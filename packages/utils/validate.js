@@ -1,0 +1,42 @@
+/**
+ * @program: entfrm-form
+ *
+ * @description: 通用校验库
+ *
+ * @author: entfrm开发团队-王翔
+ *
+ * @create: 2021-07-01
+ **/
+import { deepClone } from './index'
+
+/** 判断是否为空 **/
+export function validateNull (val) {
+  // 特殊判断
+  if (val && parseInt(val) === 0) return false
+  const list = ['$parent']
+  if (val instanceof Date || typeof val === 'boolean' || typeof val === 'number') return false
+  if (val instanceof Array) {
+    if (val.length === 0) return true
+  } else if (val instanceof Object) {
+    val = deepClone(val)
+    list.forEach(ele => {
+      delete val[ele]
+    })
+    for (const o in val) {
+      return false
+    }
+    return true
+  } else {
+    if (
+      val === 'null' ||
+      val == null ||
+      val === 'undefined' ||
+      val === undefined ||
+      val === ''
+    ) {
+      return true
+    }
+    return false
+  }
+  return false
+}
