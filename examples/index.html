@@ -6,21 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>demo</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.1/lib/theme-chalk/index.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@smallwei/avue@2.8.12/lib/index.css">
 </head>
 
 <body>
   <div id="app">
-    <avue-form-design style="height: 100vh;" :options="options" @submit="handleSubmit" storage show-avue-doc>
-    </avue-form-design>
+    <loquat-form-design style="height: 100vh;" :options="options">
+    </loquat-form-design>
 		<config-input/>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12" charset="utf-8"></script>
 	<script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.1/lib/index.js" charset="utf-8"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@smallwei/avue@2.8.12" charset="utf-8"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js" charset="utf-8"></script>
 	<script src="../lib/index.umd.min.js"></script>
   <script>
-    Vue.use(window.AvueFormDesign)
+    Vue.use(window.LoquatFormDesign)
     var app = new Vue({
       el: '#app',
       data: {

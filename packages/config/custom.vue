@@ -11,10 +11,11 @@
              style="padding: 0;"
       >自定义属性：</label>
       <div class="el-form-item__content">
-        <monaco-editor v-model="params"
-                       height="300"
-                       :key-index="data.prop"
-                       :options="options"
+        <ace-editor
+          v-model="test"
+          lang="html"
+          theme="ambiance"
+          style="height: 300px"
         />
       </div>
     </div>
@@ -23,11 +24,11 @@
              style="padding: 0;"
       >自定义事件：</label>
       <div class="el-form-item__content">
-        <monaco-editor v-model="event"
+        <!--<monaco-editor v-model="event"
                        height="300"
                        :key-index="data.prop"
                        :options="options"
-        />
+        />-->
       </div>
     </div>
     <el-form-item label="是否禁用">
@@ -39,11 +40,11 @@
   </div>
 </template>
 <script>
-import MonacoEditor from '@utils/monaco-editor'
+import AceEditor from 'v-ace-editor'
 
 export default {
   name: 'ConfigCustom',
-  components: { MonacoEditor },
+  components: { AceEditor },
   props: {
     data: {
       type: Object,
@@ -54,6 +55,7 @@ export default {
   },
   data () {
     return {
+      test: '',
       params: this.data.params || {},
       event: this.data.event || {},
       options: {

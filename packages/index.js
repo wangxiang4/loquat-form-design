@@ -6,6 +6,6 @@ export default {
   install (Vue) {
     Vue.use(Config)
     Vue.use(Plugins)
-    Vue.component('Avue' + FormDesign.name, FormDesign)
+    Vue.component('Loquat' + FormDesign.name, FormDesign)
   }
 }

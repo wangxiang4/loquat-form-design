@@ -17,34 +17,7 @@
                    @end="$emit('change')"
         >
           <template v-for="(column, index) in data.column">
-            <div v-if="column.type == 'dynamic'"
-                 :key="index"
-                 class="widget-form-table"
-                 :class="{ active: selectWidget.prop == column.prop }"
-                 @click="handleSelectWidget(index)"
-            >
-              <widget-form-table :data="data"
-                                 :column="column"
-                                 :index="index"
-                                 :select.sync="selectWidget"
-                                 @change="$emit('change')"
-              />
-            </div>
-            <div v-else-if="column.type == 'group'"
-                 :key="index"
-                 class="widget-form-group"
-                 :class="{ active: selectWidget.prop == column.prop }"
-                 @click="handleSelectWidget(index)"
-            >
-              <widget-form-group :data="data"
-                                 :column="column"
-                                 :index="index"
-                                 :select.sync="selectWidget"
-                                 @change="$emit('change')"
-              />
-            </div>
-            <el-col v-else
-                    :key="index"
+            <el-col :key="index"
                     :md="column.span || 12"
                     :xs="24"
                     :offset="column.offset || 0"
@@ -92,13 +65,11 @@
 
 <script>
 import WidgetFormItem from './WidgetFormItem'
-import WidgetFormTable from './WidgetFormTable'
-import WidgetFormGroup from './WidgetFormGroup'
 import Draggable from 'vuedraggable'
 
 export default {
   name: 'WidgetForm',
-  components: { Draggable, WidgetFormItem, WidgetFormTable, WidgetFormGroup },
+  components: { Draggable, WidgetFormItem },
   props: {
     data: {
       type: Object,

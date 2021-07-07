@@ -1,5 +1,11 @@
 <template>
   <div>
+    <el-form-item label="字段标识">
+      <el-input v-model="data.prop" clearable/>
+    </el-form-item>
+    <el-form-item label="标题">
+      <el-input v-model="data.label" clearable/>
+    </el-form-item>
     <el-form-item label="占位内容">
       <el-input v-model="data.placeholder"
                 clearable

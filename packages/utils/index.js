@@ -1,12 +1,3 @@
-/**
- * @program: entfrm-form
- *
- * @description: 通用工具库+
- *
- * @author: entfrm开发团队-王翔
- *
- * @create: 2021-07-01
- **/
 import { validateNull } from '@utils/validate'
 
 /** 设置px像素 **/

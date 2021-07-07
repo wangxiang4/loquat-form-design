@@ -1,12 +1,3 @@
-/**
- * @program: entfrm-form
- *
- * @description: 通用校验库
- *
- * @author: entfrm开发团队-王翔
- *
- * @create: 2021-07-01
- **/
 import { deepClone } from './index'
 
 /** 判断是否为空 **/

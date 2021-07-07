@@ -14,8 +14,8 @@ export default {
   watch: {
     historySteps: {
       handler (val) {
-        if (val.storage) localStorage.setItem('avue-form-history', beautifier(val))
-        else localStorage.removeItem('avue-form-history')
+        if (val.storage) localStorage.setItem('loquat-form-history', beautifier(val))
+        else localStorage.removeItem('loquat-form-history')
       },
       deep: true
     }
@@ -23,7 +23,7 @@ export default {
   methods: {
     initHistory (data) {
       if (data.storage) {
-        const history = localStorage.getItem('avue-form-history')
+        const history = localStorage.getItem('loquat-form-history')
         if (history) {
           this.historySteps = eval('(' + history + ')')
           const { index, steps } = this.historySteps

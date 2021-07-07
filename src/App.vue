@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <avue-form-design style="height: 100vh;"
-                      :options="options"
-                      storage
-                      :custom-fields="customFields"
-                      @submit="handleSubmit"
+    <loquat-form-design style="height: 100vh;"
+                        :options="options"
+                        storage
+                        :custom-fields="customFields"
+                        @submit="handleSubmit"
     />
   </div>
 </template>

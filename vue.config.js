@@ -4,20 +4,13 @@ function resolve (dir) {
 }
 
 module.exports = {
-  transpileDependencies: ['avue-plugin-ueditor'],
-
   productionSourceMap: false,
-
-  configureWebpack: {
-    output: {
-      libraryExport: 'default'
-    }
-  },
 
   chainWebpack: (config) => {
     config.externals({
       'vue': 'Vue',
-      'element-ui': 'ElementUI',
+      'element-ui': 'ELEMENT',
+      'axios': 'axios'
     })
     config.resolve.alias
       .set('@', resolve('packages'))

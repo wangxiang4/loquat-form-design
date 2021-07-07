@@ -1,18 +1,18 @@
 <template>
-  <div class="entfrm-empty">
-    <div class="entfrm-empty__image"
+  <div class="loquat-empty">
+    <div class="loquat-empty__image"
          :style="{height: setPx(size)}"
     >
       <img :src="image" alt="">
     </div>
-    <p class="entfrm-empty__desc">{{ desc }}</p>
+    <p class="loquat-empty__desc">{{ desc }}</p>
     <slot/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'EntfrmEmpty',
+  name: 'LoquatEmpty',
   props: {
     size: {
       type: String,

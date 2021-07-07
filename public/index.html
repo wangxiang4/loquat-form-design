@@ -13,25 +13,19 @@
 
 <body>
   <noscript>
-    <strong>很抱歉，如果没有 JavaScript 支持，表单设计器 将不能正常工作。请启用浏览器的 JavaScript 然后继续。</strong>
+    <strong>很抱歉，如果没有 JavaScript 支持，枇杷表单设计器 将不能正常工作。请启用浏览器的 JavaScript 然后继续。</strong>
   </noscript>
   <div id="app">
-    <div class="avue-home">
-      <div class="avue-home__main">
-        <img class="avue-home__loading" src="./img/loading-spin.svg" alt="loading">
-        <div class="avue-home__title">正在加载资源</div>
-        <div class="avue-home__sub-title">初次加载资源可能需要较多时间 请耐心等待</div>
-      </div>
-    </div>
+		<div id="loader-wrapper">
+			<div id="loader"></div>
+			<div class="loader-section section-left"></div>
+			<div class="loader-section section-right"></div>
+			<div class="load_title">枇杷设计器,美团外卖骑手代码狂热者出品</div>
+		</div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" charset="utf-8"></script>
   <script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.1/lib/index.js" charset="utf-8"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios@0.18.1/dist/axios.min.js" charset="utf-8"></script>
-  <script type="text/javascript"
-    src='https://webapi.amap.com/maps?v=1.4.11&key=a40c6d547150ac9c43cc17cc0a95f324&plugin=AMap.PlaceSearch'></script>
-  <script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.13.0/Sortable.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js" charset="utf-8"></script>
 </body>
 
 </html>
