@@ -62,26 +62,26 @@
       </el-aside>
       <el-container class="widget-container" direction="vertical">
         <el-header class="widget-container-header">
-          <div>
+          <div style="display: flex; align-items: center">
             <template v-if="undoRedo">
-              <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
-                <div style="display: inline">
+              <el-tooltip effect="dark" content="撤销" placement="bottom">
+                <div style="margin-left: 10px">
                   <el-button type="text"
                              size="medium"
-                             icon="icon iconfont icon-undo"
                              :disabled="historySteps.index == 0"
                              @click="widgetForm = handleUndo()"
-                  />
+                  ><i class="icon iconfont icon-undo"/>
+                  </el-button>
                 </div>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="重做" placement="bottom">
-                <div style="display: inline">
+              <el-tooltip effect="dark" content="重做" placement="bottom">
+                <div style="margin-left: 10px">
                   <el-button type="text"
                              size="medium"
-                             class="icon iconfont icon-redo"
                              :disabled="historySteps.index == historySteps.steps.length - 1"
                              @click="widgetForm = handleRedo()"
-                  />
+                  ><i class="icon iconfont icon-redo"/>
+                  </el-button>
                 </div>
               </el-tooltip>
             </template>
