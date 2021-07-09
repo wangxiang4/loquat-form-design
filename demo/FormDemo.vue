@@ -44,6 +44,7 @@ export default {
             append: '后置'
           },
           {
+            // 也可以使用集成第三方库的组件
             prop: 'DemoButton',
             type: 'primary',
             component: 'el-button',

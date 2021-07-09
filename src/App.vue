@@ -4,17 +4,12 @@
                         :options="options"
                         :custom-fields="customFields"
     />
-    <FormDemo/>
   </div>
 </template>
 
 <script>
-import FormDemo from '../test/FormDemo'
 export default {
   name: 'App',
-  components: {
-    FormDemo
-  },
   data () {
     return {
       customFields: [
