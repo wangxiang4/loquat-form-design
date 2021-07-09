@@ -1,3 +1,13 @@
+/**
+ * @program: loquat-form-design
+ *
+ * @description:
+ * todo:制定代码检查规范,写上了注释不符合个人开发习惯的可以自己个性化配置
+ *
+ * @author: 美团外卖骑手-代码狂热者
+ *
+ * @create: 2021-7-9
+ **/
 module.exports = {
   //查找自身层叠配置
   root: true,
