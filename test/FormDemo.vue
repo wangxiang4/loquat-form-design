@@ -1,5 +1,16 @@
 <template>
-  <loquat-form v-model="test" :option="data"/>
+  <loquat-form v-model="model" :option="data" @submit="success" @error="error">
+    <template slot="DemoInputLabel">
+      通过插槽重置文本
+    </template>
+    <template slot="DemoInputError">
+      <div>通过插槽重置错误提示</div>
+    </template>
+    <!--通过内部给每个Item设置的插槽使用演示:注意只能插入默认插槽-->
+    <template slot="DemoButtonType">
+      测试插槽
+    </template>
+  </loquat-form>
 </template>
 
 <script>
@@ -7,20 +18,21 @@ export default {
   name: 'FormDemo',
   data () {
     return {
-      test: {},
+      model: {},
       data: {
         column: [
           {
             span: 24,
-            offset: 6,
+            offset: 0,
             display: true,
-            className: 'cursor',
-            prop: 'codeZealotInput',
-            label: '代码狂热者测试文本',
+            // 自定义样式
+            className: '',
+            prop: 'DemoInput',
+            label: '演示文本',
             type: 'input',
-            rules: { required: true, message: '代码狂热者测试文本不能为空', trigger: 'blur' },
+            rules: { required: true, message: '演示文本不能为空', trigger: 'blur' },
             labelPosition: 'left',
-            labelWidth: 120,
+            labelWidth: 160,
             readonly: false,
             disabled: false,
             size: 'small',
@@ -30,6 +42,15 @@ export default {
             // 等等还可以输入对应loquat组件的一些props
             prepend: '前缀',
             append: '后置'
+          },
+          {
+            prop: 'DemoButton',
+            type: 'primary',
+            component: 'el-button',
+            params: {
+              html: 'demo'
+            },
+            span: 24
           }
         ],
         // 字典全局制定Key值,比如字典{test1:'代码狂热者1',test2:'代码狂热者2'},
@@ -45,6 +66,14 @@ export default {
         labelWidth: 120,
         componentSize: 'small'
       }
+    }
+  },
+  methods: {
+    success (e) {
+      alert('成功')
+    },
+    error (e) {
+      alert('失败')
     }
   }
 }

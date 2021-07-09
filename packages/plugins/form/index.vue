@@ -20,7 +20,7 @@
                 :sm="12"
                 :xs="24"
                 :offset="column.offset || 0"
-                :class="['loquat-form__row','--' + column.className]"
+                :class="['loquat-form__row',column.className]"
         >
           <el-form-item :prop="column.prop"
                         :label="column.label"
@@ -205,7 +205,7 @@ export default {
       if (this.$refs.form) this.$refs.form.validateField(column.prop)
     },
     submit () {
-      this.validate((valid, msg) => {
+      this.$refs.form.validate((valid, msg) => {
         if (valid) {
           this.$emit('submit', this.form)
         } else {
