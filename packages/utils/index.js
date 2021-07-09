@@ -1,8 +1,7 @@
-import { validateNull } from '@utils/validate'
 import { ARRAY_LIST, ARRAY_VALUE_LIST, DATE_LIST, INPUT_LIST, KEY_COMPONENT_NAME, MULTIPLE_LIST } from '@/global/variable'
 
 /** 设置px像素 **/
-export const setPx = (val, defval = '') => {
+export function setPx (val, defval = '') {
   if (validateNull(val)) val = defval
   if (validateNull(val)) return ''
   val = val + ''
@@ -13,7 +12,7 @@ export const setPx = (val, defval = '') => {
 }
 
 /** 对象深拷贝 **/
-export const deepClone = data => {
+export function deepClone (data) {
   const type = getObjType(data)
   let obj
   if (type === 'array') {
@@ -49,7 +48,7 @@ export const deepClone = data => {
 }
 
 /** 获取对象类型 **/
-export const getObjType = obj => {
+export function getObjType (obj) {
   var toString = Object.prototype.toString
   var map = {
     '[object Boolean]': 'boolean',
@@ -69,7 +68,7 @@ export const getObjType = obj => {
   return map[toString.call(obj)]
 }
 
-export const clearVal = (obj, list = []) => {
+export function clearVal (obj, list = []) {
   if (!obj) return {}
   Object.keys(obj).forEach(ele => {
     if (!list.includes(ele)) {
@@ -87,7 +86,7 @@ export const clearVal = (obj, list = []) => {
   return obj
 }
 
-export const formInitVal = (list = []) => {
+export function formInitVal (list = []) {
   const tableForm = {}
   list.forEach(ele => {
     if (ARRAY_VALUE_LIST.includes(ele.type) || (MULTIPLE_LIST.includes(ele.type) && ele.multiple) ||
@@ -99,16 +98,16 @@ export const formInitVal = (list = []) => {
       tableForm[ele.prop] = ''
     }
     // 表单默认值设置
-    if (!this.validatenull(ele.value)) {
+    if (!validateNull(ele.value)) {
       tableForm[ele.prop] = ele.value
     }
   })
   return { tableForm }
 }
 
-export const getComponent = (type, component) => {
+export function getComponent (type, component) {
   let result = type || 'input'
-  if (!this.validatenull(component)) {
+  if (!validateNull(component)) {
     return component
   } else if (ARRAY_LIST.includes(type)) {
     result = 'array'
@@ -122,4 +121,36 @@ export const getComponent = (type, component) => {
     result = 'input-' + type
   }
   return KEY_COMPONENT_NAME + result
+}
+
+/** 判断是否为空 **/
+export function validateNull (val) {
+  // 特殊判断
+  if (val && parseInt(val) === 0) return false
+  const list = ['$parent']
+  if (val instanceof Date || typeof val === 'boolean' || typeof val === 'number') return false
+  if (val instanceof Array) {
+    if (val.length === 0) return true
+  } else if (val instanceof Object) {
+    val = deepClone(val)
+    list.forEach(ele => {
+      delete val[ele]
+    })
+    for (const o in val) {
+      return false
+    }
+    return true
+  } else {
+    if (
+      val === 'null' ||
+      val == null ||
+      val === 'undefined' ||
+      val === undefined ||
+      val === ''
+    ) {
+      return true
+    }
+    return false
+  }
+  return false
 }

@@ -4,7 +4,7 @@
              :status-icon="parentOption.statusIcon"
              :model="form"
              :label-suffix="labelSuffix"
-             :size="parentOption.componentSize"
+             :size="size"
              :label-position="parentOption.labelPosition"
              :label-width="setPx(parentOption.labelWidth,labelWidth)"
              @submit.native.prevent
@@ -20,13 +20,13 @@
                 :sm="12"
                 :xs="24"
                 :offset="column.offset || 0"
-                :class="['loquat-form__row',column.className]"
+                :class="['loquat-form__row','--' + column.className]"
         >
           <el-form-item :prop="column.prop"
                         :label="column.label"
                         :rules="column.rules"
                         :class="'loquat-form__item--'+(column.labelPosition || parentOption.labelPosition || '')"
-                        :label-position="column.labelPosition || parentOption.labelPosition || parentOption.labelPosition"
+                        :label-position="column.labelPosition || parentOption.labelPosition"
                         :label-width="getLabelWidth(column,parentOption)"
           >
             <template v-if="$scopedSlots[column.prop + 'Label']" slot="label">
@@ -140,7 +140,7 @@ export default {
       return this.parentOption.rowKey || 'id'
     },
     size () {
-      return this.parentOption.size
+      return this.parentOption.size || 'small'
     }
   },
   watch: {
@@ -192,9 +192,9 @@ export default {
     },
     getLabelWidth (column, item) {
       let result
-      if (!this.validatenull(column.labelWidth)) {
+      if (!this.validateNull(column.labelWidth)) {
         result = column.labelWidth
-      } else if (!this.validatenull(item.labelWidth)) {
+      } else if (!this.validateNull(item.labelWidth)) {
         result = item.labelWidth
       } else {
         result = this.parentOption.labelWidth

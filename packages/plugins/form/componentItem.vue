@@ -87,7 +87,7 @@ export default {
   watch: {
     text: {
       handler (val) {
-        if (this.first || !this.validatenull(val)) {
+        if (this.first || !this.validateNull(val)) {
           this.first = true
           this.$emit('input', val)
           this.$emit('change', val)

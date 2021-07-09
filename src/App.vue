@@ -4,13 +4,17 @@
                         :options="options"
                         :custom-fields="customFields"
     />
-    <loquat-form />
+    <FormDemo/>
   </div>
 </template>
 
 <script>
+import FormDemo from '../test/FormDemo'
 export default {
   name: 'App',
+  components: {
+    FormDemo
+  },
   data () {
     return {
       customFields: [
