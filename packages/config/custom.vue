@@ -13,7 +13,7 @@
       <ace-editor
         v-model="customizeConfig"
         lang="json"
-        theme="tomorrow_night_blue"
+        theme="clouds"
         style="height: 300px"
       />
     </el-form-item>

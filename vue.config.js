@@ -20,10 +20,14 @@ module.exports = {
   },
 
   devServer: {
-    open: true
+    host: '0.0.0.0',
+    port: 80,
+    open: true,
+    disableHostCheck: true
   },
 
   css: {
+    // 是否使用css分离插件 ExtractTextPlugin
     extract: false
   }
 }

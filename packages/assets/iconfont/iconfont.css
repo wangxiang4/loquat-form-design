@@ -1,11 +1,11 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2649116 */
-  src: url('iconfont.eot?t=1625309970050'); /* IE9 */
-  src: url('iconfont.eot?t=1625309970050#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1625309970050') format('woff2'),
-       url('iconfont.woff?t=1625309970050') format('woff'),
-       url('iconfont.ttf?t=1625309970050') format('truetype'),
-       url('iconfont.svg?t=1625309970050#iconfont') format('svg');
+  src: url('iconfont.eot?t=1625848064128'); /* IE9 */
+  src: url('iconfont.eot?t=1625848064128#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1625848064128') format('woff2'),
+       url('iconfont.woff?t=1625848064128') format('woff'),
+       url('iconfont.ttf?t=1625848064128') format('truetype'),
+       url('iconfont.svg?t=1625848064128#iconfont') format('svg');
 }
 
 .iconfont {
@@ -14,6 +14,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-undo:before {
+  content: "\e658";
+}
+
+.icon-redo:before {
+  content: "\e657";
 }
 
 .icon-input:before {

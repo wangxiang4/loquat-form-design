@@ -204,8 +204,17 @@ export default {
     propChange (option, column) {
       if (this.$refs.form) this.$refs.form.validateField(column.prop)
     },
-    submit () {
+    validate (callback) {
       this.$refs.form.validate((valid, msg) => {
+        if (valid) {
+          callback(true)
+        } else {
+          callback(false, msg)
+        }
+      })
+    },
+    submit () {
+      this.validate((valid, msg) => {
         if (valid) {
           this.$emit('submit', this.form)
         } else {

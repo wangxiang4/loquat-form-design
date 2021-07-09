@@ -64,22 +64,36 @@
         <el-header class="widget-container-header">
           <div>
             <template v-if="undoRedo">
-              <el-button type="text"
-                         size="medium"
-                         icon="el-icon-refresh-left"
-                         :disabled="historySteps.index == 0"
-                         @click="widgetForm = handleUndo()"
-              >撤销</el-button>
-              <el-button type="text"
-                         size="medium"
-                         icon="el-icon-refresh-right"
-                         :disabled="historySteps.index == historySteps.steps.length - 1"
-                         @click="widgetForm = handleRedo()"
-              >重做</el-button>
+              <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
+                <div style="display: inline">
+                  <el-button type="text"
+                             size="medium"
+                             icon="icon iconfont icon-undo"
+                             :disabled="historySteps.index == 0"
+                             @click="widgetForm = handleUndo()"
+                  />
+                </div>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="重做" placement="bottom">
+                <div style="display: inline">
+                  <el-button type="text"
+                             size="medium"
+                             class="icon iconfont icon-redo"
+                             :disabled="historySteps.index == historySteps.steps.length - 1"
+                             @click="widgetForm = handleRedo()"
+                  />
+                </div>
+              </el-tooltip>
             </template>
           </div>
           <div style="display: flex; align-items: center;">
             <slot name="toolbar-left"/>
+            <el-button v-if="toolbar.includes('import')"
+                       type="text"
+                       size="medium"
+                       icon="el-icon-upload2"
+                       @click="importJsonVisible = true"
+            >导入JSON</el-button>
             <el-button v-if="toolbar.includes('clear')"
                        class="danger"
                        type="text"
@@ -93,6 +107,12 @@
                        icon="el-icon-view"
                        @click="handlePreview"
             >预览</el-button>
+            <el-button v-if="toolbar.includes('generate')"
+                       type="text"
+                       size="medium"
+                       icon="el-icon-download"
+                       @click="generateJsonVisible = true"
+            >生成JSON</el-button>
             <slot name="toolbar"/>
           </div>
         </el-header>
@@ -118,13 +138,13 @@
                  class="loquat-dialog"
                  :visible.sync="previewVisible"
                  :close-on-click-modal="false"
-                 width="600px"
                  append-to-body
                  center
                  fullscreen
       >
         <el-card style="height:100%">
           <loquat-form v-if="previewVisible"
+                       ref="previewForm"
                        v-model="widgetModels"
                        :option="widgetFormPreview"
                        @submit="handlePreviewSubmit"
@@ -133,6 +153,45 @@
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="handlePreviewSubmit" >获取数据</el-button>
           <el-button @click="handleBeforeClose">关闭</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog title="导入JSON"
+                 class="loquat-dialog"
+                 :visible.sync="importJsonVisible"
+                 :close-on-click-modal="false"
+                 width="800px"
+                 append-to-body
+                 top="3vh"
+                 center
+      >
+        <el-alert type="info" title="JSON格式如下，直接复制生成的json覆盖此处代码点击确定即可"/>
+        <ace-editor v-model="importJson"
+                    lang="json"
+                    theme="clouds"
+                    style="height: 400px"
+        />
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handlePreviewSubmit" >确定</el-button>
+          <el-button @click="handleBeforeClose">取消</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog title="生成JSON"
+                 class="loquat-dialog"
+                 :visible.sync="generateJsonVisible"
+                 :close-on-click-modal="false"
+                 width="800px"
+                 append-to-body
+                 top="3vh"
+                 center
+      >
+        <ace-editor v-model="generateJson"
+                    lang="json"
+                    theme="clouds"
+                    style="height: 400px"
+        />
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handlePreviewSubmit" >确定</el-button>
+          <el-button @click="handleBeforeClose">取消</el-button>
         </span>
       </el-dialog>
     </el-container>
@@ -147,9 +206,11 @@ import Draggable from 'vuedraggable'
 import WidgetForm from './components/WidgetForm'
 import FormConfig from './components/FormConfig'
 import WidgetConfig from './components/WidgetConfig'
+import AceEditor from 'v-ace-editor'
+// import beautifier from '@utils/json-beautifier'
 export default {
   name: 'FormDesign',
-  components: { Draggable, WidgetForm, FormConfig, WidgetConfig },
+  components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor },
   mixins: [history],
   props: {
     options: {
@@ -175,7 +236,7 @@ export default {
     toolbar: {
       type: Array,
       default: () => {
-        return ['clear', 'preview']
+        return ['import', 'clear', 'preview', 'generate']
       }
     },
     undoRedo: {
@@ -213,7 +274,11 @@ export default {
       widgetFormSelect: {},
       widgetFormPreview: {},
       previewVisible: false,
+      importJsonVisible: false,
+      generateJsonVisible: false,
       widgetModels: {},
+      importJson: '',
+      generateJson: '',
       history: {
         index: 0,
         maxStep: 20,
@@ -311,24 +376,12 @@ export default {
       }
     },
     // 预览 - 弹窗 - 确定
-    handlePreviewSubmit (form, done) {
-      if (done) {
-        this.$alert(this.widgetModels).then(() => {
-          done()
-        }).catch(() => {
-          done()
-        })
-      } else {
-        this.$refs.form.validate((valid, done) => {
-          if (valid) {
-            this.$alert(this.widgetModels).then(() => {
-              done()
-            }).catch(() => {
-              done()
-            })
-          }
-        })
-      }
+    handlePreviewSubmit () {
+      this.$refs.previewForm.validate((valid, msg) => {
+        if (valid) {
+          this.$alert(this.widgetModels)
+        }
+      })
     },
     // 预览 - 弹窗 - 关闭前
     handleBeforeClose () {
