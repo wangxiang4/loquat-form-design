@@ -30,7 +30,7 @@
                             @click.native="handleSelectWidget(index)"
               >
                 <widget-form-item :item="column"
-                                  :params="column.params"
+                                  :customize-config="column.customizeConfig"
                 />
                 <el-button v-if="selectWidget.prop == column.prop"
                            title="删除"
@@ -52,7 +52,7 @@
                            type="primary"
                            @click.stop="handleWidgetClone(index)"
                 >
-                  <i class="iconfont icon-copy"/>
+                  <i class="iconfont icon-clone"/>
                 </el-button>
               </el-form-item>
             </el-col>

@@ -1,0 +1,32 @@
+.loquat-form {
+  position: relative;
+  margin: 0 auto;
+  box-sizing: border-box;
+  &__item{
+    &--top{
+      display: flex;
+      flex-direction: column;
+      .el-form-item__label{
+        width:100% !important;
+        text-align: left !important;
+      }
+      .el-form-item__content{
+        margin-left: 0 !important;
+      }
+    }
+    &--left{
+      .el-form-item__label{
+        text-align: left !important;
+      }
+    }
+  }
+  &__row {
+    &--block {
+      width: 100%;
+      display: block;
+    }
+    &--cursor {
+      cursor: pointer;
+    }
+  }
+}

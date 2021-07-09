@@ -222,9 +222,9 @@ export default {
       previewVisible: false,
       widgetModels: {},
       history: {
-        index: 0, // 当前下标
-        maxStep: 20, // 最大记录步数
-        steps: [] // 历史步数
+        index: 0,
+        maxStep: 20,
+        steps: []
       }
     }
   },

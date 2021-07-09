@@ -1,7 +1,10 @@
 import empty from './empty'
-
+import input from './input'
+import form from './form'
 const components = [
-  empty
+  empty,
+  input,
+  form
 ]
 
 const Plugins = {

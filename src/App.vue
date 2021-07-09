@@ -2,10 +2,9 @@
   <div id="app">
     <loquat-form-design style="height: 100vh;"
                         :options="options"
-                        storage
                         :custom-fields="customFields"
-                        @submit="handleSubmit"
     />
+    <loquat-form />
   </div>
 </template>
 
@@ -23,7 +22,7 @@ export default {
           icon: 'el-icon-eleme',
           tips: '看我：自定义属性怎么用？',
           labelWidth: '0px',
-          params: {
+          customizeConfig: {
             html: '<h3 style="color:red">分割线标题</h3>',
             contentPosition: 'left'
           }
@@ -35,14 +34,9 @@ export default {
           span: 24,
           icon: 'el-icon-warning',
           tips: '看我：自定义事件怎么用？',
-          params: {
+          customizeConfig: {
             title: '警告警告警告警告',
             type: 'success'
-          },
-          event: {
-            close: () => {
-              console.log('alert关闭事件')
-            }
           }
         }
       ],
@@ -50,10 +44,6 @@ export default {
     }
   },
   methods: {
-    handleSubmit (val) {
-      this.$message.success('查看控制台')
-      console.log(val)
-    }
   }
 }
 </script>

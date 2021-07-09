@@ -8,9 +8,11 @@ import {
   setPx,
   deepClone
 } from '@utils'
+import { validateNull } from '@utils/validate'
 
 Vue.prototype.setPx = setPx
 Vue.prototype.deepClone = deepClone
+Vue.prototype.validatenull = validateNull
 
 Vue.config.productionTip = false
 

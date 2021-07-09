@@ -8,15 +8,13 @@
     </span>
     <component :is="getComponent(item.type, item.component)"
                v-else
-               v-bind="Object.assign(deepClone(item), params, { size:item.size || 'small' })"
+               v-bind="Object.assign(deepClone(item), customizeConfig, { size:item.size || 'small' })"
                :multiple="false"
                :placeholder="item.placeholder || getPlaceholder(item)"
                :dic="item.dicData"
                :value="['time', 'timerange', 'checkbox'].includes(item.type) ? item.dicData: undefined"
     >
-      <span v-if="params.html"
-            v-html="params.html"
-      />
+      <span v-if="customizeConfig.html" v-html="customizeConfig.html"/>
     </component>
   </div>
 </template>
@@ -30,7 +28,7 @@ export default {
         return {}
       }
     },
-    params: {
+    customizeConfig: {
       type: Object,
       default () {
         return {}
@@ -44,7 +42,7 @@ export default {
   },
   methods: {
     getComponent (type, component) {
-      const KEY_COMPONENT_NAME = 'avue-'
+      const KEY_COMPONENT_NAME = 'loquat-'
       let result = 'input'
       if (component) return component
       else if (['array', 'img', 'url'].includes(type)) result = 'array'
