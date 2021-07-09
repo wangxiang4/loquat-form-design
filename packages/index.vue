@@ -1,7 +1,6 @@
 <template>
   <div class="form-designer">
     <el-container>
-      <!-- 左侧字段 -->
       <el-aside :width="leftWidth">
         <div class="fields-list">
           <div v-for="(field, index) in fields" :key="index">
@@ -61,7 +60,6 @@
           </template>
         </div>
       </el-aside>
-      <!-- 中间主布局 -->
       <el-container class="widget-container" direction="vertical">
         <el-header class="widget-container-header">
           <div>
@@ -106,7 +104,6 @@
           />
         </el-main>
       </el-container>
-      <!-- 右侧配置 -->
       <el-aside class="widget-config-container" :width="rightWidth">
         <el-tabs v-model="configTab" stretch>
           <el-tab-pane label="字段属性" name="widget" style="padding: 0 10px;">
@@ -117,31 +114,27 @@
           </el-tab-pane>
         </el-tabs>
       </el-aside>
-      <!-- 预览 -->
-      <el-drawer title="预览"
+      <el-dialog title="预览"
+                 class="loquat-dialog"
                  :visible.sync="previewVisible"
-                 size="60%"
+                 :close-on-click-modal="false"
+                 width="600px"
                  append-to-body
-                 :before-close="handleBeforeClose"
+                 center
+                 fullscreen
       >
-        <avue-form v-if="previewVisible"
-                   ref="form"
-                   v-model="widgetModels"
-                   class="preview-form"
-                   :option="widgetFormPreview"
-                   @submit="handlePreviewSubmit"
-        />
-        <div class="drawer-foot">
-          <el-button size="medium"
-                     type="primary"
-                     @click="handlePreviewSubmit"
-          >确定</el-button>
-          <el-button size="medium"
-                     type="danger"
-                     @click="handleBeforeClose"
-          >取消</el-button>
-        </div>
-      </el-drawer>
+        <el-card style="height:100%">
+          <loquat-form v-if="previewVisible"
+                       v-model="widgetModels"
+                       :option="widgetFormPreview"
+                       @submit="handlePreviewSubmit"
+          />
+        </el-card>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handlePreviewSubmit" >获取数据</el-button>
+          <el-button @click="handleBeforeClose">关闭</el-button>
+        </span>
+      </el-dialog>
     </el-container>
   </div>
 </template>
@@ -313,10 +306,8 @@ export default {
     handlePreview () {
       if (!this.widgetForm.column || this.widgetForm.column.length == 0) this.$message.error('没有需要展示的内容')
       else {
-        this.transformToAvueOptions(this.widgetForm).then(data => {
-          this.widgetFormPreview = data
-          this.previewVisible = true
-        })
+        this.widgetFormPreview = this.widgetForm
+        this.previewVisible = true
       }
     },
     // 预览 - 弹窗 - 确定
