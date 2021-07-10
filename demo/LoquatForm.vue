@@ -1,13 +1,13 @@
 <template>
   <loquat-form v-model="model" :option="data" @submit="success" @error="error">
-    <template slot="DemoInputLabel">
+    <template slot="input001Label">
       通过插槽重置文本
     </template>
-    <template slot="DemoInputError">
+    <template slot="input001Error">
       <div>通过插槽重置错误提示</div>
     </template>
     <!--通过内部给每个Item设置的插槽使用演示:注意只能插入默认插槽-->
-    <template slot="DemoButtonType">
+    <template slot="button001Type">
       测试插槽
     </template>
   </loquat-form>
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'FormDemo',
+  name: 'LoquatForm',
   data () {
     return {
       model: {},
@@ -27,7 +27,7 @@ export default {
             display: true,
             // 自定义样式
             className: '',
-            prop: 'DemoInput',
+            prop: 'input001',
             label: '演示文本',
             type: 'input',
             rules: { required: true, message: '演示文本不能为空', trigger: 'blur' },
@@ -45,7 +45,7 @@ export default {
           },
           {
             // 也可以使用集成第三方库的组件
-            prop: 'DemoButton',
+            prop: 'button001',
             type: 'primary',
             component: 'el-button',
             params: {

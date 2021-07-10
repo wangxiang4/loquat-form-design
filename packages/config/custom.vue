@@ -11,9 +11,9 @@
     </el-form-item>
     <el-form-item label="自定义属性">
       <ace-editor
-        v-model="customizeConfig"
-        lang="json"
-        theme="clouds"
+        v-model="params"
+        lang="javascript"
+        theme="textmate"
         style="height: 300px"
       />
     </el-form-item>
@@ -35,19 +35,21 @@ export default {
   },
   data () {
     return {
-      customizeConfig: ''
+      params: ''
     }
   },
   watch: {
-    'data.customizeConfig': {
+    'data.params': {
       immediate: true,
       handler: function (val) {
-        if (val) this.customizeConfig = beautifier(val)
+        if (val) {
+          this.params = beautifier(val)
+        }
       }
     },
-    customizeConfig (val) {
+    params (val) {
       try {
-        this.data.customizeConfig = eval('(' + val + ')')
+        this.data.params = eval('(' + val + ')')
         // eslint-disable-next-line no-empty
       } catch (e) {}
     }

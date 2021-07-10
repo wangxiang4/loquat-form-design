@@ -30,7 +30,7 @@
                             @click.native="handleSelectWidget(index)"
               >
                 <widget-form-item :item="column"
-                                  :customize-config="column.customizeConfig"
+                                  :params="column.params"
                 />
                 <el-button v-if="selectWidget.prop == column.prop"
                            title="删除"

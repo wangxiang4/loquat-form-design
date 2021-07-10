@@ -23,46 +23,34 @@
               </draggable>
             </template>
           </div>
-          <template v-if="customFields && customFields.length > 0">
-            <el-link class="field-title"
-                     :underline="false"
-                     href="https://element.eleme.io/#/zh-CN/component/installation"
-                     target="_blank"
-            >自定义字段
-            </el-link>
-            <draggable tag="ul"
-                       :list="customFields"
-                       :group="{ name: 'form', pull: 'clone', put: false }"
-                       ghost-class="ghost"
-                       :sort="false"
-            >
-              <template v-for="(item, index) in customFields">
-                <el-tooltip v-if="item.tips"
-                            :key="index"
-                            effect="dark"
-                            :content="item.tips"
-                >
-                  <li :key="index" class="field-label">
+          <template v-if="!validateNull(customFields)">
+            <template v-for="(field, index) in customFields">
+              <div class="field-title" :key="index">{{field.title}}</div>
+              <draggable tag="ul"
+                         :list="field.list"
+                         :group="{ name: 'form', pull: 'clone', put: false }"
+                         ghost-class="ghost"
+                         :sort="false"
+                         :key="index"
+              >
+                <template v-for="(item, index) in field.list">
+                  <li class="field-label" :key="index">
                     <a style="padding: 0 5px;" @click="handleFieldClick(item)">
                       <i :class="item.icon"/>
                       <span style="margin-left: 5px;">{{ item.title || item.label }}</span>
                     </a>
                   </li>
-                </el-tooltip>
-                <li v-else :key="index" class="field-label">
-                  <a style="padding: 0 5px;" @click="handleFieldClick(item)">
-                    <i :class="item.icon"/>
-                    <span style="margin-left: 5px;">{{ item.title || item.label }}</span>
-                  </a>
-                </li>
-              </template>
-            </draggable>
+                </template>
+              </draggable>
+            </template>
           </template>
         </div>
       </el-aside>
       <el-container class="widget-container" direction="vertical">
         <el-header class="widget-container-header">
           <div style="display: flex; align-items: center">
+            <img :src="require('./assets/images/form.svg')" height="30" width="30">
+            <el-divider direction="vertical"/>
             <template v-if="undoRedo">
               <el-tooltip effect="dark" content="撤销" placement="bottom">
                 <div style="margin-right: 10px">
@@ -92,7 +80,7 @@
                        type="text"
                        size="medium"
                        icon="el-icon-upload2"
-                       @click="importJsonVisible = true"
+                       @click="handleImportJson"
             >导入JSON</el-button>
             <el-button v-if="toolbar.includes('clear')"
                        class="danger"
@@ -116,7 +104,7 @@
             <slot name="toolbar"/>
           </div>
         </el-header>
-        <el-main :style="{background: widgetForm.column.length == 0 ? `url(${widgetEmpty}) no-repeat 50%`: ''}">
+        <el-main :style="defaultBackground">
           <widget-form ref="widgetForm"
                        :data="widgetForm"
                        :select.sync="widgetFormSelect"
@@ -151,8 +139,13 @@
           />
         </el-card>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handlePreviewSubmit" >获取数据</el-button>
-          <el-button @click="handleBeforeClose">关闭</el-button>
+          <el-button type="primary"
+                     size="medium"
+                     @click="handlePreviewSubmit"
+          >获取数据</el-button>
+          <el-button size="medium"
+                     @click="handleBeforeClose"
+          >关闭</el-button>
         </span>
       </el-dialog>
       <el-dialog title="导入JSON"
@@ -167,12 +160,17 @@
         <el-alert type="info" title="JSON格式如下，直接复制生成的json覆盖此处代码点击确定即可"/>
         <ace-editor v-model="importJson"
                     lang="json"
-                    theme="clouds"
+                    theme="textmate"
                     style="height: 400px"
         />
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleImportJsonSubmit" >确定</el-button>
-          <el-button @click="importJsonVisible = false">取消</el-button>
+          <el-button type="primary"
+                     size="medium"
+                     @click="handleImportJsonSubmit"
+          >确定</el-button>
+          <el-button size="medium"
+                     @click="importJsonVisible = false"
+          >取消</el-button>
         </span>
       </el-dialog>
       <el-dialog title="生成JSON"
@@ -187,6 +185,7 @@
         <ace-editor v-model="generateJson"
                     lang="json"
                     theme="textmate"
+                    :readonly="true"
                     style="height: 400px"
         />
         <span slot="footer" class="dialog-footer">
@@ -336,22 +335,14 @@ export default {
       importJsonVisible: false,
       generateJsonVisible: false,
       widgetModels: {},
-      importJson: IMPORT_JSON_TEMPLATE,
+      importJson: '',
       generateJson: '',
       history: {
         index: 0,
         maxStep: 20,
         steps: []
       },
-      jsonOption: {
-        space: 2,
-        dropQuotesOnKeys: true,
-        dropQuotesOnNumbers: false,
-        inlineShortArrays: false,
-        inlineShortArraysDepth: 1,
-        quoteType: 'single',
-        minify: false
-      }
+      jsonOption: {}
     }
   },
   computed: {
@@ -368,6 +359,9 @@ export default {
       } else {
         return `${this.asideRightWidth}px`
       }
+    },
+    defaultBackground () {
+      return { background: this.widgetForm.column.length == 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
     }
   },
   watch: {
@@ -444,33 +438,39 @@ export default {
         this.previewVisible = true
       }
     },
-    // 预览确定
+    // 处理预览确定动作
     handlePreviewSubmit () {
-      this.$refs.previewForm.validate((valid, msg) => {
+      this.handleResetJson()
+      this.$refs.previewForm.validate(valid => {
         if (valid) {
-          this.$alert(this.widgetModels)
+          this.generateJson = beautifier(this.widgetModels, {
+            quoteType: 'double',
+            dropQuotesOnKeys: false,
+            dropQuotesOnNumbers: true
+          })
+          this.generateJsonVisible = true
         }
       })
     },
-    // 预览关闭前
+    // 处理预览关闭前重置数据
     handleBeforeClose () {
       this.$refs.previewForm.resetForm()
       this.widgetModels = {}
       this.previewVisible = false
     },
-    // 清空
+    // 处理清空动作
     handleClear () {
       if (this.widgetForm && this.widgetForm.column && this.widgetForm.column.length > 0) {
-        this.$confirm('确定要清空吗？', '警告', {
-          type: 'warning'
-        }).then(() => {
-          this.$set(this.widgetForm, 'column', [])
-          this.$set(this, 'widgetModels', {})
-          this.$set(this, 'widgetFormSelect', {})
-          this.handleHistoryChange(this.widgetForm)
-        }).catch(() => {
-        })
+        this.$set(this.widgetForm, 'column', [])
+        this.$set(this, 'widgetModels', {})
+        this.$set(this, 'widgetFormSelect', {})
+        this.handleHistoryChange(this.widgetForm)
       } else this.$message.error('没有需要清空的内容')
+    },
+    // 初始化导入JSON
+    handleImportJson () {
+      this.importJson = IMPORT_JSON_TEMPLATE
+      this.importJsonVisible = true
     },
     // 导入JSON确定
     handleImportJsonSubmit () {
@@ -484,6 +484,7 @@ export default {
     },
     // 初始化生成JSON
     handleGenerateJson () {
+      this.handleResetJson()
       this.generateJson = beautifier(this.widgetForm, {
         quoteType: 'double',
         dropQuotesOnKeys: false,
@@ -493,8 +494,9 @@ export default {
     },
     // 生成JSON复制
     handleCopy () {
+      const data = eval('(' + this.generateJson + ')')
       clipboard({
-        text: beautifier(this.widgetForm, { ...this.jsonOption })
+        text: beautifier(data, { ...this.jsonOption })
       }).then(() => {
         this.$message.success('复制成功')
       }).catch(() => {
@@ -503,11 +505,7 @@ export default {
     },
     // 生成JSON导出
     handleExport () {
-      const data = beautifier(this.widgetForm, {
-        quoteType: 'double',
-        dropQuotesOnKeys: false,
-        dropQuotesOnNumbers: true })
-      const encodedData = encodeURIComponent(data)
+      const encodedData = encodeURIComponent(this.generateJson)
       const filename = Date.now() + '.json'
       const href = 'data:application/json;charset=UTF-8,' + encodedData
       const a = document.createElement('a')
@@ -515,6 +513,18 @@ export default {
       a.href = href //  URL对象
       a.click() // 模拟点击
       URL.revokeObjectURL(a.href) // 释放URL 对象
+    },
+    // 重置Json配置数据
+    handleResetJson () {
+      this.jsonOption = {
+        space: 2,
+        dropQuotesOnKeys: true,
+        dropQuotesOnNumbers: false,
+        inlineShortArrays: false,
+        inlineShortArraysDepth: 1,
+        quoteType: 'single',
+        minify: false
+      }
     }
   }
 }
