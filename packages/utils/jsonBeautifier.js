@@ -73,7 +73,7 @@ export default function convert (object, options = {}) {
   if (dropQuotesOnNumbers) walkObjectAndDropQuotesOnNumbers(object)
 
   var result = stringify(object, null, minify ? undefined : space, dropQuotesOnKeys, quoteType)
-  debugger
+
   if (inlineShortArrays && !minify) {
     var newResult = inlineShortArraysInResult(result)
     // 深度递归折叠,默认深度折叠为1

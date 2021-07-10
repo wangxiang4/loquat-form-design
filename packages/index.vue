@@ -190,8 +190,65 @@
                     style="height: 400px"
         />
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handlePreviewSubmit" >导出</el-button>
-          <el-button @click="handleBeforeClose">复制</el-button>
+          <el-button type="primary"
+                     size="medium"
+                     @click="handleExport"
+          >导出</el-button>
+          <el-popover placement="top-start" trigger="hover">
+            <el-form v-model="jsonOption"
+                     style="padding: 0 20px"
+                     label-suffix="："
+                     label-width="166px"
+                     label-position="left"
+            >
+              <el-form-item label="缩进长度-空格数量">
+                <el-slider v-model="jsonOption.space"
+                           :disabled="jsonOption.minify"
+                           show-stops
+                           :marks="{ 1: '1', 2: '2', 3: '3', 4: '4' }"
+                           :min="1"
+                           :max="4"
+                           :step="1"
+                />
+              </el-form-item>
+              <el-form-item label="引号类型">
+                <el-switch v-model="jsonOption.quoteType"
+                           active-value="single"
+                           inactive-value="double"
+                           active-text="单引号"
+                           inactive-text="双引号"
+                />
+              </el-form-item>
+              <el-form-item label="移除key的引号">
+                <el-switch v-model="jsonOption.dropQuotesOnKeys"/>
+              </el-form-item>
+              <el-form-item label="移除数字字符串的引号">
+                <el-switch v-model="jsonOption.dropQuotesOnNumbers"/>
+              </el-form-item>
+              <el-form-item label="数组折叠">
+                <el-switch v-model="jsonOption.inlineShortArrays" :disabled="jsonOption.minify"/>
+              </el-form-item>
+              <el-form-item label="数组折叠-深度">
+                <el-slider v-model="jsonOption.inlineShortArraysDepth"
+                           :disabled="jsonOption.minify"
+                           show-stops
+                           :marks="{ 1: '1', 2: '2', 3: '3', 4: '4' }"
+                           :min="1"
+                           :max="4"
+                           :step="1"
+                />
+              </el-form-item>
+              <el-form-item label="压缩json">
+                <el-switch v-model="jsonOption.minify"/>
+              </el-form-item>
+            </el-form>
+            <el-button slot="reference"
+                       size="medium"
+                       type="primary"
+                       style="margin-left: 10px;"
+                       @click="handleCopy"
+            >复制</el-button>
+          </el-popover>
         </span>
       </el-dialog>
     </el-container>
@@ -207,6 +264,8 @@ import WidgetForm from './components/WidgetForm'
 import FormConfig from './components/FormConfig'
 import WidgetConfig from './components/WidgetConfig'
 import AceEditor from 'v-ace-editor'
+import beautifier from '@utils/jsonBeautifier'
+import clipboard from '@utils/clipboard'
 import { IMPORT_JSON_TEMPLATE } from '@/global/variable'
 export default {
   name: 'FormDesign',
@@ -283,6 +342,15 @@ export default {
         index: 0,
         maxStep: 20,
         steps: []
+      },
+      jsonOption: {
+        space: 2,
+        dropQuotesOnKeys: true,
+        dropQuotesOnNumbers: false,
+        inlineShortArrays: false,
+        inlineShortArraysDepth: 1,
+        quoteType: 'single',
+        minify: false
       }
     }
   },
@@ -323,6 +391,7 @@ export default {
     this.handleLoadStorage()
   },
   methods: {
+    // 处理加载历史数据
     async handleLoadStorage () {
       let options = this.options
       if (typeof options === 'string') {
@@ -367,7 +436,7 @@ export default {
 
       this.$refs.widgetForm.handleWidgetAdd({ newIndex })
     },
-    // 预览 - 弹窗
+    // 初始化预览
     handlePreview () {
       if (!this.widgetForm.column || this.widgetForm.column.length == 0) this.$message.error('没有需要展示的内容')
       else {
@@ -375,7 +444,7 @@ export default {
         this.previewVisible = true
       }
     },
-    // 预览 - 弹窗 - 确定
+    // 预览确定
     handlePreviewSubmit () {
       this.$refs.previewForm.validate((valid, msg) => {
         if (valid) {
@@ -383,7 +452,7 @@ export default {
         }
       })
     },
-    // 预览 - 弹窗 - 关闭前
+    // 预览关闭前
     handleBeforeClose () {
       this.$refs.previewForm.resetForm()
       this.widgetModels = {}
@@ -403,7 +472,7 @@ export default {
         })
       } else this.$message.error('没有需要清空的内容')
     },
-    // 导入JSON - 弹窗 - 确定
+    // 导入JSON确定
     handleImportJsonSubmit () {
       try {
         this.widgetForm = JSON.parse(this.importJson)
@@ -415,8 +484,37 @@ export default {
     },
     // 初始化生成JSON
     handleGenerateJson () {
-      this.generateJson = ''
+      this.generateJson = beautifier(this.widgetForm, {
+        quoteType: 'double',
+        dropQuotesOnKeys: false,
+        dropQuotesOnNumbers: true
+      })
       this.generateJsonVisible = true
+    },
+    // 生成JSON复制
+    handleCopy () {
+      clipboard({
+        text: beautifier(this.widgetForm, { ...this.jsonOption })
+      }).then(() => {
+        this.$message.success('复制成功')
+      }).catch(() => {
+        this.$message.error('复制失败')
+      })
+    },
+    // 生成JSON导出
+    handleExport () {
+      const data = beautifier(this.widgetForm, {
+        quoteType: 'double',
+        dropQuotesOnKeys: false,
+        dropQuotesOnNumbers: true })
+      const encodedData = encodeURIComponent(data)
+      const filename = Date.now() + '.json'
+      const href = 'data:application/json;charset=UTF-8,' + encodedData
+      const a = document.createElement('a')
+      a.download = filename // 指定下载的文件名
+      a.href = href //  URL对象
+      a.click() // 模拟点击
+      URL.revokeObjectURL(a.href) // 释放URL 对象
     }
   }
 }

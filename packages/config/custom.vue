@@ -21,7 +21,7 @@
 </template>
 <script>
 import AceEditor from 'v-ace-editor'
-import beautifier from '@utils/json-beautifier'
+import beautifier from '@utils/jsonBeautifier'
 export default {
   name: 'ConfigCustom',
   components: { AceEditor },
