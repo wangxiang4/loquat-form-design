@@ -6,7 +6,7 @@
              :column="Object.assign(column,params)"
              :disabled="column.disabled || disabled"
              :readonly="column.readonly || readonly"
-             :placeholder="getPlaceholder(column)"
+             :placeholder="column.placeholder || getPlaceholder(column)"
              :props="column.props || props"
              :size="column.size || size"
              :type="type || column.type"
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getComponent } from '@utils'
+import { getComponent, getPlaceholder } from '@utils'
 export default {
   name: 'ComponentItem',
   props: {
@@ -105,9 +105,7 @@ export default {
   },
   methods: {
     getComponent,
-    getPlaceholder (column) {
-      return column.placeholder
-    },
+    getPlaceholder,
     enterChange () {
       if (this.enter) this.$emit('enter')
     }

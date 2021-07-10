@@ -24,17 +24,16 @@
             </template>
           </div>
           <template v-if="!validateNull(customFields)">
-            <template v-for="(field, index) in customFields">
-              <div class="field-title" :key="index">{{field.title}}</div>
+            <div v-for="(field, index) in customFields" :key="index + fields.length">
+              <div class="field-title">{{ field.title }}</div>
               <draggable tag="ul"
                          :list="field.list"
                          :group="{ name: 'form', pull: 'clone', put: false }"
                          ghost-class="ghost"
                          :sort="false"
-                         :key="index"
               >
                 <template v-for="(item, index) in field.list">
-                  <li class="field-label" :key="index">
+                  <li :key="index" class="field-label">
                     <a style="padding: 0 5px;" @click="handleFieldClick(item)">
                       <i :class="item.icon"/>
                       <span style="margin-left: 5px;">{{ item.title || item.label }}</span>
@@ -42,7 +41,7 @@
                   </li>
                 </template>
               </draggable>
-            </template>
+            </div>
           </template>
         </div>
       </el-aside>

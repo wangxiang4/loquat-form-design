@@ -2,9 +2,8 @@
   <div class="widget-form-container">
     <el-form ref="widgetForm"
              :label-position="data.labelPosition || 'left'"
-             :label-width="data.labelWidth ? `${data.labelWidth}px` : '100px' "
+             :label-width="setPx(data.labelWidth,'100')"
              :label-suffix="data.labelSuffix"
-             :model="form"
              size="small"
     >
       <el-row :gutter="data.gutter">
@@ -29,9 +28,7 @@
                             :class="{ active: selectWidget.prop == column.prop, 'required': column.required }"
                             @click.native="handleSelectWidget(index)"
               >
-                <widget-form-item :item="column"
-                                  :params="column.params"
-                />
+                <widget-form-item :item="column" :params="column.params"/>
                 <el-button v-if="selectWidget.prop == column.prop"
                            title="删除"
                            class="widget-action-delete"
@@ -41,7 +38,7 @@
                            type="danger"
                            @click.stop="handleWidgetDelete(index)"
                 >
-                  <i class="iconfont icon-delete"/>
+                  <i class="iconfont icon-trash"/>
                 </el-button>
                 <el-button v-if="selectWidget.prop == column.prop"
                            title="复制"
@@ -66,7 +63,6 @@
 <script>
 import WidgetFormItem from './WidgetFormItem'
 import Draggable from 'vuedraggable'
-
 export default {
   name: 'WidgetForm',
   components: { Draggable, WidgetFormItem },
@@ -86,8 +82,7 @@ export default {
   },
   data () {
     return {
-      selectWidget: this.select,
-      form: {}
+      selectWidget: this.select
     }
   },
   watch: {
@@ -110,14 +105,8 @@ export default {
       const data = this.deepClone(this.data.column[newIndex])
       if (!data.prop) data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
       delete data.icon
-      delete data.subfield
-      if (data.type == 'title') {
-        delete data.label
-        this.form[data.prop] = data.value
-      }
       this.$set(this.data.column, newIndex, data)
       this.handleSelectWidget(newIndex)
-
       this.$emit('change')
     },
     handleWidgetDelete (index) {

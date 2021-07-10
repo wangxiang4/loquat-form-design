@@ -1,4 +1,4 @@
-import { ARRAY_LIST, ARRAY_VALUE_LIST, DATE_LIST, INPUT_LIST, KEY_COMPONENT_NAME, MULTIPLE_LIST } from '@/global/variable'
+import { ARRAY_LIST, ARRAY_VALUE_LIST, DATE_LIST, INPUT_LIST, KEY_COMPONENT_NAME, MULTIPLE_LIST, SELECT_LIST } from '@/global/variable'
 
 /** 设置px像素 **/
 export function setPx (val, defval = '') {
@@ -153,4 +153,13 @@ export function validateNull (val) {
     return false
   }
   return false
+}
+
+export function getPlaceholder (item) {
+  const label = item.label
+  if (SELECT_LIST.includes(item.type)) {
+    return `请选择 ${label}`
+  } else {
+    return `请输入 ${label}`
+  }
 }
