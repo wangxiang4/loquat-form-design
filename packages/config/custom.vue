@@ -12,7 +12,7 @@
     <el-form-item label="自定义属性">
       <ace-editor
         v-model="params"
-        lang="javascript"
+        lang="json"
         theme="textmate"
         style="height: 300px"
       />
@@ -43,7 +43,11 @@ export default {
       immediate: true,
       handler: function (val) {
         if (val) {
-          this.params = beautifier(val)
+          this.params = beautifier(val, {
+            quoteType: 'double',
+            dropQuotesOnKeys: false,
+            dropQuotesOnNumbers: true
+          })
         }
       }
     },
