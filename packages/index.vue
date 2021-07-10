@@ -65,7 +65,7 @@
           <div style="display: flex; align-items: center">
             <template v-if="undoRedo">
               <el-tooltip effect="dark" content="撤销" placement="bottom">
-                <div style="margin-left: 10px">
+                <div style="margin-right: 10px">
                   <el-button type="text"
                              size="medium"
                              :disabled="historySteps.index == 0"
@@ -75,7 +75,7 @@
                 </div>
               </el-tooltip>
               <el-tooltip effect="dark" content="重做" placement="bottom">
-                <div style="margin-left: 10px">
+                <div style="margin-right: 10px">
                   <el-button type="text"
                              size="medium"
                              :disabled="historySteps.index == historySteps.steps.length - 1"
@@ -111,7 +111,7 @@
                        type="text"
                        size="medium"
                        icon="el-icon-download"
-                       @click="generateJsonVisible = true"
+                       @click="handleGenerateJson"
             >生成JSON</el-button>
             <slot name="toolbar"/>
           </div>
@@ -171,8 +171,8 @@
                     style="height: 400px"
         />
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handlePreviewSubmit" >确定</el-button>
-          <el-button @click="handleBeforeClose">取消</el-button>
+          <el-button type="primary" @click="handleImportJsonSubmit" >确定</el-button>
+          <el-button @click="importJsonVisible = false">取消</el-button>
         </span>
       </el-dialog>
       <el-dialog title="生成JSON"
@@ -186,12 +186,12 @@
       >
         <ace-editor v-model="generateJson"
                     lang="json"
-                    theme="clouds"
+                    theme="textmate"
                     style="height: 400px"
         />
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handlePreviewSubmit" >确定</el-button>
-          <el-button @click="handleBeforeClose">取消</el-button>
+          <el-button type="primary" @click="handlePreviewSubmit" >导出</el-button>
+          <el-button @click="handleBeforeClose">复制</el-button>
         </span>
       </el-dialog>
     </el-container>
@@ -207,7 +207,7 @@ import WidgetForm from './components/WidgetForm'
 import FormConfig from './components/FormConfig'
 import WidgetConfig from './components/WidgetConfig'
 import AceEditor from 'v-ace-editor'
-// import beautifier from '@utils/json-beautifier'
+import { IMPORT_JSON_TEMPLATE } from '@/global/variable'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor },
@@ -277,7 +277,7 @@ export default {
       importJsonVisible: false,
       generateJsonVisible: false,
       widgetModels: {},
-      importJson: '',
+      importJson: IMPORT_JSON_TEMPLATE,
       generateJson: '',
       history: {
         index: 0,
@@ -385,7 +385,7 @@ export default {
     },
     // 预览 - 弹窗 - 关闭前
     handleBeforeClose () {
-      this.$refs.form.resetForm()
+      this.$refs.previewForm.resetForm()
       this.widgetModels = {}
       this.previewVisible = false
     },
@@ -402,6 +402,21 @@ export default {
         }).catch(() => {
         })
       } else this.$message.error('没有需要清空的内容')
+    },
+    // 导入JSON - 弹窗 - 确定
+    handleImportJsonSubmit () {
+      try {
+        this.widgetForm = JSON.parse(this.importJson)
+        this.importJsonVisible = false
+        this.handleHistoryChange(this.widgetForm)
+      } catch (e) {
+        this.$message.error(e.message)
+      }
+    },
+    // 初始化生成JSON
+    handleGenerateJson () {
+      this.generateJson = ''
+      this.generateJsonVisible = true
     }
   }
 }
