@@ -1,10 +1,55 @@
+/**
+ * @program: loquat-form-design
+ *
+ * @description: json美化,可以根据配置进行格式化
+ *
+ * 参数说明:
+ * space:
+ *   * description: 指定缩进
+ *   * default: 2
+ *   * type: Number
+ *
+ * dropQuotesOnKeys:
+ *   * description: 是否删除对象key上的引号
+ *   * default: true
+ *   * type: Boolean
+ *
+ * dropQuotesOnNumbers:
+ *   * description: 是否删除对象值是数字里的引号
+ *   * default: false
+ *   * type: Boolean
+ *
+ * inlineShortArrays:
+ *   * description: 是否开启折叠对象中的数组
+ *   * default: false
+ *   * type: Boolean
+ *
+ * inlineShortArraysDepth:
+ *   * description: 折叠对象中的数组,折叠深度
+ *   * default: 1
+ *   * type: Number
+ *
+ * quoteType:
+ *   * description: 引号类型(single,double)
+ *   * default: single
+ *   * type: String
+ *
+ * minify:
+ *   * description: 缩小json,去掉一切的格式
+ *   * default: false
+ *   * type: Boolean
+ *
+ * @author: entfrm开发团队-王翔
+ *
+ * @create: 2021-7-9
+ **/
 /* eslint-disable no-misleading-character-class */
-const
-  escapable = /[\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g
+const escapable = /[\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g
 const keyable = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/
 let gap
 let indent
-const meta = {    // table of character substitutions
+// 字符替换表
+const meta = {
   '\b': '\\b',
   '\t': '\\t',
   '\n': '\\n',
@@ -28,8 +73,10 @@ export default function convert (object, options = {}) {
   if (dropQuotesOnNumbers) walkObjectAndDropQuotesOnNumbers(object)
 
   var result = stringify(object, null, minify ? undefined : space, dropQuotesOnKeys, quoteType)
+  debugger
   if (inlineShortArrays && !minify) {
     var newResult = inlineShortArraysInResult(result)
+    // 深度递归折叠,默认深度折叠为1
     if (inlineShortArraysDepth > 1) {
       for (var i = 1; i < inlineShortArraysDepth; i++) {
         result = newResult
@@ -43,6 +90,7 @@ export default function convert (object, options = {}) {
   return result
 }
 
+// 删除对象值是数字里的引号
 function walkObjectAndDropQuotesOnNumbers (object) {
   if (!isObject(object)) return
   var keys = Object.keys(object)
@@ -63,8 +111,7 @@ function isObject (o) {
   return o && typeof o === 'object'
 }
 
-// Collapses arrays inline when they fit inside the specified width
-// in characters (including indentation).
+// 当数组长度不超过指定宽度时折叠数组,就是变成一行,字符（包括缩进）
 function inlineShortArraysInResult (result, width) {
   width || (width = 80)
   if (typeof width !== 'number' || width < 20) {
@@ -99,72 +146,59 @@ function inlineShortArraysInResult (result, width) {
 }
 
 function stringify (value, replacer, space, dropQuotesOnKeys, quoteType) {
-  // The stringify method takes a value and an optional replacer, and an optional
-  // space parameter, and returns a JSON text. The replacer can be a function
-  // that can replace values, or an array of strings that will select the keys.
-  // A default replacer method can be provided. Use of the space parameter can
-  // produce text that is more easily readable.
+  // stringify 方法接受一个值和一个可选的替换器,以及一个可选的
+  // space 参数,并返回一个 JSON 文本。替换器可以是一个函数
+  // 可以替换值,或将选择键的字符串数组。
+  // 可以提供默认的替换方法。空间参数的使用可以
+  // 生成更易于阅读的文本。
 
   var i
   gap = ''
   indent = ''
 
-  // If the space parameter is a number, make an indent string containing that
-  // many spaces.
-
+  // 如果空格参数是一个数字,则制作一个包含该数字的缩进字符串
   if (typeof space === 'number') {
     for (i = 0; i < space; i += 1) {
       indent += ' '
     }
-
-    // If the space parameter is a string, it will be used as the indent string.
+  // 如果空格参数是一个字符串,它将被用作缩进字符串。
   } else if (typeof space === 'string') {
     indent = space
   }
 
-  // If there is a replacer, it must be a function or an array.
-  // Otherwise, throw an error.
-
+  // 如果有替换器,它必须是一个函数或一个数组,否则抛出错误。
   rep = replacer
   if (replacer && typeof replacer !== 'function' &&
-    (typeof replacer !== 'object' ||
-      typeof replacer.length !== 'number')) {
+    (typeof replacer !== 'object' || typeof replacer.length !== 'number')) {
     throw new Error('JSON.stringify')
   }
 
-  // Make a fake root object containing our value under the key of ''.
-  // Return the result of stringifying the value.
-
+  // 返回字符串化值的结果,在''键下创建一个包含我们的值的假根对象。
   return str('', { '': value }, dropQuotesOnKeys, quoteType)
 }
 
 function str (key, holder, dropQuotesOnKeys, quoteType) {
-  // Produce a string from holder[key].
+  // 从 holder[key] 生成一个字符串。
 
-  var i          // The loop counter.
-  var k          // The member key.
-  var v          // The member value.
+  var i          // 循环计数器。
+  var k          // 成员密钥。
+  var v          // 值.
   var length
   var mind = gap
   var partial
   var value = holder[key]
 
-  // If the value has a toJSON method, call it to obtain a replacement value.
-
-  if (value && typeof value === 'object' &&
-    typeof value.toJSON === 'function') {
+  // 如果该值具有 tojson 方法,则调用它以获取替换值。
+  if (value && typeof value === 'object' && typeof value.toJSON === 'function') {
     value = value.toJSON(key)
   }
 
-  // If we were called with a replacer function, then call the replacer to
-  // obtain a replacement value.
-
+  // 获得替代价值,如果我们被替换函数调用,那么调用替换函数
   if (typeof rep === 'function') {
     value = rep.call(holder, key, value)
   }
 
-  // What happens next depends on the value's type.
-
+  // 接下来发生的事情取决于值的类型。
   switch (typeof value) {
     case 'function':
       return value
@@ -172,51 +206,34 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
       return quote(value, quoteType)
 
     case 'number':
-
-      // JSON numbers must be finite. Encode non-finite numbers as null.
-
+      // JSON数字必须是有限的,将非有限数编码为空。
       return isFinite(value) ? String(value) : 'null'
 
     case 'boolean':
     case 'null':
-
-      // If the value is a boolean or null, convert it to a string. Note:
-      // typeof null does not produce 'null'. The case is included here in
-      // the remote chance that this gets fixed someday.
-
+      // 如果值是布尔值或空值,则将其转换为字符串。
       return String(value)
 
-      // If the type is 'object', we might be dealing with an object or an array or
-      // null.
-
+    // 如果类型是对象,我们可能正在处理一个对象或一个数组
     case 'object':
 
-      // Due to a specification blunder in ECMAScript, typeof null is 'object',
-      // so watch out for that case.
-
+      // 由于ECMAScript中的规范错误,typeof null是'object',所以要注意这种情况。
       if (!value) {
         return 'null'
       }
 
-      // Make an array to hold the partial results of stringifying this object value.
-
+      // 制作一个数组来保存字符串化这个对象值的部分结果。
       gap += indent
       partial = []
 
-      // Is the value an array?
-
+      // 该值是一个数组,字符串化每个元素对于非JSON值,使用null作为占位符。
       if (Object.prototype.toString.apply(value) === '[object Array]') {
-        // The value is an array. Stringify every element. Use null as a placeholder
-        // for non-JSON values.
-
         length = value.length
         for (i = 0; i < length; i += 1) {
           partial[i] = str(i, value, dropQuotesOnKeys, quoteType) || 'null'
         }
 
-        // Join all of the elements together, separated with commas, and wrap them in
-        // brackets.
-
+        // 将所有元素连接在一起,用逗号分隔,并将它们包裹在大括号中。
         v = partial.length === 0
           ? '[]'
           : gap
@@ -226,8 +243,7 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
         return v
       }
 
-      // If the replacer is an array, use it to select the members to be stringified.
-
+      // 如果替换器是一个数组,则使用它来选择要字符串化的成员。
       if (rep && typeof rep === 'object') {
         length = rep.length
         for (i = 0; i < length; i += 1) {
@@ -240,8 +256,7 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
           }
         }
       } else {
-        // Otherwise, iterate through all of the keys in the object.
-
+        // 否则,遍历对象中的所有键。
         for (k in value) {
           if (Object.prototype.hasOwnProperty.call(value, k)) {
             v = str(k, value, dropQuotesOnKeys, quoteType)
@@ -252,9 +267,7 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
         }
       }
 
-      // Join all of the member texts together, separated with commas,
-      // and wrap them in braces.
-
+      // 将所有成员文本连接在一起,用逗号分隔,并将它们包裹在大括号中。
       v = partial.length === 0
         ? '{}'
         : gap
@@ -266,23 +279,21 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
 }
 
 function quote (string, quoteType) {
-  // If the string contains no control characters, no quote characters, and no
-  // backslash characters, then we can safely slap some quotes around it.
-  // Otherwise we must also replace the offending characters with safe escape
-  // sequences.
+  // 如果字符串不包含控制字符、引号字符和不包含
+  // 反斜杠字符，然后我们可以安全地在它周围加上一些引号。
+  // 否则我们还必须用安全转义替换有问题的字符
 
+  // 指定目标字符串的下一次搜索开始
   escapable.lastIndex = 0
 
   var surroundingQuote = '"'
   if (quoteType === 'single') {
     surroundingQuote = "'"
   }
-
+  // 有问题的字符进行转义,匹配上方制定的字符替换表,如果字符替换表没有则生成对应unicode编码,匹配编码值最大数值4
   return escapable.test(string) ? surroundingQuote + string.replace(escapable, function (a) {
     var c = meta[a]
-    return typeof c === 'string'
-      ? c
-      : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4)
+    return typeof c === 'string' ? c : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4)
   }) + surroundingQuote : surroundingQuote + string + surroundingQuote
 }
 
