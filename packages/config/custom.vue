@@ -55,7 +55,7 @@ export default {
       try {
         this.data.params = eval('(' + val + ')')
         // eslint-disable-next-line no-empty
-      } catch (e) {}
+      } catch (e) { }
     }
   },
   methods: {
