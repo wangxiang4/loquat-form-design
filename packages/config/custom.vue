@@ -43,10 +43,10 @@ export default {
       immediate: true,
       handler: function (val) {
         if (val) {
-          this.params = beautifier(val, {
+          const clone = this.deepClone(val)
+          this.params = beautifier(clone, {
             quoteType: 'double',
-            dropQuotesOnKeys: false,
-            dropQuotesOnNumbers: true
+            dropQuotesOnKeys: false
           })
         }
       }

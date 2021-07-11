@@ -399,7 +399,7 @@ export default {
       this.widgetForm = this.initHistory({
         index: 0,
         maxStep: 20,
-        steps: [{ ...this.widgetForm, ...options }],
+        steps: [this.deepClone({ ...this.widgetForm, ...options })],
         storage: this.storage
       })
       if (this.undoRedo) {
@@ -433,7 +433,7 @@ export default {
     handlePreview () {
       if (!this.widgetForm.column || this.widgetForm.column.length == 0) this.$message.error('没有需要展示的内容')
       else {
-        this.widgetFormPreview = this.widgetForm
+        this.widgetFormPreview = this.deepClone(this.widgetForm)
         this.previewVisible = true
       }
     },
@@ -442,10 +442,10 @@ export default {
       this.handleResetJson()
       this.$refs.previewForm.validate(valid => {
         if (valid) {
-          this.generateJson = beautifier(this.widgetModels, {
+          const clone = this.deepClone(this.widgetModels)
+          this.generateJson = beautifier(clone, {
             quoteType: 'double',
-            dropQuotesOnKeys: false,
-            dropQuotesOnNumbers: true
+            dropQuotesOnKeys: false
           })
           this.generateJsonVisible = true
         }
@@ -484,10 +484,10 @@ export default {
     // 初始化生成JSON
     handleGenerateJson () {
       this.handleResetJson()
-      this.generateJson = beautifier(this.widgetForm, {
+      const clone = this.deepClone(this.widgetForm)
+      this.generateJson = beautifier(clone, {
         quoteType: 'double',
-        dropQuotesOnKeys: false,
-        dropQuotesOnNumbers: true
+        dropQuotesOnKeys: false
       })
       this.generateJsonVisible = true
     },
