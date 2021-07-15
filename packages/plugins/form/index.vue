@@ -10,7 +10,7 @@
              @submit.native.prevent
     >
       <template v-for="(column,index) in columnOption">
-        <el-col v-if="!column.show"
+        <el-col v-if="!column.hide"
                 :key="index"
                 :style="{
                   paddingLeft:$loquat.setPx((parentOption.gutter || gutter)/2),
@@ -24,11 +24,11 @@
                 :class="['loquat-form__row',column.className]"
         >
           <el-form-item :prop="column.prop"
-                        :label="column.showLabel ? '' : column.label"
+                        :label="column.hideLabel ? '' : column.label"
                         :rules="column.rules"
                         :class="'loquat-form__item--'+(column.labelPosition || parentOption.labelPosition || labelPosition)"
                         :label-position="column.labelPosition || parentOption.labelPosition || labelPosition"
-                        :label-width="column.showLabel ? '0' :getLabelWidth(column,parentOption,labelWidth)"
+                        :label-width="column.hideLabel ? '0' :getLabelWidth(column,parentOption,labelWidth)"
           >
             <template v-if="$scopedSlots[column.prop + 'Label']" slot="label">
               <slot :name="column.prop + 'Label'"

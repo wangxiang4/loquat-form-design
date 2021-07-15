@@ -29,7 +29,7 @@ export default {
     if (multi && !hasOwnMultiProperty(data, path)) {
       vNode.componentInstance && vNode.componentInstance.$destroy()
       el.parentNode && el.parentNode.removeChild(el)
-    } else if (!hasOwnProperty(data, path)) {
+    } else if (!multi && !hasOwnProperty(data, path)) {
       vNode.componentInstance && vNode.componentInstance.$destroy()
       el.parentNode && el.parentNode.removeChild(el)
     }

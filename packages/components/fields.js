@@ -6,9 +6,21 @@ export default [
       label: '单行文本',
       icon: 'icon-input',
       span: 24,
+      labelWidth: undefined,
+      placeholder: undefined,
+      value: undefined,
+      prepend: undefined,
+      append: undefined,
       style: {
         width: '100%'
       },
+      maxlength: undefined,
+      readonly: false,
+      showWordLimit: false,
+      disabled: false,
+      showPassword: false,
+      hide: false,
+      hideLabel: false,
       validateConfig: {
         required: false,
         type: false,

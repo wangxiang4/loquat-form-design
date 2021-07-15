@@ -13,7 +13,7 @@
       <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data,'style.width']" label="组件宽度" >
-      <el-input v-model="data.style.width" placeholder="请输入组件宽度" clearable/>
+      <el-input v-model="style.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data,'placeholder']" label="占位内容">
       <el-input v-model="data.placeholder"
@@ -59,27 +59,27 @@
       <el-checkbox v-model="data.showPassword"
                    v-loquat-has-perm="[data,'showPassword']"
       >显示密码</el-checkbox>
-      <el-checkbox v-model="data.show"
-                   v-loquat-has-perm="[data,'show']"
+      <el-checkbox v-model="data.hide"
+                   v-loquat-has-perm="[data,'hide']"
       >隐藏</el-checkbox>
-      <el-checkbox v-model="data.showLabel"
-                   v-loquat-has-perm="[data,'showLabel']"
+      <el-checkbox v-model="data.hideLabel"
+                   v-loquat-has-perm="[data,'hideLabel']"
       >隐藏标签</el-checkbox>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data,validatePerm,1]" label="校验">
       <div v-loquat-has-perm="[data,'validateConfig.required']" class="validate-block">
-        <el-checkbox v-model="data.validateConfig.required">必填</el-checkbox>
-        <el-input v-show="data.validateConfig.required"
-                  v-model.lazy="data.validateConfig.requiredMessage"
+        <el-checkbox v-model="validateConfig.required">必填</el-checkbox>
+        <el-input v-show="validateConfig.required"
+                  v-model.lazy="validateConfig.requiredMessage"
                   size="mini"
                   class="message-input"
                   placeholder="自定义错误提示"
         />
       </div>
       <div v-loquat-has-perm="[data,'validateConfig.type']" class="validate-block">
-        <el-checkbox v-model="data.validateConfig.type" style="margin-right: 10px;"/>
-        <el-select v-model.lazy="data.validateConfig.typeFormat"
-                   :disabled="!data.validateConfig.type"
+        <el-checkbox v-model="validateConfig.type" style="margin-right: 10px;"/>
+        <el-select v-model.lazy="validateConfig.typeFormat"
+                   :disabled="!validateConfig.type"
                    size="mini"
                    placeholder="请选择"
         >
@@ -92,23 +92,23 @@
           <el-option value="email" label="邮箱地址"/>
           <el-option value="hex" label="十六进制"/>
         </el-select>
-        <el-input v-show="data.validateConfig.type"
-                  v-model.lazy="data.validateConfig.typeMessage"
+        <el-input v-show="validateConfig.type"
+                  v-model.lazy="validateConfig.typeMessage"
                   size="mini"
                   class="message-input"
                   placeholder="自定义错误提示"
         />
       </div>
       <div v-loquat-has-perm="[data,'validateConfig.pattern']" class="validate-block">
-        <el-checkbox v-model="data.validateConfig.pattern" style="margin-right: 10px;"/>
-        <el-input v-model.lazy="data.validateConfig.patternFormat"
-                  :disabled="!data.validateConfig.pattern"
+        <el-checkbox v-model="validateConfig.pattern" style="margin-right: 10px;"/>
+        <el-input v-model.lazy="validateConfig.patternFormat"
+                  :disabled="!validateConfig.pattern"
                   size="mini"
                   style="width: 239px;"
                   placeholder="填写正则表达式"
         />
-        <el-input v-show="data.validateConfig.pattern"
-                  v-model.lazy="data.validateConfig.patternMessage"
+        <el-input v-show="validateConfig.pattern"
+                  v-model.lazy="validateConfig.patternMessage"
                   size="mini"
                   class="message-input"
                   placeholder="自定义错误提示"
@@ -136,8 +136,9 @@ export default {
         'showWordLimit',
         'disabled',
         'showPassword',
-        'show',
-        'showLabel'],
+        'hide',
+        'hideLabel'
+      ],
       validatePerm: [
         'validateConfig.required',
         'validateConfig.type',
@@ -145,8 +146,16 @@ export default {
       ]
     }
   },
+  computed: {
+    validateConfig () {
+      return this.data.validateConfig || {}
+    },
+    style () {
+      return this.data.style || {}
+    }
+  },
   watch: {
-    'data.validateConfig': {
+    validateConfig: {
       handler (val) {
         const rules = []
         if (val.required) rules.push({ required: true, message: val.requiredMessage || `${this.data.label}必须填写` })

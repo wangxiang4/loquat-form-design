@@ -3,7 +3,7 @@
 $primary-color: #409eff;
 $primary-active-color: #ecf5ff;
 $primary-background-color: #ecf8ff;
-$primary-disable-show-color: #FEF0F0;
+$primary-hide-color: #FEF0F0;
 $primary-readonly-color: #F2F2F2;
 
 
@@ -163,8 +163,8 @@ $primary-readonly-color: #F2F2F2;
           &__readonly {
             background: $primary-readonly-color;
           }
-          &__show {
-            background: $primary-disable-show-color;
+          &__hide {
+            background: $primary-hide-color;
           }
         }
 

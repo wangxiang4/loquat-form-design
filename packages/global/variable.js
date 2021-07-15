@@ -11,6 +11,8 @@ export const KEY_COMPONENT_NAME_HTML = 'loquat-'
 export const KEY_COMPONENT_CONFIG_NAME_HTML = 'loquat-config-'
 export const KEY_COMPONENT_NAME = 'Loquat'
 export const KEY_COMPONENT_CONFIG_NAME = 'LoquatConfig'
+/** 查找参数路径表达式,比如a[0].b.c对应匹配(a,0,b,c) **/
+export const PROP_PATH_EXPRESSION = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g
 export const DATE_LIST = [
   'dates',
   'date',
@@ -47,5 +49,3 @@ export const FORM_DEFAULT_PROP = {
   disabled: false
 }
 
-/** 查找参数路径表达式,比如a[0].b.c对应匹配(a,0,b,c) **/
-export const PROP_PATH_EXPRESSION = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g

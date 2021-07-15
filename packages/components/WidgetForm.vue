@@ -30,12 +30,12 @@
                           :class="{
                             active: selectWidget.prop == column.prop,
                             'active__readonly': column.readonly,
-                            'active__show': column.show,
+                            'active__hide': column.hide,
                             'required': $loquat.get(column,'validateConfig.required'),
                           }"
                           :prop="column.prop"
-                          :label="column.showLabel ? '' : column.label"
-                          :label-width="column.showLabel ? '0' : getLabelWidth(column,data,labelWidth)"
+                          :label="column.hideLabel ? '' : column.label"
+                          :label-width="column.hideLabel ? '0' : getLabelWidth(column,data,labelWidth)"
                           :label-position="column.labelPosition || data.labelPosition || labelPosition"
                           @click.native="handleSelectWidget(index)"
             >
