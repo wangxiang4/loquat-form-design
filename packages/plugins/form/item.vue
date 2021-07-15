@@ -1,6 +1,6 @@
 <template>
   <component :is="getComponent(column.type,column.component)"
-             ref="tempItem"
+             ref="item"
              v-model="text"
              v-bind="column"
              :column="Object.assign(column,params)"
@@ -23,7 +23,7 @@
 <script>
 import { getComponent, getPlaceholder } from '@utils/dataFormat'
 export default {
-  name: 'ComponentItem',
+  name: 'FormItem',
   props: {
     value: {
       validator: () => true,

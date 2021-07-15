@@ -33,7 +33,7 @@ export const IMPORT_JSON_TEMPLATE = `{
   "column": [],
   "labelPosition": "left",
   "labelWidth": 120,
-  "componentSize": "small"
+  "size": "small"
 }`
 
 /** 查找参数路径表达式,比如a[0].b.c对应匹配(a,0,b,c) **/

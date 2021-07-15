@@ -33,7 +33,11 @@
                             }"
                             @click.native="handleSelectWidget(index)"
               >
-                <widget-form-item :item="column" :params="column.params"/>
+                <loquat-form-item :column="column"
+                                  :readonly="data.readonly || column.readonly"
+                                  :disabled="data.disabled || column.disabled"
+                                  :size="data.size || column.size"
+                />
                 <el-button v-if="selectWidget.prop == column.prop"
                            title="删除"
                            class="widget-action-delete"
@@ -67,11 +71,10 @@
 
 <script>
 import { getLabelWidth } from '@utils/dataFormat'
-import WidgetFormItem from './WidgetFormItem'
 import Draggable from 'vuedraggable'
 export default {
   name: 'WidgetForm',
-  components: { Draggable, WidgetFormItem },
+  components: { Draggable },
   props: {
     data: {
       type: Object,

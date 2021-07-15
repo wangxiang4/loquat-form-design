@@ -64,8 +64,7 @@ export default {
         statusIcon: true,
         formWidth: '80%',
         labelPosition: 'left',
-        labelWidth: 120,
-        componentSize: 'small'
+        labelWidth: 120
       }
     }
   },

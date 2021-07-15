@@ -325,7 +325,7 @@ export default {
         column: [],
         labelPosition: 'left',
         labelWidth: 120,
-        componentSize: 'small'
+        size: 'small'
       },
       configTab: 'widget',
       widgetFormSelect: {},

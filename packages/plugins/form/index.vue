@@ -59,17 +59,17 @@
                   :disabled="disabled || column.disabled"
                   :name="column.prop"
             />
-            <component-item v-else
-                            :ref="column.prop"
-                            v-model="form[column.prop]"
-                            :column="column"
-                            :props="parentOption.props"
-                            :readonly="readonly || column.readonly"
-                            :disabled="disabled || column.disabled"
-                            :size="size || column.size"
-                            :enter="parentOption.enter"
-                            @enter="submit"
-                            @change="propChange(parentOption.column,column)"
+            <form-item v-else
+                       :ref="column.prop"
+                       v-model="form[column.prop]"
+                       :column="column"
+                       :props="parentOption.props"
+                       :readonly="readonly || column.readonly"
+                       :disabled="disabled || column.disabled"
+                       :size="size || column.size"
+                       :enter="parentOption.enter"
+                       @enter="submit"
+                       @change="propChange(parentOption.column,column)"
             >
               <template v-for="item in $scopedSlots[column.prop + 'Type']?[column]:[]"
                         :slot="column.prop + 'Type'"
@@ -77,7 +77,7 @@
               >
                 <slot :name="item.prop + 'Type'" v-bind="scope"/>
               </template>
-            </component-item>
+            </form-item>
           </el-form-item>
         </el-col>
       </template>
@@ -87,10 +87,10 @@
 
 <script>
 import { clearVal, formInitVal, getLabelWidth } from '@utils/dataFormat'
-import componentItem from './componentItem'
+import formItem from './item'
 export default {
   name: 'Form',
-  components: { componentItem },
+  components: { formItem },
   props: {
     reset: {
       type: Boolean,
