@@ -1,7 +1,7 @@
 <template>
   <div class="loquat-empty">
     <div class="loquat-empty__image"
-         :style="{height: setPx(size)}"
+         :style="{height: $loquat.setPx(size)}"
     >
       <img :src="image" alt="">
     </div>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'LoquatEmpty',
+  name: 'Empty',
   props: {
     size: {
       type: String,

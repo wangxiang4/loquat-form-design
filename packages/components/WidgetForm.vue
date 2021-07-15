@@ -2,7 +2,7 @@
   <div class="widget-form-container">
     <el-form ref="widgetForm"
              :label-position="data.labelPosition || 'left'"
-             :label-width="setPx(data.labelWidth,'100')"
+             :label-width="$loquat.setPx(data.labelWidth,'100')"
              :label-suffix="data.labelSuffix"
              size="small"
     >
@@ -22,10 +22,15 @@
                     :offset="column.offset || 0"
             >
               <el-form-item class="widget-form-item"
-                            :label="column.label"
-                            :label-width="column.labelWidth"
+                            :label="column.showLabel ? '' : column.label"
+                            :label-width="column.showLabel ? '0' : getLabelWidth(column,data)"
                             :prop="column.prop"
-                            :class="{ active: selectWidget.prop == column.prop, 'required': column.required }"
+                            :class="{
+                              active: selectWidget.prop == column.prop,
+                              'active__readonly': column.readonly,
+                              'active__show': column.show,
+                              'required': $loquat.get(column,'validateConfig.required'),
+                            }"
                             @click.native="handleSelectWidget(index)"
               >
                 <widget-form-item :item="column" :params="column.params"/>
@@ -61,6 +66,7 @@
 </template>
 
 <script>
+import { getLabelWidth } from '@utils/dataFormat'
 import WidgetFormItem from './WidgetFormItem'
 import Draggable from 'vuedraggable'
 export default {
@@ -97,12 +103,13 @@ export default {
     }
   },
   methods: {
+    getLabelWidth,
     handleSelectWidget (index) {
       this.selectWidget = this.data.column[index]
     },
     handleWidgetAdd (evt) {
       const newIndex = evt.newIndex
-      const data = this.deepClone(this.data.column[newIndex])
+      const data = this.$loquat.deepClone(this.data.column[newIndex])
       if (!data.prop) data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
       delete data.icon
       this.$set(this.data.column, newIndex, data)
@@ -121,7 +128,7 @@ export default {
       })
     },
     handleWidgetClone (index) {
-      const cloneData = this.deepClone(this.data.column[index])
+      const cloneData = this.$loquat.deepClone(this.data.column[index])
       cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
       this.data.column.splice(index, 0, cloneData)
       this.$nextTick(() => {

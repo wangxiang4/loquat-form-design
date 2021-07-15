@@ -23,7 +23,7 @@
 import AceEditor from 'v-ace-editor'
 import beautifier from '@utils/jsonBeautifier'
 export default {
-  name: 'ConfigCustom',
+  name: 'Custom',
   components: { AceEditor },
   props: {
     data: {
@@ -43,7 +43,7 @@ export default {
       immediate: true,
       handler: function (val) {
         if (val) {
-          const clone = this.deepClone(val)
+          const clone = this.$loquat.deepClone(val)
           this.params = beautifier(clone, {
             quoteType: 'double',
             dropQuotesOnKeys: false

@@ -1,19 +1,20 @@
 <template>
-  <div class="loquat-form" :style="{width:setPx(parentOption.formWidth,'100%')}">
+  <div class="loquat-form" :style="{width: $loquat.setPx(parentOption.formWidth,'100%')}">
     <el-form ref="form"
              :status-icon="parentOption.statusIcon"
              :model="form"
              :label-suffix="labelSuffix"
              :size="size"
              :label-position="parentOption.labelPosition"
-             :label-width="setPx(parentOption.labelWidth,labelWidth)"
+             :label-width="$loquat.setPx(parentOption.labelWidth,90)"
              @submit.native.prevent
     >
       <template v-for="(column,index) in columnOption">
-        <el-col :key="index"
+        <el-col v-if="!column.show"
+                :key="index"
                 :style="{
-                  paddingLeft:setPx((parentOption.gutter ||20)/2),
-                  paddingRight:setPx((parentOption.gutter ||20)/2)
+                  paddingLeft:$loquat.setPx((parentOption.gutter ||20)/2),
+                  paddingRight:$loquat.setPx((parentOption.gutter ||20)/2)
                 }"
                 :span="getSpan(column)"
                 :md="getSpan(column)"
@@ -23,11 +24,11 @@
                 :class="['loquat-form__row',column.className]"
         >
           <el-form-item :prop="column.prop"
-                        :label="column.label"
+                        :label="column.showLabel ? '' : column.label"
                         :rules="column.rules"
                         :class="'loquat-form__item--'+(column.labelPosition || parentOption.labelPosition || '')"
                         :label-position="column.labelPosition || parentOption.labelPosition"
-                        :label-width="getLabelWidth(column,parentOption)"
+                        :label-width="column.showLabel ? '0' :getLabelWidth(column,parentOption)"
           >
             <template v-if="$scopedSlots[column.prop + 'Label']" slot="label">
               <slot :name="column.prop + 'Label'"
@@ -85,10 +86,10 @@
 </template>
 
 <script>
-import { clearVal, formInitVal } from '@utils'
+import { clearVal, formInitVal, getLabelWidth } from '@utils/dataFormat'
 import componentItem from './componentItem'
 export default {
-  name: 'LoquatForm',
+  name: 'Form',
   components: { componentItem },
   props: {
     reset: {
@@ -112,7 +113,6 @@ export default {
   },
   data () {
     return {
-      labelWidth: 90,
       itemSpanDefault: 12,
       form: {},
       formCreate: false,
@@ -122,7 +122,7 @@ export default {
   },
   computed: {
     parentOption () {
-      return this.deepClone(this.option)
+      return this.$loquat.deepClone(this.option)
     },
     columnOption () {
       return this.parentOption.column || []
@@ -173,8 +173,8 @@ export default {
     // 初始化表单
     dataFormat () {
       this.formDefault = formInitVal(this.columnOption)
-      const value = this.deepClone(this.formDefault.tableForm)
-      this.setForm(this.deepClone(Object.assign(value, this.formVal)))
+      const value = this.$loquat.deepClone(this.formDefault.tableForm)
+      this.setForm(this.$loquat.deepClone(Object.assign(value, this.formVal)))
     },
     // 表单赋值
     setForm (value) {
@@ -190,17 +190,7 @@ export default {
     getSpan (column) {
       return column.span || this.parentOption.span || this.itemSpanDefault
     },
-    getLabelWidth (column, item) {
-      let result
-      if (!this.validateNull(column.labelWidth)) {
-        result = column.labelWidth
-      } else if (!this.validateNull(item.labelWidth)) {
-        result = item.labelWidth
-      } else {
-        result = this.parentOption.labelWidth
-      }
-      return this.setPx(result, this.labelWidth)
-    },
+    getLabelWidth,
     propChange (option, column) {
       if (this.$refs.form) this.$refs.form.validateField(column.prop)
     },

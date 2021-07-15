@@ -27,7 +27,7 @@ export default {
         if (history) {
           this.historySteps = eval('(' + history + ')')
           const { index, steps } = this.historySteps
-          return this.deepClone(steps[index])
+          return this.$loquat.deepClone(steps[index])
         }
       }
       this.historySteps = {
@@ -35,12 +35,12 @@ export default {
         ...data
       }
       const { index, steps } = this.historySteps
-      return this.deepClone(steps[index])
+      return this.$loquat.deepClone(steps[index])
     },
     handleHistoryChange (data) {
       if (this.historySteps.index == this.historySteps.maxStep - 1) this.historySteps.steps.shift()
       else this.historySteps.index++
-      this.historySteps.steps[this.historySteps.index] = this.deepClone(data)
+      this.historySteps.steps[this.historySteps.index] = this.$loquat.deepClone(data)
 
       if (this.historySteps.index < this.historySteps.steps.length - 1) {
         this.historySteps.steps = this.historySteps.steps.slice(0, this.historySteps.index + 1)
@@ -48,11 +48,11 @@ export default {
     },
     handleUndo () {
       if (this.historySteps.index != 0) this.historySteps.index--
-      return this.deepClone(this.historySteps.steps[this.historySteps.index])
+      return this.$loquat.deepClone(this.historySteps.steps[this.historySteps.index])
     },
     handleRedo () {
       if (this.historySteps.index != (this.historySteps.steps.length - 1)) this.historySteps.index++
-      return this.deepClone(this.historySteps.steps[this.historySteps.index])
+      return this.$loquat.deepClone(this.historySteps.steps[this.historySteps.index])
     }
   }
 }

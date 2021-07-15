@@ -1,6 +1,11 @@
+
+/** 声明通用颜色,后期考虑做个性化主题功能 **/
 $primary-color: #409eff;
 $primary-active-color: #ecf5ff;
 $primary-background-color: #ecf8ff;
+$primary-disable-show-color: #FEF0F0;
+$primary-readonly-color: #F2F2F2;
+
 
 *,
 :after,
@@ -155,6 +160,12 @@ $primary-background-color: #ecf8ff;
         &.active {
           border-left: 3px solid $primary-color;
           background: $primary-active-color;
+          &__readonly {
+            background: $primary-readonly-color;
+          }
+          &__show {
+            background: $primary-disable-show-color;
+          }
         }
 
         .widget-action-delete {
@@ -225,6 +236,13 @@ $primary-background-color: #ecf8ff;
       .el-form-item {
         border-bottom: 1px solid #e1e1e1;
         padding-bottom: 10px;
+        .validate-block {
+          margin-top: 10px;
+          .message-input {
+            margin-left: 24px;
+            width: 239px;
+          }
+        }
       }
 
       .el-tabs__header {

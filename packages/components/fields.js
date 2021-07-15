@@ -6,7 +6,14 @@ export default [
       label: '单行文本',
       icon: 'icon-input',
       span: 24,
-      display: true
+      style: {
+        width: '100%'
+      },
+      validateConfig: {
+        required: false,
+        type: false,
+        pattern: false
+      }
     }]
   },
   {

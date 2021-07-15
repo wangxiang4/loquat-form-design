@@ -1,4 +1,16 @@
-export const KEY_COMPONENT_NAME = 'loquat-'
+/**
+ * @program: loquat-form-design
+ *
+ * @description: 全局变量
+ *
+ * @author: entfrm开发团队-王翔
+ *
+ * @create: 2021-07-15
+ **/
+export const KEY_COMPONENT_NAME_HTML = 'loquat-'
+export const KEY_COMPONENT_CONFIG_NAME_HTML = 'loquat-config-'
+export const KEY_COMPONENT_NAME = 'Loquat'
+export const KEY_COMPONENT_CONFIG_NAME = 'LoquatConfig'
 export const DATE_LIST = [
   'dates',
   'date',
@@ -23,3 +35,6 @@ export const IMPORT_JSON_TEMPLATE = `{
   "labelWidth": 120,
   "componentSize": "small"
 }`
+
+/** 查找参数路径表达式,比如a[0].b.c对应匹配(a,0,b,c) **/
+export const PROP_PATH_EXPRESSION = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g

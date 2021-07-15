@@ -6,7 +6,7 @@
             :type="typeParam"
             :maxlength="maxlength"
             :minlength="minlength"
-            :show-password="typeParam=='password'?showPassword:false"
+            :show-password="showPassword"
             :autosize="{ minRows: minRows, maxRows: maxRows}"
             :prefix-icon="prefixIcon"
             :suffix-icon="suffixIcon"
@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: 'LoquatInput',
+  name: 'Input',
   props: {
     value: {
       type: String,
@@ -47,11 +47,11 @@ export default {
       default: true
     },
     maxlength: {
-      type: Number,
+      type: [Number, String],
       default: undefined
     },
     minlength: {
-      type: Number,
+      type: [Number, String],
       default: undefined
     },
     disabled: {
@@ -135,8 +135,6 @@ export default {
     typeParam: function () {
       if (this.type === 'textarea') {
         return 'textarea'
-      } else if (this.type === 'password') {
-        return 'password'
       } else {
         return 'text'
       }

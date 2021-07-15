@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getComponent, getPlaceholder } from '@utils'
+import { getComponent, getPlaceholder } from '@utils/dataFormat'
 export default {
   name: 'ComponentItem',
   props: {
@@ -87,7 +87,7 @@ export default {
   watch: {
     text: {
       handler (val) {
-        if (this.first || !this.validateNull(val)) {
+        if (this.first || !this.$loquat.validateNull(val)) {
           this.first = true
           this.$emit('input', val)
           this.$emit('change', val)

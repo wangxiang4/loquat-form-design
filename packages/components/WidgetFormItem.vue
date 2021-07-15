@@ -1,7 +1,7 @@
 <template>
   <div>
     <component :is="getComponent(item.type, item.component)"
-               v-bind="Object.assign(deepClone(item), params, { size:item.size || 'small' })"
+               v-bind="Object.assign($loquat.deepClone(item), params, { size:item.size || 'small' })"
                :multiple="false"
                :placeholder="item.placeholder || getPlaceholder(item)"
     >
@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import { getComponent, getPlaceholder } from '@utils'
+import { getComponent, getPlaceholder } from '@utils/dataFormat'
 export default {
   name: 'WidgetFormItem',
   props: {

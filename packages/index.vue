@@ -23,7 +23,7 @@
               </draggable>
             </template>
           </div>
-          <template v-if="!validateNull(customFields)">
+          <template v-if="!$loquat.validateNull(customFields)">
             <div v-for="(field, index) in customFields" :key="index + fields.length">
               <div class="field-title">{{ field.title }}</div>
               <draggable tag="ul"
@@ -399,7 +399,7 @@ export default {
       this.widgetForm = this.initHistory({
         index: 0,
         maxStep: 20,
-        steps: [this.deepClone({ ...this.widgetForm, ...options })],
+        steps: [this.$loquat.deepClone({ ...this.widgetForm, ...options })],
         storage: this.storage
       })
       if (this.undoRedo) {
@@ -433,7 +433,7 @@ export default {
     handlePreview () {
       if (!this.widgetForm.column || this.widgetForm.column.length == 0) this.$message.error('没有需要展示的内容')
       else {
-        this.widgetFormPreview = this.deepClone(this.widgetForm)
+        this.widgetFormPreview = this.$loquat.deepClone(this.widgetForm)
         this.previewVisible = true
       }
     },
@@ -442,7 +442,7 @@ export default {
       this.handleResetJson()
       this.$refs.previewForm.validate(valid => {
         if (valid) {
-          const clone = this.deepClone(this.widgetModels)
+          const clone = this.$loquat.deepClone(this.widgetModels)
           this.generateJson = beautifier(clone, {
             quoteType: 'double',
             dropQuotesOnKeys: false
@@ -484,7 +484,7 @@ export default {
     // 初始化生成JSON
     handleGenerateJson () {
       this.handleResetJson()
-      const clone = this.deepClone(this.widgetForm)
+      const clone = this.$loquat.deepClone(this.widgetForm)
       this.generateJson = beautifier(clone, {
         quoteType: 'double',
         dropQuotesOnKeys: false
