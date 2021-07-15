@@ -17,8 +17,8 @@
         <template v-for="(column, index) in data.column">
           <el-col :key="index"
                   :style="{
-                    paddingLeft:$loquat.setPx((data.gutter || gutter)/2),
-                    paddingRight:$loquat.setPx((data.gutter || gutter)/2)
+                    paddingLeft:$loquat.setPx((data.gutter || 0)/2),
+                    paddingRight:$loquat.setPx((data.gutter || 0)/2)
                   }"
                   :span="column.span || data.span || span"
                   :md="column.span || data.span || span"
