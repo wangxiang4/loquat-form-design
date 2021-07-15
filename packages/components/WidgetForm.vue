@@ -1,70 +1,76 @@
 <template>
   <div class="widget-form-container">
     <el-form ref="widgetForm"
-             :label-position="data.labelPosition || 'left'"
-             :label-width="$loquat.setPx(data.labelWidth,'100')"
-             :label-suffix="data.labelSuffix"
-             size="small"
+             :label-position="data.labelPosition || labelPosition"
+             :label-width="$loquat.setPx(data.labelWidth,labelWidth)"
+             :label-suffix="data.labelSuffix || labelSuffix"
+             :size="size"
     >
-      <el-row :gutter="data.gutter">
-        <draggable class="widget-form-list"
-                   :list="data.column"
-                   :group="{ name: 'form' }"
-                   ghost-class="ghost"
-                   :animation="300"
-                   @add="handleWidgetAdd"
-                   @end="$emit('change')"
-        >
-          <template v-for="(column, index) in data.column">
-            <el-col :key="index"
-                    :md="column.span || 12"
-                    :xs="24"
-                    :offset="column.offset || 0"
+      <draggable class="widget-form-list"
+                 :list="data.column"
+                 :group="{ name: 'form' }"
+                 ghost-class="ghost"
+                 :animation="300"
+                 @add="handleWidgetAdd"
+                 @end="$emit('change')"
+      >
+        <template v-for="(column, index) in data.column">
+          <el-col :key="index"
+                  :style="{
+                    paddingLeft:$loquat.setPx((data.gutter || gutter)/2),
+                    paddingRight:$loquat.setPx((data.gutter || gutter)/2)
+                  }"
+                  :span="column.span || data.span || span"
+                  :md="column.span || data.span || span"
+                  :sm="12"
+                  :xs="24"
+                  :offset="column.offset || offset"
+          >
+            <el-form-item class="widget-form-item"
+                          :class="{
+                            active: selectWidget.prop == column.prop,
+                            'active__readonly': column.readonly,
+                            'active__show': column.show,
+                            'required': $loquat.get(column,'validateConfig.required'),
+                          }"
+                          :prop="column.prop"
+                          :label="column.showLabel ? '' : column.label"
+                          :label-width="column.showLabel ? '0' : getLabelWidth(column,data,labelWidth)"
+                          :label-position="column.labelPosition || data.labelPosition || labelPosition"
+                          @click.native="handleSelectWidget(index)"
             >
-              <el-form-item class="widget-form-item"
-                            :label="column.showLabel ? '' : column.label"
-                            :label-width="column.showLabel ? '0' : getLabelWidth(column,data)"
-                            :prop="column.prop"
-                            :class="{
-                              active: selectWidget.prop == column.prop,
-                              'active__readonly': column.readonly,
-                              'active__show': column.show,
-                              'required': $loquat.get(column,'validateConfig.required'),
-                            }"
-                            @click.native="handleSelectWidget(index)"
+              <loquat-form-item :column="column"
+                                :props="data.props"
+                                :readonly="data.readonly || column.readonly"
+                                :disabled="data.disabled || column.disabled"
+                                :size="data.size || column.size"
+              />
+              <el-button v-if="selectWidget.prop == column.prop"
+                         title="删除"
+                         class="widget-action-delete"
+                         circle
+                         plain
+                         size="small"
+                         type="danger"
+                         @click.stop="handleWidgetDelete(index)"
               >
-                <loquat-form-item :column="column"
-                                  :readonly="data.readonly || column.readonly"
-                                  :disabled="data.disabled || column.disabled"
-                                  :size="data.size || column.size"
-                />
-                <el-button v-if="selectWidget.prop == column.prop"
-                           title="删除"
-                           class="widget-action-delete"
-                           circle
-                           plain
-                           size="small"
-                           type="danger"
-                           @click.stop="handleWidgetDelete(index)"
-                >
-                  <i class="iconfont icon-trash"/>
-                </el-button>
-                <el-button v-if="selectWidget.prop == column.prop"
-                           title="复制"
-                           class="widget-action-clone"
-                           circle
-                           plain
-                           size="small"
-                           type="primary"
-                           @click.stop="handleWidgetClone(index)"
-                >
-                  <i class="iconfont icon-clone"/>
-                </el-button>
-              </el-form-item>
-            </el-col>
-          </template>
-        </draggable>
-      </el-row>
+                <i class="iconfont icon-trash"/>
+              </el-button>
+              <el-button v-if="selectWidget.prop == column.prop"
+                         title="复制"
+                         class="widget-action-clone"
+                         circle
+                         plain
+                         size="small"
+                         type="primary"
+                         @click.stop="handleWidgetClone(index)"
+              >
+                <i class="iconfont icon-clone"/>
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </template>
+      </draggable>
     </el-form>
   </div>
 </template>
@@ -72,6 +78,7 @@
 <script>
 import { getLabelWidth } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
+import { FORM_DEFAULT_PROP } from '@/global/variable'
 export default {
   name: 'WidgetForm',
   components: { Draggable },
@@ -91,6 +98,7 @@ export default {
   },
   data () {
     return {
+      ...FORM_DEFAULT_PROP,
       selectWidget: this.select
     }
   },

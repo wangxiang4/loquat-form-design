@@ -16,7 +16,7 @@ import {
   MULTIPLE_LIST, SELECT_LIST,
   KEY_COMPONENT_CONFIG_NAME_HTML
 } from '@/global/variable'
-import { validateNull } from './index'
+import { validateNull, setPx } from './index'
 
 /** 获取控件提示 **/
 export function getPlaceholder (item) {
@@ -29,14 +29,14 @@ export function getPlaceholder (item) {
 }
 
 /** 获取标签长度 **/
-export function getLabelWidth (column, item, defval = 90) {
+export function getLabelWidth (column, item, defval) {
   let result
   if (!this.$loquat.validateNull(column.labelWidth)) {
     result = column.labelWidth
   } else if (!this.$loquat.validateNull(item.labelWidth)) {
     result = item.labelWidth
   }
-  return this.$loquat.setPx(result, defval)
+  return setPx(result, defval)
 }
 
 /** 获取组件名称 **/

@@ -1,6 +1,6 @@
 <template>
   <component :is="getComponent(column.type,column.component)"
-             ref="item"
+             ref="formItem"
              v-model="text"
              v-bind="column"
              :column="Object.assign(column,params)"
@@ -53,7 +53,7 @@ export default {
     },
     size: {
       type: String,
-      default: ''
+      default: 'small'
     },
     disabled: {
       type: Boolean,

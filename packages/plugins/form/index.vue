@@ -3,40 +3,40 @@
     <el-form ref="form"
              :status-icon="parentOption.statusIcon"
              :model="form"
-             :label-suffix="labelSuffix"
-             :size="size"
-             :label-position="parentOption.labelPosition"
-             :label-width="$loquat.setPx(parentOption.labelWidth,90)"
+             :label-suffix="parentOption.labelSuffix || labelSuffix"
+             :size="parentOption.size || size"
+             :label-position="parentOption.labelPosition || labelPosition"
+             :label-width="$loquat.setPx(parentOption.labelWidth,labelWidth)"
              @submit.native.prevent
     >
       <template v-for="(column,index) in columnOption">
         <el-col v-if="!column.show"
                 :key="index"
                 :style="{
-                  paddingLeft:$loquat.setPx((parentOption.gutter ||20)/2),
-                  paddingRight:$loquat.setPx((parentOption.gutter ||20)/2)
+                  paddingLeft:$loquat.setPx((parentOption.gutter || gutter)/2),
+                  paddingRight:$loquat.setPx((parentOption.gutter || gutter)/2)
                 }"
-                :span="getSpan(column)"
-                :md="getSpan(column)"
+                :span="column.span || parentOption.span || span"
+                :md="column.span || parentOption.span || span"
                 :sm="12"
                 :xs="24"
-                :offset="column.offset || 0"
+                :offset="column.offset || offset"
                 :class="['loquat-form__row',column.className]"
         >
           <el-form-item :prop="column.prop"
                         :label="column.showLabel ? '' : column.label"
                         :rules="column.rules"
-                        :class="'loquat-form__item--'+(column.labelPosition || parentOption.labelPosition || '')"
-                        :label-position="column.labelPosition || parentOption.labelPosition"
-                        :label-width="column.showLabel ? '0' :getLabelWidth(column,parentOption)"
+                        :class="'loquat-form__item--'+(column.labelPosition || parentOption.labelPosition || labelPosition)"
+                        :label-position="column.labelPosition || parentOption.labelPosition || labelPosition"
+                        :label-width="column.showLabel ? '0' :getLabelWidth(column,parentOption,labelWidth)"
           >
             <template v-if="$scopedSlots[column.prop + 'Label']" slot="label">
               <slot :name="column.prop + 'Label'"
                     :column="column"
                     :value="form[column.prop]"
-                    :readonly="readonly || column.readonly"
-                    :disabled="disabled || column.disabled"
-                    :size="size || column.size"
+                    :readonly="parentOption.readonly || column.readonly || readonly"
+                    :disabled="parentOption.disabled || column.disabled || disabled"
+                    :size="parentOption.size || column.size || size"
               />
             </template>
             <template v-if="$scopedSlots[column.prop + 'Error']" slot="error" slot-scope="scope">
@@ -44,32 +44,31 @@
                     v-bind="Object.assign(scope,{
                       column,
                       value:form[column.prop],
-                      readonly:column.readonly || readonly,
-                      disabled:column.disabled || disabled,
-                      size:column.size || size
+                      readonly: parentOption.readonly || column.readonly || readonly,
+                      disabled: parentOption.disabled || column.disabled || disabled,
+                      size: parentOption.size || column.size || size
                     })"
               />
             </template>
             <slot v-if="$scopedSlots[column.prop]"
+                  :name="column.prop"
                   :value="form[column.prop]"
                   :column="column"
-                  :label="form['$'+column.prop]"
-                  :size="size || column.size"
-                  :readonly="readonly || column.readonly"
-                  :disabled="disabled || column.disabled"
-                  :name="column.prop"
+                  :readonly="parentOption.readonly || column.readonly || readonly"
+                  :disabled="parentOption.disabled || column.disabled || disabled"
+                  :size="parentOption.size || column.size || size"
             />
             <form-item v-else
                        :ref="column.prop"
                        v-model="form[column.prop]"
                        :column="column"
                        :props="parentOption.props"
-                       :readonly="readonly || column.readonly"
-                       :disabled="disabled || column.disabled"
-                       :size="size || column.size"
+                       :readonly="parentOption.readonly || column.readonly || readonly"
+                       :disabled="parentOption.disabled || column.disabled || disabled"
+                       :size="parentOption.size || column.size || size"
                        :enter="parentOption.enter"
                        @enter="submit"
-                       @change="propChange(parentOption.column,column)"
+                       @change="propChange(column)"
             >
               <template v-for="item in $scopedSlots[column.prop + 'Type']?[column]:[]"
                         :slot="column.prop + 'Type'"
@@ -87,6 +86,7 @@
 
 <script>
 import { clearVal, formInitVal, getLabelWidth } from '@utils/dataFormat'
+import { FORM_DEFAULT_PROP } from '@/global/variable'
 import formItem from './item'
 export default {
   name: 'Form',
@@ -113,7 +113,7 @@ export default {
   },
   data () {
     return {
-      itemSpanDefault: 12,
+      ...FORM_DEFAULT_PROP,
       form: {},
       formCreate: false,
       formDefault: {},
@@ -126,21 +126,6 @@ export default {
     },
     columnOption () {
       return this.parentOption.column || []
-    },
-    labelSuffix () {
-      return this.parentOption.labelSuffix || ':'
-    },
-    disabled () {
-      return this.parentOption.disabled
-    },
-    readonly () {
-      return this.parentOption.readonly
-    },
-    rowKey () {
-      return this.parentOption.rowKey || 'id'
-    },
-    size () {
-      return this.parentOption.size || 'small'
     }
   },
   watch: {
@@ -170,6 +155,7 @@ export default {
     })
   },
   methods: {
+    getLabelWidth,
     // 初始化表单
     dataFormat () {
       this.formDefault = formInitVal(this.columnOption)
@@ -187,11 +173,7 @@ export default {
       this.$emit('input', this.form)
       this.$emit('change', this.form)
     },
-    getSpan (column) {
-      return column.span || this.parentOption.span || this.itemSpanDefault
-    },
-    getLabelWidth,
-    propChange (option, column) {
+    propChange (column) {
       if (this.$refs.form) this.$refs.form.validateField(column.prop)
     },
     validate (callback) {
@@ -226,7 +208,8 @@ export default {
       this.$emit('reset-change')
     },
     clearVal () {
-      this.form = clearVal(this.form, (this.parentOption.clearExclude || []).concat([this.rowKey]))
+      const row = this.parentOption.rowKey || 'id'
+      this.form = clearVal(this.form, (this.parentOption.clearExclude || []).concat([row]))
     },
     resetFields () {
       this.$refs.form.resetFields()

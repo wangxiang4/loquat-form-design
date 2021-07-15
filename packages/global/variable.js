@@ -35,6 +35,17 @@ export const IMPORT_JSON_TEMPLATE = `{
   "labelWidth": 120,
   "size": "small"
 }`
+export const FORM_DEFAULT_PROP = {
+  span: 12,
+  size: 'small',
+  labelPosition: 'left',
+  labelWidth: 90,
+  labelSuffix: ':',
+  gutter: 20,
+  offset: 0,
+  readonly: false,
+  disabled: false
+}
 
 /** 查找参数路径表达式,比如a[0].b.c对应匹配(a,0,b,c) **/
 export const PROP_PATH_EXPRESSION = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g
