@@ -39,7 +39,7 @@ export default {
   name: 'Input',
   props: {
     value: {
-      type: String,
+      type: [String, Number],
       default: ''
     },
     clearable: {
@@ -135,6 +135,10 @@ export default {
     typeParam: function () {
       if (this.type === 'textarea') {
         return 'textarea'
+      } else if (this.type === 'password') {
+        return 'password'
+      } else if (this.type === 'number') {
+        return 'number'
       } else {
         return 'text'
       }
@@ -169,6 +173,7 @@ export default {
       bindEvent(this, 'click', event)
     },
     handleChange (value) {
+      if (!this.$loquat.validateNull(value) && this.type === 'number') value = Number(value)
       this.$emit('input', value)
       this.$emit('change', value)
     }
