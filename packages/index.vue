@@ -1,5 +1,5 @@
 <template>
-  <div ref="home" class="form-designer">
+  <div :class="['form-designer',formKey]">
     <el-container>
       <el-aside :width="leftWidth">
         <div class="fields-list">
@@ -413,8 +413,10 @@ export default {
   },
   mounted () {
     this.formKey = KEY_COMPONENT_NAME_HTML + randomId()
-    this.$refs.home.classList.add(this.formKey)
     this.handleLoadStorage()
+  },
+  beforeDestroy () {
+    insertCss([], this.formKey)
   },
   methods: {
     // 处理加载历史数据
