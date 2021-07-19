@@ -15,6 +15,7 @@ export default [
         width: '100%'
       },
       maxlength: undefined,
+      customClass: [],
       readonly: false,
       showWordLimit: false,
       disabled: false,

@@ -5,6 +5,7 @@
              :label-width="$loquat.setPx(data.labelWidth,labelWidth)"
              :label-suffix="data.labelSuffix || labelSuffix"
              :size="size"
+             :class="data.customClass"
     >
       <draggable class="widget-form-list"
                  :list="data.column"
@@ -27,12 +28,12 @@
                   :offset="column.offset || offset"
           >
             <el-form-item class="widget-form-item"
-                          :class="{
+                          :class="[{
                             active: selectWidget.prop == column.prop,
                             'active__readonly': column.readonly,
                             'active__hide': column.hide,
-                            'required': $loquat.get(column,'validateConfig.required'),
-                          }"
+                            'required': $loquat.get(column,'validateConfig.required')
+                          }].concat(column.customClass||[])"
                           :prop="column.prop"
                           :label="column.hideLabel ? '' : column.label"
                           :label-width="column.hideLabel ? '0' : getLabelWidth(column,data,labelWidth)"

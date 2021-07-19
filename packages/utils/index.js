@@ -134,3 +134,8 @@ export function get (object, path, defaultValue) {
     : object || undefined
   return result === undefined ? defaultValue : result
 }
+
+/** 生成随机8位ID **/
+export function randomId () {
+  return Math.random().toString(36).slice(-8)
+}

@@ -24,6 +24,27 @@
           <el-radio-button label="mini">mini</el-radio-button>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="表单样式表">
+        <el-button style="width: 100%"
+                   @click="home.styleSheetsVisible = true"
+        >设置</el-button>
+      </el-form-item>
+      <el-form-item label="自定义Class">
+        <el-select v-model="data.customClass"
+                   style="width: 100%;"
+                   filterable
+                   allow-create
+                   default-first-option
+                   multiple
+                   laceholder="请选择"
+        >
+          <el-option v-for="item in home.styleSheetsArray"
+                     :key="item"
+                     :label="item"
+                     :value="item"
+          />
+        </el-select>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -33,6 +54,12 @@ export default {
   name: 'FormConfig',
   props: {
     data: {
+      type: Object,
+      default () {
+        return { }
+      }
+    },
+    home: {
       type: Object,
       default () {
         return {}

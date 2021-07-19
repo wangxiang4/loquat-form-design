@@ -1,5 +1,5 @@
 <template>
-  <div class="loquat-form" :style="{width: $loquat.setPx(parentOption.formWidth,'100%')}">
+  <div ref="previewForm" class="loquat-form" :style="{width: $loquat.setPx(parentOption.formWidth,'100%')}">
     <el-form ref="form"
              :status-icon="parentOption.statusIcon"
              :model="form"
@@ -7,6 +7,7 @@
              :size="parentOption.size || size"
              :label-position="parentOption.labelPosition || labelPosition"
              :label-width="$loquat.setPx(parentOption.labelWidth,labelWidth)"
+             :class="parentOption.customClass"
              @submit.native.prevent
     >
       <template v-for="(column,index) in columnOption">
@@ -26,7 +27,7 @@
           <el-form-item :prop="column.prop"
                         :label="column.hideLabel ? '' : column.label"
                         :rules="column.rules"
-                        :class="'loquat-form__item--'+(column.labelPosition || parentOption.labelPosition || labelPosition)"
+                        :class="['loquat-form__item--'+(column.labelPosition || parentOption.labelPosition || labelPosition)].concat(column.customClass||[])"
                         :label-position="column.labelPosition || parentOption.labelPosition || labelPosition"
                         :label-width="column.hideLabel ? '0' :getLabelWidth(column,parentOption,labelWidth)"
           >
@@ -86,8 +87,10 @@
 
 <script>
 import { clearVal, formInitVal, getLabelWidth } from '@utils/dataFormat'
-import { FORM_DEFAULT_PROP } from '@/global/variable'
+import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_HTML } from '@/global/variable'
 import formItem from './item'
+import { randomId } from '@utils'
+import { insertCss, parseCss } from '@utils/dom'
 export default {
   name: 'Form',
   components: { formItem },
@@ -153,6 +156,12 @@ export default {
       this.clearValidate()
       this.formCreate = true
     })
+  },
+  mounted () {
+    const formKey = KEY_COMPONENT_NAME_HTML + randomId()
+    this.$refs.previewForm.classList.add(formKey)
+    const css = parseCss(this.parentOption.styleSheets)
+    insertCss(css, formKey)
   },
   methods: {
     getLabelWidth,

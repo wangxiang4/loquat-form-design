@@ -1,5 +1,5 @@
 <template>
-  <div class="form-designer">
+  <div ref="home" class="form-designer">
     <el-container>
       <el-aside :width="leftWidth">
         <div class="fields-list">
@@ -114,10 +114,10 @@
       <el-aside class="widget-config-container" :width="rightWidth">
         <el-tabs v-model="configTab" stretch>
           <el-tab-pane label="字段属性" name="widget" style="padding: 0 10px;">
-            <widget-config :data="widgetFormSelect"/>
+            <widget-config :data="widgetFormSelect" :home="this"/>
           </el-tab-pane>
           <el-tab-pane label="表单属性" name="form" lazy style="padding: 0 10px;">
-            <form-config :data="widgetForm"/>
+            <form-config :data="widgetForm" :home="this"/>
           </el-tab-pane>
         </el-tabs>
       </el-aside>
@@ -249,6 +249,30 @@
           </el-popover>
         </span>
       </el-dialog>
+      <el-dialog title="表单样式表"
+                 class="loquat-dialog"
+                 :visible.sync="styleSheetsVisible"
+                 :close-on-click-modal="false"
+                 width="900px"
+                 append-to-body
+                 top="3vh"
+                 center
+      >
+        <ace-editor v-model="widgetForm.styleSheets"
+                    lang="css"
+                    theme="textmate"
+                    style="height: 450px"
+        />
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary"
+                     size="medium"
+                     @click="handleStyleSheetsSubmit"
+          >确定</el-button>
+          <el-button size="medium"
+                     @click="styleSheetsVisible = false"
+          >取消</el-button>
+        </span>
+      </el-dialog>
     </el-container>
   </div>
 </template>
@@ -264,7 +288,9 @@ import WidgetConfig from './components/WidgetConfig'
 import AceEditor from 'v-ace-editor'
 import beautifier from '@utils/jsonBeautifier'
 import clipboard from '@utils/clipboard'
-import { IMPORT_JSON_TEMPLATE } from '@/global/variable'
+import { KEY_COMPONENT_NAME_HTML, IMPORT_JSON_TEMPLATE } from '@/global/variable'
+import { randomId } from '@utils'
+import { insertCss, parseCss, classCss } from '@utils/dom'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor },
@@ -325,7 +351,9 @@ export default {
         column: [],
         labelPosition: 'left',
         labelWidth: 120,
-        size: 'small'
+        size: 'small',
+        styleSheets: '',
+        customClass: []
       },
       configTab: 'widget',
       widgetFormSelect: {},
@@ -333,6 +361,7 @@ export default {
       previewVisible: false,
       importJsonVisible: false,
       generateJsonVisible: false,
+      styleSheetsVisible: false,
       widgetModels: {},
       importJson: '',
       generateJson: '',
@@ -341,7 +370,9 @@ export default {
         maxStep: 20,
         steps: []
       },
-      jsonOption: {}
+      jsonOption: {},
+      styleSheetsArray: [],
+      formKey: ''
     }
   },
   computed: {
@@ -381,6 +412,8 @@ export default {
     }
   },
   mounted () {
+    this.formKey = KEY_COMPONENT_NAME_HTML + randomId()
+    this.$refs.home.classList.add(this.formKey)
     this.handleLoadStorage()
   },
   methods: {
@@ -426,7 +459,6 @@ export default {
         this.widgetForm.column.splice(activeIndex, 0, item)
         newIndex = activeIndex
       }
-
       this.$refs.widgetForm.handleWidgetAdd({ newIndex })
     },
     // 初始化预览
@@ -524,6 +556,13 @@ export default {
         quoteType: 'single',
         minify: false
       }
+    },
+    // 处理样式表提交
+    handleStyleSheetsSubmit () {
+      this.styleSheetsVisible = false
+      const css = parseCss(this.widgetForm.styleSheets)
+      insertCss(css, this.formKey)
+      this.styleSheetsArray = classCss(css)
     }
   }
 }

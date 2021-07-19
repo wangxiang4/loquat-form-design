@@ -46,6 +46,22 @@
       ><template slot="append">个字符</template>
       </el-input>
     </el-form-item>
+    <el-form-item v-loquat-has-perm="[data,'customClass']" label="自定义Class">
+      <el-select v-model="data.customClass"
+                 style="width: 100%;"
+                 filterable
+                 allow-create
+                 default-first-option
+                 multiple
+                 laceholder="请选择"
+      >
+        <el-option v-for="item in home.styleSheetsArray"
+                   :key="item"
+                   :label="item"
+                   :value="item"
+        />
+      </el-select>
+    </el-form-item>
     <el-form-item v-loquat-has-perm="[data,optionPerm,1]" label="操作属性">
       <el-checkbox v-model="data.readonly"
                    v-loquat-has-perm="[data,'readonly']"
@@ -122,6 +138,12 @@ export default {
   name: 'Input',
   props: {
     data: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
+    home: {
       type: Object,
       default () {
         return {}
