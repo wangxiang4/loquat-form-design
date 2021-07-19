@@ -24,7 +24,7 @@ export function insertCss (css, formKey) {
   const styleSheets = document.styleSheets[0]
   // 删除已经添加上的样式
   for (let i = 0; i < styleSheets.cssRules.length;) {
-    (styleSheets.cssRules[i].selectorText && styleSheets.cssRules[i].selectorText.indexOf(formKey))
+    (styleSheets.cssRules[i].selectorText && styleSheets.cssRules[i].selectorText.indexOf(formKey) === 0)
       ? styleSheets.deleteRule(i)
       : i++
   }
