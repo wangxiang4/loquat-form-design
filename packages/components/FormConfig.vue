@@ -50,8 +50,10 @@
           <el-button size="mini"
                      type="primary"
                      plain
+                     hide-on-click
                      style="width: 100%;"
                      placement="bottom"
+                     trigger="click"
                      @click="home.actionSettingsVisible = true"
           >新增动作<i class="el-icon-plus"/>
           </el-button>
