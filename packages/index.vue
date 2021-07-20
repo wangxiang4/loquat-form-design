@@ -294,20 +294,13 @@
                 </el-header>
                 <el-main>
                   <el-menu class="event-script-aside-menu">
-                    <el-menu-item index="1">
+                    <el-menu-item v-for="item in widgetForm.eventScript"
+                                  :key="item.key"
+                                  :index="item.key"
+                    >
                       <div>
                         <span class="event-script-menu-i">Function</span>
-                        <div class="event-script-menu-label">mounted</div>
-                        <div class="event-script-menu-action">
-                          <i title="复制" class="iconfont icon-clone"/>
-                          <i title="删除" class="iconfont icon-trash"/>
-                        </div>
-                      </div>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                      <div>
-                        <span class="event-script-menu-i">Function</span>
-                        <div class="event-script-menu-label">creatte</div>
+                        <div class="event-script-menu-label">{{ item.name }}</div>
                         <div class="event-script-menu-action">
                           <i title="复制" class="iconfont icon-clone"/>
                           <i title="删除" class="iconfont icon-trash"/>
@@ -428,7 +421,19 @@ export default {
         labelWidth: 120,
         size: 'small',
         styleSheets: '',
-        customClass: []
+        customClass: [],
+        eventScript: [
+          {
+            'key': 'mounted',
+            'name': 'mounted',
+            'func': ''
+          },
+          {
+            'key': 'qrkooxrj',
+            'name': 'func_qrkooxrj',
+            'func': ''
+          }
+        ]
       },
       configTab: 'widget',
       widgetFormSelect: {},
