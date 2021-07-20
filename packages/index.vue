@@ -290,6 +290,7 @@
                   <el-button type="text"
                              size="small"
                              icon="el-icon-plus"
+                             @click="handleAddAction"
                   >添加动作</el-button>
                 </el-header>
                 <el-main>
@@ -646,6 +647,15 @@ export default {
       const css = parseCss(this.widgetForm.styleSheets)
       insertCss(css, this.formKey)
       this.styleSheetsArray = classCss(css)
+    },
+    // 处理添加动作
+    handleAddAction () {
+      const id = `fun_${randomId()}`
+      this.widgetForm.eventScript.push({
+        'key': id,
+        'name': id,
+        'func': ''
+      })
     }
   }
 }
