@@ -23,7 +23,6 @@
   }
   .event-script-container{
     .event-script-aside{
-      border-right: 1px solid #eee;
       .el-container{
         .el-header{
           padding:5px;
@@ -67,6 +66,17 @@
             }
           }
         }
+      }
+    }
+    .event-script-main{
+      padding:0;
+      .event-script-action{
+        text-align:right;
+      }
+      .code-line{
+        font-size:14px;
+        color:#00f;
+        font-weight:550;
       }
     }
   }

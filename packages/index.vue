@@ -304,21 +304,32 @@
                 </el-main>
               </el-container>
             </el-aside>
-            <el-main>
-              <el-form size="small" label-width="120px">
-                <el-form-item label="Function Name" :rules="[{ required: true, message: 'Function Name必须填写'}]">
-                  <el-input value="123"/>
-                </el-form-item>
-                <el-form-item style="margin-left: 0px;">
-                  <div>Function () {</div>
-                  <ace-editor value="test"
-                              lang="json"
-                              theme="textmate"
-                              style="height: 400px"
-                  />
-                  <div>}</div>
-                </el-form-item>
-              </el-form>
+            <el-main class="event-script-main">
+              <el-container>
+                <el-header style="height: 40px">
+                  <div class="event-script-action">
+                    <el-button size="mini" type="primary">确定</el-button>
+                    <el-button size="mini" type="primary">保存</el-button>
+                    <el-button size="mini">取消</el-button>
+                  </div>
+                </el-header>
+                <el-main>
+                  <el-form size="small">
+                    <el-form-item label="Function Name" required label-width="130px">
+                      <el-input value="123"/>
+                    </el-form-item>
+                    <el-form-item label-width="0">
+                      <div class="code-line">Function () {</div>
+                      <ace-editor value="test"
+                                  lang="json"
+                                  theme="textmate"
+                                  style="width: 100%; height: 380px;border:1px solid #dcdfe6;"
+                      />
+                      <div class="code-line">}</div>
+                    </el-form-item>
+                  </el-form>
+                </el-main>
+              </el-container>
             </el-main>
           </el-container>
         </el-container>
