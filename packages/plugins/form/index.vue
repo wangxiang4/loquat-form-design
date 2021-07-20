@@ -87,7 +87,7 @@
 
 <script>
 import { clearVal, formInitVal, getLabelWidth } from '@utils/dataFormat'
-import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_HTML } from '@/global/variable'
+import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
 import formItem from './item'
 import { randomId } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
@@ -156,7 +156,7 @@ export default {
       this.setVal()
       this.clearValidate()
       this.formCreate = true
-      this.formKey = KEY_COMPONENT_NAME_HTML + randomId()
+      this.formKey = KEY_COMPONENT_NAME_LINE + randomId()
       const css = parseCss(this.parentOption.styleSheets)
       insertCss(css, this.formKey)
     })

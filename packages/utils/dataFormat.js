@@ -12,9 +12,9 @@ import {
   ARRAY_VALUE_LIST,
   DATE_LIST,
   INPUT_LIST,
-  KEY_COMPONENT_NAME_HTML,
+  KEY_COMPONENT_NAME_LINE,
   MULTIPLE_LIST, SELECT_LIST,
-  KEY_COMPONENT_CONFIG_NAME_HTML
+  KEY_COMPONENT_CONFIG_NAME_LINE
 } from '@/global/variable'
 import { validateNull, setPx } from './index'
 
@@ -55,7 +55,7 @@ export function getComponent (type, component) {
   } else if (INPUT_LIST.includes(type)) {
     result = 'input-' + type
   }
-  return KEY_COMPONENT_NAME_HTML + result
+  return KEY_COMPONENT_NAME_LINE + result
 }
 
 /** 初始化表单默认值 **/
@@ -99,7 +99,7 @@ export function clearVal (obj, list = []) {
 
 /** 获取配置组件名称 **/
 export function getComponentConfig (type, component) {
-  if ((!type || component) && type != 'ueditor') return KEY_COMPONENT_CONFIG_NAME_HTML + 'custom'
+  if ((!type || component) && type != 'ueditor') return KEY_COMPONENT_CONFIG_NAME_LINE + 'custom'
   let result = 'input'
   if ([undefined, 'input', 'password', 'url'].includes(type)) result = 'input'
   else if (DATE_LIST.includes(type)) result = 'date'
@@ -108,5 +108,5 @@ export function getComponentConfig (type, component) {
   else if (['radio', 'checkbox', 'select'].includes(type)) result = 'select'
   else result = type
 
-  return KEY_COMPONENT_CONFIG_NAME_HTML + result
+  return KEY_COMPONENT_CONFIG_NAME_LINE + result
 }

@@ -1,5 +1,5 @@
 import beautifier from '@utils/jsonBeautifier'
-import { KEY_COMPONENT_NAME_HTML } from '@/global/variable'
+import { KEY_COMPONENT_NAME_LINE } from '@/global/variable'
 
 export default {
   data () {
@@ -15,8 +15,8 @@ export default {
   watch: {
     historySteps: {
       handler (val) {
-        if (val.storage) localStorage.setItem(KEY_COMPONENT_NAME_HTML + 'form-history', beautifier(val))
-        else localStorage.removeItem(KEY_COMPONENT_NAME_HTML + 'form-history')
+        if (val.storage) localStorage.setItem(KEY_COMPONENT_NAME_LINE + 'form-history', beautifier(val))
+        else localStorage.removeItem(KEY_COMPONENT_NAME_LINE + 'form-history')
       },
       deep: true
     }
@@ -24,7 +24,7 @@ export default {
   methods: {
     initHistory (data) {
       if (data.storage) {
-        const history = localStorage.getItem(KEY_COMPONENT_NAME_HTML + 'form-history')
+        const history = localStorage.getItem(KEY_COMPONENT_NAME_LINE + 'form-history')
         if (history) {
           this.historySteps = eval('(' + history + ')')
           const { index, steps } = this.historySteps

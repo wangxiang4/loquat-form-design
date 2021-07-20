@@ -7,8 +7,8 @@
  *
  * @create: 2021-07-15
  **/
-export const KEY_COMPONENT_NAME_HTML = 'loquat-'
-export const KEY_COMPONENT_CONFIG_NAME_HTML = 'loquat-config-'
+export const KEY_COMPONENT_NAME_LINE = 'loquat-'
+export const KEY_COMPONENT_CONFIG_NAME_LINE = 'loquat-config-'
 export const KEY_COMPONENT_NAME = 'Loquat'
 export const KEY_COMPONENT_CONFIG_NAME = 'LoquatConfig'
 /** 查找参数路径表达式,比如a[0].b.c对应匹配(a,0,b,c) **/

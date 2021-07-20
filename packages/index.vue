@@ -288,7 +288,7 @@ import WidgetConfig from './components/WidgetConfig'
 import AceEditor from 'v-ace-editor'
 import beautifier from '@utils/jsonBeautifier'
 import clipboard from '@utils/clipboard'
-import { KEY_COMPONENT_NAME_HTML, IMPORT_JSON_TEMPLATE } from '@/global/variable'
+import { KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE } from '@/global/variable'
 import { randomId } from '@utils'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 export default {
@@ -412,7 +412,7 @@ export default {
     }
   },
   mounted () {
-    this.formKey = KEY_COMPONENT_NAME_HTML + randomId()
+    this.formKey = KEY_COMPONENT_NAME_LINE + randomId()
     this.handleLoadStorage()
   },
   beforeDestroy () {
