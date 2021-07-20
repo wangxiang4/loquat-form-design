@@ -21,4 +21,32 @@
   .el-dialog__footer{
     text-align: center;
   }
+ .event-script-aside-menu{
+   margin:10px;
+   .el-menu-item{
+     border:1px solid #dcdfe6;
+     border-radius:3px;
+     padding:10px!important;
+     height:auto;
+     line-height:1;
+
+   }
+   .event-script-menu-i{
+     position:absolute;
+     font-size:12px;
+     left:5px;
+     top:13px;
+     width:45px;
+     text-align: center;
+     color: #67c23a;
+   }
+   .event-script-menu-label{
+     overflow:hidden;
+     text-overflow:ellipsis;
+     white-space: nowrap;
+     display: inline-block;
+     width: 170px;
+     margin-left: 50px;
+   }
+ }
 }

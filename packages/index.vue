@@ -277,7 +277,7 @@
                  class="loquat-dialog"
                  :visible.sync="actionSettingsVisible"
                  :close-on-click-modal="false"
-                 width="900px"
+                 width="1000px"
                  append-to-body
                  top="3vh"
                  center
@@ -285,20 +285,18 @@
         <el-container>
           <el-aside>
             <el-container>
-              <el-head>
-                <el-button>
-                  <el-button type="text"
-                             size="small"
-                             icon="el-icon-plus"
-                  >添加动作</el-button>
-                </el-button>
-              </el-head>
+              <el-header style="height: 40px">
+                <el-button type="text"
+                           size="small"
+                           icon="el-icon-plus"
+                >添加动作</el-button>
+              </el-header>
               <el-main>
-                <el-menu>
+                <el-menu class="event-script-aside-menu">
                   <el-menu-item>
                     <div>
-                      <span>Function</span>
-                      <div>测试</div>
+                      <span class="event-script-menu-i">Function</span>
+                      <div class="event-script-menu-label">测试</div>
                     </div>
                   </el-menu-item>
                 </el-menu>
@@ -306,16 +304,15 @@
             </el-container>
           </el-aside>
           <el-main>
-            <el-form size="small">
-              <el-form-item label="Function Name">
+            <el-form size="small" label-width="120px">
+              <el-form-item label="Function Name" :rules="[{ required: true, message: 'Function Name必须填写'}]">
                 <el-input value="123"/>
               </el-form-item>
-              <el-form-item>
+              <el-form-item style="margin-left: 0px;">
                 <div>Function () {</div>
-                <ace-editor v-model="generateJson"
+                <ace-editor value="test"
                             lang="json"
                             theme="textmate"
-                            :readonly="true"
                             style="height: 400px"
                 />
                 <div>}</div>
