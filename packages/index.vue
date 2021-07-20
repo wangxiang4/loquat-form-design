@@ -293,9 +293,7 @@
                   >添加动作</el-button>
                 </el-header>
                 <el-main>
-                  <el-menu class="event-script-aside-menu"
-                           active-text-color="#e4e7ed"
-                  >
+                  <el-menu class="event-script-aside-menu">
                     <el-menu-item index="1">
                       <div>
                         <span class="event-script-menu-i">Function</span>
