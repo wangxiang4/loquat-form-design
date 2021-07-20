@@ -47,6 +47,10 @@
               line-height:1;
               position:relative;
             }
+            .el-menu-item.is-active{
+              background:#e4e7ed;
+              color:#303133;
+            }
             .event-script-menu-i{
               position:absolute;
               font-size:12px;
