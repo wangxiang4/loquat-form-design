@@ -273,6 +273,57 @@
           >取消</el-button>
         </span>
       </el-dialog>
+      <el-dialog title="动作设置"
+                 class="loquat-dialog"
+                 :visible.sync="actionSettingsVisible"
+                 :close-on-click-modal="false"
+                 width="900px"
+                 append-to-body
+                 top="3vh"
+                 center
+      >
+        <el-container>
+          <el-aside>
+            <el-container>
+              <el-head>
+                <el-button>
+                  <el-button type="text"
+                             size="small"
+                             icon="el-icon-plus"
+                  >添加动作</el-button>
+                </el-button>
+              </el-head>
+              <el-main>
+                <el-menu>
+                  <el-menu-item>
+                    <div>
+                      <span>Function</span>
+                      <div>测试</div>
+                    </div>
+                  </el-menu-item>
+                </el-menu>
+              </el-main>
+            </el-container>
+          </el-aside>
+          <el-main>
+            <el-form size="small">
+              <el-form-item label="Function Name">
+                <el-input value="123"/>
+              </el-form-item>
+              <el-form-item>
+                <div>Function () {</div>
+                <ace-editor v-model="generateJson"
+                            lang="json"
+                            theme="textmate"
+                            :readonly="true"
+                            style="height: 400px"
+                />
+                <div>}</div>
+              </el-form-item>
+            </el-form>
+          </el-main>
+        </el-container>
+      </el-dialog>
     </el-container>
   </div>
 </template>
@@ -362,6 +413,7 @@ export default {
       importJsonVisible: false,
       generateJsonVisible: false,
       styleSheetsVisible: false,
+      actionSettingsVisible: false,
       widgetModels: {},
       importJson: '',
       generateJson: '',

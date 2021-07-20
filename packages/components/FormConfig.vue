@@ -45,6 +45,22 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="新增动作">
+        <el-dropdown style="width: 100%; margin-top: 5px;">
+          <el-button size="mini"
+                     type="primary"
+                     plain
+                     style="width: 100%;"
+                     placement="bottom"
+                     @click="home.actionSettingsVisible = true"
+          >新增动作<i class="el-icon-plus"/>
+          </el-button>
+          <el-dropdown-menu slot="dropdown" style="width: 280px">
+            <el-dropdown-item>onBefore 表单打开前执行</el-dropdown-item>
+            <el-dropdown-item>onAfter 表单保存后执行</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-form-item>
     </el-form>
   </div>
 </template>
