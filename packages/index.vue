@@ -284,7 +284,7 @@
       >
         <el-container style="height: 600px; border: 1px solid rgb(238, 238, 238);">
           <el-container class="event-script-container">
-            <el-aside class="event-script-aside">
+            <el-aside class="event-script-aside" style="width: 320px;">
               <el-container>
                 <el-header style="height: 40px">
                   <el-button type="text"
