@@ -24,12 +24,12 @@
   .event-script-container{
     .event-script-aside{
       .el-container{
-        .el-header{
+        >.el-header{
           padding:5px;
           border-bottom: 1px solid #eee;
           background:#f2f6fc;
         }
-        .el-main{
+        >.el-main{
           margin:0;
           padding:0;
           .event-script-aside-menu{
@@ -64,12 +64,31 @@
               width: 170px;
               margin-left: 50px;
             }
+            .event-script-menu-action{
+              display:inline-block;
+              padding-right:10px;
+              color:#666;
+              font-weight:600;
+              >i{
+                cursor:pointer;
+                margin-left:5px;
+              }
+            }
           }
         }
       }
     }
     .event-script-main{
       padding:0;
+      >.el-container{
+        display:flex;
+        height:100%;
+        >.el-header{
+          padding:5px;
+          border-bottom:1px solid #eee;
+          background:#f2f6fc;
+        }
+      }
       .event-script-action{
         text-align:right;
       }
