@@ -46,14 +46,16 @@
         </el-select>
       </el-form-item>
       <el-form-item label="新增动作">
-        <el-dropdown style="width: 100%; margin-top: 5px;">
+        <el-dropdown hide-on-click
+                     size="small"
+                     style="width: 100%; margin-top: 5px;"
+                     placement="bottom"
+                     trigger="click"
+        >
           <el-button size="mini"
                      type="primary"
                      plain
-                     hide-on-click
                      style="width: 100%;"
-                     placement="bottom"
-                     trigger="click"
                      @click="home.actionSettingsVisible = true"
           >新增动作<i class="el-icon-plus"/>
           </el-button>
