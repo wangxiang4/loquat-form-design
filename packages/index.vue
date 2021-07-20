@@ -293,11 +293,23 @@
                   >添加动作</el-button>
                 </el-header>
                 <el-main>
-                  <el-menu class="event-script-aside-menu" active-text-color="#e4e7ed">
-                    <el-menu-item>
+                  <el-menu class="event-script-aside-menu"
+                           active-text-color="#e4e7ed"
+                  >
+                    <el-menu-item index="1">
                       <div>
                         <span class="event-script-menu-i">Function</span>
                         <div class="event-script-menu-label">mounted</div>
+                        <div class="event-script-menu-action">
+                          <i title="复制" class="iconfont icon-clone"/>
+                          <i title="删除" class="iconfont icon-trash"/>
+                        </div>
+                      </div>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                      <div>
+                        <span class="event-script-menu-i">Function</span>
+                        <div class="event-script-menu-label">creatte</div>
                         <div class="event-script-menu-action">
                           <i title="复制" class="iconfont icon-clone"/>
                           <i title="删除" class="iconfont icon-trash"/>
