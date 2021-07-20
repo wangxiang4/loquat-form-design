@@ -23,6 +23,7 @@
   }
   .event-script-container{
     .event-script-aside{
+      border-right: 1px solid #eee;
       .el-container{
         .el-header{
           padding:5px;
@@ -34,15 +35,18 @@
           padding:0;
           .event-script-aside-menu{
             margin:10px;
+            border-right:0;
             .el-header{
               padding:5px;
             }
             .el-menu-item{
               border:1px solid #dcdfe6;
+              background:#fff;
               border-radius:3px;
               padding:10px!important;
               height:auto;
               line-height:1;
+              position:relative;
             }
             .event-script-menu-i{
               position:absolute;

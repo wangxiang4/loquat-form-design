@@ -297,7 +297,7 @@
                     <el-menu-item>
                       <div>
                         <span class="event-script-menu-i">Function</span>
-                        <div class="event-script-menu-label">mount</div>
+                        <div class="event-script-menu-label">mounted</div>
                       </div>
                     </el-menu-item>
                   </el-menu>
