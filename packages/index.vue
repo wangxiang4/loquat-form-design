@@ -121,6 +121,7 @@
           </el-tab-pane>
         </el-tabs>
       </el-aside>
+      <!--弹出窗口-->
       <el-dialog title="预览"
                  class="loquat-dialog"
                  :visible.sync="previewVisible"
@@ -494,8 +495,9 @@ export default {
     }
   },
   mounted () {
-    this.formKey = KEY_COMPONENT_NAME_LINE + randomId()
     this.handleLoadStorage()
+    this.formKey = KEY_COMPONENT_NAME_LINE + randomId()
+    this.handleStyleSheetsCore()
   },
   beforeDestroy () {
     insertCss([], this.formKey)
@@ -644,6 +646,10 @@ export default {
     // 处理样式表提交
     handleStyleSheetsSubmit () {
       this.styleSheetsVisible = false
+      this.handleStyleSheetsCore()
+    },
+    // 处理样式表核心逻辑
+    handleStyleSheetsCore () {
       const css = parseCss(this.widgetForm.styleSheets)
       insertCss(css, this.formKey)
       this.styleSheetsArray = classCss(css)
