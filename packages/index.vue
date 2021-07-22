@@ -282,6 +282,7 @@
                  append-to-body
                  top="3vh"
                  center
+                 @close="handleActionCancel"
       >
         <el-container style="height: 600px; border: 1px solid rgb(238, 238, 238);">
           <el-container class="event-script-container">
@@ -291,11 +292,11 @@
                   <el-button type="text"
                              size="small"
                              icon="el-icon-plus"
-                             @click="handleAddAction"
+                             @click="handleActionAdd"
                   >添加动作</el-button>
                 </el-header>
                 <el-main>
-                  <el-menu ref="actionMenu" class="event-script-aside-menu">
+                  <el-menu :default-active="actionMenuActive" class="event-script-aside-menu">
                     <el-menu-item v-for="item in widgetForm.eventScript"
                                   :key="item.key"
                                   :index="item.key"
@@ -477,6 +478,7 @@ export default {
       styleSheetsArray: [],
       formKey: '',
       actionForm: {},
+      actionMenuActive: '',
       actionMenuItemDisabled: false,
       actionMainContainerVisible: false
     }
@@ -677,8 +679,8 @@ export default {
       insertCss(css, this.formKey)
       this.styleSheetsArray = classCss(css)
     },
-    // 处理添加动作
-    handleAddAction () {
+    // 处理动作设置添加
+    handleActionAdd () {
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       const id = randomId()
       this.actionForm = {
@@ -688,10 +690,7 @@ export default {
       }
       this.actionMenuItemDisabled = true
       this.actionMainContainerVisible = true
-      this.$nextTick(() => {
-        const ref = this.$refs.actionMenu
-        ref.$children[ref.$children.length - 1].$el.click()
-      })
+      this.actionMenuActive = id
     },
     // 处理动作设置菜单选择
     handleActionSelect (key) {
@@ -719,10 +718,7 @@ export default {
       this.actionForm.name += '_copy'
       this.actionMenuItemDisabled = true
       this.actionMainContainerVisible = true
-      this.$nextTick(() => {
-        const ref = this.$refs.actionMenu
-        ref.$children[ref.$children.length - 1].$el.click()
-      })
+      this.actionMenuActive = this.actionForm.key
     },
     // 处理动作设置删除
     handleActionDelete (data) {
@@ -742,8 +738,10 @@ export default {
     },
     // 处理动作设置取消
     handleActionCancel () {
-      this.actionMainContainerVisible = false
+      this.actionForm = {}
+      this.actionMenuActive = randomId()
       this.actionMenuItemDisabled = false
+      this.actionMainContainerVisible = false
     }
   }
 }
