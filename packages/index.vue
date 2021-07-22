@@ -306,19 +306,19 @@
                         <span class="event-script-menu-i">Function</span>
                         <div class="event-script-menu-label">{{ item.name }}</div>
                         <div class="event-script-menu-action">
-                          <i title="复制" class="iconfont icon-clone" @click="handleActionClone(item)"/>
-                          <i title="删除" class="iconfont icon-trash" @click="handleActionDelete(item)"/>
+                          <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(item)"/>
+                          <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(item)"/>
                         </div>
                       </div>
                     </el-menu-item>
                     <!--虚拟表单项-->
-                    <el-menu-item v-if="actionMenuItemDisabled" :index="actionForm.key" @click.native="handleActionSelect(actionForm.key)">
+                    <el-menu-item v-if="actionMenuItemDisabled" :index="actionForm.key">
                       <div>
                         <span class="event-script-menu-i">Function</span>
                         <div class="event-script-menu-label">{{ actionForm.name }}</div>
                         <div class="event-script-menu-action">
-                          <i title="复制" class="iconfont icon-clone" @click="handleActionClone(actionForm)"/>
-                          <i title="删除" class="iconfont icon-trash" @click="handleActionDelete(actionForm)"/>
+                          <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(actionForm)"/>
+                          <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(actionForm)"/>
                         </div>
                       </div>
                     </el-menu-item>
