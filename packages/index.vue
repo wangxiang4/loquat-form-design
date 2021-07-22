@@ -295,17 +295,30 @@
                   >添加动作</el-button>
                 </el-header>
                 <el-main>
-                  <el-menu class="event-script-aside-menu">
+                  <el-menu ref="actionMenu" class="event-script-aside-menu">
                     <el-menu-item v-for="item in widgetForm.eventScript"
                                   :key="item.key"
                                   :index="item.key"
+                                  :disabled="actionMenuItemDisabled"
+                                  @click.native="handleActionSelect(item.key)"
                     >
                       <div>
                         <span class="event-script-menu-i">Function</span>
                         <div class="event-script-menu-label">{{ item.name }}</div>
                         <div class="event-script-menu-action">
-                          <i title="复制" class="iconfont icon-clone"/>
-                          <i title="删除" class="iconfont icon-trash"/>
+                          <i title="复制" class="iconfont icon-clone" @click="handleActionClone(item)"/>
+                          <i title="删除" class="iconfont icon-trash" @click="handleActionDelete(item)"/>
+                        </div>
+                      </div>
+                    </el-menu-item>
+                    <!--虚拟表单项-->
+                    <el-menu-item v-if="actionMenuItemDisabled" :index="actionForm.key" @click.native="handleActionSelect(actionForm.key)">
+                      <div>
+                        <span class="event-script-menu-i">Function</span>
+                        <div class="event-script-menu-label">{{ actionForm.name }}</div>
+                        <div class="event-script-menu-action">
+                          <i title="复制" class="iconfont icon-clone" @click="handleActionClone(actionForm)"/>
+                          <i title="删除" class="iconfont icon-trash" @click="handleActionDelete(actionForm)"/>
                         </div>
                       </div>
                     </el-menu-item>
@@ -314,22 +327,29 @@
               </el-container>
             </el-aside>
             <el-main class="event-script-main">
-              <el-container>
+              <el-container v-if="actionMainContainerVisible">
                 <el-header style="height: 40px">
                   <div class="event-script-action">
                     <el-button size="mini" type="primary">确定</el-button>
-                    <el-button size="mini" type="primary">保存</el-button>
-                    <el-button size="mini">取消</el-button>
+                    <el-button size="mini" type="primary" @click="handleActionSave">保存</el-button>
+                    <el-button size="mini" @click="handleActionCancel">取消</el-button>
                   </div>
                 </el-header>
                 <el-main>
-                  <el-form size="small">
-                    <el-form-item label="Function Name" required label-width="130px">
-                      <el-input value="123"/>
+                  <el-form ref="actionForm"
+                           :model="actionForm"
+                           size="small"
+                  >
+                    <el-form-item label="Function Name"
+                                  prop="name"
+                                  required
+                                  label-width="130px"
+                    ><el-input v-model="actionForm.name"/>
+                      <template slot="error">{{''}}</template>
                     </el-form-item>
-                    <el-form-item label-width="0">
+                    <el-form-item prop="func" label-width="0">
                       <div class="code-line">Function () {</div>
-                      <ace-editor value="test"
+                      <ace-editor v-model="actionForm.func"
                                   lang="json"
                                   theme="textmate"
                                   style="width: 100%; height: 380px;border:1px solid #dcdfe6;"
@@ -455,7 +475,10 @@ export default {
       },
       jsonOption: {},
       styleSheetsArray: [],
-      formKey: ''
+      formKey: '',
+      actionForm: {},
+      actionMenuItemDisabled: false,
+      actionMainContainerVisible: false
     }
   },
   computed: {
@@ -474,7 +497,7 @@ export default {
       }
     },
     defaultBackground () {
-      return { background: this.widgetForm.column.length == 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
+      return { background: this.$loquat.get(this.widgetForm, 'column.length') === 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
     }
   },
   watch: {
@@ -656,12 +679,71 @@ export default {
     },
     // 处理添加动作
     handleAddAction () {
-      const id = `fun_${randomId()}`
-      this.widgetForm.eventScript.push({
+      if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
+      const id = randomId()
+      this.actionForm = {
         'key': id,
-        'name': id,
+        'name': `fun_${id}`,
         'func': ''
+      }
+      this.actionMenuItemDisabled = true
+      this.actionMainContainerVisible = true
+      this.$nextTick(() => {
+        const ref = this.$refs.actionMenu
+        ref.$children[ref.$children.length - 1].$el.click()
       })
+    },
+    // 处理动作设置菜单选择
+    handleActionSelect (key) {
+      if (this.actionForm.key === key) return
+      if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
+      this.actionForm = this.$loquat.deepClone(this.widgetForm.eventScript.find(item => item.key === key))
+      this.actionMainContainerVisible = true
+    },
+    // 处理动作设置保存
+    handleActionSave () {
+      this.$refs.actionForm.validate((valid, msg) => {
+        if (valid) {
+          const index = this.widgetForm.eventScript.findIndex(item => item.key === this.actionForm.key)
+          index === -1 ? this.widgetForm.eventScript.push(Object({ ...this.actionForm })) : this.widgetForm.eventScript.splice(index, 1, Object({ ...this.actionForm }))
+          this.actionMenuItemDisabled = false
+          this.$message.success('保存成功')
+        }
+      })
+    },
+    // 处理动作设置克隆
+    handleActionClone (data) {
+      if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
+      this.actionForm = { ...data }
+      this.actionForm.key = randomId()
+      this.actionForm.name += '_copy'
+      this.actionMenuItemDisabled = true
+      this.actionMainContainerVisible = true
+      this.$nextTick(() => {
+        const ref = this.$refs.actionMenu
+        ref.$children[ref.$children.length - 1].$el.click()
+      })
+    },
+    // 处理动作设置删除
+    handleActionDelete (data) {
+      this.$confirm(`确定要删除该方法 [${data.name}] ?`, '警告', {
+        type: 'warning'
+      }).then(() => {
+        this.actionForm.key === data.key ? this.actionMainContainerVisible = false : ''
+        const index = this.widgetForm.eventScript.findIndex(item => item.key === data.key)
+        if (index === -1) {
+          this.actionForm = {}
+          this.actionMenuItemDisabled = false
+        } else {
+          this.widgetForm.eventScript.splice(index, 1)
+        }
+      }).catch(() => {
+      })
+    },
+    // 处理动作设置取消
+    handleActionCancel () {
+      this.actionMainContainerVisible = false
+      this.actionMenuItemDisabled = false
     }
   }
 }

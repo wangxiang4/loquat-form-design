@@ -53,6 +53,15 @@
               background:#e4e7ed;
               color:#303133;
             }
+            .el-menu-item.is-active.is-disabled{
+              background:#e4e7ed!important;
+              color:#303133;
+            }
+            .el-menu-item.is-disabled{
+              opacity:1;
+              cursor:default;
+              background:#fff;
+            }
             .event-script-menu-i{
               position:absolute;
               font-size:12px;
