@@ -536,7 +536,7 @@ export default {
   },
   methods: {
     // 处理加载历史数据
-    async handleLoadStorage () {
+    handleLoadStorage () {
       let options = this.options
       if (typeof options === 'string') {
         try {
