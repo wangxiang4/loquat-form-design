@@ -167,7 +167,11 @@
           <el-dropdown-menu slot="dropdown" style="width: 280px">
             <el-dropdown-item v-for="(val,key,index) in data.events"
                               :key="index"
-                              @click.native="home.handleActionSettingsSetData(key)"
+                              :disabled="!!val"
+                              @click.native="() => {
+                                home.handleActionSettingsSetData(key)
+                                home.handleActionAdd()
+                              }"
             >{{`${key} ${$loquat.get(EVENT_DICT,key,'')}`}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>

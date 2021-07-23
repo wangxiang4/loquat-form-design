@@ -345,7 +345,7 @@
                                   prop="name"
                                   :rules="[
                                     { required: true, message:'函数名称不能为空' },
-                                    { validator: handleActionFormNameValidate, trigger: 'blur' }
+                                    { validator: handleActionFormNameValidate }
                                   ]"
                                   label-width="130px"
                     >
@@ -356,7 +356,7 @@
                     <el-form-item prop="func" label-width="0">
                       <div class="code-line">Function () {</div>
                       <ace-editor v-model="actionForm.func"
-                                  lang="json"
+                                  lang="javascript"
                                   theme="textmate"
                                   style="width: 100%; height: 380px;border:1px solid #dcdfe6;"
                       />
@@ -711,7 +711,9 @@ export default {
       this.$refs.actionForm.validate((valid, msg) => {
         if (valid) {
           const index = this.widgetForm.eventScript.findIndex(item => item.key === this.actionForm.key)
-          index === -1 ? this.widgetForm.eventScript.push(Object({ ...this.actionForm })) : this.widgetForm.eventScript.splice(index, 1, Object({ ...this.actionForm }))
+          index === -1
+            ? this.widgetForm.eventScript.push(Object({ ...this.actionForm }))
+            : this.widgetForm.eventScript.splice(index, 1, Object({ ...this.actionForm }))
           this.actionMenuItemDisabled = false
           this.$message.success('保存成功')
         }
@@ -752,26 +754,34 @@ export default {
     },
     // 处理动作设置确认
     handleActionConfirm () {
-      if (Object.hasOwnProperty.call(this.widgetFormSelect.events, this.eventSelect)) {
-        this.$set(this.widgetFormSelect.events, this.eventSelect, this.actionForm.name)
-      }
-      this.eventSelect = ''
-      this.handleActionCancel()
-      this.actionSettingsVisible = false
+      this.$refs.actionForm.validate((valid, msg) => {
+        if (valid) {
+          const index = this.widgetForm.eventScript.findIndex(item => item.key === this.actionForm.key)
+          index === -1
+            ? this.widgetForm.eventScript.push(Object({ ...this.actionForm }))
+            : this.widgetForm.eventScript.splice(index, 1, Object({ ...this.actionForm }))
+          this.$set(this.widgetFormSelect.events, this.eventSelect, this.actionForm.name)
+          this.eventSelect = ''
+          this.handleActionCancel()
+          this.actionSettingsVisible = false
+        }
+      })
     },
     // 设置动作设置初始值
-    handleActionSettingsSetData (key, val) {
-      this.eventSelect = key
+    handleActionSettingsSetData (eventName, funcName) {
+      this.eventSelect = eventName
       this.actionSettingsVisible = true
-      if (!this.$loquat.validateNull(val)) {
-        this.actionForm = this.widgetForm.eventScript.find(item => item.name === val)
+      if (!this.$loquat.validateNull(funcName)) {
+        this.actionForm = this.widgetForm.eventScript.find(item => item.name === funcName)
         this.actionMenuActive = this.actionForm?.key
         this.actionMainContainerVisible = true
       }
     },
     // 处理函数名称不能重复校验
     handleActionFormNameValidate (rule, value, callback) {
-      this.widgetForm.eventScript.find(item => item.name === value) ? callback(new Error('方法名称不能重复')) : callback()
+      this.actionMenuItemDisabled && this.widgetForm.eventScript.find(item => item.name === value)
+        ? callback(new Error('方法名称不能重复'))
+        : callback()
     }
   }
 }
