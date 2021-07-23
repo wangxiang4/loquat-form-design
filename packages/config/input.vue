@@ -131,22 +131,51 @@
       </div>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData,'events']" label="动作设置">
-      <el-dropdown style="width: 100%; margin-top: 5px;"
-                   placement="bottom"
-                   trigger="click"
-      >
-        <el-button size="mini"
-                   type="primary"
-                   plain
-                   style="width: 100%;"
-        >新增动作<i class="el-icon-plus"/>
-        </el-button>
-        <el-dropdown-menu slot="dropdown" style="width: 280px">
-          <el-dropdown-item v-for="(val,key,index) in data.events"
+      <div class="event-panel-config">
+        <el-collapse v-if="$loquat.validateNull(events)">
+          <el-collapse-item v-for="(val,key,index) in events"
+                            v-show="val"
+                            :title="`${key} ${$loquat.get(EVENT_DICT,key,'')}`"
                             :key="index"
-          >{{`${key} ${$loquat.get(EVENT_DICT,key,'')}`}}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          >
+            <div class="event-panel-item" >
+              <el-select size="mini"
+                         v-model="data.events[key]"
+                         style="width: 100%; margin-bottom: 5px;"
+              >
+                <el-option v-for="item in home.widgetForm.eventScript"
+                           :key="item.key"
+                           :label="item.name"
+                           :value="item.name"
+                />
+              </el-select>
+              <i title="编辑代码" class="iconfont icon-code-generation"/>
+              <i title="删除" class="iconfont icon-trash"/>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+        <el-dropdown style="width: 100%; margin-top: 5px;"
+                     placement="bottom"
+                     trigger="click"
+                     @command="(key) =>{
+                       home.actionSelect = key
+                       home.actionSettingsVisible = true
+                     }"
+        >
+          <el-button size="mini"
+                     type="primary"
+                     plain
+                     style="width: 100%;"
+          >新增动作<i class="el-icon-plus"/>
+          </el-button>
+          <el-dropdown-menu slot="dropdown" style="width: 280px">
+            <el-dropdown-item v-for="(val,key,index) in data.events"
+                              :key="index"
+                              :command="key"
+            >{{`${key} ${$loquat.get(EVENT_DICT,key,'')}`}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </el-form-item>
   </div>
 </template>
@@ -194,6 +223,11 @@ export default {
     },
     style () {
       return this.data.style || {}
+    },
+    events () {
+      const clone = this.$loquat.deepClone(this.data.events)
+      for (const val in clone) this.$loquat.validateNull(clone[val]) && delete clone[val]
+      return clone
     }
   },
   watch: {

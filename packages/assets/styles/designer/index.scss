@@ -255,6 +255,36 @@ $primary-readonly-color: #F2F2F2;
       .el-tabs__content {
         margin-top: 0;
       }
+
+      .event-panel-config{
+        .el-collapse-item {
+          border: 1px solid #ebeef5;
+          border-bottom-color: #e1e1e1;
+        }
+        .el-collapse-item__header{
+          background: #ebeef5;
+          height: 30px;
+          line-height: 30px;
+          padding: 5px;
+          font-size: 12px
+        }
+        .el-collapse-item__wrap{
+          border: 0;
+          .el-collapse-item__content{
+            padding: 5px;
+          }
+        }
+        .event-panel-item{
+          vertical-align: top;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          >i{
+            margin-left: 5px;
+            cursor: pointer;
+          }
+        }
+      }
     }
   }
 

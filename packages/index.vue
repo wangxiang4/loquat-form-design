@@ -331,7 +331,7 @@
               <el-container v-if="actionMainContainerVisible">
                 <el-header style="height: 40px">
                   <div class="event-script-action">
-                    <el-button size="mini" type="primary">确定</el-button>
+                    <el-button size="mini" type="primary" v-if="actionSelect" @click="handleActionConfirm">确定</el-button>
                     <el-button size="mini" type="primary" @click="handleActionSave">保存</el-button>
                     <el-button size="mini" @click="handleActionCancel">取消</el-button>
                   </div>
@@ -484,7 +484,8 @@ export default {
       actionForm: {},
       actionMenuActive: '',
       actionMenuItemDisabled: false,
-      actionMainContainerVisible: false
+      actionMainContainerVisible: false,
+      actionSelect: ''
     }
   },
   computed: {
@@ -742,10 +743,16 @@ export default {
     },
     // 处理动作设置取消
     handleActionCancel () {
+      this.actionSelect = ''
       this.actionForm = {}
       this.actionMenuActive = randomId()
       this.actionMenuItemDisabled = false
       this.actionMainContainerVisible = false
+    },
+    // 处理动作设置确认
+    handleActionConfirm () {
+      this.widgetFormSelect.eventScript[this.actionSelect] ? this.widgetFormSelect.eventScript[this.actionSelect] = this.actionForm.name : ''
+      this.handleActionCancel()
     }
   }
 }
