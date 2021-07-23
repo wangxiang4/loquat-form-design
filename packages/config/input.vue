@@ -132,13 +132,13 @@
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData,'events']" label="动作设置">
       <div class="event-panel-config">
-        <el-collapse v-if="$loquat.validateNull(events)">
+        <el-collapse :value="Object.keys(events)" v-if="!$loquat.validateNull(events)">
           <el-collapse-item v-for="(val,key,index) in events"
-                            v-show="val"
                             :title="`${key} ${$loquat.get(EVENT_DICT,key,'')}`"
                             :key="index"
+                            :name="key"
           >
-            <div class="event-panel-item" >
+            <div class="event-panel-item">
               <el-select size="mini"
                          v-model="data.events[key]"
                          style="width: 100%; margin-bottom: 5px;"
@@ -149,18 +149,14 @@
                            :value="item.name"
                 />
               </el-select>
-              <i title="编辑代码" class="iconfont icon-code-generation"/>
-              <i title="删除" class="iconfont icon-trash"/>
+              <i title="编辑代码" class="iconfont icon-code-generation" @click.stop="home.handleActionSettingsSetData(key,val)"/>
+              <i title="删除" class="iconfont icon-trash" @click.stop="data.events[key] = ''"/>
             </div>
           </el-collapse-item>
         </el-collapse>
         <el-dropdown style="width: 100%; margin-top: 5px;"
                      placement="bottom"
                      trigger="click"
-                     @command="(key) =>{
-                       home.actionSelect = key
-                       home.actionSettingsVisible = true
-                     }"
         >
           <el-button size="mini"
                      type="primary"
@@ -171,7 +167,7 @@
           <el-dropdown-menu slot="dropdown" style="width: 280px">
             <el-dropdown-item v-for="(val,key,index) in data.events"
                               :key="index"
-                              :command="key"
+                              @click.native="home.handleActionSettingsSetData(key)"
             >{{`${key} ${$loquat.get(EVENT_DICT,key,'')}`}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>

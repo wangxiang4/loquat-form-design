@@ -306,7 +306,7 @@
                       <div>
                         <span class="event-script-menu-i">Function</span>
                         <div class="event-script-menu-label">{{ item.name }}</div>
-                        <div class="event-script-menu-action" v-if="!JS_EXECUTE_INCLUDE.includes(item.key)">
+                        <div class="event-script-menu-action" v-if="!JS_EXECUTE_INCLUDE.includes(item.name)">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(item)"/>
                           <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(item)"/>
                         </div>
@@ -331,7 +331,7 @@
               <el-container v-if="actionMainContainerVisible">
                 <el-header style="height: 40px">
                   <div class="event-script-action">
-                    <el-button size="mini" type="primary" v-if="actionSelect" @click="handleActionConfirm">确定</el-button>
+                    <el-button size="mini" type="primary" v-if="eventSelect" @click="handleActionConfirm">确定</el-button>
                     <el-button size="mini" type="primary" @click="handleActionSave">保存</el-button>
                     <el-button size="mini" @click="handleActionCancel">取消</el-button>
                   </div>
@@ -343,13 +343,15 @@
                   >
                     <el-form-item label="Function Name"
                                   prop="name"
-                                  required
+                                  :rules="[
+                                    { required: true, message:'函数名称不能为空' },
+                                    { validator: handleActionFormNameValidate, trigger: 'blur' }
+                                  ]"
                                   label-width="130px"
                     >
                       <el-input v-model="actionForm.name"
-                                :disabled="JS_EXECUTE_INCLUDE.includes(actionForm.key)"
+                                :disabled="JS_EXECUTE_INCLUDE.includes(actionForm.name)"
                       />
-                      <template slot="error">{{''}}</template>
                     </el-form-item>
                     <el-form-item prop="func" label-width="0">
                       <div class="code-line">Function () {</div>
@@ -485,7 +487,7 @@ export default {
       actionMenuActive: '',
       actionMenuItemDisabled: false,
       actionMainContainerVisible: false,
-      actionSelect: ''
+      eventSelect: ''
     }
   },
   computed: {
@@ -699,7 +701,7 @@ export default {
     },
     // 处理动作设置菜单选择
     handleActionSelect (key) {
-      if (this.actionForm.key === key) return
+      if (this.actionForm?.key === key) return
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       this.actionForm = this.$loquat.deepClone(this.widgetForm.eventScript.find(item => item.key === key))
       this.actionMainContainerVisible = true
@@ -730,7 +732,7 @@ export default {
       this.$confirm(`确定要删除该方法 [${data.name}] ?`, '警告', {
         type: 'warning'
       }).then(() => {
-        this.actionForm.key === data.key ? this.actionMainContainerVisible = false : ''
+        this.actionForm?.key === data.key ? this.actionMainContainerVisible = false : ''
         const index = this.widgetForm.eventScript.findIndex(item => item.key === data.key)
         if (index === -1) {
           this.actionForm = {}
@@ -743,7 +745,6 @@ export default {
     },
     // 处理动作设置取消
     handleActionCancel () {
-      this.actionSelect = ''
       this.actionForm = {}
       this.actionMenuActive = randomId()
       this.actionMenuItemDisabled = false
@@ -751,8 +752,26 @@ export default {
     },
     // 处理动作设置确认
     handleActionConfirm () {
-      this.widgetFormSelect.eventScript[this.actionSelect] ? this.widgetFormSelect.eventScript[this.actionSelect] = this.actionForm.name : ''
+      if (Object.hasOwnProperty.call(this.widgetFormSelect.events, this.eventSelect)) {
+        this.$set(this.widgetFormSelect.events, this.eventSelect, this.actionForm.name)
+      }
+      this.eventSelect = ''
       this.handleActionCancel()
+      this.actionSettingsVisible = false
+    },
+    // 设置动作设置初始值
+    handleActionSettingsSetData (key, val) {
+      this.eventSelect = key
+      this.actionSettingsVisible = true
+      if (!this.$loquat.validateNull(val)) {
+        this.actionForm = this.widgetForm.eventScript.find(item => item.name === val)
+        this.actionMenuActive = this.actionForm?.key
+        this.actionMainContainerVisible = true
+      }
+    },
+    // 处理函数名称不能重复校验
+    handleActionFormNameValidate (rule, value, callback) {
+      this.widgetForm.eventScript.find(item => item.name === value) ? callback(new Error('方法名称不能重复')) : callback()
     }
   }
 }

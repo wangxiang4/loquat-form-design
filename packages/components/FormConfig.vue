@@ -47,7 +47,7 @@
       </el-form-item>
       <el-form-item v-loquat-has-perm="[originData,'eventScript']" label="动作面板">
         <el-button style="width: 100%"
-                   @click="home.actionSettingsVisible = true"
+                   @click="home.handleActionSettingsSetData('')"
         >设置</el-button>
       </el-form-item>
     </el-form>
