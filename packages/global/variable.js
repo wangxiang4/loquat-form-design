@@ -48,4 +48,10 @@ export const FORM_DEFAULT_PROP = {
   readonly: false,
   disabled: false
 }
+export const JS_EXECUTE_INCLUDE = ['mounted']
+export const EVENT_DICT = {
+  onChange: '值发生变化',
+  onFocus: '获取焦点',
+  onBlur: '失去焦点'
+}
 

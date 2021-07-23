@@ -45,25 +45,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item v-loquat-has-perm="[originData,'eventScript']" label="新增动作">
-        <el-dropdown hide-on-click
-                     size="small"
-                     style="width: 100%; margin-top: 5px;"
-                     placement="bottom"
-                     trigger="click"
-        >
-          <el-button size="mini"
-                     type="primary"
-                     plain
-                     style="width: 100%;"
-                     @click="home.actionSettingsVisible = true"
-          >新增动作<i class="el-icon-plus"/>
-          </el-button>
-          <el-dropdown-menu slot="dropdown" style="width: 280px">
-            <el-dropdown-item>onBefore 表单打开前执行</el-dropdown-item>
-            <el-dropdown-item>onAfter 表单保存后执行</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+      <el-form-item v-loquat-has-perm="[originData,'eventScript']" label="动作面板">
+        <el-button style="width: 100%"
+                   @click="home.actionSettingsVisible = true"
+        >设置</el-button>
       </el-form-item>
     </el-form>
   </div>

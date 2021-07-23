@@ -130,10 +130,29 @@
         />
       </div>
     </el-form-item>
+    <el-form-item v-loquat-has-perm="[originData,'events']" label="动作设置">
+      <el-dropdown style="width: 100%; margin-top: 5px;"
+                   placement="bottom"
+                   trigger="click"
+      >
+        <el-button size="mini"
+                   type="primary"
+                   plain
+                   style="width: 100%;"
+        >新增动作<i class="el-icon-plus"/>
+        </el-button>
+        <el-dropdown-menu slot="dropdown" style="width: 280px">
+          <el-dropdown-item v-for="(val,key,index) in data.events"
+                            :key="index"
+          >{{`${key} ${$loquat.get(EVENT_DICT,key,'')}`}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </el-form-item>
   </div>
 </template>
 
 <script>
+import { EVENT_DICT } from '@/global/variable'
 export default {
   name: 'Input',
   props: {
@@ -152,6 +171,7 @@ export default {
   },
   data () {
     return {
+      EVENT_DICT,
       originData: this.$loquat.deepClone(this.data),
       optionPerm: [
         'readonly',

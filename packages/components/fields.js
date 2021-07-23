@@ -26,6 +26,11 @@ export default [
         required: false,
         type: false,
         pattern: false
+      },
+      events: {
+        onChange: '',
+        onFocus: '',
+        onBlur: ''
       }
     }]
   },

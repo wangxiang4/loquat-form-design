@@ -306,7 +306,7 @@
                       <div>
                         <span class="event-script-menu-i">Function</span>
                         <div class="event-script-menu-label">{{ item.name }}</div>
-                        <div class="event-script-menu-action">
+                        <div class="event-script-menu-action" v-if="!JS_EXECUTE_INCLUDE.includes(item.key)">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(item)"/>
                           <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(item)"/>
                         </div>
@@ -345,7 +345,10 @@
                                   prop="name"
                                   required
                                   label-width="130px"
-                    ><el-input v-model="actionForm.name"/>
+                    >
+                      <el-input v-model="actionForm.name"
+                                :disabled="JS_EXECUTE_INCLUDE.includes(actionForm.key)"
+                      />
                       <template slot="error">{{''}}</template>
                     </el-form-item>
                     <el-form-item prop="func" label-width="0">
@@ -379,7 +382,7 @@ import WidgetConfig from './components/WidgetConfig'
 import AceEditor from 'v-ace-editor'
 import beautifier from '@utils/jsonBeautifier'
 import clipboard from '@utils/clipboard'
-import { KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE } from '@/global/variable'
+import { KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE, JS_EXECUTE_INCLUDE } from '@/global/variable'
 import { randomId } from '@utils'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 export default {
@@ -438,6 +441,7 @@ export default {
     return {
       widgetEmpty,
       fields,
+      JS_EXECUTE_INCLUDE,
       widgetForm: {
         column: [],
         labelPosition: 'left',
@@ -499,7 +503,7 @@ export default {
       }
     },
     defaultBackground () {
-      return { background: this.$loquat.get(this.widgetForm, 'column.length') === 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
+      return { background: (this.widgetForm.column?.length || 0) === 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
     }
   },
   watch: {
