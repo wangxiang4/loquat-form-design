@@ -134,13 +134,13 @@
       <div class="event-panel-config">
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
-                            :title="`${key} ${$loquat.get(EVENT_DICT,key,'')}`"
                             :key="index"
+                            :title="`${key} ${$loquat.get(EVENT_DICT,key,'')}`"
                             :name="key"
           >
             <div class="event-panel-item">
-              <el-select size="mini"
-                         v-model="data.events[key]"
+              <el-select v-model="data.events[key]"
+                         size="mini"
                          style="width: 100%; margin-bottom: 5px;"
               >
                 <el-option v-for="item in home.widgetForm.eventScript"
@@ -172,7 +172,7 @@
                                 home.handleActionSettingsSetData({eventName:key})
                                 home.handleActionAdd()
                               }"
-            >{{`${key} ${$loquat.get(EVENT_DICT,key,'')}`}}</el-dropdown-item>
+            >{{ `${key} ${$loquat.get(EVENT_DICT,key,'')}` }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>

@@ -345,7 +345,7 @@
                                   prop="name"
                                   :rules="[
                                     { required: true, message:'函数名称不能为空' },
-                                    { validator: handleActionFormNameValidate }
+                                    { validator: handleActionFormNameValidate, trigger: 'blur' }
                                   ]"
                                   label-width="130px"
                     >
@@ -774,9 +774,13 @@ export default {
     },
     // 处理函数名称不能重复校验
     handleActionFormNameValidate (rule, value, callback) {
-      this.actionMenuItemDisabled && this.widgetForm.eventScript.find(item => item.name === value)
-        ? callback(new Error('方法名称不能重复'))
-        : callback()
+      const eventScript = this.$loquat.deepClone(this.widgetForm.eventScript)
+      // 如果是编辑模式,则需把当前的对象剔除
+      if (!this.actionMenuItemDisabled) {
+        const index = eventScript.findIndex(item => item.key === this.actionForm.key)
+        index !== -1 && eventScript.splice(index, 1)
+      }
+      eventScript.find(item => item.name === value) ? callback(new Error('方法名称不能重复')) : callback()
     }
   }
 }
