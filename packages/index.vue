@@ -768,11 +768,11 @@ export default {
       })
     },
     // 设置动作设置初始值
-    handleActionSettingsSetData (eventName, funcName) {
-      this.eventSelect = eventName
+    handleActionSettingsSetData (obj) {
+      this.eventSelect = obj.eventName
       this.actionSettingsVisible = true
-      if (!this.$loquat.validateNull(funcName)) {
-        this.actionForm = this.widgetForm.eventScript.find(item => item.name === funcName)
+      if (!this.$loquat.validateNull(obj.funcName)) {
+        this.actionForm = this.widgetForm.eventScript.find(item => item.name === obj.funcName)
         this.actionMenuActive = this.actionForm?.key
         this.actionMainContainerVisible = true
       }

@@ -149,7 +149,7 @@
                            :value="item.name"
                 />
               </el-select>
-              <i title="编辑代码" class="iconfont icon-code-generation" @click.stop="home.handleActionSettingsSetData(key,val)"/>
+              <i title="编辑代码" class="iconfont icon-code-generation" @click.stop="home.handleActionSettingsSetData({eventName:key,funcName:val})"/>
               <i title="删除" class="iconfont icon-trash" @click.stop="data.events[key] = ''"/>
             </div>
           </el-collapse-item>
@@ -169,7 +169,7 @@
                               :key="index"
                               :disabled="!!val"
                               @click.native="() => {
-                                home.handleActionSettingsSetData(key)
+                                home.handleActionSettingsSetData({eventName:key})
                                 home.handleActionAdd()
                               }"
             >{{`${key} ${$loquat.get(EVENT_DICT,key,'')}`}}</el-dropdown-item>
