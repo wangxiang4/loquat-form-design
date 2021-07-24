@@ -132,7 +132,7 @@
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData,'events']" label="动作设置">
       <div class="event-panel-config">
-        <el-collapse :value="Object.keys(events)" v-if="!$loquat.validateNull(events)">
+        <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
                             :title="`${key} ${$loquat.get(EVENT_DICT,key,'')}`"
                             :key="index"

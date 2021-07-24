@@ -306,7 +306,7 @@
                       <div>
                         <span class="event-script-menu-i">Function</span>
                         <div class="event-script-menu-label">{{ item.name }}</div>
-                        <div class="event-script-menu-action" v-if="!JS_EXECUTE_INCLUDE.includes(item.name)">
+                        <div v-if="!JS_EXECUTE_INCLUDE.includes(item.key)" class="event-script-menu-action">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(item)"/>
                           <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(item)"/>
                         </div>
@@ -331,7 +331,7 @@
               <el-container v-if="actionMainContainerVisible">
                 <el-header style="height: 40px">
                   <div class="event-script-action">
-                    <el-button size="mini" type="primary" v-if="eventSelect" @click="handleActionConfirm">确定</el-button>
+                    <el-button v-if="eventSelect" size="mini" type="primary" @click="handleActionConfirm">确定</el-button>
                     <el-button size="mini" type="primary" @click="handleActionSave">保存</el-button>
                     <el-button size="mini" @click="handleActionCancel">取消</el-button>
                   </div>
@@ -350,7 +350,7 @@
                                   label-width="130px"
                     >
                       <el-input v-model="actionForm.name"
-                                :disabled="JS_EXECUTE_INCLUDE.includes(actionForm.name)"
+                                :disabled="JS_EXECUTE_INCLUDE.includes(actionForm.key)"
                       />
                     </el-form-item>
                     <el-form-item prop="func" label-width="0">
