@@ -45,6 +45,11 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item v-loquat-has-perm="[originData,'dataSource']" label="数据源">
+        <el-button style="width: 100%"
+                   @click="home.dataSourceSettingsVisible = true"
+        >设置</el-button>
+      </el-form-item>
       <el-form-item v-loquat-has-perm="[originData,'eventScript']" label="动作面板">
         <el-button style="width: 100%"
                    @click="home.handleActionSettingsSetData({eventName: ''})"
