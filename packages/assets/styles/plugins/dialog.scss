@@ -156,7 +156,18 @@
               top:13px;
               width:45px;
               text-align: center;
+            }
+            .data-source-menu-i.GET{
               color: #67c23a;
+            }
+            .data-source-menu-i.POST{
+              color: #e6a23c;
+            }
+            .data-source-menu-i.PUT{
+              color: #409eff;
+            }
+            .data-source-menu-i.DELETE{
+              color: #f56c6c;
             }
             .data-source-menu-label{
               overflow:hidden;

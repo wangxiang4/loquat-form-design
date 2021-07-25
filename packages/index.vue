@@ -399,7 +399,7 @@
                                   @click.native="handleDataSourceSelect(item.key)"
                     >
                       <div>
-                        <span class="data-source-menu-i">Function</span>
+                        <span :class="['data-source-menu-i',item.method]">{{item.method}}</span>
                         <div class="data-source-menu-label">{{ item.name }}</div>
                         <div class="data-source-menu-action">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(item)"/>
@@ -410,7 +410,7 @@
                     <!--虚拟表单项-->
                     <el-menu-item v-if="dataSourceMenuItemDisabled" :index="dataSourceForm.key">
                       <div>
-                        <span class="data-source-menu-i">Function</span>
+                        <span :class="['data-source-menu-i',dataSourceForm.method]">{{dataSourceForm.method}}</span>
                         <div class="data-source-menu-label">{{ dataSourceForm.name }}</div>
                         <div class="data-source-menu-action">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(dataSourceForm)"/>
