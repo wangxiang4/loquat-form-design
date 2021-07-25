@@ -480,12 +480,12 @@
                                     :rows="1"
                                     placeholder="VALUE"
                           />
-                          <el-button @click="dataSourceForm.headers.splice(index,1)"
-                                     circle
+                          <el-button circle
                                      plain
                                      type="danger"
                                      size="small"
                                      icon="el-icon-minus"
+                                     @click="dataSourceForm.headers.splice(index,1)"
                           />
                         </div>
                         <el-button type="text" @click="dataSourceForm.headers.push({})">添加</el-button>
@@ -506,12 +506,12 @@
                                     :rows="1"
                                     placeholder="VALUE"
                           />
-                          <el-button @click="dataSourceForm.params.splice(index,1)"
-                                     circle
+                          <el-button circle
                                      plain
                                      type="danger"
                                      size="small"
                                      icon="el-icon-minus"
+                                     @click="dataSourceForm.params.splice(index,1)"
                           />
                         </div>
                         <el-button type="text" @click="dataSourceForm.params.push({})">添加</el-button>
