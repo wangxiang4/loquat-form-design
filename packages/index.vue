@@ -358,7 +358,7 @@
                       <ace-editor v-model="actionForm.func"
                                   lang="javascript"
                                   theme="textmate"
-                                  style="width: 100%; height: 380px;border:1px solid #dcdfe6;"
+                                  style="height: 380px;border:1px solid #dcdfe6;"
                       />
                       <div class="code-line">}</div>
                     </el-form-item>
@@ -373,7 +373,7 @@
                  class="loquat-dialog"
                  :visible.sync="dataSourceSettingsVisible"
                  :close-on-click-modal="false"
-                 width="1050px"
+                 width="1000px"
                  append-to-body
                  top="3vh"
                  center
@@ -524,29 +524,33 @@
                     <el-form-item label="数据处理">
                       <el-collapse :value="['requestFunc','responseFunc','errorFunc']">
                         <el-collapse-item name="requestFunc" title="请求发送前：">
-                          <div class="code-line">Function () {</div>
+                          <div class="code-desc">// config: 发出请求的可用配置选项;</div>
+                          <div class="code-desc">// 通过 config.url 可以更改请求地址，通过 config.headers 可以更改请求头部</div>
+                          <div class="code-desc">// 通过 config.data 可以更改发送的数据</div>
+                          <div class="code-line">(config) => {</div>
                           <ace-editor v-model="dataSourceForm.requestFunc"
                                       lang="javascript"
                                       theme="textmate"
-                                      style="top: 0px; left: 0px; width: 468px; height: 148px;"
+                                      style="height: 148px;border:1px solid #dcdfe6;"
                           />
                           <div class="code-line">}</div>
                         </el-collapse-item>
                         <el-collapse-item name="responseFunc" title="请求返回响应数据时：">
-                          <div class="code-line">Function () {</div>
+                          <div class="code-desc">// 默认直接返回响应数据 res，可以在下方对数据进行处理</div>
+                          <div class="code-line">(res) => {</div>
                           <ace-editor v-model="dataSourceForm.responseFunc"
                                       lang="javascript"
                                       theme="textmate"
-                                      style="top: 0px; left: 0px; width: 468px; height: 148px;"
+                                      style="height: 148px;border:1px solid #dcdfe6;"
                           />
                           <div class="code-line">}</div>
                         </el-collapse-item>
                         <el-collapse-item name="errorFunc" title="请求发生错误时：">
-                          <div class="code-line">Function () {</div>
+                          <div class="code-line">(error) => {</div>
                           <ace-editor v-model="dataSourceForm.errorFunc"
                                       lang="javascript"
                                       theme="textmate"
-                                      style="top: 0px; left: 0px; width: 468px; height: 148px;"
+                                      style="height: 148px;border:1px solid #dcdfe6;"
                           />
                           <div class="code-line">}</div>
                         </el-collapse-item>
