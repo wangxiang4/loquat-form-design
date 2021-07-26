@@ -447,7 +447,8 @@
                     <el-form-item label="请求地址"
                                   prop="url"
                                   :rules="[
-                                    { required: true, message:'请求地址不能为空' }
+                                    { required: true, message:'请求地址不能为空' },
+                                    { type: 'url', message: 'url格式不正确'}
                                   ]"
                     ><el-input v-model="dataSourceForm.url"
                                size="small"

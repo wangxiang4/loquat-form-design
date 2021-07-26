@@ -9,7 +9,7 @@
              :placeholder="column.placeholder || getPlaceholder(column)"
              :props="column.props || props"
              :size="column.size || size"
-             :type="type || column.typePrototype || column.type"
+             :type="type || column._type || column.type"
              v-on="event"
              @keyup.enter.native="enterChange"
   >
