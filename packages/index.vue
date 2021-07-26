@@ -399,7 +399,7 @@
                                   @click.native="handleDataSourceSelect(item.key)"
                     >
                       <div>
-                        <span :class="['data-source-menu-i',item.method]">{{item.method}}</span>
+                        <span :class="['data-source-menu-i',item.method]">{{ item.method }}</span>
                         <div class="data-source-menu-label">{{ item.name }}</div>
                         <div class="data-source-menu-action">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(item)"/>
@@ -410,7 +410,7 @@
                     <!--虚拟表单项-->
                     <el-menu-item v-if="dataSourceMenuItemDisabled" :index="dataSourceForm.key">
                       <div>
-                        <span :class="['data-source-menu-i',dataSourceForm.method]">{{dataSourceForm.method}}</span>
+                        <span :class="['data-source-menu-i',dataSourceForm.method]">{{ dataSourceForm.method }}</span>
                         <div class="data-source-menu-label">{{ dataSourceForm.name }}</div>
                         <div class="data-source-menu-action">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(dataSourceForm)"/>
@@ -654,8 +654,8 @@ export default {
             url: 'http://tools-server.making.link/api/uptoken',
             method: 'GET',
             auto: true,
-            headers: [],
-            params: [],
+            headers: {},
+            params: {},
             requestFunc: 'return config;',
             responseFunc: 'return res;',
             errorFunc: ''
@@ -1023,13 +1023,13 @@ export default {
     },
     // 处理数据源设置保存
     handleDataSourceSave () {
-      this.$refs.actionForm.validate((valid, msg) => {
+      this.$refs.dataSourceForm.validate((valid, msg) => {
         if (valid) {
           const dataSource = this.$loquat.deepClone(this.dataSourceForm)
           dataSource.headers = Object(...dataSource.headers.map(({ key, value }) => ({ [key]: value })))
           dataSource.params = Object(...dataSource.params.map(({ key, value }) => ({ [key]: value })))
           const index = this.widgetForm.dataSource.findIndex(item => item.key === this.dataSourceForm.key)
-          index === -1 ? this.widgetForm.dataSource.push(dataSource) : this.widgetForm.dataSource.splice(index, 1, dataSource)
+          index === -1 ? this.widgetForm.dataSource.push(Object(dataSource)) : this.widgetForm.dataSource.splice(index, 1, Object(dataSource))
           this.dataSourceMenuItemDisabled = false
           this.$message.success('保存成功')
         }
@@ -1043,6 +1043,7 @@ export default {
       this.dataSourceForm.name += '_copy'
       this.dataSourceForm.headers = Object.entries(this.dataSourceForm.headers).map(([k, v]) => ({ key: k, value: v }))
       this.dataSourceForm.params = Object.entries(this.dataSourceForm.params).map(([k, v]) => ({ key: k, value: v }))
+      !this.dataSourceForm.requestFunc ? this.dataSourceForm.requestFunc = 'return config;' : ''
       this.dataSourceMenuItemDisabled = true
       this.dataSourceMainContainerVisible = true
       this.dataSourceMenuActive = this.dataSourceForm.key
