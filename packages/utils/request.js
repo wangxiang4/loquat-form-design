@@ -1,10 +1,21 @@
+/**
+ * @program: loquat-form-design
+ *
+ * @description: 数据源请求封装
+ *
+ * @author: entfrm开发团队-王翔
+ *
+ * @create: 2021-07-27
+ **/
 import axios from 'axios'
+
+// 更新默认配置
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 axios.defaults.validateStatus = function (status) {
   return status >= 200 && status <= 500 // 默认的
 }
 
-// 创建axios实例
+// 创建axios实例,每请求一次创建一次实例
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL: process.env.VUE_APP_BASE_API,
@@ -12,19 +23,4 @@ const service = axios.create({
   timeout: 30000
 })
 
-export default function (requestFunc, responseFunc, errorFunc) {
-  // request拦截器
-  service.interceptors.request.use(
-    config => {
-      new Function(`return ${requestFunc}`)()
-      // 经过对内部源码的剖析,内部采用Promise.resolve(config)链式调用,所以此处没有拒绝回调
-    }, undefined)
-  // 响应拦截器
-  service.interceptors.response.use(res => {
-    new Function(`return ${responseFunc}`)()
-    // eslint-disable-next-line handle-callback-err
-  }, error => {
-    new Function(`return ${errorFunc}`)()
-  })
-  return service
-}
+export default service

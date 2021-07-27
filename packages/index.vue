@@ -427,6 +427,7 @@
                 <el-header style="height: 40px">
                   <div class="data-source-action">
                     <el-button size="mini" type="primary" @click="handleDataSourceSave">保存</el-button>
+                    <el-button size="mini" @click="handleDataSourceRequestTest">请求测试</el-button>
                     <el-button size="mini" @click="handleDataSourceCancel">取消</el-button>
                   </div>
                 </el-header>
@@ -526,7 +527,7 @@
                         <el-collapse-item name="requestFunc" title="请求发送前：">
                           <div class="code-desc">// config: 发出请求的可用配置选项;</div>
                           <div class="code-desc">// 通过 config.url 可以更改请求地址，通过 config.headers 可以更改请求头部</div>
-                          <div class="code-desc">// 通过 config.data 可以更改发送的数据</div>
+                          <div class="code-desc">// 通过 config.data 可以更改发送的数据，（GET 请求不适用，需要更改 config.params）</div>
                           <div class="code-line">(config) => {</div>
                           <ace-editor v-model="dataSourceForm.requestFunc"
                                       lang="javascript"
@@ -663,7 +664,7 @@ export default {
             params: {},
             requestFunc: 'return config;',
             responseFunc: 'return res;',
-            errorFunc: ''
+            errorFunc: 'return Promise.reject(new Error(error));'
           }
         ]
       },
@@ -1009,7 +1010,7 @@ export default {
         params: [],
         requestFunc: 'return config;',
         responseFunc: 'return res;',
-        errorFunc: ''
+        errorFunc: 'return Promise.reject(new Error(error));'
       }
       this.dataSourceMenuItemDisabled = true
       this.dataSourceMainContainerVisible = true
@@ -1023,6 +1024,8 @@ export default {
       dataSource.headers = Object.entries(dataSource.headers).map(([k, v]) => ({ key: k, value: v }))
       dataSource.params = Object.entries(dataSource.params).map(([k, v]) => ({ key: k, value: v }))
       !dataSource.requestFunc ? dataSource.requestFunc = 'return config;' : ''
+      !dataSource.responseFunc ? dataSource.responseFunc = 'return res;' : ''
+      !dataSource.errorFunc ? dataSource.errorFunc = 'return Promise.reject(new Error(error));' : ''
       this.dataSourceForm = dataSource
       this.dataSourceMainContainerVisible = true
     },
@@ -1049,6 +1052,8 @@ export default {
       this.dataSourceForm.headers = Object.entries(this.dataSourceForm.headers).map(([k, v]) => ({ key: k, value: v }))
       this.dataSourceForm.params = Object.entries(this.dataSourceForm.params).map(([k, v]) => ({ key: k, value: v }))
       !this.dataSourceForm.requestFunc ? this.dataSourceForm.requestFunc = 'return config;' : ''
+      !this.dataSourceForm.responseFunc ? this.dataSourceForm.responseFunc = 'return res;' : ''
+      !this.dataSourceForm.errorFunc ? this.dataSourceForm.errorFunc = 'return Promise.reject(new Error(error));' : ''
       this.dataSourceMenuItemDisabled = true
       this.dataSourceMainContainerVisible = true
       this.dataSourceMenuActive = this.dataSourceForm.key
@@ -1076,7 +1081,7 @@ export default {
       this.dataSourceMenuItemDisabled = false
       this.dataSourceMainContainerVisible = false
     },
-    // 处理函数名称不能重复校验
+    // 处理数据源名称不能重复校验
     handleDataSourceFormNameValidate (rule, value, callback) {
       const dataSource = this.$loquat.deepClone(this.widgetForm.dataSource)
       // 如果是编辑模式,则需把当前的对象剔除
@@ -1085,6 +1090,33 @@ export default {
         index !== -1 && dataSource.splice(index, 1)
       }
       dataSource.find(item => item.name === value) ? callback(new Error('数据源名称不能重复')) : callback()
+    },
+    // 处理数据源设置请求测试
+    handleDataSourceRequestTest () {
+      const request = require('axios').default
+      this.$refs.dataSourceForm.validate((valid, msg) => {
+        if (valid) {
+          this.dataSourceForm.method !== 'GET' && request.interceptors.request.use(config => {
+            return new Function('config', this.dataSourceForm.requestFunc)(config)
+          }, undefined)
+          request.interceptors.response.use(res => {
+            return new Function('res', this.dataSourceForm.responseFunc)(res)
+          }, error => {
+            return new Function('error', this.dataSourceForm.errorFunc)(error)
+          })
+          const param = (({ url, method, headers, params }) => {
+            const requestParam = { url, method, headers, params }
+            requestParam.headers = Object(...requestParam.headers.map(({ key, value }) => ({ [key]: value })))
+            requestParam.params = Object(...requestParam.params.map(({ key, value }) => ({ [key]: value })))
+            return requestParam
+          })(this.dataSourceForm)
+          request(param).then(response => {
+            this.$alert(JSON.stringify(response), { confirmButtonText: '确定' })
+          }).catch(error => {
+            this.$alert(error, { confirmButtonText: '确定' })
+          })
+        }
+      })
     }
   }
 }
