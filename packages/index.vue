@@ -647,6 +647,13 @@ export default {
         size: 'small',
         styleSheets: '',
         customClass: [],
+        eventScript: [
+          {
+            'key': 'mounted',
+            'name': 'mounted',
+            'func': ''
+          }
+        ],
         dataSource: [
           {
             key: 'upload',
