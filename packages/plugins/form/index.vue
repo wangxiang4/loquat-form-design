@@ -62,6 +62,7 @@
             <form-item v-else
                        :ref="column.prop"
                        v-model="form[column.prop]"
+                       :event-script="parentOption.eventScript"
                        :column="column"
                        :props="parentOption.props"
                        :readonly="parentOption.readonly || column.readonly || readonly"

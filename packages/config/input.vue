@@ -229,22 +229,6 @@ export default {
       for (const val in clone) this.$loquat.validateNull(clone[val]) && delete clone[val]
       return clone
     }
-  },
-  watch: {
-    validateConfig: {
-      handler (val) {
-        const rules = []
-        this.data._type = undefined
-        if (val.required) rules.push({ required: true, message: val.requiredMessage || `${this.data.label}必须填写` })
-        if (val.type) {
-          rules.push({ type: val.typeFormat, message: val.typeMessage || `${this.data.label}格式不正确` })
-          if (val.typeFormat === 'number' || val.typeFormat === 'integer' || val.typeFormat === 'float') this.data._type = 'number'
-        }
-        if (val.pattern) rules.push({ pattern: val.patternFormat, message: val.patternMessage || `${this.data.label}格式不匹配` })
-        this.data.rules = rules
-      },
-      deep: true
-    }
   }
 }
 </script>

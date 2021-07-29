@@ -68,6 +68,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    eventScript: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
@@ -81,7 +85,14 @@ export default {
       return this.column.params || {}
     },
     events () {
-      return this.column.events || {}
+      const events = this.$loquat.deepClone(this.column.events)
+      for (const key in events) {
+        if (events[key]) {
+          const event = this.eventScript.find(item => item.name === events[key])
+          events[key] = new Function(event.func)
+        } else delete events[key]
+      }
+      return events || {}
     }
   },
   watch: {

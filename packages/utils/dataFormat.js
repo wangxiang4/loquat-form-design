@@ -116,12 +116,18 @@ export function designTransformPreview (obj) {
   const data = deepClone(obj)
   for (let i = 0; i < data.column.length; i++) {
     const col = data.column[i]
-    // 事件处理
-    for (const key in col.events) {
-      if (col.events[key]) {
-        const event = data.eventScript.find(item => item.name === col.events[key])
-        col.events[key] = new Function(event.func)
-      } else delete col.events[key]
+    // 校验规则处理
+    if (col.validateConfig) {
+      const rules = []
+      col._type = undefined
+      if (col.validateConfig.required) rules.push({ required: true, message: col.validateConfig.requiredMessage || `${col.label}必须填写` })
+      if (col.validateConfig.type) {
+        rules.push({ type: col.validateConfig.typeFormat, message: col.validateConfig.typeMessage || `${col.label}格式不正确` })
+        if (col.validateConfig.typeFormat === 'number' || col.validateConfig.typeFormat === 'integer' || col.validateConfig.typeFormat === 'float') col._type = 'number'
+      }
+      if (col.validateConfig.pattern) rules.push({ pattern: col.validateConfig.patternFormat, message: col.validateConfig.patternMessage || `${col.label}格式不匹配` })
+      delete col.validateConfig
+      col.rules = rules
     }
   }
   return data

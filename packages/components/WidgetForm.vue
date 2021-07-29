@@ -41,6 +41,7 @@
                           @click.native="handleSelectWidget(index)"
             >
               <loquat-form-item :column="column"
+                                :event-script="data.eventScript"
                                 :props="data.props"
                                 :readonly="data.readonly || column.readonly"
                                 :disabled="data.disabled || column.disabled"
