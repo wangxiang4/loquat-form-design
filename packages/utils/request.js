@@ -23,4 +23,10 @@ const service = axios.create({
   timeout: 30000
 })
 
+service.interceptors.response.use(res => {
+  return res.data
+}, error => {
+  return Promise.reject(new Error(error))
+})
+
 export default service

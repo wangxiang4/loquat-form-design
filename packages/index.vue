@@ -665,7 +665,7 @@ export default {
             params: {},
             requestFunc: 'return config;',
             responseFunc: 'return res;',
-            errorFunc: 'return Promise.reject(new Error(error));'
+            errorFunc: ''
           }
         ]
       },
@@ -1011,7 +1011,7 @@ export default {
         params: [],
         requestFunc: 'return config;',
         responseFunc: 'return res;',
-        errorFunc: 'return Promise.reject(new Error(error));'
+        errorFunc: ''
       }
       this.dataSourceMenuItemDisabled = true
       this.dataSourceMainContainerVisible = true
@@ -1026,7 +1026,6 @@ export default {
       dataSource.params = Object.entries(dataSource.params).map(([k, v]) => ({ key: k, value: v }))
       !dataSource.requestFunc ? dataSource.requestFunc = 'return config;' : ''
       !dataSource.responseFunc ? dataSource.responseFunc = 'return res;' : ''
-      !dataSource.errorFunc ? dataSource.errorFunc = 'return Promise.reject(new Error(error));' : ''
       this.dataSourceForm = dataSource
       this.dataSourceMainContainerVisible = true
     },
@@ -1054,7 +1053,6 @@ export default {
       this.dataSourceForm.params = Object.entries(this.dataSourceForm.params).map(([k, v]) => ({ key: k, value: v }))
       !this.dataSourceForm.requestFunc ? this.dataSourceForm.requestFunc = 'return config;' : ''
       !this.dataSourceForm.responseFunc ? this.dataSourceForm.responseFunc = 'return res;' : ''
-      !this.dataSourceForm.errorFunc ? this.dataSourceForm.errorFunc = 'return Promise.reject(new Error(error));' : ''
       this.dataSourceMenuItemDisabled = true
       this.dataSourceMainContainerVisible = true
       this.dataSourceMenuActive = this.dataSourceForm.key
@@ -1097,25 +1095,29 @@ export default {
       this.$refs.dataSourceForm.validate((valid, msg) => {
         if (valid) {
           request.interceptors.request.empty()
-          request.interceptors.response.empty()
           this.dataSourceForm.method !== 'GET' && request.interceptors.request.use(config => {
             return new Function('config', this.dataSourceForm.requestFunc)(config)
           }, undefined)
-          request.interceptors.response.use(res => {
-            return new Function('res', this.dataSourceForm.responseFunc)(res)
-          }, error => {
-            return new Function('error', this.dataSourceForm.errorFunc)(error)
-          })
           const param = (({ url, method, headers, params }) => {
             const requestParam = { url, method, headers, params }
             requestParam.headers = Object(...requestParam.headers.map(({ key, value }) => ({ [key]: value })))
             requestParam.params = Object(...requestParam.params.map(({ key, value }) => ({ [key]: value })))
             return requestParam
           })(this.dataSourceForm)
-          request(param).then(response => {
-            this.$alert(JSON.stringify(response), { confirmButtonText: '确定' })
+          request(param).then(res => {
+            try {
+              const execute = new Function('res', this.dataSourceForm.responseFunc)(res)
+              this.$alert(JSON.stringify(execute), { confirmButtonText: '确定' })
+            } catch (e) {
+              this.$alert(e, { confirmButtonText: '确定' })
+            }
           }).catch(error => {
-            this.$alert(error, { confirmButtonText: '确定' })
+            try {
+              const execute = new Function('error', this.dataSourceForm.errorFunc)(error)
+              this.$alert(execute, { confirmButtonText: '确定' })
+            } catch (e) {
+              this.$alert(e, { confirmButtonText: '确定' })
+            }
           })
         }
       })
