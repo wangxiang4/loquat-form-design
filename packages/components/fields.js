@@ -28,9 +28,9 @@ export default [
         pattern: false
       },
       events: {
-        onChange: '',
-        onFocus: '',
-        onBlur: ''
+        change: '',
+        focus: '',
+        blur: ''
       }
     }]
   },

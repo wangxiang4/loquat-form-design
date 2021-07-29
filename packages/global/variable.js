@@ -50,8 +50,8 @@ export const FORM_DEFAULT_PROP = {
 }
 export const JS_EXECUTE_INCLUDE = ['mounted']
 export const EVENT_DICT = {
-  onChange: '值发生变化',
-  onFocus: '获取焦点',
-  onBlur: '失去焦点'
+  change: '值发生变化',
+  focus: '获取焦点',
+  blur: '失去焦点'
 }
 
