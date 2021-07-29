@@ -120,12 +120,12 @@ export function designTransformPreview (obj) {
     if (col.validateConfig) {
       const rules = []
       col._type = undefined
-      if (col.validateConfig.required) rules.push({ required: true, message: col.validateConfig.requiredMessage || `${col.label}必须填写` })
+      col.validateConfig.required && rules.push({ required: true, message: col.validateConfig.requiredMessage || `${col.label}必须填写` })
       if (col.validateConfig.type) {
         rules.push({ type: col.validateConfig.typeFormat, message: col.validateConfig.typeMessage || `${col.label}格式不正确` })
-        if (col.validateConfig.typeFormat === 'number' || col.validateConfig.typeFormat === 'integer' || col.validateConfig.typeFormat === 'float') col._type = 'number'
+        if (['number', 'integer', 'float'].includes(col.validateConfig.typeFormat)) col._type = 'number'
       }
-      if (col.validateConfig.pattern) rules.push({ pattern: col.validateConfig.patternFormat, message: col.validateConfig.patternMessage || `${col.label}格式不匹配` })
+      col.validateConfig.pattern && rules.push({ pattern: col.validateConfig.patternFormat, message: col.validateConfig.patternMessage || `${col.label}格式不匹配` })
       delete col.validateConfig
       col.rules = rules
     }
