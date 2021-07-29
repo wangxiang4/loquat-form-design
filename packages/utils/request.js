@@ -7,7 +7,7 @@
  *
  * @create: 2021-07-27
  **/
-import axios from 'axios'
+import axios from 'loquat-axios'
 
 // 更新默认配置
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'

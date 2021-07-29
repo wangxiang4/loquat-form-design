@@ -9,8 +9,7 @@ module.exports = {
   chainWebpack: (config) => {
     config.externals({
       'vue': 'Vue',
-      'element-ui': 'ELEMENT',
-      'axios': 'axios'
+      'element-ui': 'ELEMENT'
     })
     config.resolve.alias
       .set('@', resolve('packages'))

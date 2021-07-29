@@ -582,6 +582,7 @@ import clipboard from '@utils/clipboard'
 import { KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE, JS_EXECUTE_INCLUDE } from '@/global/variable'
 import { randomId } from '@utils'
 import { insertCss, parseCss, classCss } from '@utils/dom'
+import request from '@utils/request'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor },
@@ -1093,9 +1094,10 @@ export default {
     },
     // 处理数据源设置请求测试
     handleDataSourceRequestTest () {
-      const request = require('axios').default
       this.$refs.dataSourceForm.validate((valid, msg) => {
         if (valid) {
+          request.interceptors.request.empty()
+          request.interceptors.response.empty()
           this.dataSourceForm.method !== 'GET' && request.interceptors.request.use(config => {
             return new Function('config', this.dataSourceForm.requestFunc)(config)
           }, undefined)
