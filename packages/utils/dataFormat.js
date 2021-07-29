@@ -16,7 +16,7 @@ import {
   MULTIPLE_LIST, SELECT_LIST,
   KEY_COMPONENT_CONFIG_NAME_LINE
 } from '@/global/variable'
-import { validateNull, setPx } from './index'
+import { validateNull, setPx, deepClone } from './index'
 
 /** 获取控件提示 **/
 export function getPlaceholder (item) {
@@ -110,3 +110,20 @@ export function getComponentConfig (type, component) {
 
   return KEY_COMPONENT_CONFIG_NAME_LINE + result
 }
+
+/** 设计器配置转换设计器预览配置 **/
+export function designTransformPreview (obj) {
+  const data = deepClone(obj)
+  for (let i = 0; i < data.column.length; i++) {
+    const col = data.column[i]
+    // 事件处理
+    for (const key in col.events) {
+      if (col.events[key]) {
+        const event = data.eventScript.find(item => item.name === col.events[key])
+        col.events[key] = new Function(event.func)
+      } else delete col.events[key]
+    }
+  }
+  return data
+}
+

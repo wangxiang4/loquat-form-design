@@ -10,7 +10,7 @@
              :props="column.props || props"
              :size="column.size || size"
              :type="type || column._type || column.type"
-             v-on="event"
+             v-on="events"
              @keyup.enter.native="enterChange"
   >
     <span v-if="params.html" v-html="params.html"/>
@@ -80,8 +80,8 @@ export default {
     params () {
       return this.column.params || {}
     },
-    event () {
-      return this.column.event || {}
+    events () {
+      return this.column.events || {}
     }
   },
   watch: {

@@ -647,13 +647,6 @@ export default {
         size: 'small',
         styleSheets: '',
         customClass: [],
-        eventScript: [
-          {
-            'key': 'mounted',
-            'name': 'mounted',
-            'func': ''
-          }
-        ],
         dataSource: [
           {
             key: 'upload',
@@ -920,6 +913,7 @@ export default {
     handleActionSave () {
       this.$refs.actionForm.validate((valid, msg) => {
         if (valid) {
+          !this.widgetForm.eventScript ? this.widgetForm.eventScript = [] : ''
           const index = this.widgetForm.eventScript.findIndex(item => item.key === this.actionForm.key)
           index === -1
             ? this.widgetForm.eventScript.push(Object({ ...this.actionForm }))
@@ -944,6 +938,7 @@ export default {
       this.$confirm(`确定要删除该方法 [${data.name}] ?`, '警告', {
         type: 'warning'
       }).then(() => {
+        !this.widgetForm.eventScript ? this.widgetForm.eventScript = [] : ''
         this.actionForm?.key === data.key ? this.actionMainContainerVisible = false : ''
         const index = this.widgetForm.eventScript.findIndex(item => item.key === data.key)
         if (index === -1) {
@@ -966,6 +961,7 @@ export default {
     handleActionConfirm () {
       this.$refs.actionForm.validate((valid, msg) => {
         if (valid) {
+          !this.widgetForm.eventScript ? this.widgetForm.eventScript = [] : ''
           const index = this.widgetForm.eventScript.findIndex(item => item.key === this.actionForm.key)
           index === -1
             ? this.widgetForm.eventScript.push(Object({ ...this.actionForm }))
@@ -989,6 +985,7 @@ export default {
     },
     // 处理函数名称不能重复校验
     handleActionFormNameValidate (rule, value, callback) {
+      !this.widgetForm.eventScript ? this.widgetForm.eventScript = [] : ''
       const eventScript = this.$loquat.deepClone(this.widgetForm.eventScript)
       // 如果是编辑模式,则需把当前的对象剔除
       if (!this.actionMenuItemDisabled) {

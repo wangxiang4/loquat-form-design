@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { clearVal, formInitVal, getLabelWidth } from '@utils/dataFormat'
+import { clearVal, formInitVal, getLabelWidth, designTransformPreview } from '@utils/dataFormat'
 import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
 import formItem from './item'
 import { randomId } from '@utils'
@@ -126,7 +126,7 @@ export default {
   },
   computed: {
     parentOption () {
-      return this.$loquat.deepClone(this.option)
+      return designTransformPreview(this.option)
     },
     columnOption () {
       return this.parentOption.column || []
