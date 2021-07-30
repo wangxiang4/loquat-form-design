@@ -55,6 +55,9 @@
               <div class="widget-view-drag" v-if="selectWidget.prop == column.prop">
                 <i class="iconfont icon-drag"/>
               </div>
+              <div class="widget-view-model">
+                <span v-text="column.prop"/>
+              </div>
             </div>
           </el-col>
         </template>
