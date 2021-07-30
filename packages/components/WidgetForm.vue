@@ -12,6 +12,7 @@
                  :group="{ name: 'form' }"
                  ghost-class="ghost"
                  :animation="300"
+                 handle=".widget-view-drag"
                  @add="handleWidgetAdd"
                  @end="$emit('change')"
       >
@@ -26,6 +27,7 @@
                   :sm="12"
                   :xs="24"
                   :offset="column.offset || offset"
+                  @click.native="handleSelectWidget(index)"
           >
             <div :class="['widget-view',{active: selectWidget.prop == column.prop}]">
               <el-form-item class="widget-form-item"
@@ -38,7 +40,6 @@
                             :label="column.hideLabel ? '' : column.label"
                             :label-width="column.hideLabel ? '0' : getLabelWidth(column,data,labelWidth)"
                             :label-position="column.labelPosition || data.labelPosition || labelPosition"
-                            @click.native="handleSelectWidget(index)"
               >
                 <loquat-form-item :column="column"
                                   :event-script="data.eventScript"
@@ -48,11 +49,11 @@
                                   :size="data.size || column.size"
                 />
               </el-form-item>
-              <div class="widget-view-action" v-if="selectWidget.prop == column.prop">
+              <div v-if="selectWidget.prop == column.prop" class="widget-view-action">
                 <i title="复制" class="iconfont icon-clone" @click.stop="handleWidgetClone(index)"/>
                 <i title="删除" class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"/>
               </div>
-              <div class="widget-view-drag" v-if="selectWidget.prop == column.prop">
+              <div v-if="selectWidget.prop == column.prop" class="widget-view-drag">
                 <i class="iconfont icon-drag"/>
               </div>
               <div class="widget-view-model">

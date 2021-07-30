@@ -5,6 +5,7 @@ $primary-active-color: #ecf5ff;
 $primary-background-color: #ecf8ff;
 $primary-hide-color: #FEF0F0;
 $primary-readonly-color: #F2F2F2;
+$primary-ghost-color: #E47476;
 
 
 *,
@@ -133,14 +134,9 @@ $primary-readonly-color: #F2F2F2;
         margin:2px;
         overflow:hidden;
         min-height:50px;
-        &:hover {
-          border:1px solid #409eff;
-          background: $primary-background-color;
-        }
         .widget-form-item {
           padding: 8px 8px 8px 22px;
           margin: 0;
-
           &.required {
             .el-form-item__label::before {
               content: "*";
@@ -148,21 +144,9 @@ $primary-readonly-color: #F2F2F2;
               margin-right: 4px;
             }
           }
-
-          &:after {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: 0;
-            display: block;
-            z-index: 1001;
-          }
-
           &.readonly {
             background: $primary-readonly-color;
           }
-
           &.hide {
             background: $primary-hide-color;
           }
@@ -204,19 +188,34 @@ $primary-readonly-color: #F2F2F2;
           right: 9px;
           font-size: 12px;
           color: #67c23a;
-          z-index: 1002;
+          z-index: 1001;
           font-weight: 500;
+        }
+        &:hover{
+          outline:1px solid $primary-color;
+          background: $primary-background-color;
+          outline-offset:0;
         }
         &.active{
           outline:2px solid $primary-color;
-          border:1px solid #409eff;
+          border:1px solid $primary-color;
+        }
+        &:after{
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          top: 0;
+          display: block;
+          z-index: 1000;
         }
       }
     }
 
     .ghost {
       background: white;
-      border-top: 5px solid $primary-color;
+      border-top: 4px solid $primary-ghost-color;
       box-sizing: border-box;
       font-size: 0;
       content: "";
@@ -330,14 +329,6 @@ $primary-readonly-color: #F2F2F2;
     .el-aside {
       background: #fff;
     }
-  }
-
-  .danger {
-    color: #f56c6c;
-  }
-
-  .warning {
-    color: #e6a23c;
   }
 }
 
