@@ -27,49 +27,35 @@
                   :xs="24"
                   :offset="column.offset || offset"
           >
-            <el-form-item class="widget-form-item"
-                          :class="[{
-                            active: selectWidget.prop == column.prop,
-                            'active__readonly': column.readonly,
-                            'active__hide': column.hide,
-                            'required': $loquat.get(column,'validateConfig.required')
-                          }].concat(column.customClass||[])"
-                          :prop="column.prop"
-                          :label="column.hideLabel ? '' : column.label"
-                          :label-width="column.hideLabel ? '0' : getLabelWidth(column,data,labelWidth)"
-                          :label-position="column.labelPosition || data.labelPosition || labelPosition"
-                          @click.native="handleSelectWidget(index)"
-            >
-              <loquat-form-item :column="column"
-                                :event-script="data.eventScript"
-                                :props="data.props"
-                                :readonly="data.readonly || column.readonly"
-                                :disabled="data.disabled || column.disabled"
-                                :size="data.size || column.size"
-              />
-              <el-button v-if="selectWidget.prop == column.prop"
-                         title="删除"
-                         class="widget-action-delete"
-                         circle
-                         plain
-                         size="small"
-                         type="danger"
-                         @click.stop="handleWidgetDelete(index)"
+            <div :class="['widget-view',{active: selectWidget.prop == column.prop}]">
+              <el-form-item class="widget-form-item"
+                            :class="[{
+                              'readonly': column.readonly,
+                              'hide': column.hide,
+                              'required': $loquat.get(column,'validateConfig.required')
+                            }].concat(column.customClass||[])"
+                            :prop="column.prop"
+                            :label="column.hideLabel ? '' : column.label"
+                            :label-width="column.hideLabel ? '0' : getLabelWidth(column,data,labelWidth)"
+                            :label-position="column.labelPosition || data.labelPosition || labelPosition"
+                            @click.native="handleSelectWidget(index)"
               >
-                <i class="iconfont icon-trash"/>
-              </el-button>
-              <el-button v-if="selectWidget.prop == column.prop"
-                         title="复制"
-                         class="widget-action-clone"
-                         circle
-                         plain
-                         size="small"
-                         type="primary"
-                         @click.stop="handleWidgetClone(index)"
-              >
-                <i class="iconfont icon-clone"/>
-              </el-button>
-            </el-form-item>
+                <loquat-form-item :column="column"
+                                  :event-script="data.eventScript"
+                                  :props="data.props"
+                                  :readonly="data.readonly || column.readonly"
+                                  :disabled="data.disabled || column.disabled"
+                                  :size="data.size || column.size"
+                />
+              </el-form-item>
+              <div class="widget-view-action" v-if="selectWidget.prop == column.prop">
+                <i title="复制" class="iconfont icon-clone" @click.stop="handleWidgetClone(index)"/>
+                <i title="删除" class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"/>
+              </div>
+              <div class="widget-view-drag" v-if="selectWidget.prop == column.prop">
+                <i class="iconfont icon-drag"/>
+              </div>
+            </div>
           </el-col>
         </template>
       </draggable>

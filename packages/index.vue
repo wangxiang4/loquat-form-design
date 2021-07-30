@@ -642,8 +642,8 @@ export default {
       JS_EXECUTE_INCLUDE,
       widgetForm: {
         column: [],
-        labelPosition: 'left',
-        labelWidth: 120,
+        labelPosition: 'right',
+        labelWidth: 90,
         size: 'small',
         styleSheets: '',
         customClass: [],
