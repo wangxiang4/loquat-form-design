@@ -1,8 +1,17 @@
-# 枇杷表单设计器
+
+
+
+
+# 枇杷表单设计器 ![img.png](public/loquat.png)
 
 ![img.png](public/demo/sample.jpg)
 
 ## 简介
+<hr/>
+
+![img.png](public/demo/kawaii.gif)
+
+<hr/>
 本项目是一款轻量级,采用拔插式组件架构的表单设计器，拖拽式操作让你快速构建一个表单。
 
 ## 1. 安装依赖 Installation

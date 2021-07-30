@@ -48,7 +48,7 @@
       <el-container class="widget-container" direction="vertical">
         <el-header class="widget-container-header">
           <div style="display: flex; align-items: center">
-            <img :src="require('./assets/images/form.svg')" height="30" width="30">
+            <img :src="require('./assets/images/homeIcon.svg')" height="30" width="30">
             <el-divider direction="vertical"/>
             <template v-if="undoRedo">
               <el-tooltip effect="dark" content="撤销" placement="bottom">
