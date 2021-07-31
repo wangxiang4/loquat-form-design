@@ -1,10 +1,11 @@
 <template>
-  <div class="widget-form-container">
+  <div :class="['widget-form-container',adapter]">
     <el-form ref="widgetForm"
              :label-position="data.labelPosition || labelPosition"
              :label-width="$loquat.setPx(data.labelWidth,labelWidth)"
              :label-suffix="data.labelSuffix || labelSuffix"
              :size="size"
+             :style="defaultBackground"
              :class="data.customClass"
     >
       <draggable :list="data.column"
@@ -64,6 +65,7 @@
 </template>
 
 <script>
+import widgetEmpty from '../assets/images/widget-empty.png'
 import { getLabelWidth } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
@@ -82,12 +84,22 @@ export default {
       default () {
         return {}
       }
+    },
+    adapter: {
+      type: String,
+      default: 'pc'
     }
   },
   data () {
     return {
+      widgetEmpty,
       ...FORM_DEFAULT_PROP,
       selectWidget: this.select
+    }
+  },
+  computed: {
+    defaultBackground () {
+      return { background: (this.data.column?.length || 0) === 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
     }
   },
   watch: {

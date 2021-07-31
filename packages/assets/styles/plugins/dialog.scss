@@ -253,4 +253,23 @@
       }
     }
   }
+  .form-preview{
+    -webkit-box-shadow: #ebedf0 0 4px 12px;
+    box-shadow: 0 4px 12px #ebedf0;
+    height: 100%;
+    overflow: auto;
+    &.pc{
+      border-radius: 0;
+    }
+    &.pad {
+      width: 770px;
+      margin: auto;
+      border-radius: 5px;
+    }
+    &.mobile {
+      width: 375px;
+      margin: auto;
+      border-radius: 12px;
+    }
+  }
 }

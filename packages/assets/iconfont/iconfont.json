@@ -6,16 +6,51 @@
   "description": "枇杷图标",
   "glyphs": [
     {
-      "icon_id": "22789693",
+      "icon_id": "23257729",
+      "name": "redo",
+      "font_class": "redo",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "23257730",
       "name": "undo",
       "font_class": "undo",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "23257719",
+      "name": "pc",
+      "font_class": "pc",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "23257718",
+      "name": "pad",
+      "font_class": "pad",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "23257715",
+      "name": "mobile",
+      "font_class": "mobile",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "22789693",
+      "name": "undo-new",
+      "font_class": "undo-new",
       "unicode": "e658",
       "unicode_decimal": 58968
     },
     {
       "icon_id": "22789692",
-      "name": "redo",
-      "font_class": "redo",
+      "name": "redo-new",
+      "font_class": "redo-new",
       "unicode": "e657",
       "unicode_decimal": 58967
     },

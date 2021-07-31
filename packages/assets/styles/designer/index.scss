@@ -28,7 +28,6 @@ $primary-ghost-color: #E47476;
 .form-designer {
   height: 100%;
   background: #fff;
-
   .fields-list {
     padding: 10px 0;
     width: 100%;
@@ -100,27 +99,87 @@ $primary-ghost-color: #E47476;
       justify-content: space-between;
       align-items: center;
       border-bottom: solid 2px #e4e7ed;
+      .btn-bar-action{
+        line-height: 45px;
+        font-size: 24px;
+        .iconfont {
+          font-size: 18px;
+        }
+      }
+      .btn-bar-plat {
+        line-height: 45px;
+        font-size: 24px;
+        a{
+          width: 30px;
+          height: 30px;
+          color: #666;
+          display: inline-block;
+          text-align: center;
+          line-height: 30px;
+          border-radius: 3px;
+          margin-right: 5px;
+          &.active{
+            background: #e4e7ed;
+            color: #409eff;
+          }
+          .iconfont{
+            font-size: 20px;
+          }
+        }
+      }
     }
 
     .el-main {
       padding: 0;
       position: relative;
+      background: #fafafa;
     }
   }
 
   .widget-form-container {
-    height: 100%;
-    position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: absolute;
+    overflow-x: auto;
+
+    &.pc{
+      border: 0;
+      background: #fff;
+      border-radius: 0;
+      -webkit-box-shadow: #ebedf0 0 4px 12px;
+      box-shadow: 0 4px 12px #ebedf0;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+    }
+
+    &.mobile,&.pad{
+      margin: auto;
+      background: #fff;
+      -webkit-box-shadow: #ebedf0 0 4px 12px;
+      box-shadow: 0 4px 12px #ebedf0;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+    }
+
+    &.pad {
+      width: 770px;
+      border: 0;
+      border-radius: 5px;
+    }
+
+    &.mobile {
+      width: 375px;
+      border: 0;
+      border-radius: 12px;
+    }
 
     .el-form {
-      height: 100%;
-      .el-row {
-        height: 100%;
-      }
+      min-height:100%;
+      height:100%;
+      background:#fff;
+      position:relative;
     }
 
     .widget-form-list {
@@ -130,9 +189,9 @@ $primary-ghost-color: #E47476;
       .fade-enter, .fade-leave-to{
         opacity: 0;
       }
-      height: 100%;
-      min-height: calc(100% - 45px);
+      min-height: 100%;
       padding-bottom: 50px;
+      padding-top: 1px;
       .widget-view{
         position:relative;
         border:1px dashed hsla(0,0%,66.7%,.5);
@@ -327,11 +386,6 @@ $primary-ghost-color: #E47476;
 
   .el-container {
     height: 100%;
-
-    .el-main {
-      height: calc(100% - 45px);
-    }
-
     .el-aside {
       background: #fff;
     }

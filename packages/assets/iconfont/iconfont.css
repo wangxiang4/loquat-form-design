@@ -1,11 +1,11 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2649116 */
-  src: url('iconfont.eot?t=1625848064128'); /* IE9 */
-  src: url('iconfont.eot?t=1625848064128#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1625848064128') format('woff2'),
-       url('iconfont.woff?t=1625848064128') format('woff'),
-       url('iconfont.ttf?t=1625848064128') format('truetype'),
-       url('iconfont.svg?t=1625848064128#iconfont') format('svg');
+  src: url('iconfont.eot?t=1627763369473'); /* IE9 */
+  src: url('iconfont.eot?t=1627763369473#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1627763369473') format('woff2'),
+       url('iconfont.woff?t=1627763369473') format('woff'),
+       url('iconfont.ttf?t=1627763369473') format('truetype'),
+       url('iconfont.svg?t=1627763369473#iconfont') format('svg');
 }
 
 .iconfont {
@@ -16,11 +16,31 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-redo:before {
+  content: "\e65c";
+}
+
 .icon-undo:before {
+  content: "\e65d";
+}
+
+.icon-pc:before {
+  content: "\e65b";
+}
+
+.icon-pad:before {
+  content: "\e65a";
+}
+
+.icon-mobile:before {
+  content: "\e659";
+}
+
+.icon-undo-new:before {
   content: "\e658";
 }
 
-.icon-redo:before {
+.icon-redo-new:before {
   content: "\e657";
 }
 

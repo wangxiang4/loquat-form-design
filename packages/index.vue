@@ -50,28 +50,39 @@
           <div style="display: flex; align-items: center">
             <img :src="require('./assets/images/homeIcon.svg')" height="30" width="30">
             <el-divider direction="vertical"/>
-            <template v-if="undoRedo">
+            <div class="btn-bar-plat">
+              <a :class="{active:adapter==='pc'}"
+                 @click="adapter='pc'"
+              ><i class="iconfont icon-pc"/>
+              </a>
+              <a :class="{active:adapter==='pad'}"
+                 @click="adapter='pad'"
+              ><i class="iconfont icon-pad"/>
+              </a>
+              <a :class="{active:adapter==='mobile'}"
+                 @click="adapter='mobile'"
+              ><i class="iconfont icon-mobile"/>
+              </a>
+            </div>
+            <el-divider direction="vertical"/>
+            <div v-if="undoRedo" class="btn-bar-action">
               <el-tooltip effect="dark" content="撤销" placement="bottom">
-                <div style="margin-right: 10px">
-                  <el-button type="text"
-                             size="medium"
-                             :disabled="historySteps.index == 0"
-                             @click="widgetForm = handleUndo()"
-                  ><i class="icon iconfont icon-undo"/>
-                  </el-button>
-                </div>
+                <el-button type="text"
+                           size="medium"
+                           icon="iconfont icon-undo"
+                           :disabled="historySteps.index == 0"
+                           @click="widgetForm = handleUndo()"
+                />
               </el-tooltip>
               <el-tooltip effect="dark" content="重做" placement="bottom">
-                <div style="margin-right: 10px">
-                  <el-button type="text"
-                             size="medium"
-                             :disabled="historySteps.index == historySteps.steps.length - 1"
-                             @click="widgetForm = handleRedo()"
-                  ><i class="icon iconfont icon-redo"/>
-                  </el-button>
-                </div>
+                <el-button type="text"
+                           size="medium"
+                           icon="iconfont icon-redo"
+                           :disabled="historySteps.index == historySteps.steps.length - 1"
+                           @click="widgetForm = handleRedo()"
+                />
               </el-tooltip>
-            </template>
+            </div>
           </div>
           <div style="display: flex; align-items: center;">
             <slot name="toolbar-left"/>
@@ -103,10 +114,11 @@
             <slot name="toolbar"/>
           </div>
         </el-header>
-        <el-main :style="defaultBackground">
+        <el-main>
           <widget-form ref="widgetForm"
                        :data="widgetForm"
                        :select.sync="widgetFormSelect"
+                       :adapter="adapter"
                        @change="handleHistoryChange(widgetForm)"
           />
         </el-main>
@@ -130,14 +142,14 @@
                  center
                  fullscreen
       >
-        <el-card style="height:100%">
+        <div :class="['form-preview',adapter]">
           <loquat-form v-if="previewVisible"
                        ref="previewForm"
                        v-model="widgetModels"
                        :option="widgetFormPreview"
                        @submit="handlePreviewSubmit"
           />
-        </el-card>
+        </div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary"
                      size="medium"
@@ -570,7 +582,6 @@
 
 <script>
 import fields from './components/fields.js'
-import widgetEmpty from './assets/images/widget-empty.png'
 import history from './mixins/history'
 import Draggable from 'vuedraggable'
 import WidgetForm from './components/WidgetForm'
@@ -637,9 +648,9 @@ export default {
   },
   data () {
     return {
-      widgetEmpty,
       fields,
       JS_EXECUTE_INCLUDE,
+      adapter: 'pc',
       widgetForm: {
         column: [],
         labelPosition: 'right',
@@ -714,9 +725,6 @@ export default {
       } else {
         return `${this.asideRightWidth}px`
       }
-    },
-    defaultBackground () {
-      return { background: (this.widgetForm.column?.length || 0) === 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
     }
   },
   watch: {

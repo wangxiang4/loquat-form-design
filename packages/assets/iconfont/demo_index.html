@@ -55,14 +55,44 @@
           <ul class="icon_lists dib-box">
           
             <li class="dib">
-              <span class="icon iconfont">&#xe658;</span>
+              <span class="icon iconfont">&#xe65c;</span>
+                <div class="name">redo</div>
+                <div class="code-name">&amp;#xe65c;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon iconfont">&#xe65d;</span>
                 <div class="name">undo</div>
+                <div class="code-name">&amp;#xe65d;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon iconfont">&#xe65b;</span>
+                <div class="name">pc</div>
+                <div class="code-name">&amp;#xe65b;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon iconfont">&#xe65a;</span>
+                <div class="name">pad</div>
+                <div class="code-name">&amp;#xe65a;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon iconfont">&#xe659;</span>
+                <div class="name">mobile</div>
+                <div class="code-name">&amp;#xe659;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon iconfont">&#xe658;</span>
+                <div class="name">undo-new</div>
                 <div class="code-name">&amp;#xe658;</div>
               </li>
           
             <li class="dib">
               <span class="icon iconfont">&#xe657;</span>
-                <div class="name">redo</div>
+                <div class="name">redo-new</div>
                 <div class="code-name">&amp;#xe657;</div>
               </li>
           
@@ -330,12 +360,12 @@
 <pre><code class="language-css"
 >@font-face {
   font-family: 'iconfont';
-  src: url('iconfont.eot?t=1625848064128'); /* IE9 */
-  src: url('iconfont.eot?t=1625848064128#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1625848064128') format('woff2'),
-       url('iconfont.woff?t=1625848064128') format('woff'),
-       url('iconfont.ttf?t=1625848064128') format('truetype'),
-       url('iconfont.svg?t=1625848064128#iconfont') format('svg');
+  src: url('iconfont.eot?t=1627763369473'); /* IE9 */
+  src: url('iconfont.eot?t=1627763369473#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1627763369473') format('woff2'),
+       url('iconfont.woff?t=1627763369473') format('woff'),
+       url('iconfont.ttf?t=1627763369473') format('truetype'),
+       url('iconfont.svg?t=1627763369473#iconfont') format('svg');
 }
 </code></pre>
           <h3 id="-iconfont-">第二步：定义使用 iconfont 的样式</h3>
@@ -362,6 +392,15 @@
         <ul class="icon_lists dib-box">
           
           <li class="dib">
+            <span class="icon iconfont icon-redo"></span>
+            <div class="name">
+              redo
+            </div>
+            <div class="code-name">.icon-redo
+            </div>
+          </li>
+          
+          <li class="dib">
             <span class="icon iconfont icon-undo"></span>
             <div class="name">
               undo
@@ -371,11 +410,47 @@
           </li>
           
           <li class="dib">
-            <span class="icon iconfont icon-redo"></span>
+            <span class="icon iconfont icon-pc"></span>
             <div class="name">
-              redo
+              pc
             </div>
-            <div class="code-name">.icon-redo
+            <div class="code-name">.icon-pc
+            </div>
+          </li>
+          
+          <li class="dib">
+            <span class="icon iconfont icon-pad"></span>
+            <div class="name">
+              pad
+            </div>
+            <div class="code-name">.icon-pad
+            </div>
+          </li>
+          
+          <li class="dib">
+            <span class="icon iconfont icon-mobile"></span>
+            <div class="name">
+              mobile
+            </div>
+            <div class="code-name">.icon-mobile
+            </div>
+          </li>
+          
+          <li class="dib">
+            <span class="icon iconfont icon-undo-new"></span>
+            <div class="name">
+              undo-new
+            </div>
+            <div class="code-name">.icon-undo-new
+            </div>
+          </li>
+          
+          <li class="dib">
+            <span class="icon iconfont icon-redo-new"></span>
+            <div class="name">
+              redo-new
+            </div>
+            <div class="code-name">.icon-redo-new
             </div>
           </li>
           
@@ -777,6 +852,14 @@
           
             <li class="dib">
                 <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#icon-redo"></use>
+                </svg>
+                <div class="name">redo</div>
+                <div class="code-name">#icon-redo</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
                   <use xlink:href="#icon-undo"></use>
                 </svg>
                 <div class="name">undo</div>
@@ -785,10 +868,42 @@
           
             <li class="dib">
                 <svg class="icon svg-icon" aria-hidden="true">
-                  <use xlink:href="#icon-redo"></use>
+                  <use xlink:href="#icon-pc"></use>
                 </svg>
-                <div class="name">redo</div>
-                <div class="code-name">#icon-redo</div>
+                <div class="name">pc</div>
+                <div class="code-name">#icon-pc</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#icon-pad"></use>
+                </svg>
+                <div class="name">pad</div>
+                <div class="code-name">#icon-pad</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#icon-mobile"></use>
+                </svg>
+                <div class="name">mobile</div>
+                <div class="code-name">#icon-mobile</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#icon-undo-new"></use>
+                </svg>
+                <div class="name">undo-new</div>
+                <div class="code-name">#icon-undo-new</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#icon-redo-new"></use>
+                </svg>
+                <div class="name">redo-new</div>
+                <div class="code-name">#icon-redo-new</div>
             </li>
           
             <li class="dib">
