@@ -7,61 +7,57 @@
              :size="size"
              :class="data.customClass"
     >
-      <draggable class="widget-form-list"
-                 :list="data.column"
+      <draggable :list="data.column"
                  :group="{ name: 'form' }"
                  ghost-class="ghost"
                  :animation="300"
                  handle=".widget-view-drag"
+                 :no-transition-on-drag="true"
                  @add="handleWidgetAdd"
                  @end="$emit('change')"
       >
-        <template v-for="(column, index) in data.column">
-          <el-col :key="index"
-                  :style="{
-                    paddingLeft:$loquat.setPx((data.gutter || 0)/2),
-                    paddingRight:$loquat.setPx((data.gutter || 0)/2)
-                  }"
-                  :span="column.span || data.span || span"
-                  :md="column.span || data.span || span"
-                  :sm="12"
-                  :xs="24"
-                  :offset="column.offset || offset"
-                  @click.native="handleSelectWidget(index)"
-          >
-            <div :class="['widget-view',{active: selectWidget.prop == column.prop}]">
-              <el-form-item class="widget-form-item"
-                            :class="[{
-                              'readonly': column.readonly,
-                              'hide': column.hide,
-                              'required': $loquat.get(column,'validateConfig.required')
-                            }].concat(column.customClass||[])"
-                            :prop="column.prop"
-                            :label="column.hideLabel ? '' : column.label"
-                            :label-width="column.hideLabel ? '0' : getLabelWidth(column,data,labelWidth)"
-                            :label-position="column.labelPosition || data.labelPosition || labelPosition"
-              >
-                <loquat-form-item :column="column"
-                                  :event-script="data.eventScript"
-                                  :props="data.props"
-                                  :readonly="data.readonly || column.readonly"
-                                  :disabled="data.disabled || column.disabled"
-                                  :size="data.size || column.size"
-                />
-              </el-form-item>
-              <div v-if="selectWidget.prop == column.prop" class="widget-view-action">
-                <i title="复制" class="iconfont icon-clone" @click.stop="handleWidgetClone(index)"/>
-                <i title="删除" class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"/>
+        <transition-group name="fade" tag="div" class="widget-form-list">
+          <template v-for="(column, index) in data.column">
+            <template v-if="column.type == 'coralLayout'">
+              珊瑚布局组件区域
+            </template>
+            <template v-else>
+              <div :key="index" @click.stop="handleSelectWidget(index)">
+                <div :class="['widget-view',{active: selectWidget.prop == column.prop}]">
+                  <el-form-item class="widget-form-item"
+                                :class="[{
+                                  'readonly': column.readonly,
+                                  'hide': column.hide,
+                                  'required': $loquat.get(column,'validateConfig.required')
+                                }].concat(column.customClass||[])"
+                                :prop="column.prop"
+                                :label="column.hideLabel ? '' : column.label"
+                                :label-width="column.hideLabel ? '0' : getLabelWidth(column,data,labelWidth)"
+                                :label-position="column.labelPosition || data.labelPosition || labelPosition"
+                  >
+                    <loquat-form-item :column="column"
+                                      :event-script="data.eventScript"
+                                      :props="data.props"
+                                      :readonly="data.readonly || column.readonly"
+                                      :disabled="data.disabled || column.disabled"
+                                      :size="data.size || column.size"
+                    />
+                  </el-form-item>
+                  <div v-if="selectWidget.prop == column.prop" class="widget-view-action">
+                    <i title="复制" class="iconfont icon-clone" @click.stop="handleWidgetClone(index)"/>
+                    <i title="删除" class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"/>
+                  </div>
+                  <div v-if="selectWidget.prop == column.prop" class="widget-view-drag">
+                    <i class="iconfont icon-drag"/>
+                  </div>
+                  <div class="widget-view-model">
+                    <span v-text="column.prop"/>
+                  </div>
+                </div>
               </div>
-              <div v-if="selectWidget.prop == column.prop" class="widget-view-drag">
-                <i class="iconfont icon-drag"/>
-              </div>
-              <div class="widget-view-model">
-                <span v-text="column.prop"/>
-              </div>
-            </div>
-          </el-col>
-        </template>
+            </template>
+          </template>
+        </transition-group>
       </draggable>
     </el-form>
   </div>

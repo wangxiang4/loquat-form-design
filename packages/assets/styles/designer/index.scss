@@ -124,6 +124,12 @@ $primary-ghost-color: #E47476;
     }
 
     .widget-form-list {
+      .fade-enter-active, .fade-leave-active{
+        transition: opacity .5s;
+      }
+      .fade-enter, .fade-leave-to{
+        opacity: 0;
+      }
       height: 100%;
       min-height: calc(100% - 45px);
       padding-bottom: 50px;
@@ -329,6 +335,14 @@ $primary-ghost-color: #E47476;
     .el-aside {
       background: #fff;
     }
+  }
+
+  .danger {
+    color: #f56c6c;
+  }
+
+  .warning {
+    color: #e6a23c;
   }
 }
 

@@ -22,8 +22,6 @@ export default {
       data: {
         column: [
           {
-            span: 24,
-            offset: 0,
             display: true,
             // 自定义样式
             className: '',
@@ -50,15 +48,13 @@ export default {
             component: 'el-button',
             params: {
               html: 'demo'
-            },
-            span: 24
+            }
           }
         ],
         // 字典全局制定Key值,比如字典{test1:'代码狂热者1',test2:'代码狂热者2'},
         // 我要获取代码狂热者1数据,可以指定字段key,{label:test1}
         props: { },
         enter: true,
-        gutter: '10',
         size: 'small',
         labelSuffix: ':',
         statusIcon: true,

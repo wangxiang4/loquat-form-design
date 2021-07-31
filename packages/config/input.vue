@@ -6,9 +6,6 @@
     <el-form-item v-loquat-has-perm="[originData,'label']" label="标题">
       <el-input v-model="data.label" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'span']" label="表单栅格">
-      <el-slider v-model="data.span" :max="24" :min="1" :marks="{12:''}"/>
-    </el-form-item>
     <el-form-item v-loquat-has-perm="[originData,'labelWidth']" label="标签宽度">
       <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>

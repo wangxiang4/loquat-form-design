@@ -38,13 +38,10 @@ export const IMPORT_JSON_TEMPLATE = `{
   "size": "small"
 }`
 export const FORM_DEFAULT_PROP = {
-  span: 12,
   size: 'small',
   labelPosition: 'left',
   labelWidth: 90,
   labelSuffix: ':',
-  gutter: 20,
-  offset: 0,
   readonly: false,
   disabled: false
 }

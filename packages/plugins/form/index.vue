@@ -10,21 +10,14 @@
              :class="parentOption.customClass"
              @submit.native.prevent
     >
-      <template v-for="(column,index) in columnOption">
-        <el-col v-if="!column.hide"
-                :key="index"
-                :style="{
-                  paddingLeft:$loquat.setPx((parentOption.gutter || gutter)/2),
-                  paddingRight:$loquat.setPx((parentOption.gutter || gutter)/2)
-                }"
-                :span="column.span || parentOption.span || span"
-                :md="column.span || parentOption.span || span"
-                :sm="12"
-                :xs="24"
-                :offset="column.offset || offset"
-                :class="['loquat-form__row',column.className]"
-        >
-          <el-form-item :prop="column.prop"
+      <template v-for="(column, index) in columnOption">
+        <template v-if="column.type == 'coralLayout'">
+          珊瑚布局组件区域
+        </template>
+        <template v-else>
+          <el-form-item v-if="!column.hide"
+                        :key="index"
+                        :prop="column.prop"
                         :label="column.hideLabel ? '' : column.label"
                         :rules="column.rules"
                         :class="['loquat-form__item--'+(column.labelPosition || parentOption.labelPosition || labelPosition)].concat(column.customClass||[])"
@@ -80,7 +73,7 @@
               </template>
             </form-item>
           </el-form-item>
-        </el-col>
+        </template>
       </template>
     </el-form>
   </div>
