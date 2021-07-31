@@ -9,8 +9,8 @@ $primary-ghost-color: #E47476;
 
 
 *,
-:after,
-:before {
+::after,
+::before {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -28,6 +28,7 @@ $primary-ghost-color: #E47476;
 .form-designer {
   height: 100%;
   background: #fff;
+
   .fields-list {
     padding: 10px 0;
     width: 100%;
@@ -99,17 +100,21 @@ $primary-ghost-color: #E47476;
       justify-content: space-between;
       align-items: center;
       border-bottom: solid 2px #e4e7ed;
-      .btn-bar-action{
+
+      .btn-bar-action {
         line-height: 45px;
         font-size: 24px;
+
         .iconfont {
           font-size: 18px;
         }
       }
+
       .btn-bar-plat {
         line-height: 45px;
         font-size: 24px;
-        a{
+
+        a {
           width: 30px;
           height: 30px;
           color: #666;
@@ -118,11 +123,13 @@ $primary-ghost-color: #E47476;
           line-height: 30px;
           border-radius: 3px;
           margin-right: 5px;
-          &.active{
+
+          &.active {
             background: #e4e7ed;
             color: #409eff;
           }
-          .iconfont{
+
+          .iconfont {
             font-size: 20px;
           }
         }
@@ -140,7 +147,7 @@ $primary-ghost-color: #E47476;
     position: absolute;
     overflow-x: auto;
 
-    &.pc{
+    &.pc {
       border: 0;
       background: #fff;
       border-radius: 0;
@@ -152,7 +159,7 @@ $primary-ghost-color: #E47476;
       bottom: 10px;
     }
 
-    &.mobile,&.pad{
+    &.mobile, &.pad {
       margin: auto;
       background: #fff;
       -webkit-box-shadow: #ebedf0 0 4px 12px;
@@ -176,32 +183,37 @@ $primary-ghost-color: #E47476;
     }
 
     .el-form {
-      min-height:100%;
-      height:100%;
-      background:#fff;
-      position:relative;
+      min-height: 100%;
+      height: 100%;
+      background: #fff;
+      position: relative;
     }
 
     .widget-form-list {
-      .fade-enter-active, .fade-leave-active{
-        transition: opacity .5s;
-      }
-      .fade-enter, .fade-leave-to{
-        opacity: 0;
-      }
       min-height: 100%;
       padding-bottom: 50px;
       padding-top: 1px;
-      .widget-view{
-        position:relative;
-        border:1px dashed hsla(0,0%,66.7%,.5);
-        background-color:rgba(236,245,255,.3);
-        margin:2px;
-        overflow:hidden;
-        min-height:50px;
+
+      .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+      }
+
+      .fade-enter, .fade-leave-to {
+        opacity: 0;
+      }
+
+      .widget-view {
+        position: relative;
+        border: 1px dashed hsla(0,0%,66.7%,.5);
+        background-color: rgba(236,245,255,.3);
+        margin: 2px;
+        overflow: hidden;
+        min-height: 50px;
+
         .widget-form-item {
           padding: 8px 8px 8px 22px;
           margin: 0;
+
           &.required {
             .el-form-item__label::before {
               content: "*";
@@ -209,21 +221,25 @@ $primary-ghost-color: #E47476;
               margin-right: 4px;
             }
           }
+
           &.readonly {
             background: $primary-readonly-color;
           }
+
           &.hide {
             background: $primary-hide-color;
           }
         }
-        .widget-view-action{
-          position:absolute;
-          right:0;
-          bottom:0;
+
+        .widget-view-action {
+          position: absolute;
+          right: 0;
+          bottom: 0;
           height: 28px;
           line-height: 28px;
-          background:$primary-color;
-          z-index:1002;
+          background: $primary-color;
+          z-index: 1002;
+
           i {
             font-size: 14px;
             color: #fff;
@@ -231,8 +247,9 @@ $primary-ghost-color: #E47476;
             cursor: pointer;
           }
         }
-        .widget-view-drag{
-          position:absolute;
+
+        .widget-view-drag {
+          position: absolute;
           left: -2px;
           top:-2px;
           bottom: -18px;
@@ -240,14 +257,16 @@ $primary-ghost-color: #E47476;
           line-height: 28px;
           background: $primary-color;
           z-index: 1002;
-          i{
-            font-size:14px;
-            color:#fff;
-            margin:0 5px;
-            cursor:move;
+
+          i {
+            font-size: 14px;
+            color: #fff;
+            margin: 0 5px;
+            cursor: move;
           }
         }
-        .widget-view-model{
+
+        .widget-view-model {
           position: absolute;
           top: 9px;
           right: 9px;
@@ -256,16 +275,19 @@ $primary-ghost-color: #E47476;
           z-index: 1001;
           font-weight: 500;
         }
-        &:hover{
-          outline:1px solid $primary-color;
+
+        &:hover {
+          outline: 1px solid $primary-color;
           background: $primary-background-color;
-          outline-offset:0;
+          outline-offset: 0;
         }
-        &.active{
-          outline:2px solid $primary-color;
-          border:1px solid $primary-color;
+
+        &.active {
+          outline: 2px solid $primary-color;
+          border: 1px solid $primary-color;
         }
-        &:after{
+
+        &::after {
           content: "";
           position: absolute;
           left: 0;
@@ -322,8 +344,10 @@ $primary-ghost-color: #E47476;
       .el-form-item {
         border-bottom: 1px solid #e1e1e1;
         padding-bottom: 10px;
+
         .validate-block {
           margin-top: 10px;
+
           .message-input {
             margin-left: 24px;
             width: 239px;
@@ -342,30 +366,35 @@ $primary-ghost-color: #E47476;
         margin-top: 0;
       }
 
-      .event-panel-config{
+      .event-panel-config {
         .el-collapse-item {
           border: 1px solid #ebeef5;
           border-bottom-color: #e1e1e1;
         }
-        .el-collapse-item__header{
+
+        .el-collapse-item__header {
           background: #ebeef5;
           height: 30px;
           line-height: 30px;
           padding: 5px;
           font-size: 12px
         }
-        .el-collapse-item__wrap{
+
+        .el-collapse-item__wrap {
           border: 0;
-          .el-collapse-item__content{
+
+          .el-collapse-item__content {
             padding: 5px;
           }
         }
-        .event-panel-item{
+
+        .event-panel-item {
           vertical-align: top;
           display: -webkit-box;
           display: -ms-flexbox;
           display: flex;
-          >i{
+
+          > i {
             margin-left: 5px;
             cursor: pointer;
           }
@@ -378,6 +407,7 @@ $primary-ghost-color: #E47476;
     .el-form--label-top .el-form-item__label {
       display: inline;
     }
+
     .el-form-item {
       border-bottom: 1px solid #e1e1e1;
       padding-bottom: 10px;
@@ -386,6 +416,7 @@ $primary-ghost-color: #E47476;
 
   .el-container {
     height: 100%;
+
     .el-aside {
       background: #fff;
     }
@@ -401,8 +432,8 @@ $primary-ghost-color: #E47476;
 }
 
 button, input, optgroup, select, textarea {
-  font-family:inherit;
-  font-size:100%;
-  line-height:1.15;
-  margin:0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
 }
