@@ -1,8 +1,8 @@
 <template>
-  <div :class="['widget-form-container',adapter]">
+  <div :class="['widget-form-container', adapter]">
     <el-form ref="widgetForm"
              :label-position="data.labelPosition || labelPosition"
-             :label-width="$loquat.setPx(data.labelWidth,labelWidth)"
+             :label-width="$loquat.setPx(data.labelWidth, labelWidth)"
              :label-suffix="data.labelSuffix || labelSuffix"
              :size="size"
              :style="defaultBackground"
@@ -24,16 +24,16 @@
             </template>
             <template v-else>
               <div :key="index" @click.stop="handleSelectWidget(index)">
-                <div :class="['widget-view',{active: selectWidget.prop == column.prop}]">
+                <div :class="['widget-view', { active: selectWidget.prop == column.prop }]">
                   <el-form-item class="widget-form-item"
                                 :class="[{
                                   'readonly': column.readonly,
                                   'hide': column.hide,
-                                  'required': $loquat.get(column,'validateConfig.required')
+                                  'required': $loquat.get(column, 'validateConfig.required')
                                 }].concat(column.customClass||[])"
                                 :prop="column.prop"
                                 :label="column.hideLabel ? '' : column.label"
-                                :label-width="column.hideLabel ? '0' : getLabelWidth(column,data,labelWidth)"
+                                :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, labelWidth)"
                                 :label-position="column.labelPosition || data.labelPosition || labelPosition"
                   >
                     <loquat-form-item :column="column"
