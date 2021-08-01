@@ -1,18 +1,21 @@
-.loquat-empty{
-    margin: 0 8px;
-    font-size: 14px;
-    line-height: 22px;
-    text-align: center;
-  &__image{
+.loquat-empty {
+  margin: 0 8px;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+
+  &__image {
     height: 100px;
     margin-bottom: 8px;
-    img{
+
+    img {
       height: 100%;
       vertical-align: middle;
       border-style: none;
     }
   }
-  &__desc{
+
+  &__desc {
     color: rgba(0,0,0,0.65);
   }
 }
