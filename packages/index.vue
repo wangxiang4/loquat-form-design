@@ -649,8 +649,8 @@ export default {
   data () {
     return {
       fields,
-      JS_EXECUTE_INCLUDE,
       adapter: 'pc',
+      JS_EXECUTE_INCLUDE,
       widgetForm: {
         column: [],
         labelPosition: 'right',
