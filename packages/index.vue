@@ -267,8 +267,9 @@
                  append-to-body
                  top="3vh"
                  center
+                 @open="styleSheets = widgetForm.styleSheets"
       >
-        <ace-editor v-model="widgetForm.styleSheets"
+        <ace-editor v-model="styleSheets"
                     lang="css"
                     theme="textmate"
                     style="height: 450px;"
@@ -705,7 +706,8 @@ export default {
       dataSourceMenuActive: '',
       dataSourceForm: {},
       dataSourceMenuItemDisabled: false,
-      dataSourceMainContainerVisible: false
+      dataSourceMainContainerVisible: false,
+      styleSheets: ''
     }
   },
   computed: {
@@ -892,6 +894,7 @@ export default {
     },
     // 处理样式表提交
     handleStyleSheetsSubmit () {
+      this.widgetForm.styleSheets = this.styleSheets
       this.styleSheetsVisible = false
       this.handleStyleSheetsCore()
     },
