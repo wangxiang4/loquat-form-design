@@ -1,5 +1,5 @@
 <template>
-  <div :class="['form-designer',formKey]">
+  <div :class="['form-designer', formKey]">
     <el-container>
       <el-aside :width="leftWidth">
         <div class="fields-list">
@@ -51,18 +51,15 @@
             <img :src="require('./assets/images/homeIcon.svg')" height="30" width="30">
             <el-divider direction="vertical"/>
             <div class="btn-bar-plat">
-              <a :class="{active:adapter==='pc'}"
-                 @click="adapter='pc'"
-              ><i class="iconfont icon-pc"/>
-              </a>
-              <a :class="{active:adapter==='pad'}"
-                 @click="adapter='pad'"
-              ><i class="iconfont icon-pad"/>
-              </a>
-              <a :class="{active:adapter==='mobile'}"
-                 @click="adapter='mobile'"
-              ><i class="iconfont icon-mobile"/>
-              </a>
+              <a :class="{ active: adapter==='pc' }"
+                 @click="adapter = 'pc'"
+              ><i class="iconfont icon-pc"/></a>
+              <a :class="{ active: adapter==='pad' }"
+                 @click="adapter = 'pad'"
+              ><i class="iconfont icon-pad"/></a>
+              <a :class="{ active: adapter==='mobile' }"
+                 @click="adapter = 'mobile'"
+              ><i class="iconfont icon-mobile"/></a>
             </div>
             <el-divider direction="vertical"/>
             <div v-if="undoRedo" class="btn-bar-action">
@@ -142,7 +139,7 @@
                  center
                  fullscreen
       >
-        <div :class="['form-preview',adapter]">
+        <div :class="['form-preview', adapter]">
           <loquat-form v-if="previewVisible"
                        ref="previewForm"
                        v-model="widgetModels"
@@ -173,7 +170,7 @@
         <ace-editor v-model="importJson"
                     lang="json"
                     theme="textmate"
-                    style="height: 400px"
+                    style="height: 400px;"
         />
         <span slot="footer" class="dialog-footer">
           <el-button type="primary"
@@ -198,7 +195,7 @@
                     lang="json"
                     theme="textmate"
                     :readonly="true"
-                    style="height: 400px"
+                    style="height: 400px;"
         />
         <span slot="footer" class="dialog-footer">
           <el-button type="primary"
@@ -207,7 +204,7 @@
           >导出</el-button>
           <el-popover placement="top-start" trigger="hover">
             <el-form v-model="jsonOption"
-                     style="padding: 0 20px"
+                     style="padding: 0 20px;"
                      label-suffix="："
                      label-width="166px"
                      label-position="left"
@@ -274,7 +271,7 @@
         <ace-editor v-model="widgetForm.styleSheets"
                     lang="css"
                     theme="textmate"
-                    style="height: 450px"
+                    style="height: 450px;"
         />
         <span slot="footer" class="dialog-footer">
           <el-button type="primary"
@@ -300,7 +297,7 @@
           <el-container class="event-script-container">
             <el-aside class="event-script-aside" style="width: 320px;">
               <el-container>
-                <el-header style="height: 40px">
+                <el-header style="height: 40px;">
                   <el-button type="text"
                              size="small"
                              icon="el-icon-plus"
@@ -341,7 +338,7 @@
             </el-aside>
             <el-main class="event-script-main">
               <el-container v-if="actionMainContainerVisible">
-                <el-header style="height: 40px">
+                <el-header style="height: 40px;">
                   <div class="event-script-action">
                     <el-button v-if="eventSelect" size="mini" type="primary" @click="handleActionConfirm">确定</el-button>
                     <el-button size="mini" type="primary" @click="handleActionSave">保存</el-button>
@@ -356,7 +353,7 @@
                     <el-form-item label="Function Name"
                                   prop="name"
                                   :rules="[
-                                    { required: true, message:'函数名称不能为空' },
+                                    { required: true, message: '函数名称不能为空' },
                                     { validator: handleActionFormNameValidate, trigger: 'blur' }
                                   ]"
                                   label-width="130px"
@@ -395,7 +392,7 @@
           <el-container class="data-source-container">
             <el-aside class="data-source-aside" style="width: 320px;">
               <el-container>
-                <el-header style="height: 40px">
+                <el-header style="height: 40px;">
                   <el-button type="text"
                              size="small"
                              icon="el-icon-plus"
@@ -411,7 +408,7 @@
                                   @click.native="handleDataSourceSelect(item.key)"
                     >
                       <div>
-                        <span :class="['data-source-menu-i',item.method]">{{ item.method }}</span>
+                        <span :class="['data-source-menu-i', item.method]">{{ item.method }}</span>
                         <div class="data-source-menu-label">{{ item.name }}</div>
                         <div class="data-source-menu-action">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(item)"/>
@@ -422,7 +419,7 @@
                     <!--虚拟表单项-->
                     <el-menu-item v-if="dataSourceMenuItemDisabled" :index="dataSourceForm.key">
                       <div>
-                        <span :class="['data-source-menu-i',dataSourceForm.method]">{{ dataSourceForm.method }}</span>
+                        <span :class="['data-source-menu-i', dataSourceForm.method]">{{ dataSourceForm.method }}</span>
                         <div class="data-source-menu-label">{{ dataSourceForm.name }}</div>
                         <div class="data-source-menu-action">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(dataSourceForm)"/>
@@ -436,7 +433,7 @@
             </el-aside>
             <el-main class="data-source-main">
               <el-container v-if="dataSourceMainContainerVisible">
-                <el-header style="height: 40px">
+                <el-header style="height: 40px;">
                   <div class="data-source-action">
                     <el-button size="mini" type="primary" @click="handleDataSourceSave">保存</el-button>
                     <el-button size="mini" @click="handleDataSourceRequestTest">请求测试</el-button>
@@ -452,7 +449,7 @@
                     <el-form-item label="名称"
                                   prop="name"
                                   :rules="[
-                                    { required: true, message:'数据源名称不能为空' },
+                                    { required: true, message: '数据源名称不能为空' },
                                     { validator: handleDataSourceFormNameValidate, trigger: 'blur' }
                                   ]"
                     ><el-input v-model="dataSourceForm.name"/>
@@ -460,7 +457,7 @@
                     <el-form-item label="请求地址"
                                   prop="url"
                                   :rules="[
-                                    { required: true, message:'请求地址不能为空' },
+                                    { required: true, message: '请求地址不能为空' },
                                     { type: 'url', message: 'url格式不正确'}
                                   ]"
                     ><el-input v-model="dataSourceForm.url"
@@ -479,7 +476,7 @@
                     </el-form-item>
                     <el-form-item label="请求头部" prop="headers">
                       <div class="array-dynamic-container">
-                        <div v-for="(item,index) in dataSourceForm.headers" :key="index" class="array-dynamic-item" >
+                        <div v-for="(item, index) in dataSourceForm.headers" :key="index" class="array-dynamic-item" >
                           <el-input v-model="item.key"
                                     size="small"
                                     clearable
@@ -499,7 +496,7 @@
                                      type="danger"
                                      size="small"
                                      icon="el-icon-minus"
-                                     @click="dataSourceForm.headers.splice(index,1)"
+                                     @click="dataSourceForm.headers.splice(index, 1)"
                           />
                         </div>
                         <el-button type="text" @click="dataSourceForm.headers.push({})">添加</el-button>
@@ -507,7 +504,7 @@
                     </el-form-item>
                     <el-form-item label="请求参数" prop="params">
                       <div class="array-dynamic-container">
-                        <div v-for="(item,index) in dataSourceForm.params" :key="index" class="array-dynamic-item" >
+                        <div v-for="(item, index) in dataSourceForm.params" :key="index" class="array-dynamic-item" >
                           <el-input v-model="item.key"
                                     size="small"
                                     type="textarea"
@@ -525,7 +522,7 @@
                                      type="danger"
                                      size="small"
                                      icon="el-icon-minus"
-                                     @click="dataSourceForm.params.splice(index,1)"
+                                     @click="dataSourceForm.params.splice(index, 1)"
                           />
                         </div>
                         <el-button type="text" @click="dataSourceForm.params.push({})">添加</el-button>
@@ -535,7 +532,7 @@
                       <el-switch v-model="dataSourceForm.auto"/>
                     </el-form-item>
                     <el-form-item label="数据处理">
-                      <el-collapse :value="['requestFunc','responseFunc','errorFunc']">
+                      <el-collapse :value="['requestFunc', 'responseFunc', 'errorFunc']">
                         <el-collapse-item name="requestFunc" title="请求发送前：">
                           <div class="code-desc">// config: 发出请求的可用配置选项;</div>
                           <div class="code-desc">// 通过 config.url 可以更改请求地址，通过 config.headers 可以更改请求头部</div>
@@ -544,7 +541,7 @@
                           <ace-editor v-model="dataSourceForm.requestFunc"
                                       lang="javascript"
                                       theme="textmate"
-                                      style="height: 148px;border:1px solid #dcdfe6;"
+                                      style="height: 148px; border:1px solid #dcdfe6;"
                           />
                           <div class="code-line">}</div>
                         </el-collapse-item>
@@ -554,7 +551,7 @@
                           <ace-editor v-model="dataSourceForm.responseFunc"
                                       lang="javascript"
                                       theme="textmate"
-                                      style="height: 148px;border:1px solid #dcdfe6;"
+                                      style="height: 148px; border:1px solid #dcdfe6;"
                           />
                           <div class="code-line">}</div>
                         </el-collapse-item>
@@ -563,7 +560,7 @@
                           <ace-editor v-model="dataSourceForm.errorFunc"
                                       lang="javascript"
                                       theme="textmate"
-                                      style="height: 148px;border:1px solid #dcdfe6;"
+                                      style="height: 148px; border:1px solid #dcdfe6;"
                           />
                           <div class="code-line">}</div>
                         </el-collapse-item>
