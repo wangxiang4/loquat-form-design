@@ -90,7 +90,6 @@
                        @click="handleImportJson"
             >导入JSON</el-button>
             <el-button v-if="toolbar.includes('clear')"
-                       class="danger"
                        type="text"
                        size="medium"
                        icon="el-icon-delete"
