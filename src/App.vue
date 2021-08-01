@@ -13,7 +13,7 @@ export default {
   data () {
     return {
       customFields: [{
-        title: '枇杷字段',
+        title: '自定义字段',
         list: [
           {
             title: '分割线',
