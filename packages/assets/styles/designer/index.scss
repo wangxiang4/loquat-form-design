@@ -198,11 +198,12 @@ $primary-ghost-color: #67C23A;
       padding-bottom: 50px;
       padding-top: 1px;
 
-      .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s;
+      .fade-enter-active {
+        transition: all .3s linear;
       }
 
-      .fade-enter, .fade-leave-to {
+      .fade-enter {
+        transform: translateX(10px);
         opacity: 0;
       }
 
