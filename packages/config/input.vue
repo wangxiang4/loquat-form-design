@@ -3,47 +3,47 @@
     <el-form-item label="字段标识">
       <el-input v-model="data.prop" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'label']" label="标题">
+    <el-form-item v-loquat-has-perm="[originData, 'label']" label="标题">
       <el-input v-model="data.label" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'labelWidth']" label="标签宽度">
+    <el-form-item v-loquat-has-perm="[originData, 'labelWidth']" label="标签宽度">
       <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'style.width']" label="组件宽度" >
+    <el-form-item v-loquat-has-perm="[originData, 'style.width']" label="组件宽度" >
       <el-input v-model="style.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'placeholder']" label="占位内容">
+    <el-form-item v-loquat-has-perm="[originData, 'placeholder']" label="占位内容">
       <el-input v-model="data.placeholder"
                 clearable
                 placeholder="占位内容"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'value']" label="默认值">
+    <el-form-item v-loquat-has-perm="[originData, 'value']" label="默认值">
       <el-input v-model="data.value"
                 clearable
                 placeholder="默认值"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'prepend']" label="前缀">
+    <el-form-item v-loquat-has-perm="[originData, 'prepend']" label="前缀">
       <el-input v-model="data.prepend"
                 clearable
                 placeholder="前缀"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'append']" label="后缀">
+    <el-form-item v-loquat-has-perm="[originData, 'append']" label="后缀">
       <el-input v-model="data.append"
                 clearable
                 placeholder="后缀"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'maxlength']" label="最多输入">
+    <el-form-item v-loquat-has-perm="[originData, 'maxlength']" label="最多输入">
       <el-input v-model="data.maxlength"
                 type="number"
                 placeholder="请输入字符长度"
       ><template slot="append">个字符</template>
       </el-input>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,'customClass']" label="自定义Class">
+    <el-form-item v-loquat-has-perm="[originData, 'customClass']" label="自定义Class">
       <el-select v-model="data.customClass"
                  style="width: 100%;"
                  filterable
@@ -59,28 +59,28 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,optionPerm,1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[originData, optionPerm, 1]" label="操作属性">
       <el-checkbox v-model="data.readonly"
-                   v-loquat-has-perm="[originData,'readonly']"
+                   v-loquat-has-perm="[originData, 'readonly']"
       >只读</el-checkbox>
       <el-checkbox v-model="data.showWordLimit"
-                   v-loquat-has-perm="[originData,'showWordLimit']"
+                   v-loquat-has-perm="[originData, 'showWordLimit']"
       >显示计数</el-checkbox>
       <el-checkbox v-model="data.disabled"
-                   v-loquat-has-perm="[originData,'disabled']"
+                   v-loquat-has-perm="[originData, 'disabled']"
       >禁用</el-checkbox>
       <el-checkbox v-model="data.showPassword"
-                   v-loquat-has-perm="[originData,'showPassword']"
+                   v-loquat-has-perm="[originData, 'showPassword']"
       >显示密码</el-checkbox>
       <el-checkbox v-model="data.hide"
-                   v-loquat-has-perm="[originData,'hide']"
+                   v-loquat-has-perm="[originData, 'hide']"
       >隐藏</el-checkbox>
       <el-checkbox v-model="data.hideLabel"
-                   v-loquat-has-perm="[originData,'hideLabel']"
+                   v-loquat-has-perm="[originData, 'hideLabel']"
       >隐藏标签</el-checkbox>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData,validatePerm,1]" label="校验">
-      <div v-loquat-has-perm="[originData,'validateConfig.required']" class="validate-block">
+    <el-form-item v-loquat-has-perm="[originData, validatePerm, 1]" label="校验">
+      <div v-loquat-has-perm="[originData, 'validateConfig.required']" class="validate-block">
         <el-checkbox v-model="validateConfig.required">必填</el-checkbox>
         <el-input v-show="validateConfig.required"
                   v-model.lazy="validateConfig.requiredMessage"
@@ -89,7 +89,7 @@
                   placeholder="自定义错误提示"
         />
       </div>
-      <div v-loquat-has-perm="[originData,'validateConfig.type']" class="validate-block">
+      <div v-loquat-has-perm="[originData, 'validateConfig.type']" class="validate-block">
         <el-checkbox v-model="validateConfig.type" style="margin-right: 10px;"/>
         <el-select v-model.lazy="validateConfig.typeFormat"
                    :disabled="!validateConfig.type"
@@ -111,7 +111,7 @@
                   placeholder="自定义错误提示"
         />
       </div>
-      <div v-loquat-has-perm="[originData,'validateConfig.pattern']" class="validate-block">
+      <div v-loquat-has-perm="[originData, 'validateConfig.pattern']" class="validate-block">
         <el-checkbox v-model="validateConfig.pattern" style="margin-right: 10px;"/>
         <el-input v-model.lazy="validateConfig.patternFormat"
                   :disabled="!validateConfig.pattern"
@@ -132,7 +132,7 @@
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
                             :key="index"
-                            :title="`${key} ${$loquat.get(EVENT_DICT,key,'')}`"
+                            :title="`${key} ${$loquat.get(EVENT_DICT, key, '')}`"
                             :name="key"
           >
             <div class="event-panel-item">
@@ -146,7 +146,7 @@
                            :value="item.name"
                 />
               </el-select>
-              <i title="编辑代码" class="iconfont icon-code-generation" @click.stop="home.handleActionSettingsSetData({eventName:key,funcName:val})"/>
+              <i title="编辑代码" class="iconfont icon-code-generation" @click.stop="home.handleActionSettingsSetData({ eventName: key, funcName: val })"/>
               <i title="删除" class="iconfont icon-trash" @click.stop="data.events[key] = ''"/>
             </div>
           </el-collapse-item>
@@ -161,15 +161,15 @@
                      style="width: 100%;"
           >新增动作<i class="el-icon-plus"/>
           </el-button>
-          <el-dropdown-menu slot="dropdown" style="width: 280px">
+          <el-dropdown-menu slot="dropdown" style="width: 280px;">
             <el-dropdown-item v-for="(val,key,index) in data.events"
                               :key="index"
                               :disabled="!!val"
                               @click.native="() => {
-                                home.handleActionSettingsSetData({eventName:key})
+                                home.handleActionSettingsSetData({ eventName: key })
                                 home.handleActionAdd()
                               }"
-            >{{ `${key} ${$loquat.get(EVENT_DICT,key,'')}` }}</el-dropdown-item>
+            >{{ `${key} ${$loquat.get(EVENT_DICT, key, '')}` }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
