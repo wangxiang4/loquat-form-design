@@ -1,12 +1,12 @@
 <template>
-  <div :class="['loquat-form',formKey]" :style="{width: $loquat.setPx(parentOption.formWidth,'100%')}">
+  <div :class="['loquat-form', formKey]" :style="{ width: $loquat.setPx(parentOption.formWidth, '100%') }">
     <el-form ref="form"
              :status-icon="parentOption.statusIcon"
              :model="form"
              :label-suffix="parentOption.labelSuffix || labelSuffix"
              :size="parentOption.size || size"
              :label-position="parentOption.labelPosition || labelPosition"
-             :label-width="$loquat.setPx(parentOption.labelWidth,labelWidth)"
+             :label-width="$loquat.setPx(parentOption.labelWidth, labelWidth)"
              :class="parentOption.customClass"
              @submit.native.prevent
     >
@@ -20,9 +20,9 @@
                         :prop="column.prop"
                         :label="column.hideLabel ? '' : column.label"
                         :rules="column.rules"
-                        :class="['loquat-form__item--'+(column.labelPosition || parentOption.labelPosition || labelPosition)].concat(column.customClass||[])"
+                        :class="['loquat-form__item--' + (column.labelPosition || parentOption.labelPosition || labelPosition)].concat(column.customClass || [])"
                         :label-position="column.labelPosition || parentOption.labelPosition || labelPosition"
-                        :label-width="column.hideLabel ? '0' :getLabelWidth(column,parentOption,labelWidth)"
+                        :label-width="column.hideLabel ? '0' :getLabelWidth(column, parentOption, labelWidth)"
           >
             <template v-if="$scopedSlots[column.prop + 'Label']" slot="label">
               <slot :name="column.prop + 'Label'"
@@ -35,7 +35,7 @@
             </template>
             <template v-if="$scopedSlots[column.prop + 'Error']" slot="error" slot-scope="scope">
               <slot :name="column.prop + 'Error'"
-                    v-bind="Object.assign(scope,{
+                    v-bind="Object.assign(scope, {
                       column,
                       value:form[column.prop],
                       readonly: parentOption.readonly || column.readonly || readonly,
@@ -65,7 +65,7 @@
                        @enter="submit"
                        @change="propChange(column)"
             >
-              <template v-for="item in $scopedSlots[column.prop + 'Type']?[column]:[]"
+              <template v-for="item in $scopedSlots[column.prop + 'Type'] ? [column] : []"
                         :slot="column.prop + 'Type'"
                         slot-scope="scope"
               >
