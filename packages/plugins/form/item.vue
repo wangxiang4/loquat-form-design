@@ -1,9 +1,9 @@
 <template>
-  <component :is="getComponent(column.type,column.component)"
+  <component :is="getComponent(column.type, column.component)"
              ref="formItem"
              v-model="text"
              v-bind="column"
-             :column="Object.assign(column,params)"
+             :column="Object.assign(column, params)"
              :disabled="column.disabled || disabled"
              :readonly="column.readonly || readonly"
              :placeholder="column.placeholder || getPlaceholder(column)"
@@ -14,7 +14,7 @@
              @keyup.enter.native="enterChange"
   >
     <span v-if="params.html" v-html="params.html"/>
-    <template v-for="item in $scopedSlots[column.prop + 'Type']?[column]:[]" slot-scope="scope">
+    <template v-for="item in $scopedSlots[column.prop + 'Type'] ? [column] : []" slot-scope="scope">
       <slot :name="item.prop + 'Type'" v-bind="scope"/>
     </template>
   </component>
