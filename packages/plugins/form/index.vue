@@ -1,5 +1,5 @@
 <template>
-  <div :class="['loquat-form', formKey]" :style="{ width: $loquat.setPx(parentOption.formWidth, '100%') }">
+  <div :class="['loquat-form', formId]" :style="{ width: $loquat.setPx(parentOption.formWidth, '100%') }">
     <el-form ref="form"
              :status-icon="parentOption.statusIcon"
              :model="form"
@@ -115,7 +115,7 @@ export default {
       formCreate: false,
       formDefault: {},
       formVal: {},
-      formKey: ''
+      formId: ''
     }
   },
   computed: {
@@ -150,13 +150,13 @@ export default {
       this.setVal()
       this.clearValidate()
       this.formCreate = true
-      this.formKey = KEY_COMPONENT_NAME_LINE + randomId()
+      this.formId = KEY_COMPONENT_NAME_LINE + randomId()
       const css = parseCss(this.parentOption.styleSheets)
-      insertCss(css, this.formKey)
+      insertCss(css, this.formId)
     })
   },
   beforeDestroy () {
-    insertCss([], this.formKey)
+    insertCss([], this.formId)
   },
   methods: {
     getLabelWidth,

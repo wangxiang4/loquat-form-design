@@ -1,5 +1,5 @@
 <template>
-  <div :class="['form-designer', formKey]">
+  <div :class="['form-designer', formId]">
     <el-container>
       <el-aside :width="leftWidth">
         <div class="fields-list">
@@ -696,7 +696,7 @@ export default {
       },
       jsonOption: {},
       styleSheetsArray: [],
-      formKey: '',
+      formId: '',
       actionForm: {},
       actionMenuActive: '',
       actionMenuItemDisabled: false,
@@ -745,11 +745,11 @@ export default {
   },
   mounted () {
     this.handleLoadStorage()
-    this.formKey = KEY_COMPONENT_NAME_LINE + randomId()
+    this.formId = KEY_COMPONENT_NAME_LINE + randomId()
     this.handleStyleSheetsCore()
   },
   beforeDestroy () {
-    insertCss([], this.formKey)
+    insertCss([], this.formId)
   },
   methods: {
     // 处理加载历史数据
@@ -901,7 +901,7 @@ export default {
     // 处理样式表核心逻辑
     handleStyleSheetsCore () {
       const css = parseCss(this.widgetForm.styleSheets)
-      insertCss(css, this.formKey)
+      insertCss(css, this.formId)
       this.styleSheetsArray = classCss(css)
     },
     // 处理动作设置添加
