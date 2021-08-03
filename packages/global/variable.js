@@ -42,8 +42,7 @@ export const FORM_DEFAULT_PROP = {
   labelPosition: 'left',
   labelWidth: 90,
   labelSuffix: ':',
-  readonly: false,
-  disabled: false
+  readonly: false
 }
 export const JS_EXECUTE_INCLUDE = ['mounted']
 export const EVENT_DICT = {

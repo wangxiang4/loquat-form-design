@@ -153,6 +153,12 @@
                      @click="handlePreviewSubmit"
           >获取数据</el-button>
           <el-button size="medium"
+                     @click="handlePreviewFormReset"
+          >重置</el-button>
+          <el-button size="medium"
+                     @click="previewFormToggleDisable = !previewFormToggleDisable"
+          > {{ previewFormToggleDisable ? '启动编辑' : '禁用编辑'}} </el-button>
+          <el-button size="medium"
                      @click="handleBeforeClose"
           >关闭</el-button>
         </span>
@@ -707,7 +713,8 @@ export default {
       dataSourceForm: {},
       dataSourceMenuItemDisabled: false,
       dataSourceMainContainerVisible: false,
-      styleSheets: ''
+      styleSheets: '',
+      previewFormToggleDisable: false
     }
   },
   computed: {
@@ -741,6 +748,12 @@ export default {
         this.widgetForm = { ...this.widgetForm, ...options }
       },
       deep: true
+    },
+    previewFormToggleDisable: {
+      handler (val) {
+        if (val) this.$refs.previewForm.useDisabled()
+        else this.$refs.previewForm.useActivation()
+      }
     }
   },
   mounted () {
@@ -1133,6 +1146,10 @@ export default {
           })
         }
       })
+    },
+    // 处理预览表单重置
+    handlePreviewFormReset () {
+      this.$refs.previewForm.resetFields()
     }
   }
 }

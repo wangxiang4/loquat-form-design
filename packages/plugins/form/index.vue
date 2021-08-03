@@ -29,7 +29,7 @@
                     :column="column"
                     :value="form[column.prop]"
                     :readonly="parentOption.readonly || column.readonly || readonly"
-                    :disabled="parentOption.disabled || column.disabled || disabled"
+                    :disabled="getDisabled(column)"
                     :size="parentOption.size || column.size || size"
               />
             </template>
@@ -49,7 +49,7 @@
                   :value="form[column.prop]"
                   :column="column"
                   :readonly="parentOption.readonly || column.readonly || readonly"
-                  :disabled="parentOption.disabled || column.disabled || disabled"
+                  :disabled="getDisabled(column)"
                   :size="parentOption.size || column.size || size"
             />
             <form-item v-else
@@ -59,7 +59,7 @@
                        :column="column"
                        :props="parentOption.props"
                        :readonly="parentOption.readonly || column.readonly || readonly"
-                       :disabled="parentOption.disabled || column.disabled || disabled"
+                       :disabled="getDisabled(column)"
                        :size="parentOption.size || column.size || size"
                        :enter="parentOption.enter"
                        @enter="submit"
@@ -115,7 +115,8 @@ export default {
       formCreate: false,
       formDefault: {},
       formVal: {},
-      formId: ''
+      formId: '',
+      allDisabled: false
     }
   },
   computed: {
@@ -160,13 +161,11 @@ export default {
   },
   methods: {
     getLabelWidth,
-    // 初始化表单
     dataFormat () {
       this.formDefault = formInitVal(this.columnOption)
       const value = this.$loquat.deepClone(this.formDefault.tableForm)
       this.setForm(this.$loquat.deepClone(Object.assign(value, this.formVal)))
     },
-    // 表单赋值
     setForm (value) {
       Object.keys(value).forEach(ele => {
         const result = value[ele]
@@ -217,6 +216,15 @@ export default {
     },
     resetFields () {
       this.$refs.form.resetFields()
+    },
+    getDisabled (column) {
+      return this.parentOption.disabled || column.disabled || this.allDisabled
+    },
+    useActivation () {
+      this.allDisabled = false
+    },
+    useDisabled () {
+      this.allDisabled = true
     }
   }
 }
