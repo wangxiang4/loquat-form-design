@@ -156,8 +156,8 @@
                      @click="handlePreviewFormReset"
           >重置</el-button>
           <el-button size="medium"
-                     @click="previewFormToggleDisable = !previewFormToggleDisable"
-          > {{ previewFormToggleDisable ? '启动编辑' : '禁用编辑'}} </el-button>
+                     @click="previewDisableSwitch = !previewDisableSwitch"
+          > {{ previewDisableSwitch ? '启动编辑' : '禁用编辑'}} </el-button>
           <el-button size="medium"
                      @click="handleBeforeClose"
           >关闭</el-button>
@@ -714,7 +714,7 @@ export default {
       dataSourceMenuItemDisabled: false,
       dataSourceMainContainerVisible: false,
       styleSheets: '',
-      previewFormToggleDisable: false
+      previewDisableSwitch: false
     }
   },
   computed: {
@@ -749,7 +749,7 @@ export default {
       },
       deep: true
     },
-    previewFormToggleDisable: {
+    previewDisableSwitch: {
       handler (val) {
         if (val) this.$refs.previewForm.useDisabled()
         else this.$refs.previewForm.useActivation()
