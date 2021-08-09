@@ -31,6 +31,7 @@
                     :readonly="parentOption.readonly || column.readonly || readonly"
                     :disabled="getDisabled(column)"
                     :size="parentOption.size || column.size || size"
+                    :dic="DIC[column.prop]"
               />
             </template>
             <template v-if="$scopedSlots[column.prop + 'Error']" slot="error" slot-scope="scope">
@@ -40,7 +41,8 @@
                       value:form[column.prop],
                       readonly: parentOption.readonly || column.readonly || readonly,
                       disabled: parentOption.disabled || column.disabled || disabled,
-                      size: parentOption.size || column.size || size
+                      size: parentOption.size || column.size || size,
+                      dic: DIC[column.prop]
                     })"
               />
             </template>
@@ -51,9 +53,11 @@
                   :readonly="parentOption.readonly || column.readonly || readonly"
                   :disabled="getDisabled(column)"
                   :size="parentOption.size || column.size || size"
+                  :dic="DIC[column.prop]"
             />
             <form-item v-else
                        :ref="column.prop"
+                       :dic="DIC[column.prop]"
                        v-model="form[column.prop]"
                        :event-script="parentOption.eventScript"
                        :column="column"
@@ -116,12 +120,13 @@ export default {
       formDefault: {},
       formVal: {},
       formId: '',
-      allDisabled: false
+      allDisabled: false,
+      DIC: {}
     }
   },
   computed: {
     parentOption () {
-      return designTransformPreview(this.option)
+      return designTransformPreview(this)
     },
     columnOption () {
       return this.parentOption.column || []

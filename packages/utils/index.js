@@ -139,3 +139,14 @@ export function get (object, path, defaultValue) {
 export function randomId () {
   return Math.random().toString(36).slice(-8)
 }
+
+/** 字符串数据类型转化 **/
+export function detailDataType (value, type) {
+  if (type === 'number') {
+    return Number(value)
+  } else if (type === 'string') {
+    return value + ''
+  } else {
+    return value
+  }
+}

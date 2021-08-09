@@ -17,6 +17,7 @@ import {
   KEY_COMPONENT_CONFIG_NAME_LINE
 } from '@/global/variable'
 import { validateNull, setPx, deepClone } from './index'
+import request from '@utils/request'
 
 /** 获取控件提示 **/
 export function getPlaceholder (item) {
@@ -112,10 +113,77 @@ export function getComponentConfig (type, component) {
 }
 
 /** 设计器配置转换设计器预览配置 **/
-export function designTransformPreview (obj) {
-  const data = deepClone(obj)
-  for (let i = 0; i < data.column.length; i++) {
+export function designTransformPreview (_this) {
+  const data = deepClone(_this.option)
+  const autoDataSource = data.dataSource && data.dataSource.filter(item => item.auto) || []
+  for (let i = 0; i < data.column.length; ++i) {
     const col = data.column[i]
+    // 处理远端请求数据转换
+    if (MULTIPLE_LIST.includes(col.type)) {
+      if (col.static) _this.$set(_this.DIC, col.prop, col.dicData)
+      else {
+        const dataSource = autoDataSource.find(item => item.key === col.remoteDataSource)
+        // 提取请求参数
+        const param = (({ url, method, headers, params }) => {
+          return { url, method, headers, params }
+        })(dataSource)
+        switch (col.remoteType) {
+          case 'option' :
+            if (_this.$loquat.remoteOption[col.remoteOption]) _this.$set(_this.DIC, col.prop, _this.$loquat.remoteOption[col.remoteOption])
+            break
+          case 'func' :
+            if (_this.$loquat.remoteFunc[col.remoteFunc]) _this.$set(_this.DIC, col.prop, _this.$loquat.remoteFunc[col.remoteFunc])
+            break
+          case 'datasource' :
+            if (!dataSource) break
+            // 是否使用第三方Axios请求
+            if (dataSource.thirdPartyAxios) {
+              !validateNull(_this.$loquat.axios) && _this.$loquat.axios(param).then(res => {
+                try {
+                  const execute = new Function('res', dataSource.responseFunc)(res)
+                  _this.$set(_this.DIC, col.prop, execute)
+                } catch (e) {
+                  console.error(e)
+                }
+              }).catch(error => {
+                try {
+                  const execute = new Function('error', dataSource.errorFunc)(error)
+                  console.error(execute)
+                } catch (e) {
+                  console.error(e)
+                }
+              })
+            } else {
+              request.interceptors.request.empty()
+              dataSource.method !== 'GET' && request.interceptors.request.use(config => {
+                return new Function('config', dataSource.requestFunc)(config)
+              }, undefined)
+              request(param).then(res => {
+                try {
+                  const execute = new Function('res', dataSource.responseFunc)(res)
+                  _this.$set(_this.DIC, col.prop, execute)
+                } catch (e) {
+                  console.error(e)
+                }
+              }).catch(error => {
+                try {
+                  const execute = new Function('error', dataSource.errorFunc)(error)
+                  console.error(execute)
+                } catch (e) {
+                  console.error(e)
+                }
+              })
+            }
+            break
+        }
+      }
+      delete col.static
+      delete col.dicData
+      delete col.remoteDataSource
+      delete col.remoteType
+      delete col.remoteFunc
+      delete col.remoteOption
+    }
     // 校验规则处理
     if (col.validateConfig) {
       const rules = []

@@ -5,7 +5,6 @@ export default [
       type: 'input',
       label: '单行文本',
       icon: 'icon-input',
-      span: 24,
       labelWidth: undefined,
       placeholder: undefined,
       value: undefined,
@@ -27,6 +26,48 @@ export default [
         type: false,
         pattern: false
       },
+      events: {
+        change: '',
+        focus: '',
+        blur: ''
+      }
+    }, {
+      type: 'select',
+      label: '下拉选择',
+      icon: 'icon-select',
+      value: undefined,
+      multiple: false,
+      disabled: false,
+      clearable: false,
+      placeholder: undefined,
+      validateConfig: {
+        required: false
+      },
+      showLabel: false,
+      style: {
+        width: '100%'
+      },
+      dicData: [
+        { label: '选项一', value: 'Option 1' },
+        { label: '选项二', value: 'Option 2' },
+        { label: '选项三', value: 'Option 3' }
+      ],
+      static: true,
+      remoteType: undefined,
+      remoteOption: undefined,
+      filterable: false,
+      props: {
+        label: 'label',
+        value: 'value'
+      },
+      remoteFunc: undefined,
+      customClass: [],
+      labelWidth: undefined,
+      hideLabel: false,
+      hide: false,
+      remoteDataSource: undefined,
+      drag: false,
+      readonly: false,
       events: {
         change: '',
         focus: '',

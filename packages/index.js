@@ -17,22 +17,18 @@ import { deepClone, setPx, validateNull, get } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 
 export default {
-  install (Vue) {
+  install (Vue, opts = {}) {
     Vue.use(Config)
     Vue.use(Plugins)
     Vue.use(permission)
-    if (!Vue.prototype.$loquat) {
-      Vue.prototype.$loquat = {
-        setPx: setPx,
-        deepClone: deepClone,
-        validateNull: validateNull,
-        get: get
-      }
-    } else {
-      Vue.prototype.$loquat.setPx = setPx
-      Vue.prototype.$loquat.deepClone = deepClone
-      Vue.prototype.$loquat.validateNull = validateNull
-      Vue.prototype.$loquat.get = get
+    Vue.prototype.$loquat = {
+      setPx: setPx,
+      deepClone: deepClone,
+      validateNull: validateNull,
+      get: get,
+      axios: opts.axios || {},
+      remoteOption: opts.remoteOption || {},
+      remoteFunc: opts.remoteFunc || {}
     }
     Vue.component(KEY_COMPONENT_NAME + FormDesign.name, FormDesign)
   }

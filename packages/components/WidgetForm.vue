@@ -39,6 +39,7 @@
                     <loquat-form-item :column="column"
                                       :event-script="data.eventScript"
                                       :props="data.props"
+                                      :value="column.value"
                                       :readonly="data.readonly || column.readonly"
                                       :disabled="data.disabled || column.disabled"
                                       :size="data.size || column.size"

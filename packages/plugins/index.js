@@ -2,12 +2,14 @@ import empty from './empty'
 import input from './input'
 import form from './form'
 import formItem from './form/item'
+import select from './select'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
   empty,
   input,
   form,
-  formItem
+  formItem,
+  select
 ]
 
 const Plugins = {

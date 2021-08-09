@@ -123,10 +123,10 @@
       <el-aside class="widget-config-container" :width="rightWidth">
         <el-tabs v-model="configTab" stretch>
           <el-tab-pane label="字段属性" name="widget" style="padding: 0 10px;">
-            <widget-config :data="widgetFormSelect" :home="this"/>
+            <widget-config :data="widgetFormSelect" :home="home"/>
           </el-tab-pane>
           <el-tab-pane label="表单属性" name="form" lazy style="padding: 0 10px;">
-            <form-config :data="widgetForm" :home="this"/>
+            <form-config :data="widgetForm" :home="home"/>
           </el-tab-pane>
         </el-tabs>
       </el-aside>
@@ -535,6 +535,9 @@
                         <el-button type="text" @click="dataSourceForm.params.push({})">添加</el-button>
                       </div>
                     </el-form-item>
+                    <el-form-item label="是否使用第三方axios" prop="thirdPartyAxios" label-width="155px">
+                      <el-switch v-model="dataSourceForm.thirdPartyAxios" @change="handleThirdPartyAxios"/>
+                    </el-form-item>
                     <el-form-item label="是否表单初始化发送请求" prop="auto" label-width="175px">
                       <el-switch v-model="dataSourceForm.auto"/>
                     </el-form-item>
@@ -546,7 +549,9 @@
                           <div class="code-desc">// 通过 config.data 可以更改发送的数据，（GET 请求不适用，需要更改 config.params）</div>
                           <div class="code-line">(config) => {</div>
                           <ace-editor v-model="dataSourceForm.requestFunc"
+                                      ref="requestFuncAce"
                                       lang="javascript"
+                                      :readonly="dataSourceForm.thirdPartyAxios"
                                       theme="textmate"
                                       style="height: 148px; border:1px solid #dcdfe6;"
                           />
@@ -653,6 +658,7 @@ export default {
   data () {
     return {
       fields,
+      home: this,
       adapter: 'pc',
       JS_EXECUTE_INCLUDE,
       widgetForm: {
@@ -676,10 +682,24 @@ export default {
             url: 'http://tools-server.making.link/api/uptoken',
             method: 'GET',
             auto: true,
+            thirdPartyAxios: false,
             headers: {},
             params: {},
             requestFunc: 'return config;',
             responseFunc: 'return res;',
+            errorFunc: ''
+          },
+          {
+            key: 'options',
+            name: 'Get Options',
+            url: 'http://tools-server.making.link/api/new/options',
+            method: 'GET',
+            auto: true,
+            thirdPartyAxios: false,
+            headers: {},
+            params: {},
+            requestFunc: 'return config;',
+            responseFunc: 'return res.data;',
             errorFunc: ''
           }
         ]
@@ -1001,7 +1021,7 @@ export default {
         }
       })
     },
-    // 设置动作设置初始值
+    // 处理动作设置初始值
     handleActionSettingsSetData (obj) {
       this.eventSelect = obj.eventName
       this.actionSettingsVisible = true
@@ -1032,6 +1052,7 @@ export default {
         url: '',
         method: 'GET',
         auto: true,
+        thirdPartyAxios: false,
         headers: [],
         params: [],
         requestFunc: 'return config;',
@@ -1150,6 +1171,10 @@ export default {
     // 处理预览表单重置
     handlePreviewFormReset () {
       this.$refs.previewForm.resetFields()
+    },
+    // 处理使用第三方axios禁用请求发送前
+    handleThirdPartyAxios (change) {
+      if (change) this.$refs.requestFuncAce.setValue('return config;')
     }
   }
 }

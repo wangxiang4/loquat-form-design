@@ -405,6 +405,29 @@ $primary-ghost-color: #67C23A;
           }
         }
       }
+
+      .ghost {
+        background: #fff;
+        border: 1px dashed $primary-color;
+      }
+
+      ul{
+        margin: 0;
+        padding: 0;
+      }
+
+      .el-form-item--small .el-checkbox,
+      .el-form-item--small .el-radio {
+        line-height: 32px!important;
+      }
+
+      .el-input--mini{
+        font-size: 12px;
+
+        .el-input__inner {
+          padding: 0 9px;
+        }
+      }
     }
   }
 

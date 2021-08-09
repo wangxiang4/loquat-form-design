@@ -4,6 +4,7 @@
              v-model="text"
              v-bind="column"
              :column="Object.assign(column, params)"
+             :dic="dic"
              :disabled="column.disabled || disabled"
              :readonly="column.readonly || readonly"
              :placeholder="column.placeholder || getPlaceholder(column)"
@@ -26,8 +27,10 @@ export default {
   name: 'FormItem',
   props: {
     value: {
-      validator: () => true,
       default: undefined
+    },
+    dic: {
+      type: Array
     },
     props: {
       type: Object,

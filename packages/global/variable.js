@@ -50,4 +50,16 @@ export const EVENT_DICT = {
   focus: '获取焦点',
   blur: '失去焦点'
 }
+export const DIC_PROPS = {
+  nodeKey: 'id',
+  label: 'label',
+  value: 'value',
+  desc: 'desc',
+  groups: 'groups',
+  title: 'title',
+  leaf: 'leaf',
+  children: 'children',
+  labelText: '名称',
+  disabled: 'disabled'
+}
 

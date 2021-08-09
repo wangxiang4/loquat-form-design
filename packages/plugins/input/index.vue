@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import { detailDataType } from '@utils'
+import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Input',
   props: {
@@ -173,16 +175,10 @@ export default {
       bindEvent(this, 'click', event)
     },
     handleChange (value) {
-      if (!this.$loquat.validateNull(value) && this.type === 'number') value = Number(value)
+      value = detailDataType(value, this.type)
       this.$emit('input', value)
       this.$emit('change', value)
     }
   }
 }
-
-function bindEvent (safe, name, event) {
-  typeof safe[name] === 'function' && safe[name]({ value: safe.value, column: safe.column })
-  safe.$emit(name, safe.value, event)
-}
-
 </script>

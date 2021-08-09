@@ -1,9 +1,11 @@
 import Custom from './custom.vue'
 import Input from './input.vue'
+import select from './select'
 import { KEY_COMPONENT_CONFIG_NAME } from '@/global/variable'
 const components = [
   Custom,
-  Input
+  Input,
+  select
 ]
 
 const Config = {
