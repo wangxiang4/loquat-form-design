@@ -779,6 +779,7 @@ export default {
     this.handleLoadStorage()
     this.formId = KEY_COMPONENT_NAME_LINE + randomId()
     this.handleStyleSheetsCore()
+    this.handlePluginDefaultData()
   },
   beforeDestroy () {
     insertCss([], this.formId)
