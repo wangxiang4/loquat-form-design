@@ -179,27 +179,24 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="10" v-loquat-has-perm="[originData, 'readonly']">
-          <el-checkbox v-model="data.readonly">只读</el-checkbox>
+        <el-col :span="10" v-loquat-has-perm="[originData, 'hide']">
+          <el-checkbox v-model="data.hide">隐藏</el-checkbox>
         </el-col>
         <el-col :span="12" v-loquat-has-perm="[originData, 'disabled']">
           <el-checkbox v-model="data.disabled">禁用</el-checkbox>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="10" v-loquat-has-perm="[originData, 'hide']">
-          <el-checkbox v-model="data.hide">隐藏</el-checkbox>
-        </el-col>
-        <el-col :span="12" v-loquat-has-perm="[originData, 'hideLabel']">
+        <el-col :span="10" v-loquat-has-perm="[originData, 'hideLabel']">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
+        </el-col>
+        <el-col :span="12" v-loquat-has-perm="[originData, 'clearable']">
+          <el-checkbox v-model="data.clearable">显示清除按钮</el-checkbox>
         </el-col>
       </el-row>
       <el-row>
         <el-col v-if="data.multiple" :span="10" v-loquat-has-perm="[originData, 'drag']">
           <el-checkbox v-model="data.drag">是否可拖拽</el-checkbox>
-        </el-col>
-        <el-col :span="12" v-loquat-has-perm="[originData, 'clearable']">
-          <el-checkbox v-model="data.clearable">显示清除按钮</el-checkbox>
         </el-col>
       </el-row>
     </el-form-item>

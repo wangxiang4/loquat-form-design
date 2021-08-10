@@ -67,7 +67,6 @@ export default [
       hide: false,
       remoteDataSource: undefined,
       drag: false,
-      readonly: false,
       events: {
         change: '',
         focus: '',
