@@ -27,10 +27,7 @@ export default {
   components: { AceEditor },
   props: {
     data: {
-      type: Object,
-      default () {
-        return {}
-      }
+      type: Object
     }
   },
   data () {

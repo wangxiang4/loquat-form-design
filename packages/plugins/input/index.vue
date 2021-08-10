@@ -40,21 +40,16 @@ import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Input',
   props: {
-    value: {
-      type: [String, Number],
-      default: ''
-    },
+    value: {},
     clearable: {
       type: Boolean,
       default: true
     },
     maxlength: {
-      type: [Number, String],
-      default: undefined
+      type: [Number, String]
     },
     minlength: {
-      type: [Number, String],
-      default: undefined
+      type: [Number, String]
     },
     disabled: {
       type: Boolean,
@@ -77,28 +72,24 @@ export default {
       default: ' _blank'
     },
     prefixIcon: {
-      type: String,
-      default: ''
+      type: String
     },
     suffixIcon: {
-      type: String,
-      default: ''
+      type: String
     },
     prependClick: {
       type: Function,
       default: () => { }
     },
     prepend: {
-      type: String,
-      default: ''
+      type: String
     },
     appendClick: {
       type: Function,
       default: () => { }
     },
     append: {
-      type: String,
-      default: ''
+      type: String
     },
     minRows: {
       type: Number,
@@ -109,8 +100,7 @@ export default {
       default: 10
     },
     autocomplete: {
-      type: String,
-      default: 'off'
+      type: String
     },
     readonly: {
       type: Boolean,

@@ -269,16 +269,10 @@ export default {
   name: 'Select',
   props: {
     data: {
-      type: Object,
-      default () {
-        return {}
-      }
+      type: Object
     },
     home: {
-      type: Object,
-      default () {
-        return {}
-      }
+      type: Object
     }
   },
   components: { Draggable },

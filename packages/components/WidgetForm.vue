@@ -75,16 +75,10 @@ export default {
   components: { Draggable },
   props: {
     data: {
-      type: Object,
-      default () {
-        return {}
-      }
+      type: Object
     },
     select: {
-      type: Object,
-      default () {
-        return {}
-      }
+      type: Object
     },
     adapter: {
       type: String,

@@ -183,16 +183,10 @@ export default {
   name: 'Input',
   props: {
     data: {
-      type: Object,
-      default () {
-        return {}
-      }
+      type: Object
     },
     home: {
-      type: Object,
-      default () {
-        return {}
-      }
+      type: Object
     }
   },
   data () {

@@ -26,45 +26,34 @@ import { getComponent, getPlaceholder } from '@utils/dataFormat'
 export default {
   name: 'FormItem',
   props: {
-    value: {
-      default: undefined
-    },
+    value: {},
     dic: {
       type: Array
     },
     props: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+      type: Object
     },
     clearable: {
-      type: Boolean,
-      default: false
+      type: Boolean
     },
     enter: {
       type: Boolean,
       default: false
     },
     type: {
-      type: String,
-      default: ''
+      type: String
     },
     placeholder: {
-      type: String,
-      default: ''
+      type: String
     },
     size: {
-      type: String,
-      default: 'small'
+      type: String
     },
     disabled: {
-      type: Boolean,
-      default: false
+      type: Boolean
     },
     readonly: {
-      type: Boolean,
-      default: false
+      type: Boolean
     },
     column: {
       type: Object,

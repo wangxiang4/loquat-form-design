@@ -15,8 +15,7 @@ export default {
   name: 'Empty',
   props: {
     size: {
-      type: String,
-      default: ''
+      type: String
     },
     image: {
       type: String,

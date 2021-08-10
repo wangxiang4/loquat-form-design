@@ -84,16 +84,13 @@ export default {
       default: () => []
     },
     loadingText: {
-      type: String,
-      default: ''
+      type: String
     },
     noMatchText: {
-      type: String,
-      default: ''
+      type: String
     },
     noDataText: {
-      type: String,
-      default: ''
+      type: String
     },
     drag: {
       type: Boolean,
@@ -152,10 +149,6 @@ export default {
       default: () => {
         return {}
       }
-    },
-    dataType: {
-      type: String,
-      default: ''
     },
     typeFormat: Function,
     props: {

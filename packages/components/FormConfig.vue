@@ -64,16 +64,10 @@ export default {
   name: 'FormConfig',
   props: {
     data: {
-      type: Object,
-      default () {
-        return { }
-      }
+      type: Object
     },
     home: {
-      type: Object,
-      default () {
-        return {}
-      }
+      type: Object
     }
   },
   data () {

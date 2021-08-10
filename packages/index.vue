@@ -651,8 +651,7 @@ export default {
       }
     },
     customFields: {
-      type: Array,
-      default: () => []
+      type: Array
     }
   },
   data () {
