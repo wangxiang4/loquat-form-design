@@ -35,7 +35,7 @@
                 <template v-for="(item, index) in field.list">
                   <li :key="index" class="field-label">
                     <a @click="handleFieldClick(item)">
-                      <i class="icon iconfont" :class="item.icon"/>
+                      <i class="icon" :class="item.icon"/>
                       <span>{{ item.title || item.label }}</span>
                     </a>
                   </li>

@@ -18,7 +18,7 @@ export default {
           {
             title: '分割线',
             component: 'el-divider',
-            icon: 'icon-divider',
+            icon: 'iconfont icon-divider',
             label: '',
             labelWidth: 0,
             params: {
