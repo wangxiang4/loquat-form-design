@@ -168,7 +168,10 @@
       <el-row>
         <el-col :span="10" v-loquat-has-perm="[originData, 'multiple']">
           <el-checkbox v-model="data.multiple"
-                       @change="(check) => check ? $set(data, 'value', []) : $set(data, 'value', '')"
+                       @change="(check) => {
+                         check ? $set(data, 'value', []) : $set(data, 'value', '')
+                         $set(data, 'drag', false)
+                       }"
           >是否多选</el-checkbox>
         </el-col>
         <el-col :span="12" v-loquat-has-perm="[originData, 'filterable']">

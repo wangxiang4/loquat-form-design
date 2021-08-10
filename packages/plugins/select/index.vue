@@ -190,7 +190,7 @@ export default {
     value: {
       handler (val) {
         this.initVal()
-        // 值改变时候请求Api接口
+        // 值改变时候请求远端接口
         if (!this.$loquat.validateNull(val)) {
           if (this.remote && !this.created) {
             this.created = true
