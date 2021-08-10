@@ -1,7 +1,7 @@
 <template>
   <el-select ref="main"
-             class="loquat-select"
              v-model="text"
+             class="loquat-select"
              :size="size"
              :loading="loading"
              :loading-text="loadingText"
@@ -15,13 +15,13 @@
              :collapse-tags="tags"
              :clearable="disabled ? false : clearable"
              :placeholder="placeholder"
-             @focus="handleFocus"
-             @blur="handleBlur"
-             @click.native="handleClick"
              :multiple-limit="limit"
              :allow-create="allowCreate"
              :default-first-option="defaultFirstOption"
              :disabled="disabled"
+             @focus="handleFocus"
+             @blur="handleBlur"
+             @click.native="handleClick"
   >
     <template v-if="group">
       <el-option-group v-for="(item,index) in netDic"
@@ -34,10 +34,10 @@
                    :label="getLabelText(citem)"
                    :value="citem[valueKey]"
         >
-          <slot :label="labelKey"
+          <slot v-if="$scopedSlots.default"
+                :label="labelKey"
                 :value="valueKey"
                 :item="citem"
-                v-if="$scopedSlots.default"
           />
           <template v-else>
             <span>{{ getLabelText(citem) }}</span>
@@ -55,10 +55,10 @@
                  :label="getLabelText(item)"
                  :value="item[valueKey]"
       >
-        <slot :label="labelKey"
+        <slot v-if="$scopedSlots.default"
+              :label="labelKey"
               :value="valueKey"
               :item="item"
-              v-if="$scopedSlots.default"
         />
         <template v-else>
           <span>{{ getLabelText(item) }}</span>

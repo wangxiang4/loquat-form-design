@@ -94,7 +94,11 @@ module.exports = {
     //在标签的右括号前要求或不允许有空格
     "vue/html-closing-bracket-spacing": "off",
     //需要v-bind:key用v-for指令
-    'vue/require-v-for-key': 0,
+    'vue/require-v-for-key': 'off',
+    //需要道具的默认值
+    'vue/require-default-prop': 'off',
+    //在 props 中需要类型定义
+    'vue/require-prop-types': 'off',
 
     /** -----------------------eslint配置-----------------------------**/
     //具体参考eslint-plugin-vue-libs地址:https://github.com/vuejs/eslint-plugin-vue-libs/blob/master/config.js
