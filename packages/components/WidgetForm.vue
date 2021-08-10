@@ -43,6 +43,7 @@
                                       :readonly="data.readonly || column.readonly"
                                       :disabled="data.disabled || column.disabled"
                                       :size="data.size || column.size"
+                                      :dic="column.dicData"
                     />
                   </el-form-item>
                   <div v-if="selectWidget.prop == column.prop" class="widget-view-action">

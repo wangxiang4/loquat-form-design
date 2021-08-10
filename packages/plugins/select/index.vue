@@ -37,6 +37,7 @@
           <slot v-if="$scopedSlots.default"
                 :label="labelKey"
                 :value="valueKey"
+                :showLabel="showLabel"
                 :item="citem"
           />
           <template v-else>
@@ -58,6 +59,7 @@
         <slot v-if="$scopedSlots.default"
               :label="labelKey"
               :value="valueKey"
+              :showLabel="showLabel"
               :item="item"
         />
         <template v-else>
@@ -158,6 +160,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    showLabel: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -259,7 +265,7 @@ export default {
       if (typeof this.typeFormat === 'function') {
         return this.typeFormat(item, this.labelKey, this.valueKey)
       }
-      return item[this.labelKey]
+      return (this.showLabel && item[this.labelKey]) ? item[this.labelKey] : item[this.valueKey]
     },
     handleChange (value) {
       this.$emit('input', value)
