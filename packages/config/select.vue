@@ -329,7 +329,9 @@ export default {
       this.data.dicData.splice(index, 1)
     },
     handleAddFields () {
-      this.data.dicData.push({ label: `标签`, value: `值` })
+      this.data.showLabel
+        ? this.data.dicData.push({ label: '新选项', value: '新选项' })
+        : this.data.dicData.push(Object({ value: '新选项' }))
     }
   }
 }
