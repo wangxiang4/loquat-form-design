@@ -150,3 +150,14 @@ export function detailDataType (value, type) {
     return value
   }
 }
+
+/** 处理响应数据数据是否受理 **/
+export function responseDataAccept (data, type) {
+  switch (type) {
+    case 'select':
+    case 'tree':
+      if (getObjType(data) === 'array') return data
+      else return []
+  }
+  return undefined
+}

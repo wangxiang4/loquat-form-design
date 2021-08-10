@@ -54,13 +54,13 @@ export default [
       ],
       static: true,
       remoteType: undefined,
-      remoteOption: undefined,
+      remoteOption: 'optionDemo',
       filterable: false,
       props: {
         label: 'label',
         value: 'value'
       },
-      remoteFunc: undefined,
+      remoteFunc: 'funcDemo',
       customClass: [],
       labelWidth: undefined,
       hideLabel: false,

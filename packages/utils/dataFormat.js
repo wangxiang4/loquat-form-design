@@ -16,7 +16,7 @@ import {
   MULTIPLE_LIST, SELECT_LIST,
   KEY_COMPONENT_CONFIG_NAME_LINE
 } from '@/global/variable'
-import { validateNull, setPx, deepClone } from './index'
+import { validateNull, setPx, deepClone, responseDataAccept } from './index'
 import request from '@utils/request'
 
 /** 获取控件提示 **/
@@ -121,18 +121,18 @@ export function designTransformPreview (_this) {
     // 处理远端请求数据转换
     if (MULTIPLE_LIST.includes(col.type)) {
       if (col.static) _this.$set(_this.DIC, col.prop, col.dicData)
-      else {
+      if (!col.static) {
         const dataSource = autoDataSource.find(item => item.key === col.remoteDataSource)
         // 提取请求参数
         const param = (({ url, method, headers, params }) => {
           return { url, method, headers, params }
-        })(dataSource)
+        })(dataSource || {})
         switch (col.remoteType) {
           case 'option' :
             if (_this.$loquat.remoteOption[col.remoteOption]) _this.$set(_this.DIC, col.prop, _this.$loquat.remoteOption[col.remoteOption])
             break
           case 'func' :
-            if (_this.$loquat.remoteFunc[col.remoteFunc]) _this.$set(_this.DIC, col.prop, _this.$loquat.remoteFunc[col.remoteFunc])
+            if (_this.$loquat.remoteFunc[col.remoteFunc]) _this.$set(_this.DIC, col.prop, _this.$loquat.remoteFunc[col.remoteFunc]())
             break
           case 'datasource' :
             if (!dataSource) break
@@ -141,7 +141,7 @@ export function designTransformPreview (_this) {
               !validateNull(_this.$loquat.axios) && _this.$loquat.axios(param).then(res => {
                 try {
                   const execute = new Function('res', dataSource.responseFunc)(res)
-                  _this.$set(_this.DIC, col.prop, execute)
+                  _this.$set(_this.DIC, col.prop, responseDataAccept(execute, col.type))
                 } catch (e) {
                   console.error(e)
                 }
@@ -161,7 +161,7 @@ export function designTransformPreview (_this) {
               request(param).then(res => {
                 try {
                   const execute = new Function('res', dataSource.responseFunc)(res)
-                  _this.$set(_this.DIC, col.prop, execute)
+                  _this.$set(_this.DIC, col.prop, responseDataAccept(execute, col.type))
                 } catch (e) {
                   console.error(e)
                 }
