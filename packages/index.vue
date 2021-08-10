@@ -1174,6 +1174,19 @@ export default {
     // 处理使用第三方axios重置请求发送前
     handleThirdPartyAxios (change) {
       if (change) this.$refs.requestFuncAce.setValue('return config;')
+    },
+    // 处理插件的一些默认数据
+    handlePluginDefaultData () {
+      this.$loquat.remoteOption.optionDefault = [
+        { value: '4399小游戏', label: '4399小游戏' },
+        { value: '7k7k小游戏', label: '7k7k小游戏' },
+        { value: '拇指玩小游戏', label: '拇指玩小游戏' }
+      ]
+      this.$loquat.remoteFunc.funcDefault = () => [
+        { value: '小白兔', label: '小白兔' },
+        { value: '煎饼果子', label: '煎饼果子' },
+        { value: '彩虹猫', label: '彩虹猫' }
+      ]
     }
   }
 }
