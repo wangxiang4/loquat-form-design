@@ -57,8 +57,8 @@
             />
             <form-item v-else
                        :ref="column.prop"
-                       :dic="DIC[column.prop]"
                        v-model="form[column.prop]"
+                       :dic="DIC[column.prop]"
                        :event-script="parentOption.eventScript"
                        :column="column"
                        :props="parentOption.props"

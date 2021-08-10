@@ -3,16 +3,16 @@
     <el-form-item label="字段标识">
       <el-input v-model="data.prop" clearable/>
     </el-form-item>
-    <el-form-item label="标题">
+    <el-form-item v-loquat-has-perm="[originData, 'label']" label="标题">
       <el-input v-model="data.label" clearable/>
     </el-form-item>
-    <el-form-item label="标题宽度">
-      <el-input v-model="data.labelWidth" clearable/>
+    <el-form-item v-loquat-has-perm="[originData, 'labelWidth']" label="标签宽度">
+      <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度"/>
     </el-form-item>
     <el-form-item label="自定义属性">
       <ace-editor
         v-model="params"
-        lang="json"
+        lang="json5"
         theme="textmate"
         style="height: 300px"
       />
@@ -32,27 +32,25 @@ export default {
   },
   data () {
     return {
-      params: ''
+      params: beautifier(this.data.params) || '{}',
+      originData: this.$loquat.deepClone(this.data)
+    }
+  },
+  computed: {
+    style () {
+      return this.data.style || {}
     }
   },
   watch: {
-    'data.params': {
-      immediate: true,
-      handler: function (val) {
-        if (val) {
-          const clone = this.$loquat.deepClone(val)
-          this.params = beautifier(clone, {
-            quoteType: 'double',
-            dropQuotesOnKeys: false
-          })
-        }
-      }
+    'data.params' (val) {
+      this.params = beautifier(val) || '{}'
     },
     params (val) {
       try {
         this.data.params = eval('(' + val + ')')
-        // eslint-disable-next-line no-empty
-      } catch (e) { }
+      } catch (e) {
+        // console.error(e)
+      }
     }
   }
 }

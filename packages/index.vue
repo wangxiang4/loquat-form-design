@@ -34,9 +34,9 @@
               >
                 <template v-for="(item, index) in field.list">
                   <li :key="index" class="field-label">
-                    <a style="padding: 0 5px;" @click="handleFieldClick(item)">
-                      <i :class="item.icon"/>
-                      <span style="margin-left: 5px;">{{ item.title || item.label }}</span>
+                    <a @click="handleFieldClick(item)">
+                      <i class="icon iconfont" :class="item.icon"/>
+                      <span>{{ item.title || item.label }}</span>
                     </a>
                   </li>
                 </template>
@@ -157,7 +157,7 @@
           >重置</el-button>
           <el-button size="medium"
                      @click="previewDisableSwitch = !previewDisableSwitch"
-          > {{ previewDisableSwitch ? '启动编辑' : '禁用编辑'}} </el-button>
+          > {{ previewDisableSwitch ? '启动编辑' : '禁用编辑' }} </el-button>
           <el-button size="medium"
                      @click="handleBeforeClose"
           >关闭</el-button>
@@ -548,8 +548,8 @@
                           <div class="code-desc">// 通过 config.url 可以更改请求地址，通过 config.headers 可以更改请求头部</div>
                           <div class="code-desc">// 通过 config.data 可以更改发送的数据，（GET 请求不适用，需要更改 config.params）</div>
                           <div class="code-line">(config) => {</div>
-                          <ace-editor v-model="dataSourceForm.requestFunc"
-                                      ref="requestFuncAce"
+                          <ace-editor ref="requestFuncAce"
+                                      v-model="dataSourceForm.requestFunc"
                                       lang="javascript"
                                       :readonly="dataSourceForm.thirdPartyAxios"
                                       theme="textmate"

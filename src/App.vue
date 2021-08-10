@@ -17,11 +17,10 @@ export default {
         list: [
           {
             title: '分割线',
-            component: 'el-divider', // ele分割线
-            span: 24,
-            icon: 'el-icon-eleme',
-            tips: '看我：自定义属性怎么用？',
-            labelWidth: '0px',
+            component: 'el-divider',
+            icon: 'icon-divider',
+            label: '',
+            labelWidth: 0,
             params: {
               html: '<h3 style="color:red">分割线标题</h3>',
               contentPosition: 'left'
@@ -30,15 +29,14 @@ export default {
           {
             title: '警告',
             component: 'el-alert',
-            labelWidth: '0px',
-            span: 24,
+            labelWidth: undefined,
             icon: 'el-icon-warning',
             tips: '看我：自定义事件怎么用？',
             params: {
               title: '警告警告警告警告',
               type: 'success'
             },
-            event: {
+            events: {
               close: () => {
                 console.log('alert关闭事件')
               }

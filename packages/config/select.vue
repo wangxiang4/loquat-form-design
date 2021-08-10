@@ -38,10 +38,10 @@
           >
             <li v-for="(item, index) in data.dicData" :key="index">
               <el-checkbox :label="item.value" style="margin-right: 3px;">
-                <el-input :style="{ width: data.showLabel ? '90px' : '180px'}"
+                <el-input v-model="item.value"
+                          :style="{ width: data.showLabel ? '90px' : '180px'}"
                           size="mini"
                           clearable
-                          v-model="item.value"
                 />
                 <el-input v-if="data.showLabel"
                           style="width: 90px;"
