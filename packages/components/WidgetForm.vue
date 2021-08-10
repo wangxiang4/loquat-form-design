@@ -36,7 +36,7 @@
                                 :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, labelWidth)"
                                 :label-position="column.labelPosition || data.labelPosition || labelPosition"
                   >
-                    <loquat-form-item :column="column"
+                    <loquat-form-item :column="$loquat.deepClone(column)"
                                       :event-script="data.eventScript"
                                       :props="data.props"
                                       :value="column.value"
