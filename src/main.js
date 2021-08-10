@@ -2,7 +2,9 @@ import Vue from 'vue'
 import App from './App'
 import '/packages/assets/styles/index.scss'
 import LoquatFormDesign from '../packages/'
+import request from './request'
 Vue.use(LoquatFormDesign, {
+  axios: request,
   remoteOption: {
     optionDemo: [
       { value: '4399小游戏', label: '4399小游戏' },
