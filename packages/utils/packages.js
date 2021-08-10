@@ -15,6 +15,12 @@ const list = {
     title: '表格拖拽，需要引sortableJs',
     version: '1.10.0-rc2',
     github: 'https://github.com/SortableJS/Sortable'
+  },
+  'thirdPartyAxios': {
+    title: '需要引入第三方axios发送数据包',
+    url: 'https://cdn.staticfile.org/axios/0.21.1/axios.js',
+    version: '0.21.1',
+    github: 'https://github.com/axios/axios'
   }
 }
 

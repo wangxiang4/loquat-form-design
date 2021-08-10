@@ -18,6 +18,7 @@ import {
 } from '@/global/variable'
 import { validateNull, setPx, deepClone, responseDataAccept } from './index'
 import request from '@utils/request'
+import packages from './packages'
 
 /** 获取控件提示 **/
 export function getPlaceholder (item) {
@@ -138,7 +139,7 @@ export function designTransformPreview (_this) {
             if (!dataSource) break
             // 是否使用第三方Axios请求
             if (dataSource.thirdPartyAxios) {
-              !validateNull(_this.$loquat.axios) && _this.$loquat.axios(param).then(res => {
+              !validateNull(_this.$loquat.axios) ? _this.$loquat.axios(param).then(res => {
                 try {
                   const execute = new Function('res', dataSource.responseFunc)(res)
                   _this.$set(_this.DIC, col.prop, responseDataAccept(execute, col.type))
@@ -152,7 +153,7 @@ export function designTransformPreview (_this) {
                 } catch (e) {
                   console.error(e)
                 }
-              })
+              }) : packages.logs('thirdPartyAxios')
             } else {
               request.interceptors.request.empty()
               dataSource.method !== 'GET' && request.interceptors.request.use(config => {
