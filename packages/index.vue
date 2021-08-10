@@ -1171,7 +1171,7 @@ export default {
     handlePreviewFormReset () {
       this.$refs.previewForm.resetFields()
     },
-    // 处理使用第三方axios禁用请求发送前
+    // 处理使用第三方axios重置请求发送前
     handleThirdPartyAxios (change) {
       if (change) this.$refs.requestFuncAce.setValue('return config;')
     }
