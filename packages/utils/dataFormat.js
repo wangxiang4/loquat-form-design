@@ -204,7 +204,7 @@ export function designTransformPreview (_this) {
       col.validateConfig.required && rules.push({ required: true, message: col.validateConfig.requiredMessage || `${col.label}必须填写` })
       if (col.validateConfig.type) {
         rules.push({ type: col.validateConfig.typeFormat, message: col.validateConfig.typeMessage || `${col.label}格式不正确` })
-        if (['number', 'integer', 'float'].includes(col.validateConfig.typeFormat)) col._type = 'number'
+        if (['number', 'integer', 'float'].includes(col.validateConfig.typeFormat) && hasOwnProperty(col, '_type')) col._type = 'number'
       }
       col.validateConfig.pattern && rules.push({ pattern: col.validateConfig.patternFormat, message: col.validateConfig.patternMessage || `${col.label}格式不匹配` })
       delete col.validateConfig
