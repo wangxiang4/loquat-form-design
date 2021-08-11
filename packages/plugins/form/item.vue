@@ -10,7 +10,7 @@
              :placeholder="column.placeholder || getPlaceholder(column)"
              :props="column.props || props"
              :size="column.size || size"
-             :type="type || column._type || column.type"
+             :type="type || column.type"
              v-on="events"
              @keyup.enter.native="enterChange"
   >
@@ -60,10 +60,6 @@ export default {
       default: () => {
         return {}
       }
-    },
-    eventScript: {
-      type: Array,
-      default: () => []
     }
   },
   data () {
@@ -77,14 +73,7 @@ export default {
       return this.column.params || {}
     },
     events () {
-      const events = this.$loquat.deepClone(this.column.events)
-      for (const key in events) {
-        if (events[key]) {
-          const event = this.eventScript.find(item => item.name === events[key])
-          events[key] = new Function(event.func)
-        } else delete events[key]
-      }
-      return events || {}
+      return this.column.events || {}
     }
   },
   watch: {

@@ -29,9 +29,9 @@ export default {
           {
             title: '警告',
             component: 'el-alert',
-            labelWidth: undefined,
+            label: '',
+            labelWidth: 0,
             icon: 'el-icon-warning',
-            tips: '看我：自定义事件怎么用？',
             params: {
               title: '警告警告警告警告',
               type: 'success'
@@ -44,10 +44,9 @@ export default {
           }
         ]
       }],
+      // 设置表单配置会覆盖掉内部的默认配置
       options: { column: [] }
     }
-  },
-  methods: {
   }
 }
 </script>

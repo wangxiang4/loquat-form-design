@@ -59,7 +59,7 @@
                        :ref="column.prop"
                        v-model="form[column.prop]"
                        :dic="DIC[column.prop]"
-                       :event-script="parentOption.eventScript"
+                       :type="column._type"
                        :column="column"
                        :props="parentOption.props"
                        :readonly="parentOption.readonly || column.readonly || readonly"

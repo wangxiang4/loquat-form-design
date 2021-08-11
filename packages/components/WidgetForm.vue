@@ -37,13 +37,13 @@
                                 :label-position="column.labelPosition || data.labelPosition || labelPosition"
                   >
                     <loquat-form-item :column="$loquat.deepClone(column)"
-                                      :event-script="data.eventScript"
                                       :props="data.props"
                                       :value="column.value"
                                       :readonly="data.readonly || column.readonly"
                                       :disabled="data.disabled || column.disabled"
                                       :size="data.size || column.size"
                                       :dic="column.dicData"
+                                      :type="column._type"
                     />
                   </el-form-item>
                   <div v-if="selectWidget.prop == column.prop" class="widget-view-action">

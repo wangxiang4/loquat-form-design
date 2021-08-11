@@ -5,6 +5,7 @@ export default [
       type: 'input',
       label: '单行文本',
       icon: 'icon-input',
+      _type: undefined,
       labelWidth: undefined,
       placeholder: undefined,
       value: undefined,

@@ -37,7 +37,7 @@ export default {
 }
 
 /** 查找多个属性如果发现全部不存在返回失败 **/
-function hasOwnMultiProperty (data, path) {
+export function hasOwnMultiProperty (data, path) {
   if (getObjType(path) !== 'array') return false
   for (const item of path) {
     if (hasOwnProperty(data, item)) return true
@@ -46,7 +46,7 @@ function hasOwnMultiProperty (data, path) {
 }
 
 /** 采用正则对路径进行解析查找对象key **/
-function hasOwnProperty (object, path) {
+export function hasOwnProperty (object, path) {
   if (validateNull(object) && validateNull(path)) return false
   if (getObjType(path) !== 'array') path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
   let index = 0

@@ -19,6 +19,7 @@ import {
 import { validateNull, setPx, deepClone, responseDataAccept } from './index'
 import request from '@utils/request'
 import packages from './packages'
+import { hasOwnProperty } from '@/directive/hasPerm'
 
 /** 获取控件提示 **/
 export function getPlaceholder (item) {
@@ -116,14 +117,25 @@ export function getComponentConfig (type, component) {
 /** 设计器配置转换设计器预览配置 **/
 export function designTransformPreview (_this) {
   const data = deepClone(_this.option)
-  const autoDataSource = data.dataSource && data.dataSource.filter(item => item.auto) || []
+  const eventScript = data.eventScript
+  const autoDataSource = data.dataSource && data.dataSource.filter(item => item.auto)
   for (let i = 0; i < data.column.length; ++i) {
     const col = data.column[i]
+    // 处理动作转换数据
+    if (!validateNull(col.events)) {
+      for (const key in col.events) {
+        if (typeof col.events[key] !== 'string') continue
+        if (col.events[key]) {
+          const event = eventScript && eventScript.find(item => item.name === col.events[key])
+          col.events[key] = new Function(event?.func)
+        } else delete col.events[key]
+      }
+    }
     // 处理远端请求数据转换
     if (MULTIPLE_LIST.includes(col.type)) {
       if (col.static) _this.$set(_this.DIC, col.prop, col.dicData)
       if (!col.static) {
-        const dataSource = autoDataSource.find(item => item.key === col.remoteDataSource)
+        const dataSource = autoDataSource && autoDataSource.find(item => item.key === col.remoteDataSource)
         // 提取请求参数
         const param = (({ url, method, headers, params }) => {
           return { url, method, headers, params }
@@ -188,7 +200,7 @@ export function designTransformPreview (_this) {
     // 校验规则处理
     if (col.validateConfig) {
       const rules = []
-      col._type = undefined
+      if (hasOwnProperty(col, '_type')) col._type = undefined
       col.validateConfig.required && rules.push({ required: true, message: col.validateConfig.requiredMessage || `${col.label}必须填写` })
       if (col.validateConfig.type) {
         rules.push({ type: col.validateConfig.typeFormat, message: col.validateConfig.typeMessage || `${col.label}格式不正确` })
@@ -199,6 +211,8 @@ export function designTransformPreview (_this) {
       col.rules = rules
     }
   }
+  delete data.dataSource
+  delete data.eventScript
   return data
 }
 
