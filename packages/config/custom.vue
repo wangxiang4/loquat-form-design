@@ -17,6 +17,14 @@
         style="height: 300px"
       />
     </el-form-item>
+    <el-form-item label="自定义事件">
+      <ace-editor
+        v-model="events"
+        lang="javascript"
+        theme="textmate"
+        style="height: 300px"
+      />
+    </el-form-item>
   </div>
 </template>
 <script>
@@ -33,6 +41,7 @@ export default {
   data () {
     return {
       params: beautifier(this.data.params) || '{}',
+      events: beautifier(this.data.events) || '{}',
       originData: this.$loquat.deepClone(this.data)
     }
   },
@@ -45,9 +54,19 @@ export default {
     'data.params' (val) {
       this.params = beautifier(val) || '{}'
     },
+    'data.events' (val) {
+      this.events = beautifier(val) || '{}'
+    },
     params (val) {
       try {
         this.data.params = eval('(' + val + ')')
+      } catch (e) {
+        // console.error(e)
+      }
+    },
+    events (val) {
+      try {
+        this.data.events = eval('(' + val + ')')
       } catch (e) {
         // console.error(e)
       }

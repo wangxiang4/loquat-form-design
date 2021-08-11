@@ -29,9 +29,9 @@ export default {
           {
             title: '警告',
             component: 'el-alert',
+            icon: 'el-icon-warning',
             label: '',
             labelWidth: 0,
-            icon: 'el-icon-warning',
             params: {
               title: '警告警告警告警告',
               type: 'success'
