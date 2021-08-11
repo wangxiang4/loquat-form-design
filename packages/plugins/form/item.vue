@@ -1,21 +1,21 @@
 <template>
-  <component :is="getComponent(column.type, column.component)"
+  <component :is="getComponent(col.type, col.component)"
              ref="formItem"
              v-model="text"
-             v-bind="column"
-             :column="Object.assign(column, params)"
+             v-bind="col"
+             :column="Object.assign(col, params)"
              :dic="dic"
-             :disabled="column.disabled || disabled"
-             :readonly="column.readonly || readonly"
-             :placeholder="column.placeholder || getPlaceholder(column)"
-             :props="column.props || props"
-             :size="column.size || size"
-             :type="type || column.type"
+             :disabled="col.disabled || disabled"
+             :readonly="col.readonly || readonly"
+             :placeholder="col.placeholder || getPlaceholder(col)"
+             :props="col.props || props"
+             :size="col.size || size"
+             :type="type || col.type"
              v-on="events"
              @keyup.enter.native="enterChange"
   >
     <span v-if="params.html" v-html="params.html"/>
-    <template v-for="item in $scopedSlots[column.prop + 'Type'] ? [column] : []" slot-scope="scope">
+    <template v-for="item in $scopedSlots[col.prop + 'Type'] ? [col] : []" slot-scope="scope">
       <slot :name="item.prop + 'Type'" v-bind="scope"/>
     </template>
   </component>
@@ -60,6 +60,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    preview: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -69,11 +73,29 @@ export default {
     }
   },
   computed: {
+    col () {
+      const col = this.$loquat.deepClone(this.column)
+      // 排除表单设计时插件显示没有经过处理的报错字段
+      if (!this.preview) {
+        // 处理动作转换数据
+        delete col.events
+        // 处理远端请求数据转换
+        delete col.validateConfig
+        delete col.static
+        delete col.dicData
+        delete col.remoteDataSource
+        delete col.remoteType
+        delete col.remoteFunc
+        // 校验规则处理
+        delete col.remoteOption
+      }
+      return col
+    },
     params () {
-      return this.column.params || {}
+      return this.col.params || {}
     },
     events () {
-      return this.column.events || {}
+      return this.col.events || {}
     }
   },
   watch: {

@@ -36,7 +36,7 @@
                                 :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, labelWidth)"
                                 :label-position="column.labelPosition || data.labelPosition || labelPosition"
                   >
-                    <loquat-form-item :column="$loquat.deepClone(column)"
+                    <loquat-form-item :column="column"
                                       :props="data.props"
                                       :value="column.value"
                                       :readonly="data.readonly || column.readonly"
@@ -44,6 +44,7 @@
                                       :size="data.size || column.size"
                                       :dic="column.dicData"
                                       :type="column._type"
+                                      :preview="false"
                     />
                   </el-form-item>
                   <div v-if="selectWidget.prop == column.prop" class="widget-view-action">
