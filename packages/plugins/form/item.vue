@@ -80,14 +80,14 @@ export default {
         // 处理动作转换数据
         delete col.events
         // 处理远端请求数据转换
-        delete col.validateConfig
         delete col.static
         delete col.dicData
         delete col.remoteDataSource
         delete col.remoteType
         delete col.remoteFunc
-        // 校验规则处理
         delete col.remoteOption
+        // 校验规则处理
+        delete col.validateConfig
       }
       return col
     },
