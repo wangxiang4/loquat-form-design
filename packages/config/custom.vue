@@ -40,8 +40,8 @@ export default {
   },
   data () {
     return {
-      params: beautifier(this.data.params) || '',
-      events: beautifier(this.data.events) || ''
+      params: '',
+      events: ''
     }
   },
   computed: {
@@ -53,11 +53,17 @@ export default {
     }
   },
   watch: {
-    'data.params' (val) {
-      this.params = beautifier(val) || ''
+    'data.params': {
+      handler (val) {
+        this.params = beautifier(val) || ''
+      },
+      immediate: true
     },
-    'data.events' (val) {
-      this.events = beautifier(val) || ''
+    'data.events': {
+      handler (val) {
+        this.events = beautifier(val) || ''
+      },
+      immediate: true
     },
     params (val) {
       try {
