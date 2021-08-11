@@ -47,9 +47,6 @@ export default {
   computed: {
     style () {
       return this.data.style || {}
-    },
-    originData () {
-      return this.$loquat.deepClone(this.data)
     }
   },
   watch: {
