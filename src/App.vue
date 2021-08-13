@@ -35,7 +35,7 @@ export default {
               type: 'success'
             },
             events: {
-              close: () => {
+              close () {
                 console.log('alert关闭事件')
               }
             }

@@ -18,7 +18,7 @@
   "dependencies": {
     "js-beautify": "^1.14.0",
     "loquat-axios": "0.0.1",
-    "v-ace-editor": "^1.2.2",
+    "v-ace-editor": "^1.2.3",
     "vuedraggable": "^2.24.3"
   },
   "devDependencies": {

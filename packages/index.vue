@@ -23,8 +23,8 @@
               </draggable>
             </template>
           </div>
-          <template v-if="!$loquat.validateNull(customFields)">
-            <div v-for="(field, index) in customFields" :key="index + fields.length">
+          <template v-if="!$loquat.validateNull(getCustomFields)">
+            <div v-for="(field, index) in getCustomFields" :key="index + fields.length">
               <div class="field-title">{{ field.title }}</div>
               <draggable tag="ul"
                          :list="field.list"
@@ -599,8 +599,9 @@ import WidgetConfig from './components/WidgetConfig'
 import AceEditor from 'v-ace-editor'
 import beautifier from '@utils/jsonBeautifier'
 import clipboard from '@utils/clipboard'
-import { KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE, JS_EXECUTE_INCLUDE } from '@/global/variable'
-import { randomId } from '@utils'
+import codeBeautifier from 'js-beautify'
+import { KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE, JS_EXECUTE_INCLUDE, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
+import { randomId, getObjType } from '@utils'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 import request from '@utils/request'
 export default {
@@ -750,6 +751,21 @@ export default {
       } else {
         return `${this.asideRightWidth}px`
       }
+    },
+    getCustomFields () {
+      const customFields = this.$loquat.deepClone(this.customFields)
+      // 处理第三方传入的自定义属性与自定义事件代码美化
+      customFields.forEach(item => {
+        if (getObjType(item.list) === 'array') {
+          item.list.forEach(field => {
+            !this.$loquat.validateNull(field.params)
+              ? field.params = codeBeautifier.js(beautifier(field.params), BEAUTIFIER_DEFAULTS_CONF) : ''
+            !this.$loquat.validateNull(field.events)
+              ? field.events = codeBeautifier.js(beautifier(field.events), BEAUTIFIER_DEFAULTS_CONF) : ''
+          })
+        }
+      })
+      return customFields
     }
   },
   watch: {
