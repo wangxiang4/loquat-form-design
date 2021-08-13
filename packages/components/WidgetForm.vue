@@ -1,5 +1,5 @@
 <template>
-  <div :class="['widget-form-container', adapter]">
+  <div :class="['widget-form-container', adapter]" @contextmenu.prevent="">
     <el-form ref="widgetForm"
              :label-position="data.labelPosition || labelPosition"
              :label-width="$loquat.setPx(data.labelWidth, labelWidth)"

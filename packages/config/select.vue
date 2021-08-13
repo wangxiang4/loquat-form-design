@@ -47,22 +47,22 @@
                           clearable
                 />
                 <el-input v-if="data.showLabel"
+                          v-model="item.label"
                           style="width: 90px;"
                           size="mini"
                           clearable
-                          v-model="item.label"
                 />
               </el-checkbox>
               <i class="drag-item el-icon-s-operation"
                  style="font-size: 16px; margin: 0 5px; cursor: move;"
               />
-              <el-button @click="handleRemoveFields(index)"
-                         circle
+              <el-button circle
                          plain
                          type="danger"
                          size="mini"
                          icon="el-icon-minus"
                          style="padding: 4px;margin-left: 5px;"
+                         @click="handleRemoveFields(index)"
               />
             </li>
           </draggable>
@@ -76,28 +76,28 @@
           >
             <li v-for="(item, index) in data.dicData" :key="index">
               <el-radio :label="item.value" style="margin-right: 3px;">
-                <el-input :style="{ width: data.showLabel ? '90px' : '180px' }"
+                <el-input v-model="item.value"
+                          :style="{ width: data.showLabel ? '90px' : '180px' }"
                           size="mini"
                           clearable
-                          v-model="item.value"
                 />
                 <el-input v-if="data.showLabel"
+                          v-model="item.label"
                           style="width: 90px"
                           size="mini"
                           clearable
-                          v-model="item.label"
                 />
               </el-radio>
               <i class="drag-item el-icon-s-operation"
                  style="font-size: 16px; margin: 0 5px; cursor: move;"
               />
-              <el-button @click="handleRemoveFields(index)"
-                         circle
+              <el-button circle
                          plain
                          type="danger"
                          size="mini"
                          icon="el-icon-minus"
                          style="padding: 4px;margin-left: 5px;"
+                         @click="handleRemoveFields(index)"
               />
             </li>
           </draggable>
@@ -173,7 +173,7 @@
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData, optionPerm, 1]" label="操作属性">
       <el-row>
-        <el-col :span="10" v-loquat-has-perm="[originData, 'multiple']">
+        <el-col v-loquat-has-perm="[originData, 'multiple']" :span="10">
           <el-checkbox v-model="data.multiple"
                        @change="(check) => {
                          check ? $set(data, 'value', []) : $set(data, 'value', '')
@@ -181,28 +181,28 @@
                        }"
           >是否多选</el-checkbox>
         </el-col>
-        <el-col :span="12" v-loquat-has-perm="[originData, 'filterable']">
+        <el-col v-loquat-has-perm="[originData, 'filterable']" :span="12">
           <el-checkbox v-model="data.filterable">是否可搜索</el-checkbox>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="10" v-loquat-has-perm="[originData, 'hide']">
+        <el-col v-loquat-has-perm="[originData, 'hide']" :span="10">
           <el-checkbox v-model="data.hide">隐藏</el-checkbox>
         </el-col>
-        <el-col :span="12" v-loquat-has-perm="[originData, 'disabled']">
+        <el-col v-loquat-has-perm="[originData, 'disabled']" :span="12">
           <el-checkbox v-model="data.disabled">禁用</el-checkbox>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="10" v-loquat-has-perm="[originData, 'hideLabel']">
+        <el-col v-loquat-has-perm="[originData, 'hideLabel']" :span="10">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
         </el-col>
-        <el-col :span="12" v-loquat-has-perm="[originData, 'clearable']">
+        <el-col v-loquat-has-perm="[originData, 'clearable']" :span="12">
           <el-checkbox v-model="data.clearable">显示清除按钮</el-checkbox>
         </el-col>
       </el-row>
       <el-row>
-        <el-col v-if="data.multiple" :span="10" v-loquat-has-perm="[originData, 'drag']">
+        <el-col v-if="data.multiple" v-loquat-has-perm="[originData, 'drag']" :span="10">
           <el-checkbox v-model="data.drag">是否可拖拽</el-checkbox>
         </el-col>
       </el-row>
@@ -274,6 +274,7 @@ import { EVENT_DICT } from '@/global/variable'
 
 export default {
   name: 'Select',
+  components: { Draggable },
   props: {
     data: {
       type: Object
@@ -282,7 +283,6 @@ export default {
       type: Object
     }
   },
-  components: { Draggable },
   data () {
     return {
       EVENT_DICT,
