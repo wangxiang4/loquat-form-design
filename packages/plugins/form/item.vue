@@ -102,7 +102,6 @@ export default {
           getObjType(parse) === 'object' ? params = parse : params = {}
         } catch (e) {
           params = {}
-          console.warn('自定义参数数据解析失败,请调整参数后重试')
         }
       }
       return params
@@ -117,7 +116,6 @@ export default {
           getObjType(parse) === 'object' ? events = parse : events = {}
         } catch (e) {
           events = {}
-          console.warn('自定义事件数据解析失败,请调整参数后重试')
         }
       }
       return events
