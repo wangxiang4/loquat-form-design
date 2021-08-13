@@ -756,14 +756,12 @@ export default {
       const customFields = this.$loquat.deepClone(this.customFields)
       // 处理第三方传入的自定义属性与自定义事件代码美化
       customFields.forEach(item => {
-        if (getObjType(item.list) === 'array') {
-          item.list.forEach(field => {
-            !this.$loquat.validateNull(field.params)
-              ? field.params = codeBeautifier.js(beautifier(field.params), BEAUTIFIER_DEFAULTS_CONF) : ''
-            !this.$loquat.validateNull(field.events)
-              ? field.events = codeBeautifier.js(beautifier(field.events), BEAUTIFIER_DEFAULTS_CONF) : ''
-          })
-        }
+        getObjType(item.list) === 'array' && item.list.forEach(field => {
+          !this.$loquat.validateNull(field.params)
+            ? field.params = codeBeautifier.js(beautifier(field.params), BEAUTIFIER_DEFAULTS_CONF) : ''
+          !this.$loquat.validateNull(field.events)
+            ? field.events = codeBeautifier.js(beautifier(field.events), BEAUTIFIER_DEFAULTS_CONF) : ''
+        })
       })
       return customFields
     }
