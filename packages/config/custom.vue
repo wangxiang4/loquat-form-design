@@ -29,7 +29,8 @@
 </template>
 <script>
 import AceEditor from 'v-ace-editor'
-import beautifier from '@utils/jsonBeautifier'
+import beautifier from 'js-beautify'
+import { BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
 export default {
   name: 'Custom',
   components: { AceEditor },
@@ -52,29 +53,25 @@ export default {
   watch: {
     'data.params': {
       handler (val) {
-        this.params = beautifier(val) || ''
+        if (typeof val === 'string') {
+          this.params = beautifier.js(val, BEAUTIFIER_DEFAULTS_CONF)
+        }
       },
       immediate: true
     },
     'data.events': {
       handler (val) {
-        this.events = beautifier(val) || ''
+        if (typeof val === 'string') {
+          this.events = beautifier.js(val, BEAUTIFIER_DEFAULTS_CONF)
+        }
       },
       immediate: true
     },
     params (val) {
-      try {
-        this.data.params = eval('(' + val + ')')
-      } catch (e) {
-        console.warn('自定义参数数据解析失败,请调整参数后重试')
-      }
+      this.data.params = val
     },
     events (val) {
-      try {
-        this.data.events = eval('(' + val + ')')
-      } catch (e) {
-        console.warn('自定义事件数据解析失败,请调整参数后重试')
-      }
+      this.data.events = val
     }
   }
 }
