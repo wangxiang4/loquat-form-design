@@ -97,8 +97,8 @@ export default {
       // 解析自定义属性配置
       if (getObjType(params) === 'string') {
         try {
-          const window = eval // 将this指向window
-          const parse = window('(' + params + ')')
+          const execute = eval // 将this指向window
+          const parse = execute('(' + params + ')')
           getObjType(parse) === 'object' ? params = parse : params = {}
         } catch (e) {
           params = {}
@@ -111,8 +111,8 @@ export default {
       // 解析自定义事件配置
       if (getObjType(events) === 'string') {
         try {
-          const window = eval // 将this指向window
-          const parse = window('(' + events + ')')
+          const execute = eval // 将this指向window
+          const parse = execute('(' + events + ')')
           getObjType(parse) === 'object' ? events = parse : events = {}
         } catch (e) {
           events = {}
