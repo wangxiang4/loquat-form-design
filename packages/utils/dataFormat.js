@@ -102,9 +102,9 @@ export function clearVal (obj, list = []) {
 
 /** 获取配置组件名称 **/
 export function getComponentConfig (type, component) {
-  if ((!type || component) && type != 'ueditor') return KEY_COMPONENT_CONFIG_NAME_LINE + 'custom'
+  if ((!type || component) && type !== 'ueditor') return KEY_COMPONENT_CONFIG_NAME_LINE + 'custom'
   let result = 'input'
-  if ([undefined, 'input', 'password', 'url'].includes(type)) result = 'input'
+  if ([undefined, 'input', 'password', 'url', 'textarea'].includes(type)) result = 'input'
   else if (DATE_LIST.includes(type)) result = 'date'
   else if (['array', 'img'].includes(type)) result = 'array'
   else if (['tree', 'cascader'].includes(type)) result = 'tree'

@@ -33,6 +33,32 @@ export default [
         blur: ''
       }
     }, {
+      type: 'textarea',
+      label: '多行文本',
+      icon: 'icon-textarea',
+      labelWidth: undefined,
+      placeholder: undefined,
+      value: undefined,
+      style: {
+        width: '100%'
+      },
+      maxlength: undefined,
+      customClass: [],
+      readonly: false,
+      showWordLimit: false,
+      disabled: false,
+      hide: false,
+      hideLabel: false,
+      validateConfig: {
+        required: false,
+        pattern: false
+      },
+      events: {
+        change: '',
+        focus: '',
+        blur: ''
+      }
+    }, {
       type: 'select',
       label: '下拉选择',
       icon: 'icon-select',

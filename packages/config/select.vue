@@ -286,7 +286,6 @@ export default {
   data () {
     return {
       EVENT_DICT,
-      originData: this.$loquat.deepClone(this.data),
       optionPerm: [
         'multiple',
         'filterable',
@@ -313,6 +312,9 @@ export default {
     }
   },
   computed: {
+    originData () {
+      return this.$loquat.deepClone(this.data)
+    },
     validateConfig () {
       return this.data.validateConfig || {}
     },

@@ -22,17 +22,19 @@
 import { getObjType, validateNull, pathFormat } from '@utils'
 
 export default {
-  inserted (el, binding, vNode) {
+  inserted (el, binding) {
     const { value } = binding
     if (getObjType(value) !== 'array' && getObjType(value) !== 'object') throw new Error(`请设置校验权限标签值"`)
     const [data, path, multi] = deconstruction(value)
-    if (multi && !hasOwnMultiProperty(data, path)) {
-      vNode.componentInstance && vNode.componentInstance.$destroy()
-      el.parentNode && el.parentNode.removeChild(el)
-    } else if (!multi && !hasOwnProperty(data, path)) {
-      vNode.componentInstance && vNode.componentInstance.$destroy()
-      el.parentNode && el.parentNode.removeChild(el)
-    }
+    if (multi && !hasOwnMultiProperty(data, path)) el.hidden = true
+    else if (!multi && !hasOwnProperty(data, path)) el.hidden = true
+  },
+  update (el, binding) {
+    const { value } = binding
+    const [data, path, multi] = deconstruction(value)
+    if (multi && !hasOwnMultiProperty(data, path)) el.hidden = true
+    else if (!multi && !hasOwnProperty(data, path)) el.hidden = true
+    else el.hidden = false
   }
 }
 
