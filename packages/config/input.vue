@@ -61,26 +61,22 @@
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData, operationPerm, 1]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[originData, 'readonly']" :span="operationLeftWidth">
+        <el-col v-loquat-has-perm="[originData, 'readonly']" :span="operationComputedSpan">
           <el-checkbox v-model="data.readonly">只读</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'showWordLimit']" :span="operationRightWidth">
+        <el-col v-loquat-has-perm="[originData, 'showWordLimit']" :span="operationComputedSpan">
           <el-checkbox v-model="data.showWordLimit">显示计数</el-checkbox>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col v-loquat-has-perm="[originData, 'disabled']" :span="operationLeftWidth">
+        <el-col v-loquat-has-perm="[originData, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="data.disabled">禁用</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'showPassword']" :span="operationRightWidth">
+        <el-col v-loquat-has-perm="[originData, 'showPassword']" :span="operationComputedSpan">
           <el-checkbox v-model="data.showPassword">显示密码</el-checkbox>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col v-loquat-has-perm="[originData, 'hide']" :span="operationLeftWidth">
+        <el-col v-loquat-has-perm="[originData, 'hide']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hide">隐藏</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'hideLabel']" :span="operationRightWidth">
+        <el-col v-loquat-has-perm="[originData, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
         </el-col>
       </el-row>
@@ -198,8 +194,7 @@ export default {
   data () {
     return {
       EVENT_DICT,
-      operationLeftWidth: 10,
-      operationRightWidth: 12,
+      operationComputedSpan: 24 / 2,
       operationPerm: [
         'readonly',
         'showWordLimit',

@@ -173,7 +173,7 @@
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData, operationPerm, 1]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[originData, 'multiple']" :span="operationLeftWidth">
+        <el-col v-loquat-has-perm="[originData, 'multiple']" :span="operationComputedSpan">
           <el-checkbox v-model="data.multiple"
                        @change="(check) => {
                          check ? $set(data, 'value', []) : $set(data, 'value', '')
@@ -181,28 +181,22 @@
                        }"
           >是否多选</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'filterable']" :span="operationRightWidth">
+        <el-col v-loquat-has-perm="[originData, 'filterable']" :span="operationComputedSpan">
           <el-checkbox v-model="data.filterable">是否可搜索</el-checkbox>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col v-loquat-has-perm="[originData, 'hide']" :span="operationLeftWidth">
+        <el-col v-loquat-has-perm="[originData, 'hide']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hide">隐藏</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'disabled']" :span="operationRightWidth">
+        <el-col v-loquat-has-perm="[originData, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="data.disabled">禁用</el-checkbox>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col v-loquat-has-perm="[originData, 'hideLabel']" :span="operationLeftWidth">
+        <el-col v-loquat-has-perm="[originData, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'clearable']" :span="operationRightWidth">
+        <el-col v-loquat-has-perm="[originData, 'clearable']" :span="operationComputedSpan">
           <el-checkbox v-model="data.clearable">显示清除按钮</el-checkbox>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col v-if="data.multiple" v-loquat-has-perm="[originData, 'drag']" :span="operationLeftWidth">
+        <el-col v-if="data.multiple" v-loquat-has-perm="[originData, 'drag']" :span="operationComputedSpan">
           <el-checkbox v-model="data.drag">是否可拖拽</el-checkbox>
         </el-col>
       </el-row>
@@ -286,8 +280,7 @@ export default {
   data () {
     return {
       EVENT_DICT,
-      operationLeftWidth: 10,
-      operationRightWidth: 12,
+      operationComputedSpan: 24 / 2,
       operationPerm: [
         'multiple',
         'filterable',
