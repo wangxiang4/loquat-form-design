@@ -59,25 +59,31 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, optionPerm, 1]" label="操作属性">
-      <el-checkbox v-model="data.readonly"
-                   v-loquat-has-perm="[originData, 'readonly']"
-      >只读</el-checkbox>
-      <el-checkbox v-model="data.showWordLimit"
-                   v-loquat-has-perm="[originData, 'showWordLimit']"
-      >显示计数</el-checkbox>
-      <el-checkbox v-model="data.disabled"
-                   v-loquat-has-perm="[originData, 'disabled']"
-      >禁用</el-checkbox>
-      <el-checkbox v-model="data.showPassword"
-                   v-loquat-has-perm="[originData, 'showPassword']"
-      >显示密码</el-checkbox>
-      <el-checkbox v-model="data.hide"
-                   v-loquat-has-perm="[originData, 'hide']"
-      >隐藏</el-checkbox>
-      <el-checkbox v-model="data.hideLabel"
-                   v-loquat-has-perm="[originData, 'hideLabel']"
-      >隐藏标签</el-checkbox>
+    <el-form-item v-loquat-has-perm="[originData, operationPerm, 1]" label="操作属性">
+      <el-row>
+        <el-col v-loquat-has-perm="[originData, 'readonly']" :span="operationLeftWidth">
+          <el-checkbox v-model="data.readonly">只读</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[originData, 'showWordLimit']" :span="operationRightWidth">
+          <el-checkbox v-model="data.showWordLimit">显示计数</el-checkbox>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col v-loquat-has-perm="[originData, 'disabled']" :span="operationLeftWidth">
+          <el-checkbox v-model="data.disabled">禁用</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[originData, 'showPassword']" :span="operationRightWidth">
+          <el-checkbox v-model="data.showPassword">显示密码</el-checkbox>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col v-loquat-has-perm="[originData, 'hide']" :span="operationLeftWidth">
+          <el-checkbox v-model="data.hide">隐藏</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[originData, 'hideLabel']" :span="operationRightWidth">
+          <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
+        </el-col>
+      </el-row>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData, validatePerm, 1]" label="校验">
       <div v-loquat-has-perm="[originData, 'validateConfig.required']" class="validate-block">
@@ -192,7 +198,9 @@ export default {
   data () {
     return {
       EVENT_DICT,
-      optionPerm: [
+      operationLeftWidth: 10,
+      operationRightWidth: 12,
+      operationPerm: [
         'readonly',
         'showWordLimit',
         'disabled',

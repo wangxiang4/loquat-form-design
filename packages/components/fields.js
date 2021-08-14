@@ -42,10 +42,8 @@ export default [
       style: {
         width: '100%'
       },
-      maxlength: undefined,
       customClass: [],
       readonly: false,
-      showWordLimit: false,
       disabled: false,
       hide: false,
       hideLabel: false,
