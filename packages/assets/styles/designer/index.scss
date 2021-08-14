@@ -145,7 +145,7 @@ $primary-ghost-color: #67C23A;
 
   .widget-form-container {
     position: absolute;
-    overflow-x: auto;
+    overflow-x: hidden;
 
     &.pc {
       border: 0;
