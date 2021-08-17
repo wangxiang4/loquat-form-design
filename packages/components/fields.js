@@ -57,6 +57,32 @@ export default [
         blur: ''
       }
     }, {
+      type: 'number',
+      label: '计数器',
+      icon: 'icon-number',
+      labelWidth: undefined,
+      value: 0,
+      style: {
+        width: '100%'
+      },
+      minRows: 0,
+      maxRows: 9,
+      step: 1,
+      precision: 0,
+      controlsPosition: '',
+      customClass: [],
+      disabled: false,
+      hide: false,
+      hideLabel: false,
+      validateConfig: {
+        required: false
+      },
+      events: {
+        change: '',
+        focus: '',
+        blur: ''
+      }
+    }, {
       type: 'select',
       label: '下拉选择',
       icon: 'icon-select',

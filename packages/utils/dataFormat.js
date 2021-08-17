@@ -109,7 +109,9 @@ export function getComponentConfig (type, component) {
   else if (['array', 'img'].includes(type)) result = 'array'
   else if (['tree', 'cascader'].includes(type)) result = 'tree'
   else if (['radio', 'checkbox', 'select'].includes(type)) result = 'select'
-  else result = type
+  else if (INPUT_LIST.includes(type)) {
+    result = 'input-' + type
+  } else result = type
 
   return KEY_COMPONENT_CONFIG_NAME_LINE + result
 }

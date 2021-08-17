@@ -3,13 +3,15 @@ import input from './input'
 import form from './form'
 import formItem from './form/item'
 import select from './select'
+import inputNumber from './input-number'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
   empty,
   input,
   form,
   formItem,
-  select
+  select,
+  inputNumber
 ]
 
 const Plugins = {
