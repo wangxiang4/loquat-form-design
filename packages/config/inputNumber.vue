@@ -144,7 +144,6 @@ export default {
       EVENT_DICT,
       operationComputedSpan: 24 / 2,
       operationPerm: [
-        'readonly',
         'disabled',
         'hide',
         'hideLabel'

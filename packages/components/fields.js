@@ -123,6 +123,95 @@ export default [
         focus: '',
         blur: ''
       }
+    }, {
+      type: 'radio',
+      label: '单选框',
+      icon: 'icon-radio',
+      value: undefined,
+      disabled: false,
+      validateConfig: {
+        required: false
+      },
+      showLabel: false,
+      style: {
+        width: '100%'
+      },
+      dicData: [
+        {
+          value: 'Option 1',
+          label: 'Option 1'
+        },
+        {
+          value: 'Option 2',
+          label: 'Option 2'
+        },
+        {
+          value: 'Option 3',
+          label: 'Option 3'
+        }
+      ],
+      static: true,
+      remoteType: undefined,
+      remoteOption: 'optionDefault',
+      props: {
+        label: 'label',
+        value: 'value'
+      },
+      remoteFunc: 'funcDefault',
+      customClass: [],
+      labelWidth: undefined,
+      hideLabel: false,
+      hide: false,
+      inline: false,
+      remoteDataSource: undefined,
+      events: {
+        change: '',
+        focus: '',
+        blur: ''
+      }
+    }, {
+      type: 'checkbox',
+      label: '多选框',
+      icon: 'icon-check-box',
+      value: [],
+      disabled: false,
+      validateConfig: {
+        required: false
+      },
+      showLabel: false,
+      style: {
+        width: '100%'
+      },
+      static: true,
+      dicData: [
+        {
+          value: 'Option 1'
+        },
+        {
+          value: 'Option 2'
+        },
+        {
+          value: 'Option 3'
+        }
+      ],
+      remoteType: undefined,
+      remoteOption: 'optionDefault',
+      props: {
+        label: 'label',
+        value: 'value'
+      },
+      remoteFunc: 'funcDefault',
+      customClass: [],
+      labelWidth: undefined,
+      hideLabel: false,
+      hide: false,
+      inline: false,
+      remoteDataSource: undefined,
+      events: {
+        change: '',
+        focus: '',
+        blur: ''
+      }
     }]
   },
   {

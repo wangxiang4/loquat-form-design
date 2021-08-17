@@ -4,6 +4,8 @@ import form from './form'
 import formItem from './form/item'
 import select from './select'
 import inputNumber from './input-number'
+import radio from './radio'
+import checkbox from './checkbox'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
   empty,
@@ -11,7 +13,9 @@ const components = [
   form,
   formItem,
   select,
-  inputNumber
+  inputNumber,
+  radio,
+  checkbox
 ]
 
 const Plugins = {

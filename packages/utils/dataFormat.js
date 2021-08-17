@@ -108,7 +108,6 @@ export function getComponentConfig (type, component) {
   else if (DATE_LIST.includes(type)) result = 'date'
   else if (['array', 'img'].includes(type)) result = 'array'
   else if (['tree', 'cascader'].includes(type)) result = 'tree'
-  else if (['radio', 'checkbox', 'select'].includes(type)) result = 'select'
   else if (INPUT_LIST.includes(type)) {
     result = 'input-' + type
   } else result = type
@@ -134,7 +133,7 @@ export function designTransformPreview (_this) {
       }
     }
     // 处理远端请求数据转换
-    if (MULTIPLE_LIST.includes(col.type)) {
+    if (SELECT_LIST.includes(col.type)) {
       if (col.static) _this.$set(_this.DIC, col.prop, col.dicData)
       if (!col.static) {
         const dataSource = autoDataSource && autoDataSource.find(item => item.key === col.remoteDataSource)
