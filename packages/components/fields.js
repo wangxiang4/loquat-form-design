@@ -165,9 +165,7 @@ export default [
       inline: false,
       remoteDataSource: undefined,
       events: {
-        change: '',
-        focus: '',
-        blur: ''
+        change: ''
       }
     }, {
       type: 'checkbox',
@@ -209,9 +207,7 @@ export default [
       all: false,
       remoteDataSource: undefined,
       events: {
-        change: '',
-        focus: '',
-        blur: ''
+        change: ''
       }
     }]
   },
