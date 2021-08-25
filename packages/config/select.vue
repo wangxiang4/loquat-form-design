@@ -22,10 +22,6 @@
       <el-radio-group v-model="data.static"
                       size="mini"
                       style="margin-bottom: 10px;"
-                      @change="(check) => {
-                        check ? $set(data, 'value', false) : $set(data, 'showLabel', true)
-                        data.multiple ? $set(data, 'value', []) : $set(data, 'value', '')
-                      }"
       >
         <el-radio-button :label="true">静态数据</el-radio-button>
         <el-radio-button :label="false">动态数据</el-radio-button>

@@ -141,6 +141,8 @@ export function designTransformPreview (_this) {
         const param = (({ url, method, headers, params }) => {
           return { url, method, headers, params }
         })(dataSource || {})
+        // 远端请求显示标签不能手动控制,设置显示
+        if (hasOwnProperty(col, 'showLabel')) col.showLabel = true
         switch (col.remoteType) {
           case 'option' :
             if (_this.$loquat.remoteOption[col.remoteOption]) _this.$set(_this.DIC, col.prop, _this.$loquat.remoteOption[col.remoteOption])
