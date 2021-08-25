@@ -14,7 +14,7 @@
                  :border="border"
                  :readonly="readonly"
                  :disabled="item[disabledKey]"
-      >{{item[labelKey]}}</component>
+      >{{showLabel ? item[labelKey] : item[valueKey]}}</component>
     </el-radio-group>
   </div>
 </template>
@@ -64,6 +64,10 @@ export default {
     inline: {
       type: Boolean,
       default: false
+    },
+    showLabel: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -95,7 +99,9 @@ export default {
       }
     }
   },
-  created () { },
+  created () {
+    this.initVal()
+  },
   mounted () { },
   methods: {
     initVal () {

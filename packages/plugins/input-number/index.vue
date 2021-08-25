@@ -86,7 +86,9 @@ export default {
       }
     }
   },
-  created () { },
+  created () {
+    this.initVal()
+  },
   mounted () { },
   methods: {
     initVal () {

@@ -18,12 +18,13 @@
       <component :is="componentName"
                  v-for="(item,index) in dic"
                  :key="index"
+                 :style="inlineStyle"
                  :label="item[valueKey]"
                  :border="border"
                  :size="size"
                  :readonly="readonly"
                  :disabled="item[disabledKey]"
-      >{{ item[labelKey] }}</component>
+      >{{showLabel ? item[labelKey] : item[valueKey]}}</component>
     </el-checkbox-group>
   </div>
 </template>
@@ -34,7 +35,10 @@ import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Checkbox',
   props: {
-    value: {},
+    value: {
+      type: Array,
+      default: () => []
+    },
     all: {
       type: Boolean,
       default: false
@@ -76,6 +80,10 @@ export default {
     },
     max: {
       type: Number
+    },
+    showLabel: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -121,7 +129,9 @@ export default {
       }
     }
   },
-  created () { },
+  created () {
+    this.initVal()
+  },
   mounted () { },
   methods: {
     initVal () {
