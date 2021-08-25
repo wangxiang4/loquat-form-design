@@ -11,7 +11,6 @@
                    :max="maxRows"
                    :step="step"
                    :clearable="disabled?false:clearable"
-                   :readonly="readonly"
                    :controls-position="controlsPosition"
                    :controls="controls"
                    :label="placeholder"
@@ -59,10 +58,6 @@ export default {
     clearable: {
       type: Boolean,
       default: true
-    },
-    readonly: {
-      type: Boolean,
-      default: false
     },
     disabled: {
       type: Boolean,

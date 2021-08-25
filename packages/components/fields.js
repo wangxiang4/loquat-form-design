@@ -206,6 +206,7 @@ export default [
       hideLabel: false,
       hide: false,
       inline: false,
+      all: false,
       remoteDataSource: undefined,
       events: {
         change: '',

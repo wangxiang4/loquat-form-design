@@ -143,6 +143,9 @@
         <el-col v-loquat-has-perm="[originData, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
         </el-col>
+        <el-col v-loquat-has-perm="[originData, 'all']" :span="operationComputedSpan">
+          <el-checkbox v-model="data.all">全选</el-checkbox>
+        </el-col>
       </el-row>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData, 'validateConfig.required']" label="校验">

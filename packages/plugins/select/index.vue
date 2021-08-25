@@ -8,7 +8,6 @@
              :multiple="multiple"
              :filterable="remote?true:filterable"
              :remote="remote"
-             :readonly="readonly"
              :no-match-text="noMatchText"
              :no-data-text="noDataText"
              :remote-method="handleRemoteMethod"
@@ -127,10 +126,6 @@ export default {
       default: ''
     },
     multiple: {
-      type: Boolean,
-      default: false
-    },
-    readonly: {
       type: Boolean,
       default: false
     },

@@ -22,7 +22,6 @@
                  :label="item[valueKey]"
                  :border="border"
                  :size="size"
-                 :readonly="readonly"
                  :disabled="item[disabledKey]"
       >{{showLabel ? item[labelKey] : item[valueKey]}}</component>
     </el-checkbox-group>
@@ -60,10 +59,6 @@ export default {
       default: () => []
     },
     border: {
-      type: Boolean,
-      default: false
-    },
-    readonly: {
       type: Boolean,
       default: false
     },
