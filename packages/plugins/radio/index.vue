@@ -5,6 +5,7 @@
                     @change="handleChange"
                     @click.native="handleClick"
                     :disabled="disabled"
+                    :style="customizeStyle"
     >
       <component :is="componentName"
                  v-for="(item,index) in dic"
@@ -68,6 +69,9 @@ export default {
     showLabel: {
       type: Boolean,
       default: true
+    },
+    customizeStyle: {
+      type: Object
     }
   },
   computed: {

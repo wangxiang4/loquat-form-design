@@ -82,10 +82,7 @@ export default {
       default: false
     },
     customizeStyle: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+      type: Object
     },
     isRange: {
       type: Boolean,

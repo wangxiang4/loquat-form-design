@@ -18,6 +18,7 @@
              :allow-create="allowCreate"
              :default-first-option="defaultFirstOption"
              :disabled="disabled"
+             :style="customizeStyle"
              @focus="handleFocus"
              @blur="handleBlur"
              @click.native="handleClick"
@@ -159,6 +160,9 @@ export default {
     showLabel: {
       type: Boolean,
       default: true
+    },
+    customizeStyle: {
+      type: Object
     }
   },
   data () {

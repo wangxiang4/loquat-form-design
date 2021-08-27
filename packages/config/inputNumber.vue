@@ -9,8 +9,8 @@
     <el-form-item v-loquat-has-perm="[originData, 'labelWidth']" label="标签宽度">
       <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'style.width']" label="组件宽度" >
-      <el-input v-model="style.width" placeholder="请输入组件宽度" clearable/>
+    <el-form-item v-loquat-has-perm="[originData, 'customizeStyle.width']" label="组件宽度" >
+      <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData, 'minRows']" label="最小值">
       <el-input-number v-model.number="data.minRows"/>
@@ -157,8 +157,8 @@ export default {
     validateConfig () {
       return this.data.validateConfig || {}
     },
-    style () {
-      return this.data.style || {}
+    customizeStyle () {
+      return this.data.customizeStyle || {}
     },
     events () {
       const clone = this.$loquat.deepClone(this.data.events)

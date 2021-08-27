@@ -15,6 +15,7 @@
             :show-word-limit="showWordLimit"
             :disabled="disabled"
             :autocomplete="autocomplete"
+            :style="customizeStyle"
             @click.native="handleClick"
             @keyup.enter="isSearch?appendClick():''"
             @focus="handleFocus"
@@ -113,6 +114,9 @@ export default {
     type: {
       type: String,
       default: ''
+    },
+    customizeStyle: {
+      type: Object
     }
   },
   data () {

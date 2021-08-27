@@ -12,7 +12,7 @@ export default [
       prepend: '',
       append: '',
       maxlength: '',
-      style: {
+      customizeStyle: {
         width: '100%'
       },
       customClass: [],
@@ -39,7 +39,7 @@ export default [
       labelWidth: '',
       placeholder: '',
       value: '',
-      style: {
+      customizeStyle: {
         width: '100%'
       },
       customClass: [],
@@ -62,7 +62,7 @@ export default [
       icon: 'icon-number',
       labelWidth: '',
       value: 0,
-      style: {
+      customizeStyle: {
         width: '100%'
       },
       minRows: 0,
@@ -95,7 +95,7 @@ export default [
         required: false
       },
       showLabel: false,
-      style: {
+      customizeStyle: {
         width: '100%'
       },
       dicData: [
@@ -133,7 +133,7 @@ export default [
         required: false
       },
       showLabel: false,
-      style: {
+      customizeStyle: {
         width: '100%'
       },
       dicData: [
@@ -177,7 +177,7 @@ export default [
         required: false
       },
       showLabel: false,
-      style: {
+      customizeStyle: {
         width: '100%'
       },
       static: true,

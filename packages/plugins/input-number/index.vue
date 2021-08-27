@@ -15,6 +15,7 @@
                    :controls="controls"
                    :label="placeholder"
                    :disabled="disabled"
+                   :style="customizeStyle"
   />
 </template>
 
@@ -62,6 +63,9 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    customizeStyle: {
+      type: Object
     }
   },
   data () {
