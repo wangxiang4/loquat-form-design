@@ -37,12 +37,20 @@
       <el-input v-model="data.format" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData, 'value']" label="默认值">
-      <el-time-picker v-model="data.value"
+      <el-time-picker v-if="!data.isRange"
+                      v-model="data.value"
+                      key="1"
                       style="width: 100%;"
-                      clearable
                       :arrow-control="data.arrowControl"
                       :value-format="data.format"
-                      :is-range="data.isRange"
+      />
+      <el-time-picker v-if="data.isRange"
+                      v-model="data.value"
+                      key="2"
+                      style="width: 100%;"
+                      is-range
+                      :arrow-control="data.arrowControl"
+                      :value-format="data.format"
       />
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData, 'customClass']" label="自定义Class">
