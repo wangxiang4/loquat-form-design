@@ -3,6 +3,8 @@
  *
  * @description: 设置一些通用的数据格式,表单,以及其他地方
  *
+ * todo: 等插件加完,要把组件LIST,比如ARRAY_LIST,MULTIPLE_LISTd等等需要统一
+ *
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-15
