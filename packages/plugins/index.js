@@ -6,6 +6,7 @@ import select from './select'
 import inputNumber from './input-number'
 import radio from './radio'
 import checkbox from './checkbox'
+import time from './time'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
   empty,
@@ -15,7 +16,8 @@ const components = [
   select,
   inputNumber,
   radio,
-  checkbox
+  checkbox,
+  time
 ]
 
 const Plugins = {

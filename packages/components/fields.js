@@ -5,16 +5,16 @@ export default [
       type: 'input',
       label: '单行文本',
       icon: 'icon-input',
-      _type: undefined,
-      labelWidth: undefined,
-      placeholder: undefined,
-      value: undefined,
-      prepend: undefined,
-      append: undefined,
+      _type: '',
+      labelWidth: '',
+      placeholder: '',
+      value: '',
+      prepend: '',
+      append: '',
+      maxlength: '',
       style: {
         width: '100%'
       },
-      maxlength: undefined,
       customClass: [],
       readonly: false,
       showWordLimit: false,
@@ -36,9 +36,9 @@ export default [
       type: 'textarea',
       label: '多行文本',
       icon: 'icon-textarea',
-      labelWidth: undefined,
-      placeholder: undefined,
-      value: undefined,
+      labelWidth: '',
+      placeholder: '',
+      value: '',
       style: {
         width: '100%'
       },
@@ -60,7 +60,7 @@ export default [
       type: 'number',
       label: '计数器',
       icon: 'icon-number',
-      labelWidth: undefined,
+      labelWidth: '',
       value: 0,
       style: {
         width: '100%'
@@ -86,11 +86,11 @@ export default [
       type: 'select',
       label: '下拉选择',
       icon: 'icon-select',
-      value: undefined,
+      value: '',
       multiple: false,
       disabled: false,
       clearable: false,
-      placeholder: undefined,
+      placeholder: '',
       validateConfig: {
         required: false
       },
@@ -104,7 +104,7 @@ export default [
         { label: '选项三', value: 'Option 3' }
       ],
       static: true,
-      remoteType: undefined,
+      remoteType: '',
       remoteOption: 'optionDefault',
       filterable: false,
       props: {
@@ -113,10 +113,10 @@ export default [
       },
       remoteFunc: 'funcDefault',
       customClass: [],
-      labelWidth: undefined,
+      labelWidth: '',
       hideLabel: false,
       hide: false,
-      remoteDataSource: undefined,
+      remoteDataSource: '',
       drag: false,
       events: {
         change: '',
@@ -127,7 +127,7 @@ export default [
       type: 'radio',
       label: '单选框',
       icon: 'icon-radio',
-      value: undefined,
+      value: '',
       disabled: false,
       validateConfig: {
         required: false
@@ -151,7 +151,7 @@ export default [
         }
       ],
       static: true,
-      remoteType: undefined,
+      remoteType: '',
       remoteOption: 'optionDefault',
       props: {
         label: 'label',
@@ -159,11 +159,11 @@ export default [
       },
       remoteFunc: 'funcDefault',
       customClass: [],
-      labelWidth: undefined,
+      labelWidth: '',
       hideLabel: false,
       hide: false,
       inline: false,
-      remoteDataSource: undefined,
+      remoteDataSource: '',
       events: {
         change: ''
       }
@@ -192,7 +192,7 @@ export default [
           value: 'Option 3'
         }
       ],
-      remoteType: undefined,
+      remoteType: '',
       remoteOption: 'optionDefault',
       props: {
         label: 'label',
@@ -200,14 +200,45 @@ export default [
       },
       remoteFunc: 'funcDefault',
       customClass: [],
-      labelWidth: undefined,
+      labelWidth: '',
       hideLabel: false,
       hide: false,
       inline: false,
       all: false,
-      remoteDataSource: undefined,
+      remoteDataSource: '',
       events: {
         change: ''
+      }
+    }, {
+      type: 'time',
+      label: '时间选择器',
+      icon: 'icon-time',
+      value: '',
+      format: 'HH:mm:ss',
+      valueFormat: 'HH:mm:ss',
+      labelWidth: '',
+      readonly: false,
+      disabled: false,
+      isRange: false,
+      editable: true,
+      clearable: true,
+      arrowControl: true,
+      placeholder: '',
+      startPlaceholder: '',
+      endPlaceholder: '',
+      customizeStyle: {
+        width: '100%'
+      },
+      validateConfig: {
+        required: false
+      },
+      hideLabel: false,
+      hide: false,
+      customClass: [],
+      events: {
+        change: '',
+        focus: '',
+        blur: ''
       }
     }]
   },

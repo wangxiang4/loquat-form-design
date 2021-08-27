@@ -10,7 +10,6 @@
 import {
   ARRAY_LIST,
   ARRAY_VALUE_LIST,
-  DATE_LIST,
   INPUT_LIST,
   KEY_COMPONENT_NAME_LINE,
   MULTIPLE_LIST, SELECT_LIST,
@@ -51,8 +50,6 @@ export function getComponent (type, component) {
     result = 'array'
   } else if (['time', 'timerange'].includes(type)) {
     result = 'time'
-  } else if (DATE_LIST.includes(type)) {
-    result = 'date'
   } else if (['password', 'textarea', 'search'].includes(type)) {
     result = 'input'
   } else if (INPUT_LIST.includes(type)) {
@@ -105,7 +102,6 @@ export function getComponentConfig (type, component) {
   if ((!type || component) && type !== 'ueditor') return KEY_COMPONENT_CONFIG_NAME_LINE + 'custom'
   let result = 'input'
   if ([undefined, 'input', 'password', 'url', 'textarea'].includes(type)) result = 'input'
-  else if (DATE_LIST.includes(type)) result = 'date'
   else if (['array', 'img'].includes(type)) result = 'array'
   else if (['tree', 'cascader'].includes(type)) result = 'tree'
   else if (INPUT_LIST.includes(type)) {
@@ -203,7 +199,7 @@ export function designTransformPreview (_this) {
     // 校验规则处理
     if (col.validateConfig) {
       const rules = []
-      if (hasOwnProperty(col, '_type')) col._type = undefined
+      if (hasOwnProperty(col, '_type')) col._type = ''
       col.validateConfig.required && rules.push({ required: true, message: col.validateConfig.requiredMessage || `${col.label}必须填写` })
       if (col.validateConfig.type) {
         rules.push({ type: col.validateConfig.typeFormat, message: col.validateConfig.typeMessage || `${col.label}格式不正确` })
