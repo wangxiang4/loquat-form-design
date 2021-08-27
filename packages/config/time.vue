@@ -18,24 +18,22 @@
                 placeholder="占位内容"
       />
     </el-form-item>
-    <template v-else>
-      <el-form-item v-loquat-has-perm="[originData, 'startPlaceholder']" label="开始时间占位内容">
-        <el-input v-model="data.startPlaceholder"
-                  clearable
-                  placeholder="开始时间占位内容"
-        />
-      </el-form-item>
-      <el-form-item v-loquat-has-perm="[originData, 'endPlaceholder']" label="结束时间占位内容">
-        <el-input v-model="data.endPlaceholder"
-                  clearable
-                  placeholder="结束时间占位内容"
-        />
-      </el-form-item>
-    </template>
-    <el-form-item v-loquat-has-perm="[originData, 'valueFormat']" label="设置值格式">
+    <el-form-item v-if="data.isRange" v-loquat-has-perm="[originData, 'startPlaceholder']" label="开始时间占位内容">
+      <el-input v-model="data.startPlaceholder"
+                clearable
+                placeholder="开始时间占位内容"
+      />
+    </el-form-item>
+    <el-form-item v-if="data.isRange" v-loquat-has-perm="[originData, 'endPlaceholder']" label="结束时间占位内容">
+      <el-input v-model="data.endPlaceholder"
+                clearable
+                placeholder="结束时间占位内容"
+      />
+    </el-form-item>
+    <el-form-item v-loquat-has-perm="[originData, 'valueFormat']" label="值格式化">
       <el-input v-model="data.valueFormat" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'format']" label="设置输入框显示格式">
+    <el-form-item v-loquat-has-perm="[originData, 'format']" label="显示格式化">
       <el-input v-model="data.format" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[originData, 'value']" label="默认值">
