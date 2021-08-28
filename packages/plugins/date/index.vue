@@ -1,23 +1,26 @@
 <template>
-  <div class="loquat-time">
-    <el-time-picker v-model="text"
-                    :is-range="isRange"
+  <div class="loquat-date">
+    <el-date-picker v-model="text"
+                    :type="type"
                     :size="size"
-                    :style="customizeStyle"
                     :editable="editable"
+                    :unlink-panels="unlinkPanels"
+                    :readonly="readonly"
+                    :style="customizeStyle"
                     :default-value="defaultValue"
+                    :default-time="defaultTime"
                     :range-separator="rangeSeparator"
-                    :arrow-control="arrowControl"
                     :start-placeholder="startPlaceholder"
                     :end-placeholder="endPlaceholder"
                     :format="format"
-                    :readonly="readonly"
                     :clearable="disabled?false:clearable"
+                    :picker-options="pickerOptions"
                     :value-format="valueFormat"
                     :placeholder="placeholder"
-                    @change="handleChange"
-                    @click.native="handleClick"
                     :disabled="disabled"
+                    @blur="handleBlur"
+                    @focus="handleFocus"
+                    @click.native="handleClick"
     />
   </div>
 </template>
@@ -25,20 +28,24 @@
 <script>
 import { bindEvent } from '@utils/plugins'
 export default {
-  name: 'Time',
+  name: 'Date',
   props: {
     value: {},
     editable: {
       type: Boolean,
       default: true
     },
+    unlinkPanels: {
+      type: Boolean,
+      default: false
+    },
     startPlaceholder: {
       type: String,
-      default: '开始时间'
+      default: '开始日期'
     },
     endPlaceholder: {
       type: String,
-      default: '结束时间'
+      default: '结束日期'
     },
     rangeSeparator: {
       type: String
@@ -46,14 +53,20 @@ export default {
     defaultValue: {
       type: [String, Array]
     },
-    valueFormat: {
-      default: ''
+    defaultTime: {
+      type: [String, Array]
     },
-    arrowControl: {
-      type: Boolean,
-      default: false
+    pickerOptions: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
     type: {
+      type: String,
+      default: 'date'
+    },
+    valueFormat: {
       default: ''
     },
     format: {
@@ -81,10 +94,6 @@ export default {
     },
     customizeStyle: {
       type: Object
-    },
-    isRange: {
-      type: Boolean,
-      default: false
     }
   },
   data () {
@@ -95,10 +104,6 @@ export default {
   watch: {
     text (n) {
       this.handleChange(n)
-      // 当范围选择数组为空时设置位字符串,因为el-time-picker内部规则,空数组会出问题
-      if (Array.isArray(this.text) && this.$loquat.validateNull(this.text)) {
-        this.text = this.text.join(',')
-      }
     },
     value: {
       handler () {
@@ -114,13 +119,20 @@ export default {
     initVal () {
       this.text = this.value
     },
-    handleChange (value) {
-      this.$emit('input', value)
-      this.$emit('change', value)
+    handleBlur (event) {
+      bindEvent(this, 'blur', event)
+    },
+    handleFocus (event) {
+      bindEvent(this, 'focus', event)
     },
     handleClick (event) {
       bindEvent(this, 'click', event)
+    },
+    handleChange (value) {
+      this.$emit('input', value)
+      this.$emit('change', value)
     }
   }
 }
 </script>
+

@@ -13,6 +13,7 @@ import {
   ARRAY_LIST,
   ARRAY_VALUE_LIST,
   INPUT_LIST,
+  DATE_LIST,
   KEY_COMPONENT_NAME_LINE,
   MULTIPLE_LIST, SELECT_LIST,
   KEY_COMPONENT_CONFIG_NAME_LINE
@@ -52,6 +53,8 @@ export function getComponent (type, component) {
     result = 'array'
   } else if (['time', 'timerange'].includes(type)) {
     result = 'time'
+  } else if (DATE_LIST.includes(type)) {
+    result = 'date'
   } else if (['password', 'textarea', 'search'].includes(type)) {
     result = 'input'
   } else if (INPUT_LIST.includes(type)) {
@@ -103,13 +106,21 @@ export function clearVal (obj, list = []) {
 export function getComponentConfig (type, component) {
   if ((!type || component) && type !== 'ueditor') return KEY_COMPONENT_CONFIG_NAME_LINE + 'custom'
   let result = 'input'
-  if ([undefined, 'input', 'password', 'url', 'textarea'].includes(type)) result = 'input'
-  else if (['array', 'img'].includes(type)) result = 'array'
-  else if (['tree', 'cascader'].includes(type)) result = 'tree'
-  else if (INPUT_LIST.includes(type)) {
+  if ([undefined, 'input', 'password', 'url', 'textarea'].includes(type)) {
+    result = 'input'
+  } else if (['array', 'img'].includes(type)) {
+    result = 'array'
+  } else if (['tree', 'cascader'].includes(type)) {
+    result = 'tree'
+  } else if (['time', 'timerange'].includes(type)) {
+    result = 'time'
+  } else if (DATE_LIST.includes(type)) {
+    result = 'date'
+  } else if (INPUT_LIST.includes(type)) {
     result = 'input-' + type
-  } else result = type
-
+  } else {
+    result = type
+  }
   return KEY_COMPONENT_CONFIG_NAME_LINE + result
 }
 

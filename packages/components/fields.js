@@ -240,6 +240,35 @@ export default [
         focus: '',
         blur: ''
       }
+    }, {
+      type: 'date',
+      label: '日期选择器',
+      icon: 'icon-date',
+      value: '',
+      format: 'yyyy-MM-dd',
+      valueFormat: 'yyyy-MM-dd',
+      labelWidth: '',
+      readonly: false,
+      disabled: false,
+      editable: true,
+      clearable: true,
+      hideLabel: false,
+      hide: false,
+      placeholder: '',
+      startPlaceholder: '',
+      endPlaceholder: '',
+      customizeStyle: {
+        width: '100%'
+      },
+      validateConfig: {
+        required: false
+      },
+      customClass: [],
+      events: {
+        change: '',
+        focus: '',
+        blur: ''
+      }
     }]
   },
   {

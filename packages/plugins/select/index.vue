@@ -171,7 +171,8 @@ export default {
       netDic: [],
       loading: false,
       text: undefined,
-      propsDefault: DIC_PROPS
+      propsDefault: DIC_PROPS,
+      first: false
     }
   },
   computed: {
@@ -212,7 +213,12 @@ export default {
     },
     text: {
       handler (n) {
-        this.handleChange(n)
+        if (this.first || !this.$loquat.validateNull(n)) {
+          this.first = true
+          this.handleChange(n)
+        } else {
+          this.first = true
+        }
       }
     }
   },

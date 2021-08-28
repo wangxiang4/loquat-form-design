@@ -5,6 +5,7 @@ import inputNumber from './inputNumber'
 import radio from './radio'
 import checkbox from './checkbox'
 import time from './time'
+import date from './date'
 import { KEY_COMPONENT_CONFIG_NAME } from '@/global/variable'
 const components = [
   Custom,
@@ -13,7 +14,8 @@ const components = [
   inputNumber,
   radio,
   checkbox,
-  time
+  time,
+  date
 ]
 
 const Config = {

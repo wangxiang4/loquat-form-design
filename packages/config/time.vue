@@ -3,46 +3,47 @@
     <el-form-item label="字段标识">
       <el-input v-model="data.prop" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'label']" label="标题">
+    <el-form-item v-loquat-has-perm="[data, 'label']" label="标题">
       <el-input v-model="data.label" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'labelWidth']" label="标签宽度">
+    <el-form-item v-loquat-has-perm="[data, 'labelWidth']" label="标签宽度">
       <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'customizeStyle.width']" label="组件宽度" >
+    <el-form-item v-loquat-has-perm="[data, 'customizeStyle.width']" label="组件宽度" >
       <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
-    <el-form-item v-if="!data.isRange" v-loquat-has-perm="[originData, 'placeholder']" label="占位内容">
+    <el-form-item v-if="!data.isRange" v-loquat-has-perm="[data, 'placeholder']" label="占位内容">
       <el-input v-model="data.placeholder"
                 clearable
                 placeholder="占位内容"
       />
     </el-form-item>
-    <el-form-item v-if="data.isRange" v-loquat-has-perm="[originData, 'startPlaceholder']" label="开始时间占位内容">
+    <el-form-item v-if="data.isRange" v-loquat-has-perm="[data, 'startPlaceholder']" label="开始时间占位内容">
       <el-input v-model="data.startPlaceholder"
                 clearable
                 placeholder="开始时间占位内容"
       />
     </el-form-item>
-    <el-form-item v-if="data.isRange" v-loquat-has-perm="[originData, 'endPlaceholder']" label="结束时间占位内容">
+    <el-form-item v-if="data.isRange" v-loquat-has-perm="[data, 'endPlaceholder']" label="结束时间占位内容">
       <el-input v-model="data.endPlaceholder"
                 clearable
                 placeholder="结束时间占位内容"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'valueFormat']" label="值格式化">
+    <el-form-item v-loquat-has-perm="[data, 'valueFormat']" label="值格式化">
       <el-input v-model="data.valueFormat" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'format']" label="显示格式化">
+    <el-form-item v-loquat-has-perm="[data, 'format']" label="显示格式化">
       <el-input v-model="data.format" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'value']" label="默认值">
+    <el-form-item v-loquat-has-perm="[data, 'value']" label="默认值">
       <el-time-picker v-if="!data.isRange"
                       v-model="data.value"
                       key="1"
                       style="width: 100%;"
                       :arrow-control="data.arrowControl"
-                      :value-format="data.format"
+                      :value-format="data.valueFormat"
+                      :format="data.format"
       />
       <el-time-picker v-if="data.isRange"
                       v-model="data.value"
@@ -50,56 +51,57 @@
                       style="width: 100%;"
                       is-range
                       :arrow-control="data.arrowControl"
-                      :value-format="data.format"
+                      :value-format="data.valueFormat"
+                      :format="data.format"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'customClass']" label="自定义Class">
-      <el-select v-model="data.customClass"
-                 style="width: 100%;"
-                 filterable
-                 allow-create
-                 default-first-option
-                 multiple
-                 laceholder="请选择"
+    <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
+      <loquat-select v-model="data.customClass"
+                     style="width: 100%;"
+                     filterable
+                     allow-create
+                     default-first-option
+                     multiple
+                     laceholder="请选择"
       >
         <el-option v-for="item in home.styleSheetsArray"
                    :key="item"
                    :label="item"
                    :value="item"
         />
-      </el-select>
+      </loquat-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[data, operationPerm, 1]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[originData, 'readonly']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[data, 'readonly']" :span="operationComputedSpan">
           <el-checkbox v-model="data.readonly">只读</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'disabled']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[data, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="data.disabled">禁用</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'hide']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[data, 'hide']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hide">隐藏</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'hideLabel']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[data, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'editable']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[data, 'editable']" :span="operationComputedSpan">
           <el-checkbox v-model="data.editable">文本框可输入</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'isRange']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[data, 'isRange']" :span="operationComputedSpan">
           <el-checkbox v-model="data.isRange"
                        @change="$set(data, 'value', '')"
           >是否为范围选择</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'clearable']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[data, 'clearable']" :span="operationComputedSpan">
           <el-checkbox v-model="data.clearable">显示清除按钮</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[originData, 'arrowControl']" :span="24">
+        <el-col v-loquat-has-perm="[data, 'arrowControl']" :span="24">
           <el-checkbox v-model="data.arrowControl">使用箭头进行时间选择</el-checkbox>
         </el-col>
       </el-row>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'validateConfig.required']" label="校验">
+    <el-form-item v-loquat-has-perm="[data, 'validateConfig.required']" label="校验">
       <div class="validate-block">
         <el-checkbox v-model="validateConfig.required">必填</el-checkbox>
         <el-input v-show="validateConfig.required"
@@ -110,7 +112,7 @@
         />
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[originData, 'events']" label="动作设置">
+    <el-form-item v-loquat-has-perm="[data, 'events']" label="动作设置">
       <div class="event-panel-config">
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
@@ -189,9 +191,6 @@ export default {
     }
   },
   computed: {
-    originData () {
-      return this.$loquat.deepClone(this.data)
-    },
     validateConfig () {
       return this.data.validateConfig || {}
     },
