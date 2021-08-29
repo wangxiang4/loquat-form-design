@@ -119,6 +119,7 @@
         <el-col v-loquat-has-perm="[data, 'timestamp']" :span="operationComputedSpan">
           <el-checkbox v-model="data.timestamp"
                        @change="(check) => {
+                         $set(data, 'value', '')
                          check || $set(data, 'valueFormat', handleFormatType(data.type,0))
                        }"
           >是否获取时间戳</el-checkbox>
