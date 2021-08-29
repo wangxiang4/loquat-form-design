@@ -254,6 +254,7 @@ export default [
       clearable: true,
       hideLabel: false,
       hide: false,
+      timestamp: false,
       placeholder: '',
       startPlaceholder: '',
       endPlaceholder: '',

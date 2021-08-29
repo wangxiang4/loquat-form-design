@@ -13,7 +13,15 @@
       <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'type']" label="显示类型" >
-      <el-select v-model="data.type" clearable style="width: 100%;">
+      <el-select v-model="data.type"
+                 clearable
+                 style="width: 100%;"
+                 @change="() => {
+                   $set(data, 'value', '')
+                   $set(data, 'format', handleFormatType(data.type,1))
+                   $set(data, 'valueFormat', handleFormatType(data.type,0))
+                 }"
+      >
         <el-option value="year"/>
         <el-option value="month"/>
         <el-option value="date"/>
@@ -42,7 +50,14 @@
       />
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'valueFormat']" label="值格式化">
-      <el-input v-model="data.valueFormat" clearable/>
+      <el-input v-if="!data.timestamp"
+                v-model="data.valueFormat"
+                clearable
+      />
+      <el-input v-else
+                :value="$set(data, 'valueFormat', 'timestamp')"
+                :disabled="true"
+      />
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'format']" label="显示格式化">
       <el-input v-model="data.format" clearable/>
@@ -100,6 +115,13 @@
         </el-col>
         <el-col v-loquat-has-perm="[data, 'clearable']" :span="operationComputedSpan">
           <el-checkbox v-model="data.clearable">显示清除按钮</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[data, 'timestamp']" :span="operationComputedSpan">
+          <el-checkbox v-model="data.timestamp"
+                       @change="(check) => {
+                         check || $set(data, 'valueFormat', handleFormatType(data.type,0))
+                       }"
+          >是否获取时间戳</el-checkbox>
         </el-col>
       </el-row>
     </el-form-item>
@@ -201,6 +223,27 @@ export default {
       const clone = this.$loquat.deepClone(this.data.events)
       for (const val in clone) this.$loquat.validateNull(clone[val]) && delete clone[val]
       return clone
+    }
+  },
+  methods: {
+    // 获取格式类型,可以通过设置选择显示格式(1)或值格式(0)
+    handleFormatType (type, option) {
+      switch (type) {
+        case 'year':
+          return option ? 'yyyy' : 'yyyy'
+        case 'week':
+          return option ? 'yyyy 第 WW 周' : 'yyyy-MM-dd HH:mm:ss'
+        case 'month':
+        case 'monthrange':
+          return option ? 'yyyy-MM' : 'yyyy-MM'
+        case 'date':
+        case 'dates':
+        case 'daterange':
+          return option ? 'yyyy-MM-dd' : 'yyyy-MM-dd'
+        case 'datetime':
+        case 'datetimerange':
+          return option ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd HH:mm:ss'
+      }
     }
   }
 }
