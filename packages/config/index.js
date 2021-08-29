@@ -7,6 +7,7 @@ import checkbox from './checkbox'
 import time from './time'
 import date from './date'
 import rate from './rate'
+import color from './inputColor'
 import { KEY_COMPONENT_CONFIG_NAME } from '@/global/variable'
 const components = [
   Custom,
@@ -17,7 +18,8 @@ const components = [
   checkbox,
   time,
   date,
-  rate
+  rate,
+  color
 ]
 
 const Config = {

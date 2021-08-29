@@ -9,6 +9,7 @@ import checkbox from './checkbox'
 import time from './time'
 import date from './date'
 import rate from './rate'
+import color from './input-color'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
   empty,
@@ -21,7 +22,8 @@ const components = [
   checkbox,
   time,
   date,
-  rate
+  rate,
+  color
 ]
 
 const Plugins = {

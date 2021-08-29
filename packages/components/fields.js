@@ -289,6 +289,23 @@ export default [
       events: {
         change: ''
       }
+    }, {
+      type: 'color',
+      label: '颜色选择器',
+      icon: 'icon-color',
+      value: '',
+      labelWidth: '',
+      showAlpha: false,
+      disabled: false,
+      hideLabel: false,
+      hide: false,
+      validateConfig: {
+        required: false
+      },
+      customClass: [],
+      events: {
+        change: ''
+      }
     }]
   },
   {
