@@ -1,5 +1,5 @@
-import Custom from './custom'
-import Input from './input'
+import custom from './custom'
+import input from './input'
 import select from './select'
 import inputNumber from './input-number'
 import radio from './radio'
@@ -8,11 +8,11 @@ import time from './time'
 import date from './date'
 import rate from './rate'
 import color from './input-color'
-import _switch from './switch'
+import Switch from './switch'
 import { KEY_COMPONENT_CONFIG_NAME } from '@/global/variable'
 const components = [
-  Custom,
-  Input,
+  custom,
+  input,
   select,
   inputNumber,
   radio,
@@ -21,7 +21,7 @@ const components = [
   date,
   rate,
   color,
-  _switch
+  Switch
 ]
 
 const Config = {

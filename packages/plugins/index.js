@@ -10,7 +10,7 @@ import time from './time'
 import date from './date'
 import rate from './rate'
 import color from './input-color'
-import _switch from './switch'
+import Switch from './switch'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
   empty,
@@ -25,7 +25,7 @@ const components = [
   date,
   rate,
   color,
-  _switch
+  Switch
 ]
 
 const Plugins = {
