@@ -11,17 +11,19 @@
              :show-input="showInput"
              :marks="marks"
              :format-tooltip="formatTooltip"
-             @click.native="handleClick"></el-slider>
+             @click.native="handleClick"
+  />
 </template>
 
 <script>
-import create from "core/create";
-import props from "../../core/common/props.js";
-import event from "../../core/common/event.js";
-export default create({
-  name: "slider",
-  mixins: [props(), event()],
+import { bindEvent } from '@utils/plugins'
+export default {
+  name: 'Slider',
   props: {
+    value: {
+      type: Number,
+      default: 0
+    },
     step: {
       type: Number
     },
@@ -51,7 +53,44 @@ export default create({
       default: false
     },
     formatTooltip: Function,
-    height: String
+    height: String,
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      text: undefined
+    }
+  },
+  watch: {
+    text: {
+      handler (n) {
+        this.handleChange(n)
+      }
+    },
+    value: {
+      handler () {
+        this.initVal()
+      }
+    }
+  },
+  created () {
+    this.initVal()
+  },
+  mounted () { },
+  methods: {
+    initVal () {
+      this.text = this.value
+    },
+    handleClick (event) {
+      bindEvent(this, 'click', event)
+    },
+    handleChange (value) {
+      this.$emit('input', value)
+      this.$emit('change', value)
+    }
   }
-});
+}
 </script>

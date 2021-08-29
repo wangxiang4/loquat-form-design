@@ -294,6 +294,9 @@ export default [
       label: '颜色选择器',
       icon: 'icon-color',
       value: '',
+      customizeStyle: {
+        width: '100%'
+      },
       labelWidth: '',
       showAlpha: false,
       disabled: false,
@@ -315,6 +318,29 @@ export default [
       disabled: false,
       hideLabel: false,
       hide: false,
+      validateConfig: {
+        required: false
+      },
+      customClass: [],
+      events: {
+        change: ''
+      }
+    }, {
+      type: 'slider',
+      label: '滑块',
+      icon: 'icon-slider',
+      value: 0,
+      labelWidth: '',
+      customizeStyle: {
+        width: '100%'
+      },
+      min: 0,
+      max: 100,
+      step: 1,
+      disabled: false,
+      hideLabel: false,
+      hide: false,
+      showInput: false,
       validateConfig: {
         required: false
       },
