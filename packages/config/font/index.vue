@@ -31,7 +31,11 @@
       </el-select>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'value']" label="默认值">
-      <el-input v-model="data.value" clearable/>
+      <el-input v-model="data.value"
+                type="textarea"
+                :rows="5"
+                clearable
+      />
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
       <loquat-select v-model="data.customClass"
