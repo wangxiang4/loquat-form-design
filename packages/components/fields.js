@@ -306,6 +306,22 @@ export default [
       events: {
         change: ''
       }
+    }, {
+      type: 'switch',
+      label: '开关',
+      icon: 'icon-switch',
+      value: false,
+      labelWidth: '',
+      disabled: false,
+      hideLabel: false,
+      hide: false,
+      validateConfig: {
+        required: false
+      },
+      customClass: [],
+      events: {
+        change: ''
+      }
     }]
   },
   {

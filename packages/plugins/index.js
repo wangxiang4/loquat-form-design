@@ -10,6 +10,7 @@ import time from './time'
 import date from './date'
 import rate from './rate'
 import color from './input-color'
+import _switch from './switch'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
   empty,
@@ -23,7 +24,8 @@ const components = [
   time,
   date,
   rate,
-  color
+  color,
+  _switch
 ]
 
 const Plugins = {
@@ -32,7 +34,10 @@ const Plugins = {
     this.installed = true
 
     components.map(component => {
-      Vue.component(KEY_COMPONENT_NAME + component.name, component)
+      // 检查当前name是否有唯一标识,没有加上,确保注册组件唯一
+      (typeof component.name === 'string' && !component.name.includes(KEY_COMPONENT_NAME))
+        ? component.name = KEY_COMPONENT_NAME + component.name : ''
+      Vue.component(component.name, component)
     })
   }
 }
