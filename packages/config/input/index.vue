@@ -21,6 +21,8 @@
     <el-form-item v-loquat-has-perm="[data, 'value']" label="默认值">
       <el-input v-model="data.value"
                 clearable
+                :type="data.type"
+                :rows="5"
                 placeholder="默认值"
       />
     </el-form-item>
