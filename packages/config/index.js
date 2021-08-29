@@ -10,6 +10,7 @@ import rate from './rate'
 import color from './input-color'
 import Switch from './switch'
 import slider from './slider'
+import font from './font'
 import { KEY_COMPONENT_CONFIG_NAME } from '@/global/variable'
 const components = [
   custom,
@@ -23,7 +24,8 @@ const components = [
   rate,
   color,
   Switch,
-  slider
+  slider,
+  font
 ]
 
 const Config = {

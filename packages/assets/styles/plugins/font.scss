@@ -1,0 +1,99 @@
+.loquat-font {
+  $white-color: #fff;
+  $success-background-color: #f0f9eb;
+  $success-color: #67c23a;
+  $info-background-color: #f4f4f5;
+  $info-color: #909399;
+  $warning-background-color: #fdf6ec;
+  $warning-color: #e6a23c;
+  $error-background-color: #fef0f0;
+  $error-color: #f56c6c;
+  $tip-background-color: #ecf8ff;
+  $tip-color: #5e6d82;
+
+  width: 100%;
+  box-sizing: border-box;
+  &__success {
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &.is-light {
+      background-color: $success-background-color;
+      color: $success-color;
+    }
+
+    &.is-dark {
+      background-color: $success-color;
+      color: $white-color;
+    }
+  }
+
+  &__info {
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &.is-light {
+      background-color: $info-background-color;
+      color: $info-color;
+    }
+
+    &.is-dark {
+      background-color: $info-color;
+      color: $white-color
+    }
+  }
+
+  &__warning {
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &.is-light {
+      background-color: $warning-background-color;
+      color: $warning-color;
+    }
+
+    &.is-dark {
+      background-color: $warning-color;
+      color: $white-color;
+    }
+  }
+
+  &__error {
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &.is-light {
+      background-color: $error-background-color;
+      color: $error-color;
+    }
+
+    &.is-dark {
+      background-color: $error-color;
+      color: $white-color;
+    }
+  }
+
+  &__tip {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border-left: 5px solid #50bfff;
+
+    &.is-light {
+      background-color: $tip-background-color;
+      color: $tip-color;
+    }
+
+    &.is-dark {
+      background-color: $tip-color;
+      color: $white-color;
+    }
+  }
+
+  &.is-center {
+    justify-content: center;
+  }
+
+}
+
+
+

@@ -348,6 +348,18 @@ export default [
       events: {
         change: ''
       }
+    }, {
+      type: 'font',
+      label: '文字',
+      icon: 'icon-font',
+      value: 'This is a text',
+      effect: 'light',
+      effectType: 'default',
+      labelWidth: '',
+      center: false,
+      hideLabel: false,
+      hide: false,
+      customClass: []
     }]
   },
   {

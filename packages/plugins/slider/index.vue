@@ -11,6 +11,7 @@
              :show-input="showInput"
              :marks="marks"
              :format-tooltip="formatTooltip"
+             :style="customizeStyle"
              @click.native="handleClick"
   />
 </template>
@@ -57,6 +58,9 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    customizeStyle: {
+      type: Object
     }
   },
   data () {

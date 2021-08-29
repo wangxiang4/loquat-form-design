@@ -12,6 +12,7 @@ import rate from './rate'
 import color from './input-color'
 import Switch from './switch'
 import slider from './slider'
+import font from './font'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
   empty,
@@ -27,7 +28,8 @@ const components = [
   rate,
   color,
   Switch,
-  slider
+  slider,
+  font
 ]
 
 const Plugins = {
