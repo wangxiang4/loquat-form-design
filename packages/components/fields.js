@@ -270,6 +270,25 @@ export default [
         focus: '',
         blur: ''
       }
+    }, {
+      type: 'rate',
+      label: '评价',
+      icon: 'icon-score',
+      max: 5,
+      value: 0,
+      labelWidth: '',
+      showScore: false,
+      allowHalf: false,
+      disabled: false,
+      hideLabel: false,
+      hide: false,
+      validateConfig: {
+        required: false
+      },
+      customClass: [],
+      events: {
+        change: ''
+      }
     }]
   },
   {

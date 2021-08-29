@@ -1,0 +1,11 @@
+.loquat-rate {
+  .el-rate {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  &__empty {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+}
