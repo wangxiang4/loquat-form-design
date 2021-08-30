@@ -23,6 +23,7 @@
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'InputNumber',
+  inheritAttrs: false,
   props: {
     value: {},
     controls: {

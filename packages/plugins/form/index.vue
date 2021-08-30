@@ -91,6 +91,7 @@ import { randomId } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
 export default {
   name: 'Form',
+  inheritAttrs: false,
   components: { formItem },
   props: {
     reset: {

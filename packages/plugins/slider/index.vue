@@ -20,6 +20,7 @@
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Slider',
+  inheritAttrs: false,
   props: {
     value: {
       type: Number,

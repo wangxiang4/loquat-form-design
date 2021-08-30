@@ -13,6 +13,7 @@
 <script>
 export default {
   name: 'Empty',
+  inheritAttrs: false,
   props: {
     size: {
       type: String

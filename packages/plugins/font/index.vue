@@ -15,6 +15,7 @@
 <script>
 export default {
   name: 'Font',
+  inheritAttrs: false,
   props: {
     value: {},
     center: {

@@ -25,6 +25,7 @@
 <script>
 export default {
   name: 'InputColor',
+  inheritAttrs: false,
   props: {
     value: {},
     placeholder: {

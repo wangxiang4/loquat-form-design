@@ -20,6 +20,7 @@ import { DIC_PROPS } from '@/global/variable'
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Switch',
+  inheritAttrs: false,
   props: {
     value: {},
     dic: {

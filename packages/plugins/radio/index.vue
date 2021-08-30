@@ -25,6 +25,7 @@ import { bindEvent } from '@utils/plugins'
 import { DIC_PROPS } from '@/global/variable'
 export default {
   name: 'Radio',
+  inheritAttrs: false,
   data () {
     return {
       name: 'radio',

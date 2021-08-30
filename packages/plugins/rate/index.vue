@@ -33,6 +33,7 @@
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Rate',
+  inheritAttrs: false,
   props: {
     value: {
       type: Number,

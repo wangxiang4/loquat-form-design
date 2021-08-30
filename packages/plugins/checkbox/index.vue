@@ -34,6 +34,7 @@ import { DIC_PROPS } from '@/global/variable'
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Checkbox',
+  inheritAttrs: false,
   props: {
     value: {
       type: Array,

@@ -26,6 +26,7 @@
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Time',
+  inheritAttrs: false,
   props: {
     value: {},
     editable: {
