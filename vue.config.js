@@ -4,7 +4,9 @@ function resolve (dir) {
 }
 /** 标准横幅 **/
 const package = require('./package.json')
-const banner = `/* ${package.name} v${package.version} | (c) ${new Date().getFullYear()} by entfrm开发团队-王翔 Released under the MIT License.*/\n`
+const banner = `${package.name} v${package.version}
+(c) 2021-${new Date().getFullYear()} entfrm开发团队-王翔
+Released under the MIT License`
 
 module.exports =  {
 

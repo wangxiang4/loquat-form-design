@@ -177,7 +177,7 @@ export default {
     uploadError: Function,
     uploadAfter: Function,
     uploadBefore: Function,
-    uploadExceed: Function,
+    uploadExceed: Function
   },
   data () {
     return {
