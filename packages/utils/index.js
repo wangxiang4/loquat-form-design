@@ -161,3 +161,21 @@ export function responseDataAccept (data, type) {
   }
   return undefined
 }
+
+/** 将base64地址转换为文件 **/
+export function dataURLtoFile (dataUrl, filename) {
+  const arr = dataUrl.split(',')
+  // 获取Base64类型
+  const mime = arr[0].match(/:(.*?);/)[1]
+  // 解码Base64
+  const buffStr = atob(arr[1])
+  let n = buffStr.length
+  // 将二进制数据转换为utf-8
+  const utf8Arr = new Uint8Array(n)
+  while (n--) {
+    utf8Arr[n] = buffStr.charCodeAt(n)
+  }
+  return new File([utf8Arr], filename, {
+    type: mime
+  })
+}

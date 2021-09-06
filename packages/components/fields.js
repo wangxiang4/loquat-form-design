@@ -364,7 +364,30 @@ export default [
   },
   {
     title: '高级字段',
-    list: []
+    list: [{
+      type: 'upload',
+      label: '文件',
+      icon: 'icon-file-upload',
+      labelWidth: '',
+      customizeStyle: {
+        width: '100%'
+      },
+      showFileList: true,
+      multiple: true,
+      limit: 10,
+      uploadConfig: {},
+      canvasOption: {},
+      disabled: false,
+      hideLabel: false,
+      hide: false,
+      customClass: [],
+      validateConfig: {
+        required: false
+      },
+      events: {
+        change: ''
+      }
+    }]
   },
   {
     title: '布局字段',

@@ -15,6 +15,7 @@ import FormDesign from './index.vue'
 import permission from './directive'
 import { deepClone, setPx, validateNull, get } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
+import imagePreview from '@components/ImagePreview'
 
 export default {
   install (Vue, opts = {}) {
@@ -28,7 +29,14 @@ export default {
       get: get,
       axios: opts.axios || {},
       remoteOption: opts.remoteOption || {},
-      remoteFunc: opts.remoteFunc || {}
+      remoteFunc: opts.remoteFunc || {},
+      typeList: {
+        img: /\.(gif|jpg|jpeg|png|GIF|JPG|PNG)/,
+        video: /\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|ogg|mp4)/
+      },
+      imagePreview: imagePreview(Vue),
+      qiniu: {},
+      ali: {}
     }
     Vue.component(KEY_COMPONENT_NAME + FormDesign.name, FormDesign)
   }

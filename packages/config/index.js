@@ -11,6 +11,7 @@ import color from './input-color'
 import Switch from './switch'
 import slider from './slider'
 import font from './font'
+import upload from './upload'
 import { KEY_COMPONENT_CONFIG_NAME } from '@/global/variable'
 const components = [
   custom,
@@ -25,7 +26,8 @@ const components = [
   color,
   Switch,
   slider,
-  font
+  font,
+  upload
 ]
 
 const Config = {

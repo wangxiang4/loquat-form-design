@@ -21,6 +21,17 @@ const list = {
     url: 'https://cdn.staticfile.org/axios/0.21.1/axios.js',
     version: '0.21.1',
     github: 'https://github.com/axios/axios'
+  },
+  'CryptoJS': {
+    url: 'http://qtestbucket.qiniudn.com/demo/CryptoJS.js',
+    title: '七牛云图片上传，需要引入CryptoJS',
+    version: '3.1.2'
+  },
+  'AliOSS': {
+    url: 'https://cdn.bootcdn.net/ajax/libs/ali-oss/6.2.1/aliyun-oss-sdk.min.js',
+    title: '阿里云云图片上传，需要引入OSS的sdk',
+    version: '6.1.0',
+    github: 'https://github.com/ali-sdk/ali-oss/'
   }
 }
 

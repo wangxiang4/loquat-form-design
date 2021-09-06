@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import widgetEmpty from '../assets/images/widget-empty.png'
+import widgetEmpty from '@/assets/images/widget-empty.png'
 import { getLabelWidth } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
