@@ -2,14 +2,9 @@ const path = require('path');
 function resolve (dir) {
   return path.join(__dirname, dir)
 }
-const version = process.env.VERSION || require('./package.json').version;
-const banner =
-  ' loquat-form-designer v' + version +
-  '\n' +
-  ' (c) 2021-' +
-  new Date().getFullYear() +
-  ' entfrm开发团队-王翔\n' +
-  ' Released under the MIT License.'
+/** 标准横幅 **/
+const package = require('./package.json')
+const banner = `/* ${package.name} v${package.version} | (c) ${new Date().getFullYear()} by entfrm开发团队-王翔 Released under the MIT License.*/\n`
 
 module.exports =  {
 
