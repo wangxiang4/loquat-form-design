@@ -26,7 +26,7 @@ module.exports =  {
       .set('@mixins', resolve('packages/mixins'))
 
     config.plugin('banner')
-      .use(require('webpack/lib/BannerPlugin'), [banner])
+      .use(require('webpack').BannerPlugin, [banner])
   },
 
   devServer: {
