@@ -134,8 +134,8 @@ export function designTransformPreview (_this) {
     // 处理上传数据
     if (col.type === 'upload') {
       // 转换请求头部与请求参数数据格式
-      col.headers = Object(...col.headers.map(({ key, value }) => ({ [key]: value })))
-      col.data = Object(...col.params.map(({ key, value }) => ({ [key]: value })))
+      col.headers = col.headers && Object(...col.headers.map(({ key, value }) => ({ [key]: value })))
+      col.data = col.data && Object(...col.data.map(({ key, value }) => ({ [key]: value })))
     }
     // 处理动作转换数据
     if (!validateNull(col.events)) {

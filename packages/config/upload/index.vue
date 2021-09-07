@@ -18,7 +18,7 @@
     <el-form-item v-loquat-has-perm="[data, 'action']" label="上传地址" >
       <el-input v-model="data.action" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'action']" label="设置上传的请求头部" >
+    <el-form-item v-loquat-has-perm="[data, 'headers']" label="设置上传的请求头部" >
       <ul>
         <li v-for="(item, index) in data.headers" :key="index" style="margin-bottom: 5px;">
           <el-input v-model="item.key"
@@ -51,8 +51,38 @@
         <el-button type="text" @click="data.headers.push({key: '', value: '' })">添加</el-button>
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'action']" label="设置上传的请求参数" >
-      <el-input v-model="data.action" clearable/>
+    <el-form-item v-loquat-has-perm="[data, 'data']" label="设置上传的请求参数" >
+      <ul>
+        <li v-for="(item, index) in data.data" :key="index" style="margin-bottom: 5px;">
+          <el-input v-model="item.key"
+                    type="textarea"
+                    style="width: 100px;margin-right: 5px;"
+                    size="mini"
+                    :rows="1"
+                    clearable
+                    placeholder="KEY"
+          />
+          <el-input v-model="item.value"
+                    type="textarea"
+                    style="width: 130px;"
+                    size="mini"
+                    :rows="1"
+                    clearable
+                    placeholder="VALUE"
+          />
+          <el-button circle
+                     plain
+                     type="danger"
+                     size="mini"
+                     icon="el-icon-minus"
+                     style="padding: 4px;margin-left: 5px;"
+                     @click="data.data.splice(index, 1)"
+          />
+        </li>
+      </ul>
+      <div>
+        <el-button type="text" @click="data.data.push({key: '', value: '' })">添加</el-button>
+      </div>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
       <loquat-select v-model="data.customClass"
