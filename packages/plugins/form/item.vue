@@ -78,6 +78,9 @@ export default {
       const col = this.$loquat.deepClone(this.column)
       // 排除表单设计时插件显示没有经过处理的报错字段
       if (!this.preview) {
+        // 处理上传数据
+        delete col.headers
+        delete col.data
         // 处理动作转换数据
         delete col.events
         // 处理远端请求数据转换

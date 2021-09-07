@@ -131,6 +131,12 @@ export function designTransformPreview (_this) {
   const autoDataSource = data.dataSource && data.dataSource.filter(item => item.auto)
   for (let i = 0; i < data.column.length; ++i) {
     const col = data.column[i]
+    // 处理上传数据
+    if (col.type === 'upload') {
+      // 转换请求头部与请求参数数据格式
+      col.headers = Object(...col.headers.map(({ key, value }) => ({ [key]: value })))
+      col.data = Object(...col.params.map(({ key, value }) => ({ [key]: value })))
+    }
     // 处理动作转换数据
     if (!validateNull(col.events)) {
       for (const key in col.events) {

@@ -22,9 +22,7 @@
         <i class="el-icon-plus"/>
       </template>
       <template v-else-if="listType=='picture-img'">
-        <slot v-if="$scopedSlots.default"
-              :file="{url:imgUrl}"
-        />
+        <slot v-if="$scopedSlots.default" :file="{url:imgUrl}"/>
         <template v-else>
           <img v-if="imgUrl"
                :src="imgUrl"
@@ -32,9 +30,7 @@
                class="loquat-upload__avatar"
                @mouseover="menu=true"
           >
-          <i v-else
-             class="el-icon-plus loquat-upload__icon"
-          />
+          <i v-else class="el-icon-plus loquat-upload__icon"/>
           <div v-if="menu"
                class="el-upload-list__item-actions loquat-upload__menu"
                @mouseover="menu=true"
@@ -59,17 +55,10 @@
         </div>
       </template>
       <template v-else>
-        <el-button size="small"
-                   type="primary"
-        >{{ '点击上传' }}</el-button>
+        <el-button size="small" type="primary">{{ '点击上传' }}</el-button>
       </template>
-      <div slot="tip"
-           class="el-upload__tip"
-      >{{ tip }}</div>
-      <template v-if="$scopedSlots.default"
-                slot="file"
-                slot-scope="scope"
-      >
+      <div slot="tip" class="el-upload__tip">{{ tip }}</div>
+      <template v-if="$scopedSlots.default" slot="file" slot-scope="scope">
         <slot v-bind="scope"/>
       </template>
     </el-upload>

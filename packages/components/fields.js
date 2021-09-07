@@ -372,6 +372,10 @@ export default [
       customizeStyle: {
         width: '100%'
       },
+      tip: '',
+      action: 'http://tools-server.making.link/api/transfer',
+      headers: [],
+      data: [],
       showFileList: true,
       multiple: true,
       limit: 10,
