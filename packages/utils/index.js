@@ -123,6 +123,7 @@ export function pathFormat (val) {
 
 /** 获取对象值 **/
 export function get (object, path, defaultValue) {
+  if (!path) return object
   path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
   let index = 0
   const length = path.length
@@ -178,4 +179,9 @@ export function dataURLtoFile (dataUrl, filename) {
   return new File([utf8Arr], filename, {
     type: mime
   })
+}
+
+/** 文件上传判断是否拼接根地址加子地址 **/
+export function getFileUrl (home, uri) {
+  return uri && uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : home + uri
 }

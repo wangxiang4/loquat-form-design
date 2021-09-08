@@ -1,22 +1,23 @@
 <template>
-  <div v-loading.lock="loading" class="loquat-upload">
-    <el-upload :class="{'loquat-upload__list':listType=='picture-img','upload':disabled}"
+  <div class="loquat-upload">
+    <el-upload :class="{ 'loquat-upload__list':listType=='picture-img', 'upload':disabled }"
                :action="action"
-               :on-remove="handleRemove"
                :accept="acceptList"
-               :before-remove="beforeRemove"
                :multiple="multiple"
-               :on-preview="handlePreview"
                :limit="limit"
-               :http-request="httpUpload"
                :drag="drag"
                :show-file-list="isPictureImg?false:showFileList"
                :list-type="listType"
-               :on-change="handleFileChange"
-               :on-exceed="handleExceed"
                :disabled="disabled"
                :file-list="fileList"
-               @click.native="handleClick"
+               :http-request="httpUpload"
+               :before-remove="handleBeforeRemove"
+               :on-remove="handleRemove"
+               :on-preview="handlePreview"
+               :on-change="handleFileChange"
+               :on-exceed="handleExceed"
+               :on-error="handleError"
+               :on-success="handleSuccess"
     >
       <template v-if="listType=='picture-card'">
         <i class="el-icon-plus"/>
@@ -42,7 +43,7 @@
             />
             <i v-if="!disabled"
                class="el-icon-delete"
-               @click.stop="handleDelete(imgUrl)"
+               @click.stop="handleAvatarRemove(imgUrl)"
             />
           </div>
         </template>
@@ -66,13 +67,12 @@
 </template>
 
 <script>
-import { bindEvent } from '@utils/plugins'
 import packages from '@/utils/packages'
 import { getToken } from '@utils/qiniuOss'
 import { getClient } from '@utils/aliOss'
-import { DIC_PROPS } from '@/global/variable'
 import axios from 'axios'
 import { detailImg } from '@utils/watermark'
+import { getFileUrl, deepClone } from '@utils'
 export default {
   name: 'Upload',
   props: {
@@ -117,15 +117,7 @@ export default {
         return {}
       }
     },
-    // img属性绑定参数
     params: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    // 当前传入进来的表单item数据
-    column: {
       type: Object,
       default: () => {
         return {}
@@ -149,41 +141,36 @@ export default {
     oss: {
       type: String
     },
-    props: {
-      type: Object,
-      default: () => DIC_PROPS
-    },
     canvasOption: {
       type: Object,
       default: () => {
         return {}
       }
     },
-    onRemove: Function,
-    uploadDelete: Function,
+    uploadRemove: Function,
+    uploadRemoveBefore: Function,
     uploadPreview: Function,
-    httpRequest: Function,
+    uploadSuccess: Function,
     uploadError: Function,
     uploadAfter: Function,
     uploadBefore: Function,
-    uploadExceed: Function
+    uploadExceed: Function,
+    httpRequest: Function
   },
   data () {
     return {
       res: '',
-      loading: false,
       text: [],
       file: {},
-      menu: false,
-      propsDefault: DIC_PROPS
+      menu: false
     }
   },
   computed: {
     homeUrl () {
       return this.uploadConfig.home || ''
     },
-    fileName () {
-      return this.uploadConfig.fileName || 'file'
+    resFileName () {
+      return this.uploadConfig.resFileName || 'file'
     },
     resKey: function () {
       return this.uploadConfig.res || ''
@@ -191,23 +178,11 @@ export default {
     urlKey: function () {
       return this.uploadConfig.url || 'url'
     },
-    nameKey: function () {
-      return this.uploadConfig.name || 'name'
-    },
     isQiniuOss () {
       return this.oss === 'qiniu'
     },
     isAliOss () {
       return this.oss === 'ali'
-    },
-    isArrayStringMode () {
-      return this.text.every(el => typeof el === 'string')
-    },
-    labelKey: function () {
-      return this.props.label || this.propsDefault.label
-    },
-    valueKey: function () {
-      return this.props.value || this.propsDefault.value
     },
     acceptList () {
       if (Array.isArray(this.accept)) {
@@ -216,33 +191,22 @@ export default {
       return this.accept
     },
     fileList () {
-      const list = [];
-      (this.text || []).forEach((ele, index) => {
-        if (ele) {
-          let name
-          // 处理单个url链接取最后为label,当label名字获取不到时使用(备用)
-          if (typeof ele === 'string') {
-            const i = ele.lastIndexOf('/')
-            name = ele.substring(i + 1)
-          }
-          list.push({
-            uid: index + '',
-            status: 'done',
-            isImage: ele.isImage || this.$loquat.typeList.img.test(ele[this.valueKey] || ele),
-            name: ele[this.labelKey] || name,
-            url: getFileUrl(this.homeUrl, ele[this.valueKey] || ele)
-          })
-        }
+      // 添加额外的参数
+      return (this.text || []).map(ele => {
+        const files = Object.assign(ele, {
+          isImage: ele.isImage || this.$loquat.typeList.img.test(ele[this.urlKey]),
+          url: getFileUrl(this.homeUrl, ele[this.urlKey] || ele.response?.[this.urlKey])
+        })
+        return files
       })
-      return list
     },
     isPictureImg () {
       return this.listType === 'picture-img'
     },
-    // 单个头像图片
     imgUrl () {
       if (!this.$loquat.validateNull(this.text)) {
-        return getFileUrl(this.homeUrl, this.text[0])
+        return getFileUrl(this.homeUrl,
+          this.text[0]?.[this.urlKey] || this.text[0]?.response?.[this.urlKey])
       }
       return ''
     },
@@ -256,48 +220,45 @@ export default {
     }
   },
   methods: {
-    handleClick (event) {
-      bindEvent(this, 'click', event)
-    },
+    // 处理上传移除
     handleRemove (file, fileList) {
-      this.onRemove && this.onRemove(file, fileList)
-      this.delete(file)
+      this.uploadRemove && this.uploadRemove(file, fileList)
     },
-    beforeRemove (file) {
-      if (typeof this.uploadDelete === 'function') {
-        return this.uploadDelete(file, this.column)
+    // 处理上传移除前
+    handleBeforeRemove (file, fileList) {
+      if (typeof this.uploadRemoveBefore === 'function') {
+        return this.uploadRemoveBefore(file, fileList)
       } else {
         return Promise.resolve()
       }
     },
+    // 处理预览
     handlePreview (file) {
       const callback = () => {
         const url = file.url
         const list = this.fileList.map(ele => Object.assign(ele, {
           type: this.$loquat.typeList.video.test(ele.url) ? 'video' : ''
         }))
-        const index = this.fileList.findIndex(ele => {
-          return ele.url === url
-        })
+        const index = this.fileList.findIndex(ele => ele.url === url)
         this.$loquat.imagePreview(list, index)
       }
       if (typeof this.uploadPreview === 'function') {
-        this.uploadPreview(file, this.column, callback)
+        this.uploadPreview(file, callback)
       } else {
         callback()
       }
     },
+    // 扩展内部文件上传
     httpUpload (config) {
       if (typeof this.httpRequest === 'function') {
         this.httpRequest(config)
         return
       }
-      this.loading = true
       let file = config.file
       const fileSize = file.size / 1024
       this.file = config.file
       if (!this.$loquat.validateNull(fileSize) && fileSize > this.fileSize) {
-        this.hide('文件太大不符合')
+        config.onError('文件太大不符合')
         return
       }
       const headers = Object.assign(this.headers, { 'Content-Type': 'multipart/form-data' })
@@ -313,12 +274,12 @@ export default {
             param.append(o, this.data[o])
           }
           const uploadFile = newFile || file
-          param.append(this.fileName, uploadFile)
+          param.append(this.resFileName, uploadFile)
           // 七牛云oss存储
           if (this.isQiniuOss) {
             if (!window.CryptoJS) {
               packages.logs('CryptoJS')
-              this.hide()
+              config.onError('七牛云oss存储检测不存在CryptoJS文件')
               return
             }
             ossConfig = this.$loquat.qiniu
@@ -331,7 +292,7 @@ export default {
           } else if (this.isAliOss) {
             if (!window.OSS) {
               packages.logs('AliOSS')
-              this.hide()
+              config.onError('阿里云oss存储检测不存在AliOSS文件')
               return
             }
             ossConfig = this.$loquat.ali
@@ -343,7 +304,15 @@ export default {
                 headers: this.headers
               })
             } else {
-              return axios.post(url, param, { headers })
+              return axios.post(url, param, {
+                headers,
+                onUploadProgress: function progress (e) {
+                  if (e.total > 0) {
+                    e.percent = e.loaded / e.total * 100
+                  }
+                  config.onProgress(e)
+                }
+              })
             }
           })()
             .then(res => {
@@ -353,34 +322,23 @@ export default {
               }
 
               if (this.isAliOss) {
-                this.res = this.$loquat.get(res, this.resKey, '')
+                this.res = deepClone(this.$loquat.get(res, this.resKey, ''))
               } else {
-                this.res = this.$loquat.get(res.data, this.resKey, '')
+                this.res = deepClone(this.$loquat.get(res.data, this.resKey, ''))
               }
 
               if (typeof this.uploadAfter === 'function') {
-                this.uploadAfter(
-                  this.res,
-                  this.show,
-                  () => {
-                    this.loading = false
-                  },
-                  this.column
-                )
-              } else this.show(this.res)
+                this.uploadAfter(this.res, config.onSuccess(this.res))
+              } else config.onSuccess(this.res)
             })
             .catch(error => {
               if (typeof this.uploadAfter === 'function') {
-                this.uploadAfter(error, this.hide, () => {
-                  this.loading = false
-                }, this.column)
-              } else this.hide(error)
+                this.uploadAfter(error, config.onError(error))
+              } else config.onError(error)
             })
         }
         if (typeof this.uploadBefore === 'function') {
-          this.uploadBefore(this.file, callback, () => {
-            this.loading = false
-          }, this.column)
+          this.uploadBefore(this.file, callback)
         } else callback()
       }
       // 是否开启水印
@@ -389,50 +347,33 @@ export default {
           file = res
           done()
         })
-      } else {
-        done()
-      }
+      } else done()
     },
+    // 处理上传成功
+    handleSuccess (res, file, fileList) {
+      this.uploadSuccess && this.uploadSuccess(res, file, fileList)
+    },
+    // 处理文件修改
     handleFileChange (file, fileList) {
-      fileList.splice(fileList.length - 1, 1)
+      this.text = fileList
     },
+    // 处理上传超出扩展
     handleExceed (files, fileList) {
-      this.uploadExceed && this.uploadExceed(this.limit, files, fileList, this.column)
+      this.uploadExceed && this.uploadExceed(this.limit, files, fileList)
     },
-    handleDelete (file) {
-      this.beforeRemove(file).then(() => {
+    // 处理上传异常扩展
+    handleError (err, file, fileList) {
+      this.uploadError && this.uploadError(err, file, fileList)
+    },
+    // 处理头像移除操作
+    handleAvatarRemove (file) {
+      // 考虑到需要做后续处理所以决定把删除前函数抽出来
+      this.handleBeforeRemove(file, this.text).then(() => {
         this.text = []
         this.menu = false
       }).catch(() => {
       })
-    },
-    hide (msg) {
-      this.loading = false
-      this.handleError(msg)
-    },
-    handleError (error) {
-      this.uploadError && this.uploadError(error, this.column)
-    },
-    show (data) {
-      this.loading = false
-      this.handleSuccess(data || this.res)
-    },
-    handleSuccess (file) {
-      if (this.isPictureImg) {
-        this.text.splice(0, 1, file[this.urlKey])
-      } else if (this.isArrayStringMode) {
-        this.text.push(file[this.urlKey])
-      } else {
-        const obj = {}
-        obj[this.labelKey] = file[this.nameKey]
-        obj[this.valueKey] = file[this.urlKey]
-        this.text.push(obj)
-      }
     }
   }
-}
-
-function getFileUrl (home, uri = '') {
-  return uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : home + uri
 }
 </script>

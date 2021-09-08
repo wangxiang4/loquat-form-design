@@ -10,6 +10,6 @@
 
 export const getClient = (params) => {
   // oss 基本配置
-  var client = new window.OSS(params)
+  const client = new window.OSS(params)
   return client
 }
