@@ -160,6 +160,8 @@ export default {
   data () {
     return {
       text: [],
+      reqs: {},
+      test: '',
       menu: false
     }
   },
@@ -167,14 +169,14 @@ export default {
     homeUrl () {
       return this.uploadConfig.home || ''
     },
+    urlKey () {
+      return this.uploadConfig.url || 'url'
+    },
     fileName () {
       return this.uploadConfig.fileName || 'file'
     },
-    resKey: function () {
+    resKey () {
       return this.uploadConfig.res || ''
-    },
-    urlKey: function () {
-      return this.uploadConfig.url || 'url'
     },
     isQiniuOss () {
       return this.oss === 'qiniu'
@@ -224,6 +226,7 @@ export default {
     },
     // 处理上传移除前
     handleBeforeRemove (file, fileList) {
+      this.handleAbort(file)
       if (typeof this.uploadRemoveBefore === 'function') {
         return this.uploadRemoveBefore(file, fileList)
       } else {
@@ -308,7 +311,11 @@ export default {
                     e.percent = e.loaded / e.total * 100
                   }
                   config.onProgress(e)
-                }
+                },
+                cancelToken: new axios.CancelToken(c => {
+                  this.test = c
+                  this.reqs[file.uid] = c
+                })
               })
             }
           })()
@@ -349,6 +356,7 @@ export default {
     // 处理上传成功
     handleSuccess (res, file, fileList) {
       this.uploadSuccess && this.uploadSuccess(res, file, fileList)
+      delete this.reqs[file.uid]
     },
     // 处理文件修改
     handleFileChange (file, fileList) {
@@ -361,6 +369,7 @@ export default {
     // 处理上传异常扩展
     handleError (err, file, fileList) {
       this.uploadError && this.uploadError(err, file, fileList)
+      delete this.reqs[file.uid]
     },
     // 处理头像移除操作
     handleAvatarRemove (file) {
@@ -370,6 +379,22 @@ export default {
         this.menu = false
       }).catch(() => {
       })
+    },
+    // 处理取消请求,防止上传还没完成就删除文件
+    handleAbort (file) {
+      const { reqs } = this
+      if (file) {
+        let uid = file
+        if (file.uid) uid = file.uid
+        if (reqs[uid]) {
+          reqs[uid].abort()
+        }
+      } else { // 全部执行取消请求
+        Object.keys(reqs).forEach((uid) => {
+          if (reqs[uid]) reqs[uid].abort()
+          delete reqs[uid]
+        })
+      }
     }
   }
 }
