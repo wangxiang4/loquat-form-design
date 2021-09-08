@@ -1,6 +1,6 @@
 <template>
   <div class="loquat-upload">
-    <el-upload :class="{ 'loquat-upload__list':listType=='picture-img', 'upload':disabled }"
+    <el-upload :class="{ 'loquat-upload__list':listType=='picture-img' }"
                :action="action"
                :accept="acceptList"
                :multiple="multiple"
@@ -27,7 +27,7 @@
         <template v-else>
           <img v-if="imgUrl"
                :src="imgUrl"
-               v-bind="allParams"
+               v-bind="imgParams"
                class="loquat-upload__avatar"
                @mouseover="menu=true"
           >
@@ -159,9 +159,7 @@ export default {
   },
   data () {
     return {
-      res: '',
       text: [],
-      file: {},
       menu: false
     }
   },
@@ -169,8 +167,8 @@ export default {
     homeUrl () {
       return this.uploadConfig.home || ''
     },
-    resFileName () {
-      return this.uploadConfig.resFileName || 'file'
+    fileName () {
+      return this.uploadConfig.fileName || 'file'
     },
     resKey: function () {
       return this.uploadConfig.res || ''
@@ -210,7 +208,7 @@ export default {
       }
       return ''
     },
-    allParams () {
+    imgParams () {
       if (this.$loquat.typeList.video.test(this.imgUrl)) {
         return Object.assign({
           is: 'video'
@@ -256,7 +254,6 @@ export default {
       }
       let file = config.file
       const fileSize = file.size / 1024
-      this.file = config.file
       if (!this.$loquat.validateNull(fileSize) && fileSize > this.fileSize) {
         config.onError('文件太大不符合')
         return
@@ -274,7 +271,7 @@ export default {
             param.append(o, this.data[o])
           }
           const uploadFile = newFile || file
-          param.append(this.resFileName, uploadFile)
+          param.append(this.fileName, uploadFile)
           // 七牛云oss存储
           if (this.isQiniuOss) {
             if (!window.CryptoJS) {
@@ -316,20 +313,20 @@ export default {
             }
           })()
             .then(res => {
-              this.res = {}
+              let responseData
               if (this.isQiniuOss) {
                 res.data.key = ossConfig.url + res.data.key
               }
 
               if (this.isAliOss) {
-                this.res = deepClone(this.$loquat.get(res, this.resKey, ''))
+                responseData = deepClone(this.$loquat.get(res, this.resKey, ''))
               } else {
-                this.res = deepClone(this.$loquat.get(res.data, this.resKey, ''))
+                responseData = deepClone(this.$loquat.get(res.data, this.resKey, ''))
               }
 
               if (typeof this.uploadAfter === 'function') {
-                this.uploadAfter(this.res, config.onSuccess(this.res))
-              } else config.onSuccess(this.res)
+                this.uploadAfter(responseData, config.onSuccess(responseData))
+              } else config.onSuccess(responseData)
             })
             .catch(error => {
               if (typeof this.uploadAfter === 'function') {
@@ -338,7 +335,7 @@ export default {
             })
         }
         if (typeof this.uploadBefore === 'function') {
-          this.uploadBefore(this.file, callback)
+          this.uploadBefore(file, callback)
         } else callback()
       }
       // 是否开启水印
