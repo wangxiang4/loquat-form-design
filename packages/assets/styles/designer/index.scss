@@ -358,6 +358,14 @@ $primary-ghost-color: #67C23A;
             width: 239px;
           }
         }
+
+        .horizontal-tip-text {
+          font-size: 12px;
+          color: #797c80;
+        }
+        .el-input-number .el-input__inner {
+          text-align: left;
+        }
       }
 
       .el-tabs__header {

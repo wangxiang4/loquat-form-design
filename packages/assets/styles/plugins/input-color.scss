@@ -1,0 +1,23 @@
+.loquat-input-color {
+  .el-color-picker--medium {
+    height: 34px;
+    .el-color-picker__trigger {
+      height: 31px;
+      width: 34px;
+    }
+  }
+  .el-color-picker--small {
+    height: 30px;
+    .el-color-picker__trigger {
+      height: 27px;
+      width: 30px;
+    }
+  }
+  .el-color-picker--mini {
+    height: 26px;
+    .el-color-picker__trigger {
+      height: 23px;
+      width: 26px;
+    }
+  }
+}

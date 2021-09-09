@@ -147,6 +147,11 @@ export default {
         return {}
       }
     },
+    // 跨域提供凭证,一般用于跨域携带cookie
+    withCredentials: {
+      type: Boolean,
+      default: false
+    },
     uploadRemove: Function,
     uploadRemoveBefore: Function,
     uploadPreview: Function,
@@ -298,11 +303,11 @@ export default {
             client = getClient(ossConfig)
           }
           (() => {
-            if (this.isAliOss) {
+            if (this.isAliOss) { // 使用aliOss客户端传输套接字
               return client.put(uploadFile.name, uploadFile, {
                 headers: this.headers
               })
-            } else {
+            } else { // 使用axios传输套接字
               return axios.post(url, param, {
                 headers,
                 onUploadProgress: function progress (e) {
@@ -311,7 +316,8 @@ export default {
                   }
                   config.onProgress(e)
                 },
-                cancelToken: new axios.CancelToken(c => { this.reqs[file.uid] = c })
+                cancelToken: new axios.CancelToken(c => { this.reqs[file.uid] = c }),
+                withCredentials: this.withCredentials
               })
             }
           })()

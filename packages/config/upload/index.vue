@@ -1,4 +1,4 @@
-<template>
+`<template>
   <div>
     <el-form-item label="字段标识">
       <el-input v-model="data.prop" clearable/>
@@ -84,6 +84,107 @@
         <el-button type="text" @click="data.data.push({key: '', value: '' })">添加</el-button>
       </div>
     </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, 'listType']" label="文件列表类型" >
+      <el-select v-model="data.listType" style="width: 100%;">
+        <el-option label="附件" value="text"/>
+        <el-option label="照片墙" value="picture-card"/>
+        <el-option label="头像" value="picture-img"/>
+        <el-option label="缩略图" value="picture"/>
+      </el-select>
+    </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, 'limit']" label="最大上传数" >
+      <el-input v-model.number="data.limit" type="number" clearable/>
+    </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, 'fileSize']" label="文件大小" >
+      <el-input-number v-model="data.fileSize"
+                       controls-position="right"
+                       placeholder="文件大小限制（字节）"
+                       :min="0"
+                       style="width: 100%;"
+      />
+    </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, configCenterPerm, 1]" label="配置中心">
+      <el-collapse accordion>
+        <el-collapse-item v-loquat-has-perm="[data, uploadConfigPerm, 1]" title="上传配置">
+          <div v-loquat-has-perm="[uploadConfig, 'home']">
+            <span class="horizontal-tip-text">首页地址:</span>
+            <el-input v-model="uploadConfig.home" size="mini" clearable/>
+          </div>
+          <div v-loquat-has-perm="[uploadConfig, 'fileName']">
+            <span class="horizontal-tip-text">文件字段名:</span>
+            <el-input v-model="uploadConfig.fileName" size="mini" clearable/>
+          </div>
+          <div v-loquat-has-perm="[uploadConfig, 'res']">
+            <span class="horizontal-tip-text">响应数据键:</span>
+            <el-input v-model="uploadConfig.res" size="mini" clearable/>
+          </div>
+          <div v-loquat-has-perm="[uploadConfig, 'url']">
+            <span class="horizontal-tip-text">响应数据url键:</span>
+            <el-input v-model="uploadConfig.url" size="mini" clearable/>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item v-loquat-has-perm="[data, canvasOptionPerm, 1]" title="水印配置">
+          <div v-loquat-has-perm="[canvasOption, 'text']">
+            <span class="horizontal-tip-text">水印文字:</span>
+            <el-input v-model="canvasOption.text" size="mini" clearable/>
+          </div>
+          <div v-loquat-has-perm="[canvasOption, 'fontFamily']">
+            <span class="horizontal-tip-text">字体类型:</span>
+            <el-input v-model="canvasOption.fontFamily" size="mini" clearable/>
+          </div>
+          <div v-loquat-has-perm="[canvasOption, 'color']">
+            <span class="horizontal-tip-text">字体颜色:</span>
+            <loquat-input-color v-model="canvasOption.color" size="mini" clearable/>
+          </div>
+          <div v-loquat-has-perm="[canvasOption, 'fontSize']">
+            <span class="horizontal-tip-text">字体大小:</span>
+            <el-input-number v-model="canvasOption.fontSize"
+                             style="width: 100%;"
+                             size="mini"
+                             controls-position="right"
+            />
+          </div>
+          <div v-loquat-has-perm="[canvasOption, 'opacity']">
+            <span class="horizontal-tip-text">文字的透明度:</span>
+            <el-input-number v-model="canvasOption.opacity"
+                             style="width: 100%;"
+                             size="mini"
+                             controls-position="right"
+                             :step="10"
+                             :min="10"
+                             :max="100"
+            />
+          </div>
+          <div v-loquat-has-perm="[canvasOption, 'bottom']">
+            <span class="horizontal-tip-text">文字距离图片底部的距离:</span>
+            <el-input-number v-model="canvasOption.bottom"
+                             style="width: 100%;"
+                             controls-position="right"
+                             size="mini"
+            />
+          </div>
+          <div v-loquat-has-perm="[canvasOption, 'right']">
+            <span class="horizontal-tip-text">文字距离图片右边的距离:</span>
+            <el-input-number v-model="canvasOption.right"
+                             style="width: 100%;"
+                             controls-position="right"
+                             size="mini"
+            />
+          </div>
+          <div v-loquat-has-perm="[canvasOption, 'fontSize']">
+            <span class="horizontal-tip-text">压缩图片比率:</span>
+            <el-input-number v-model="canvasOption.ratio"
+                             style="width: 100%;"
+                             controls-position="right"
+                             :step="0.1"
+                             :min="0"
+                             :max="1"
+                             size="mini"
+            />
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
       <loquat-select v-model="data.customClass"
                      style="width: 100%;"
@@ -110,6 +211,18 @@
         </el-col>
         <el-col v-loquat-has-perm="[data, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[data, 'drag']" :span="operationComputedSpan">
+          <el-checkbox v-model="data.drag">是否拖拽上传</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[data, 'multiple']" :span="operationComputedSpan">
+          <el-checkbox v-model="data.multiple">是否多选</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[data, 'withCredentials']" :span="24">
+          <el-checkbox v-model="data.withCredentials">跨域请求是否提供凭据信息</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[data, 'showFileList']" :span="24">
+          <el-checkbox v-model="data.showFileList">是否显示已上传文件列表</el-checkbox>
         </el-col>
       </el-row>
     </el-form-item>
@@ -193,16 +306,43 @@ export default {
       operationPerm: [
         'disabled',
         'hide',
-        'hideLabel'
+        'hideLabel',
+        'drag',
+        'withCredentials'
+      ],
+      uploadConfigPerm: [
+        'uploadConfig.home',
+        'uploadConfig.url',
+        'uploadConfig.fileName',
+        'uploadConfig.res'
+      ],
+      canvasOptionPerm: [
+        'canvasOption.fontSize',
+        'canvasOption.opacity',
+        'canvasOption.bottom',
+        'canvasOption.right',
+        'canvasOption.ratio',
+        'canvasOption.text',
+        'canvasOption.fontFamily',
+        'canvasOption.color'
       ]
     }
   },
   computed: {
+    configCenterPerm () {
+      return [...this.uploadConfigPerm, ...this.canvasOptionPerm]
+    },
     customizeStyle () {
       return this.data.customizeStyle || {}
     },
     validateConfig () {
       return this.data.validateConfig || {}
+    },
+    uploadConfig () {
+      return this.data.uploadConfig || {}
+    },
+    canvasOption () {
+      return this.data.canvasOption || {}
     },
     events () {
       const clone = this.$loquat.deepClone(this.data.events)
@@ -212,3 +352,4 @@ export default {
   }
 }
 </script>
+`

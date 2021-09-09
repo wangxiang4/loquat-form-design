@@ -1,5 +1,5 @@
 <template>
-  <div class="loquat-color">
+  <div class="loquat-input-color">
     <el-input v-model="text"
               :placeholder="placeholder"
               :size="size"
@@ -10,7 +10,7 @@
     >
       <template slot="append">
         <el-color-picker v-model="text"
-                         size="mini"
+                         :size="size"
                          :show-alpha="showAlpha"
                          :color-format="colorFormat"
                          :popper-class="popperClass"
