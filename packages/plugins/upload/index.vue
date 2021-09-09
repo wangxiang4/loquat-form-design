@@ -126,6 +126,10 @@ export default {
     fileSize: {
       type: Number
     },
+    byteUnit: {
+      type: String,
+      default: 'KB'
+    },
     headers: {
       type: Object,
       default: () => {
@@ -170,7 +174,12 @@ export default {
     return {
       text: [],
       reqs: {},
-      menu: false
+      menu: false,
+      byteUnitFormula: {
+        KB: 1024,
+        MB: 1024 / 1024,
+        GB: 1024 / 1024 / 1024
+      }
     }
   },
   computed: {
@@ -263,7 +272,7 @@ export default {
         return
       }
       let file = config.file
-      const fileSize = file.size / 1024
+      const fileSize = file.size / this.byteUnitFormula[this.byteUnit]
       if (!this.$loquat.validateNull(fileSize) && fileSize > this.fileSize) {
         config.onError('文件太大不符合')
         return

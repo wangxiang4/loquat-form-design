@@ -383,7 +383,8 @@ export default [
       showFileList: true,
       multiple: false,
       limit: 10,
-      fileSize: 1073741824,
+      fileSize: 2,
+      byteUnit: 'MB',
       uploadConfig: {
         home: '',
         url: '',

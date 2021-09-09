@@ -18,8 +18,20 @@
     <el-form-item v-loquat-has-perm="[data, 'action']" label="上传地址" >
       <el-input v-model="data.action" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'accept']" label="接受文件类型" >
-      <el-input v-model="data.accept" placeholder="多个类型用,隔开" clearable/>
+    <el-form-item v-loquat-has-perm="[data, 'accept']" label="文件类型">
+      <el-select v-model="data.accept"
+                 placeholder="请选择文件类型"
+                 :style="{ width: '100%' }"
+                 clearable
+      >
+        <el-option label="图片" value="image/*" />
+        <el-option label="视频" value="video/*" />
+        <el-option label="音频" value="audio/*" />
+        <el-option label="excel" value=".xls,.xlsx" />
+        <el-option label="word" value=".doc,.docx" />
+        <el-option label="pdf" value=".pdf" />
+        <el-option label="txt" value=".txt" />
+      </el-select>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'headers']" label="设置上传的请求头部" >
       <ul>
@@ -88,23 +100,32 @@
       </div>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'listType']" label="文件列表类型" >
-      <el-select v-model="data.listType" style="width: 100%;">
-        <el-option label="附件" value="text"/>
-        <el-option label="照片墙" value="picture-card"/>
-        <el-option label="头像" value="picture-img"/>
-        <el-option label="缩略图" value="picture"/>
-      </el-select>
+      <el-radio-group v-model="data.listType">
+        <el-radio-button label="text">
+          附件
+        </el-radio-button>
+        <el-radio-button label="picture-card">
+          照片墙
+        </el-radio-button>
+        <el-radio-button label="picture-img">
+          头像
+        </el-radio-button>
+        <el-radio-button label="picture">
+          缩略图
+        </el-radio-button>
+      </el-radio-group>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'limit']" label="最大上传数" >
       <el-input v-model.number="data.limit" type="number" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'fileSize']" label="文件大小" >
-      <el-input-number v-model="data.fileSize"
-                       controls-position="right"
-                       placeholder="文件大小限制（字节）"
-                       :min="0"
-                       style="width: 100%;"
-      />
+    <el-form-item v-loquat-has-perm="[data, ['fileSize', 'byteUnit'], 1]" label="文件大小" >
+      <el-input v-model.number="data.fileSize" placeholder="请输入文件大小">
+        <el-select slot="append" v-model="data.byteUnit" :style="{ width: '66px' }">
+          <el-option label="KB" value="KB" />
+          <el-option label="MB" value="MB" />
+          <el-option label="GB" value="GB" />
+        </el-select>
+      </el-input>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, configCenterPerm, 1]" label="配置中心">
       <el-collapse accordion>
