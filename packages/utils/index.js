@@ -183,5 +183,7 @@ export function dataURLtoFile (dataUrl, filename) {
 
 /** 文件上传判断是否拼接根地址加子地址 **/
 export function getFileUrl (home, uri) {
-  return uri && uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : home + uri
+  return getObjType(uri) === 'string'
+    ? uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : home + uri
+    : ''
 }

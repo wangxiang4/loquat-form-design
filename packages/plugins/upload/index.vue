@@ -204,8 +204,7 @@ export default {
     },
     imgUrl () {
       if (!this.$loquat.validateNull(this.text)) {
-        return getFileUrl(this.homeUrl,
-          this.text[0]?.[this.urlKey] || this.text[0]?.response?.[this.urlKey])
+        return getFileUrl(this.homeUrl, this.text[0]?.[this.urlKey] || this.text[0]?.response?.[this.urlKey])
       }
       return ''
     },
