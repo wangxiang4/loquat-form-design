@@ -212,6 +212,9 @@
         <el-col v-loquat-has-perm="[data, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
         </el-col>
+        <el-col v-loquat-has-perm="[data, 'showCanvas']" :span="operationComputedSpan">
+          <el-checkbox v-model="data.showCanvas">开启水印</el-checkbox>
+        </el-col>
         <el-col v-loquat-has-perm="[data, 'drag']" :span="operationComputedSpan">
           <el-checkbox v-model="data.drag">是否拖拽上传</el-checkbox>
         </el-col>

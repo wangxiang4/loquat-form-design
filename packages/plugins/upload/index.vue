@@ -141,6 +141,10 @@ export default {
     oss: {
       type: String
     },
+    showCanvas: {
+      type: Boolean,
+      default: false
+    },
     canvasOption: {
       type: Object,
       default: () => {
@@ -348,7 +352,7 @@ export default {
         } else callback()
       }
       // 是否开启水印
-      if (!this.$loquat.validateNull(this.canvasOption)) {
+      if (this.showCanvas) {
         detailImg(file, this.canvasOption).then(res => {
           file = res
           done()

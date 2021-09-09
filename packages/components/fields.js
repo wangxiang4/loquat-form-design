@@ -399,6 +399,7 @@ export default [
         fontFamily: 'microsoft yahei',
         color: '#999'
       },
+      showCanvas: false,
       disabled: false,
       hideLabel: false,
       hide: false,
