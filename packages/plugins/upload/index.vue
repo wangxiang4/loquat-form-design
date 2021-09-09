@@ -1,6 +1,6 @@
 <template>
   <div class="loquat-upload">
-    <el-upload :class="{ 'loquat-upload__list':listType=='picture-img', 'loquat-upload__upload':disabled }"
+    <el-upload :class="{ 'loquat-upload__list':listType=='picture-img', 'loquat-upload__disabled':disabled }"
                :action="action"
                :accept="acceptList"
                :multiple="multiple"
@@ -70,7 +70,7 @@
 import packages from '@/utils/packages'
 import { getToken } from '@utils/qiniuOss'
 import { getClient } from '@utils/aliOss'
-import axios from 'axios'
+import axios from 'loquat-axios'
 import { detailImg } from '@utils/watermark'
 import { getFileUrl, deepClone } from '@utils'
 export default {
@@ -161,7 +161,6 @@ export default {
     return {
       text: [],
       reqs: {},
-      test: '',
       menu: false
     }
   },
@@ -289,6 +288,7 @@ export default {
             })
             param.append('token', token)
             url = ossConfig.bucket
+          // 阿里云oss存储
           } else if (this.isAliOss) {
             if (!window.OSS) {
               packages.logs('AliOSS')
@@ -312,10 +312,7 @@ export default {
                   }
                   config.onProgress(e)
                 },
-                cancelToken: new axios.CancelToken(c => {
-                  this.test = c
-                  this.reqs[file.uid] = c
-                })
+                cancelToken: new axios.CancelToken(c => { this.reqs[file.uid] = c })
               })
             }
           })()
