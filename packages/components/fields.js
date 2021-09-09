@@ -376,6 +376,7 @@ export default [
       action: 'https://www.fastmock.site/mock/185db6c1486280937f7c763b10fa48fa/test/upload',
       headers: [],
       data: [],
+      accept: '',
       listType: 'text',
       drag: false,
       withCredentials: false,

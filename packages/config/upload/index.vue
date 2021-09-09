@@ -18,6 +18,9 @@
     <el-form-item v-loquat-has-perm="[data, 'action']" label="上传地址" >
       <el-input v-model="data.action" clearable/>
     </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, 'accept']" label="接受文件类型" >
+      <el-input v-model="data.accept" placeholder="多个类型用,隔开" clearable/>
+    </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'headers']" label="设置上传的请求头部" >
       <ul>
         <li v-for="(item, index) in data.headers" :key="index" style="margin-bottom: 5px;">
