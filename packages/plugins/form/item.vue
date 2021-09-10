@@ -28,9 +28,7 @@ export default {
   name: 'FormItem',
   props: {
     value: {},
-    dic: {
-      type: Array
-    },
+    dic: {},
     props: {
       type: Object
     },

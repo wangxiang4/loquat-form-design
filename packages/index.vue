@@ -604,6 +604,8 @@ import { KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE, JS_EXECUTE_INCLUDE, BEAU
 import { randomId, getObjType } from '@utils'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 import request from '@utils/request'
+import { getToken } from '@utils/qiniuOss'
+import packages from '@utils/packages'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor },
@@ -686,7 +688,7 @@ export default {
             headers: {},
             params: {},
             requestFunc: 'return config;',
-            responseFunc: 'return res;',
+            responseFunc: 'return res.uptoken;',
             errorFunc: ''
           },
           {
@@ -1202,6 +1204,18 @@ export default {
         { value: '煎饼果子', label: '煎饼果子' },
         { value: '彩虹猫', label: '彩虹猫' }
       ]
+      // 处理七牛云Token函数
+      this.$loquat.remoteFunc.funcGetToken = () => {
+        if (!window.CryptoJS) {
+          packages.logs('CryptoJS')
+          return
+        }
+        const oss = this.$loquat.qiniu
+        return getToken(oss.ak, oss.sk, {
+          scope: oss.bucket,
+          deadline: new Date().getTime() + (oss.deadline || 1) * 3600
+        })
+      }
     }
   }
 }

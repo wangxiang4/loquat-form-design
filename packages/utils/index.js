@@ -152,13 +152,16 @@ export function detailDataType (value, type) {
   }
 }
 
-/** 处理响应数据数据是否受理 **/
+/** 处理响应数据数据是否受理,解决dic应对各种类型问题 **/
 export function responseDataAccept (data, type) {
   switch (type) {
     case 'select':
     case 'tree':
       if (getObjType(data) === 'array') return data
       else return []
+    case 'upload':
+      if (getObjType(data) === 'string') return data
+      else return ''
   }
   return undefined
 }
@@ -186,4 +189,16 @@ export function getFileUrl (home, uri) {
   return getObjType(uri) === 'string'
     ? uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : home + uri
     : ''
+}
+
+/** 处理字节容量计算 **/
+export function byteCapacityCompute (fileSize, unit) {
+  switch (unit) {
+    case 'KB':
+      return fileSize / 1024
+    case 'MB':
+      return fileSize / 1024 / 1024
+    case 'GB':
+      return fileSize / 1024 / 1024
+  }
 }

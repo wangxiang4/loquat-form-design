@@ -18,6 +18,46 @@
     <el-form-item v-loquat-has-perm="[data, 'action']" label="上传地址" >
       <el-input v-model="data.action" clearable/>
     </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, 'oss']" label="OSS" >
+      <el-radio-group v-model="data.oss">
+        <el-radio-button label="">
+          不使用OSS
+        </el-radio-button>
+        <el-radio-button label="qiniu">
+          七牛OSS
+        </el-radio-button>
+        <el-radio-button label="ali">
+          阿里OSS
+        </el-radio-button>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, 'domain']" v-if="data.oss" label="Domain" >
+      <el-input v-model="data.domain" clearable/>
+    </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, staticPerm, 1]" v-if="data.oss" label="获取Token" >
+      <el-radio-group v-model="data.remoteType">
+        <el-radio label="datasource">数据源</el-radio>
+        <el-radio label="func">方法函数</el-radio>
+      </el-radio-group>
+      <template v-if="data.remoteType === 'datasource'">
+        <el-select v-model="data.remoteDataSource"
+                   style="width: 100%; margin-bottom: 5px;"
+                   placeholder="请选择"
+        >
+          <el-option v-for="item in home.widgetForm.dataSource"
+                     :key="item.key"
+                     :label="item.name"
+                     :value="item.key"
+          />
+        </el-select>
+      </template>
+      <template v-if="data.remoteType === 'func'">
+        <el-input v-model="data.remoteFunc"
+                  style="margin-bottom: 5px;"
+                  clearable
+        />
+      </template>
+    </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'accept']" label="文件类型">
       <el-select v-model="data.accept"
                  placeholder="请选择文件类型"
@@ -352,6 +392,12 @@ export default {
         'canvasOption.text',
         'canvasOption.fontFamily',
         'canvasOption.color'
+      ],
+      staticPerm: [
+        'static',
+        'remoteType',
+        'remoteDataSource',
+        'remoteFunc'
       ]
     }
   },

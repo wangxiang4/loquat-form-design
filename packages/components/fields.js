@@ -384,7 +384,9 @@ export default [
       multiple: false,
       limit: 10,
       fileSize: 2,
+      oss: '',
       byteUnit: 'MB',
+      domain: 'http://tcdn.form.making.link/',
       uploadConfig: {
         home: '',
         url: '',
@@ -405,6 +407,10 @@ export default [
       disabled: false,
       hideLabel: false,
       hide: false,
+      static: false,
+      remoteType: 'datasource',
+      remoteFunc: 'funcGetToken',
+      remoteDataSource: '',
       customClass: [],
       validateConfig: {
         required: false

@@ -148,7 +148,7 @@ export function designTransformPreview (_this) {
       }
     }
     // 处理远端请求数据转换
-    if (SELECT_LIST.includes(col.type)) {
+    if (SELECT_LIST.includes(col.type) || col.type === 'upload') {
       if (col.static) _this.$set(_this.DIC, col.prop, col.dicData)
       if (!col.static) {
         const dataSource = autoDataSource && autoDataSource.find(item => item.key === col.remoteDataSource)

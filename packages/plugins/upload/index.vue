@@ -67,12 +67,9 @@
 </template>
 
 <script>
-import packages from '@/utils/packages'
-import { getToken } from '@utils/qiniuOss'
-import { getClient } from '@utils/aliOss'
 import axios from 'loquat-axios'
 import { detailImg } from '@utils/watermark'
-import { getFileUrl, deepClone } from '@utils'
+import { getFileUrl, byteCapacityCompute } from '@utils'
 export default {
   name: 'Upload',
   props: {
@@ -145,6 +142,10 @@ export default {
     oss: {
       type: String
     },
+    dic: {
+      type: String,
+      default: ''
+    },
     showCanvas: {
       type: Boolean,
       default: false
@@ -160,6 +161,11 @@ export default {
       type: Boolean,
       default: false
     },
+    // 外链地址
+    domain: {
+      type: String,
+      default: ''
+    },
     uploadRemove: Function,
     uploadRemoveBefore: Function,
     uploadPreview: Function,
@@ -174,12 +180,7 @@ export default {
     return {
       text: [],
       reqs: {},
-      menu: false,
-      byteUnitFormula: {
-        KB: 1024,
-        MB: 1024 / 1024,
-        GB: 1024 / 1024 / 1024
-      }
+      menu: false
     }
   },
   computed: {
@@ -272,89 +273,52 @@ export default {
         return
       }
       let file = config.file
-      const fileSize = file.size / this.byteUnitFormula[this.byteUnit]
+      const fileSize = byteCapacityCompute(file.size, this.byteUnit)
       if (!this.$loquat.validateNull(fileSize) && fileSize > this.fileSize) {
         config.onError('文件太大不符合')
         return
       }
-      const headers = Object.assign(this.headers, { 'Content-Type': 'multipart/form-data' })
-      // oss配置属性
-      let ossConfig = {}
-      let client = {}
-      const param = new FormData()
       const done = () => {
+        let ossConfig = {}
+        const param = new FormData()
+        const headers = Object.assign(this.headers, { 'Content-Type': 'multipart/form-data' })
         const callback = (newFile) => {
-          let url = this.action
-          // 附加属性
-          for (const o in this.data) {
-            param.append(o, this.data[o])
-          }
+          for (const o in this.data) param.append(o, this.data[o])
           const uploadFile = newFile || file
-          param.append(this.fileName, uploadFile)
-          // 七牛云oss存储
-          if (this.isQiniuOss) {
-            if (!window.CryptoJS) {
-              packages.logs('CryptoJS')
-              config.onError('七牛云oss存储检测不存在CryptoJS文件')
-              return
-            }
-            ossConfig = this.$loquat.qiniu
-            const token = getToken(ossConfig.AK, ossConfig.SK, {
-              scope: ossConfig.scope,
-              deadline: new Date().getTime() + ossConfig.deadline * 3600
-            })
-            param.append('token', token)
-            url = ossConfig.bucket
-          // 阿里云oss存储
-          } else if (this.isAliOss) {
-            if (!window.OSS) {
-              packages.logs('AliOSS')
-              config.onError('阿里云oss存储检测不存在AliOSS文件')
-              return
-            }
-            ossConfig = this.$loquat.ali
-            client = getClient(ossConfig)
-          }
+          param.append(this.fileName, uploadFile);
+          // 开始发送请求上传文件
           (() => {
-            if (this.isAliOss) { // 使用aliOss客户端传输套接字
-              return client.put(uploadFile.name, uploadFile, {
-                headers: this.headers
-              })
-            } else { // 使用axios传输套接字
-              return axios.post(url, param, {
-                headers,
-                onUploadProgress: function progress (e) {
-                  if (e.total > 0) {
-                    e.percent = e.loaded / e.total * 100
-                  }
-                  config.onProgress(e)
-                },
-                cancelToken: new axios.CancelToken(c => { this.reqs[file.uid] = c }),
-                withCredentials: this.withCredentials
-              })
+            if (this.isQiniuOss) { // qiniu
+              param.append('token', this.dic)
+              ossConfig = this.$loquat.qiniu
+            } else if (this.isAliOss) { // ali
+              ossConfig = this.$loquat.ali
             }
-          })()
-            .then(res => {
-              let responseData
-              if (this.isQiniuOss) {
-                res.data.key = ossConfig.url + res.data.key
-              }
-
-              if (this.isAliOss) {
-                responseData = deepClone(this.$loquat.get(res, this.resKey, ''))
-              } else {
-                responseData = deepClone(this.$loquat.get(res.data, this.resKey, ''))
-              }
-
-              if (typeof this.uploadAfter === 'function') {
-                this.uploadAfter(responseData, config.onSuccess(responseData))
-              } else config.onSuccess(responseData)
+            const url = (this.isQiniuOss || this.isAliOss) ? ossConfig.up : this.action
+            return axios.post(url, param, {
+              headers,
+              onUploadProgress: function progress (e) {
+                if (e.total > 0) {
+                  e.percent = e.loaded / e.total * 100
+                }
+                config.onProgress(e)
+              },
+              cancelToken: new axios.CancelToken(c => {
+                this.reqs[file.uid] = c
+              }),
+              withCredentials: this.withCredentials
             })
-            .catch(error => {
-              if (typeof this.uploadAfter === 'function') {
-                this.uploadAfter(error, config.onError(error))
-              } else config.onError(error)
-            })
+          })().then(res => {
+            (this.isQiniuOss || this.isAliOss) ? res.data.url = this.domain + res.data.key : ''
+            const responseData = this.$loquat.get(res.data, this.resKey, '')
+            if (typeof this.uploadAfter === 'function') {
+              this.uploadAfter(responseData, config.onSuccess(responseData))
+            } else config.onSuccess(responseData)
+          }).catch(error => {
+            if (typeof this.uploadAfter === 'function') {
+              this.uploadAfter(error, config.onError(error))
+            } else config.onError(error)
+          })
         }
         if (typeof this.uploadBefore === 'function') {
           this.uploadBefore(file, callback)
