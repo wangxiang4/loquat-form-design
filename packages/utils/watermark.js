@@ -122,20 +122,33 @@ export function detailImg (file, option = {}) {
     width: 200,
     height: 200
   }
+  const config = {
+    text: '商用通用大水印', // 文字
+    fontFamily: 'microsoft yahei', // 字体
+    color: '#999', // 颜色
+    fontSize: 16, // 大小
+    opacity: 100, // 透明度
+    bottom: 10, // 下边位置
+    right: 10, // 右边位置
+    ratio: 1, // 压缩比
+    left: 0, // 左边位置
+    top: 0 // 上边位置
+  }
+  let canvas, ctx
   return new Promise(function (resolve, reject) {
     const { text, fontFamily, color, fontSize, opacity, bottom, right, ratio } = option
     initParams()
     fileToBase64(file, initImg)
     // 参数初始化
     function initParams () {
-      this.text = text || '商用通用大水印' // 文字
-      this.fontFamily = fontFamily || 'microsoft yahei' // 字体
-      this.color = color || '#999' // 颜色
-      this.fontSize = fontSize || 16 // 大小
-      this.opacity = opacity || 100 // 透明度
-      this.bottom = bottom || 10 // 下边位置
-      this.right = right || 10 // 右边位置
-      this.ratio = ratio || 1 // 压缩比
+      config.text = text || config.text // 文字
+      config.fontFamily = fontFamily || config.fontFamily // 字体
+      config.color = color || config.color // 颜色
+      config.fontSize = fontSize || config.fontSize // 大小
+      config.opacity = opacity || config.opacity // 透明度
+      config.bottom = bottom || config.bottom // 下边位置
+      config.right = right || config.right // 右边位置
+      config.ratio = ratio || config.ratio // 压缩比
     }
     // 加载图片
     function initImg (data) {
@@ -145,54 +158,54 @@ export function detailImg (file, option = {}) {
         const width = img.width
         const height = img.height
         creteCanvas(width, height)
-        this.ctx.drawImage(img, 0, 0, width, height)
+        ctx.drawImage(img, 0, 0, width, height)
         setText(width, height)
-        resolve(dataURLtoFile(document.getElementById('canvas').toDataURL(file.type, this.ratio), file.name))
+        resolve(dataURLtoFile(document.getElementById('canvas').toDataURL(file.type, config.ratio), file.name))
       }
     }
     // 创建画板
     function creteCanvas (width, height) {
-      this.canvas = document.getElementById('canvas')
-      if (this.canvas === null) {
-        this.canvas = document.createElement('canvas')
-        this.canvas.id = 'canvas'
-        this.canvas.className = 'loquat-canvas'
-        document.body.appendChild(this.canvas)
+      canvas = document.getElementById('canvas')
+      if (canvas === null) {
+        canvas = document.createElement('canvas')
+        canvas.id = 'canvas'
+        canvas.className = 'loquat-canvas'
+        document.body.appendChild(canvas)
       }
-      this.ctx = this.canvas.getContext('2d')
-      this.canvas.width = width
-      this.canvas.height = height
+      ctx = canvas.getContext('2d')
+      canvas.width = width
+      canvas.height = height
     }
     // 添加水印
     function setText (width, height) {
-      const txt = this.text
+      const txt = config.text
       const param = calcParam(txt, width, height)
-      this.ctx.font = param.fontSize + 'px ' + this.fontFamily
-      this.ctx.fillStyle = this.color
-      this.ctx.globalAlpha = this.opacity / 100
-      this.ctx.fillText(txt, param.x, param.y)
+      ctx.font = param.fontSize + 'px ' + config.fontFamily
+      ctx.fillStyle = config.color
+      ctx.globalAlpha = config.opacity / 100
+      ctx.fillText(txt, param.x, param.y)
     }
     // 计算比例
     function calcParam (txt, width, height) {
       let x, y
 
       // 字体的比例
-      const calcFontSize = this.fontSize / configDefault.width
+      const calcFontSize = config.fontSize / configDefault.width
       const fontSize = calcFontSize * width
 
-      if (this.bottom) {
-        y = configDefault.height - this.bottom
+      if (config.bottom) {
+        y = configDefault.height - config.bottom
       } else {
-        y = this.top
+        y = config.top
       }
 
-      if (this.right) {
-        x = configDefault.width - this.right
+      if (config.right) {
+        x = configDefault.width - config.right
       } else {
-        x = this.left
+        x = config.left
       }
-      this.ctx.font = this.fontSize + 'px ' + this.fontFamily
-      var txtWidth = Number(this.ctx.measureText(txt).width)
+      ctx.font = config.fontSize + 'px ' + config.fontFamily
+      var txtWidth = Number(ctx.measureText(txt).width)
 
       x = x - txtWidth
 

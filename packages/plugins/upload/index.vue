@@ -1,6 +1,6 @@
 <template>
   <div class="loquat-upload">
-    <el-upload :class="{ 'loquat-upload__list':listType=='picture-img', 'loquat-upload__disabled':disabled }"
+    <el-upload :class="{ 'loquat-upload__list': listType=='picture-img', 'loquat-upload__disabled': (disabled || !tokenOnline) }"
                :action="action"
                :accept="acceptList"
                :multiple="multiple"
@@ -13,7 +13,7 @@
                :http-request="httpUpload"
                :before-remove="handleBeforeRemove"
                :on-remove="handleRemove"
-               :on-preview="handlePreview"
+               :on-preview="handleTagPreview"
                :on-change="handleFileChange"
                :on-exceed="handleExceed"
                :on-error="handleError"
@@ -180,7 +180,18 @@ export default {
     return {
       text: [],
       reqs: {},
-      menu: false
+      menu: false,
+      tokenOnline: false
+    }
+  },
+  watch: {
+    dic: {
+      handler (n) {
+        if (this.oss && this.$loquat.validateNull(n)) {
+          this.tokenOnline = false
+        } else this.tokenOnline = true
+      },
+      immediate: true
     }
   },
   computed: {
@@ -251,6 +262,18 @@ export default {
         return Promise.resolve()
       }
     },
+    // 处理打开新标签页面预览
+    handleTagPreview (file) {
+      const callback = () => {
+        const url = file.url
+        window.open(url)
+      }
+      if (typeof this.uploadPreview === 'function') {
+        this.uploadPreview(file, callback)
+      } else {
+        callback()
+      }
+    },
     // 处理预览
     handlePreview (file) {
       const callback = () => {
@@ -294,8 +317,6 @@ export default {
             if (this.isQiniuOss) {
               param.append(this.fileName, uploadFile)
               param.append('token', this.dic)
-              param.append('key', uploadFile.uid)
-              param.append('fname', uploadFile.name)
               ossConfig = this.$loquat.qiniu
               url = ossConfig.up
               withCredentials = false
