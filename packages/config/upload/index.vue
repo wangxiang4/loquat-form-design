@@ -21,13 +21,10 @@
     <el-form-item v-loquat-has-perm="[data, 'oss']" label="OSS" >
       <el-radio-group v-model="data.oss">
         <el-radio-button label="">
-          不使用OSS
+          上传请求
         </el-radio-button>
         <el-radio-button label="qiniu">
           七牛OSS
-        </el-radio-button>
-        <el-radio-button label="ali">
-          阿里OSS
         </el-radio-button>
       </el-radio-group>
     </el-form-item>

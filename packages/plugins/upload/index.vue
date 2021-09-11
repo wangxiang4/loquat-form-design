@@ -199,9 +199,6 @@ export default {
     isQiniuOss () {
       return this.oss === 'qiniu'
     },
-    isAliOss () {
-      return this.oss === 'ali'
-    },
     acceptList () {
       if (Array.isArray(this.accept)) {
         return this.accept.join(',')
@@ -211,9 +208,11 @@ export default {
     fileList () {
       // 添加额外的参数
       return (this.text || []).map(ele => {
+        // url考虑自己设置 || 响应后更新后的
+        const url = ele.response?.[this.urlKey] || ele[this.urlKey]
         const files = Object.assign(ele, {
-          isImage: ele.isImage || this.$loquat.typeList.img.test(ele[this.urlKey]),
-          url: getFileUrl(this.homeUrl, ele[this.urlKey] || ele.response?.[this.urlKey])
+          isImage: ele.isImage || this.$loquat.typeList.img.test(url),
+          url: getFileUrl(this.homeUrl, url)
         })
         return files
       })
@@ -223,7 +222,9 @@ export default {
     },
     imgUrl () {
       if (!this.$loquat.validateNull(this.text)) {
-        return getFileUrl(this.homeUrl, this.text[0]?.[this.urlKey] || this.text[0]?.response?.[this.urlKey])
+        // url考虑自己设置 || 响应后更新后的
+        const url = this.text[0]?.response?.[this.urlKey] || this.text[0]?.[this.urlKey]
+        return getFileUrl(this.homeUrl, url)
       }
       return ''
     },
@@ -280,21 +281,23 @@ export default {
       }
       const done = () => {
         let ossConfig = {}
+        let url = this.action
         const param = new FormData()
         const headers = Object.assign(this.headers, { 'Content-Type': 'multipart/form-data' })
         const callback = (newFile) => {
           for (const o in this.data) param.append(o, this.data[o])
-          const uploadFile = newFile || file
-          param.append(this.fileName, uploadFile);
+          const uploadFile = newFile || file;
           // 开始发送请求上传文件
           (() => {
-            if (this.isQiniuOss) { // qiniu
+            // 使用七牛OSS请求数据处理
+            if (this.isQiniuOss) {
+              param.append(this.fileName, uploadFile)
               param.append('token', this.dic)
+              param.append('key', uploadFile.uid)
+              param.append('fname', uploadFile.name)
               ossConfig = this.$loquat.qiniu
-            } else if (this.isAliOss) { // ali
-              ossConfig = this.$loquat.ali
+              url = ossConfig.up
             }
-            const url = (this.isQiniuOss || this.isAliOss) ? ossConfig.up : this.action
             return axios.post(url, param, {
               headers,
               onUploadProgress: function progress (e) {
@@ -309,12 +312,15 @@ export default {
               withCredentials: this.withCredentials
             })
           })().then(res => {
-            (this.isQiniuOss || this.isAliOss) ? res.data.url = this.domain + res.data.key : ''
+            // 使用七牛OSS响应数据处理
+            if (this.isQiniuOss) res.data[this.urlKey] = this.domain + res.data.key
             const responseData = this.$loquat.get(res.data, this.resKey, '')
+            // 成功调用外部提供上传后接口
             if (typeof this.uploadAfter === 'function') {
               this.uploadAfter(responseData, config.onSuccess(responseData))
             } else config.onSuccess(responseData)
           }).catch(error => {
+            // 异常调用外部提供上传后接口
             if (typeof this.uploadAfter === 'function') {
               this.uploadAfter(error, config.onError(error))
             } else config.onError(error)
