@@ -282,6 +282,7 @@ export default {
       const done = () => {
         let ossConfig = {}
         let url = this.action
+        let withCredentials = this.withCredentials
         const param = new FormData()
         const headers = Object.assign(this.headers, { 'Content-Type': 'multipart/form-data' })
         const callback = (newFile) => {
@@ -297,6 +298,7 @@ export default {
               param.append('fname', uploadFile.name)
               ossConfig = this.$loquat.qiniu
               url = ossConfig.up
+              withCredentials = false
             }
             return axios.post(url, param, {
               headers,
@@ -309,7 +311,7 @@ export default {
               cancelToken: new axios.CancelToken(c => {
                 this.reqs[file.uid] = c
               }),
-              withCredentials: this.withCredentials
+              withCredentials
             })
           })().then(res => {
             // 使用七牛OSS响应数据处理

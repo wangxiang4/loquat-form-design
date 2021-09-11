@@ -37,12 +37,11 @@ export default {
       imagePreview: imagePreview(Vue),
       qiniu: {
         up: 'https://upload.qiniup.com', // 存储地区，默认为华东，其他的如下表
-        bucket: 'formmakingtemp', // 存储空间名称
-        ak: 'PxqtWzgkQHTp3ye1mcnQwomV5vBeCl688sEmsaGI', // 七牛云相关密钥
-        sk: '', // 七牛云相关密钥
+        bucket: 'loquat', // 存储空间名称
+        ak: 'z1KE2yt6JzO9zVxqPsnVo5m9AeI-dDTpia_qTb6X', // 七牛云相关密钥
+        sk: 'outhjqeI2PiHZnKsQTZD5DGP3GLzEUf1-w5C0ak6', // 七牛云相关密钥
         deadline: 1 // token过期时间(单位:h)
-      },
-      ali: {}
+      }
     }
     Vue.component(KEY_COMPONENT_NAME + FormDesign.name, FormDesign)
   }

@@ -15,18 +15,18 @@
     <el-form-item v-loquat-has-perm="[data, 'tip']" label="字段提示" >
       <el-input v-model="data.tip" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'action']" label="上传地址" >
-      <el-input v-model="data.action" clearable/>
-    </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'oss']" label="OSS" >
       <el-radio-group v-model="data.oss">
         <el-radio-button label="">
-          上传请求
+          普通请求
         </el-radio-button>
         <el-radio-button label="qiniu">
           七牛OSS
         </el-radio-button>
       </el-radio-group>
+    </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, 'action']" v-if="!data.oss" label="上传地址" >
+      <el-input v-model="data.action" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'domain']" v-if="data.oss" label="Domain" >
       <el-input v-model="data.domain" clearable/>
@@ -54,6 +54,9 @@
                   clearable
         />
       </template>
+    </el-form-item>
+    <el-form-item v-loquat-has-perm="[data, 'limit']" label="最大上传数" >
+      <el-input v-model.number="data.limit" type="number" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'accept']" label="文件类型">
       <el-select v-model="data.accept"
@@ -151,9 +154,6 @@
           缩略图
         </el-radio-button>
       </el-radio-group>
-    </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'limit']" label="最大上传数" >
-      <el-input v-model.number="data.limit" type="number" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, ['fileSize', 'byteUnit'], 1]" label="文件大小" >
       <el-input v-model.number="data.fileSize" placeholder="请输入文件大小">
@@ -282,7 +282,7 @@
         <el-col v-loquat-has-perm="[data, 'multiple']" :span="operationComputedSpan">
           <el-checkbox v-model="data.multiple">是否多选</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'withCredentials']" :span="24">
+        <el-col v-loquat-has-perm="[data, 'withCredentials']" v-if="!data.oss" :span="24">
           <el-checkbox v-model="data.withCredentials">跨域请求是否提供凭据信息</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[data, 'showFileList']" :span="24">
