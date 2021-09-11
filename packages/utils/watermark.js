@@ -160,8 +160,9 @@ export function detailImg (file, option = {}) {
         creteCanvas(width, height)
         ctx.drawImage(img, 0, 0, width, height)
         setText(width, height)
-        resolve(dataURLtoFile(document.getElementById('canvas').toDataURL(file.type, config.ratio), file.name))
+        const files = dataURLtoFile(document.getElementById('canvas').toDataURL(file.type, config.ratio))
         document.getElementById('canvas').remove()
+        resolve(files, file.name)
       }
     }
     // 创建画板
