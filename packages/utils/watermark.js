@@ -161,6 +161,7 @@ export function detailImg (file, option = {}) {
         ctx.drawImage(img, 0, 0, width, height)
         setText(width, height)
         resolve(dataURLtoFile(document.getElementById('canvas').toDataURL(file.type, config.ratio), file.name))
+        document.getElementById('canvas').remove()
       }
     }
     // 创建画板
