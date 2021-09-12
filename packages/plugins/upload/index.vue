@@ -69,7 +69,7 @@
 <script>
 import axios from 'loquat-axios'
 import { detailImg } from '@utils/watermark'
-import { getFileUrl, byteCapacityCompute } from '@utils'
+import { getFileUrl, byteCapacityCompute, urlJoin } from '@utils'
 export default {
   name: 'Upload',
   props: {
@@ -207,6 +207,12 @@ export default {
     resKey () {
       return this.uploadConfig.res || ''
     },
+    externalLinkKey () {
+      return this.uploadConfig.externalLink || ''
+    },
+    externalLinkQiniuKey () {
+      return this.uploadConfig.externalLinkQiniu || 'key'
+    },
     isQiniuOss () {
       return this.oss === 'qiniu'
     },
@@ -313,9 +319,9 @@ export default {
           const uploadFile = newFile || file;
           // 开始发送请求上传文件
           (() => {
+            param.append(this.fileName, uploadFile)
             // 使用七牛OSS请求数据处理
             if (this.isQiniuOss) {
-              param.append(this.fileName, uploadFile)
               param.append('token', this.dic)
               ossConfig = this.$loquat.qiniu
               url = ossConfig.up
@@ -335,9 +341,13 @@ export default {
               withCredentials
             })
           })().then(res => {
-            // 使用七牛OSS响应数据处理
-            if (this.isQiniuOss) res.data[this.urlKey] = this.domain + res.data.key
             const responseData = this.$loquat.get(res.data, this.resKey, '')
+            responseData[this.urlKey] = this.$loquat.get(responseData, this.externalLinkKey, '')
+            // 使用七牛OSS响应数据处理
+            if (this.isQiniuOss) {
+              responseData[this.urlKey] =
+                  urlJoin(this.domain, this.$loquat.get(responseData, this.externalLinkQiniuKey, ''))
+            }
             // 成功调用外部提供上传后接口
             if (typeof this.uploadAfter === 'function') {
               this.uploadAfter(responseData, config.onSuccess(responseData))

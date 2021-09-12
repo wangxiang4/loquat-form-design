@@ -183,6 +183,10 @@
             <span class="horizontal-tip-text">响应数据url键:</span>
             <el-input v-model="uploadConfig.url" size="mini" clearable/>
           </div>
+          <div v-loquat-has-perm="[uploadConfig, 'externalLink']">
+            <span class="horizontal-tip-text">外链url键:</span>
+            <el-input v-model="uploadConfig.externalLink" size="mini" clearable/>
+          </div>
         </el-collapse-item>
         <el-collapse-item v-loquat-has-perm="[data, canvasOptionPerm, 1]" title="水印配置">
           <div v-loquat-has-perm="[canvasOption, 'text']">
@@ -422,4 +426,3 @@ export default {
   }
 }
 </script>
-`

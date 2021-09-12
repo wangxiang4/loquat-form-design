@@ -373,7 +373,7 @@ export default [
         width: '100%'
       },
       tip: '',
-      action: 'https://www.fastmock.site/mock/185db6c1486280937f7c763b10fa48fa/test/upload',
+      action: 'http://localhost/api/common/upload',
       headers: [],
       data: [],
       accept: '',
@@ -388,10 +388,12 @@ export default [
       byteUnit: 'MB',
       domain: 'http://tcdn.form.making.link/',
       uploadConfig: {
-        home: '',
+        home: 'http://localhost/api',
         url: '',
         fileName: '',
-        res: ''
+        res: '',
+        externalLink: 'data',
+        externalLinkQiniu: 'key'
       },
       canvasOption: {
         fontSize: 16,

@@ -187,7 +187,7 @@ export function dataURLtoFile (dataUrl, filename) {
 /** 文件上传判断是否拼接根地址加子地址 **/
 export function getFileUrl (home, uri) {
   return getObjType(uri) === 'string'
-    ? uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : home + uri
+    ? uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : urlJoin(home, uri)
     : ''
 }
 
@@ -201,4 +201,9 @@ export function byteCapacityCompute (fileSize, unit) {
     case 'GB':
       return fileSize / 1024 / 1024
   }
+}
+
+/** 处理url路径拼接是否自动加斜杠 **/
+export function urlJoin (base, url) {
+  return `${base.replace(/([\w\W]+)\/$/, '$1')}/${url.replace(/^\/([\w\W]+)$/, '$1')}`
 }
