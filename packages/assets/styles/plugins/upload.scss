@@ -10,7 +10,8 @@
       margin-top: -6px;
     }
   }
-  &__list {
+
+  &__img {
     .el-upload {
       border: 1px dashed #d9d9d9;
       border-radius: 6px;
@@ -22,6 +23,7 @@
       border-color: #409eff;
     }
   }
+
   &__menu{
     position: absolute;
     top:0;
@@ -39,6 +41,7 @@
       font-size: 20px;
     }
   }
+
   &__icon {
     font-size: 28px;
     color: #8c939d;
@@ -47,6 +50,7 @@
     line-height: 178px;
     text-align: center;
   }
+
   &__avatar {
     width: 178px;
     height: 178px;

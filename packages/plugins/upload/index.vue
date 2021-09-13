@@ -1,6 +1,6 @@
 <template>
   <div class="loquat-upload">
-    <el-upload :class="{ 'loquat-upload__list': listType=='picture-img', 'loquat-upload__disabled': (disabled || !tokenOnline) }"
+    <el-upload :class="{ 'loquat-upload__img': listType=='picture-img', 'loquat-upload__disabled': (disabled || !tokenOnline) }"
                :action="action"
                :accept="acceptList"
                :multiple="multiple"
