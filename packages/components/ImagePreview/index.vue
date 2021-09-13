@@ -65,6 +65,12 @@
 <script>
 export default {
   name: 'ImagePreview',
+  mounted () {
+    document.addEventListener('keydown', this.keydown)
+  },
+  beforeDestroy () {
+    document.removeEventListener('keydown', this.keydown)
+  },
   data () {
     return {
       left: 0,
@@ -74,7 +80,8 @@ export default {
       rotate: 0,
       isShow: false,
       index: 0,
-      onClose: null
+      onClose: null,
+      fullScreen: false
     }
   },
   computed: {
@@ -163,6 +170,11 @@ export default {
       this.isShow = false
       if (typeof this.onClose === 'function') {
         this.onClose(this)
+      }
+    },
+    keydown (e) {
+      if (e.keyCode === 27) { // esc关闭消息
+        if (this.isShow) this.close()
       }
     }
   }
