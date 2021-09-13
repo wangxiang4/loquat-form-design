@@ -227,10 +227,7 @@ export default {
       return (this.text || []).map(ele => {
         // url考虑自己设置 || 响应后更新后的
         const url = ele.response?.[this.urlKey] || ele[this.urlKey]
-        const files = Object.assign(ele, {
-          isImage: ele.isImage || this.$loquat.typeList.img.test(url),
-          url: getFileUrl(this.homeUrl, url)
-        })
+        const files = Object.assign(ele, { url: getFileUrl(this.homeUrl, url) })
         return files
       })
     },
