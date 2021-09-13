@@ -56,9 +56,6 @@
       <div class="el-image-viewer__actions__inner">
         <i class="el-icon-zoom-out" @click="subScale"/>
         <i class="el-icon-zoom-in" @click="addScale"/>
-        <!-- <i class="el-image-viewer__actions__divider"></i> -->
-        <!-- <i class="el-icon-full-screen"></i> -->
-        <!-- <i class="el-image-viewer__actions__divider"></i> -->
         <i class="el-icon-refresh-left" @click="rotate=rotate-90"/>
         <i class="el-icon-refresh-right" @click="rotate=rotate+90"/>
       </div>

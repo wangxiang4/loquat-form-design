@@ -13,7 +13,7 @@
                :http-request="httpUpload"
                :before-remove="handleBeforeRemove"
                :on-remove="handleRemove"
-               :on-preview="handleTagPreview"
+               :on-preview="handlePreview"
                :on-change="handleFileChange"
                :on-exceed="handleExceed"
                :on-error="handleError"
@@ -268,20 +268,9 @@ export default {
         return Promise.resolve()
       }
     },
-    // 处理打开新标签页面预览
-    handleTagPreview (file) {
-      const callback = () => {
-        const url = file.url
-        window.open(url)
-      }
-      if (typeof this.uploadPreview === 'function') {
-        this.uploadPreview(file, callback)
-      } else {
-        callback()
-      }
-    },
     // 处理预览
     handlePreview (file) {
+      if (this.$loquat.validateNull(file)) return console.warn('文件尚未上传完毕,请稍后预览!')
       const callback = () => {
         const url = file.url
         const list = this.fileList.map(ele => Object.assign(ele, {
