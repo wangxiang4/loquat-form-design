@@ -267,7 +267,7 @@ export default {
     },
     // 处理预览
     handlePreview (file) {
-      if (this.$loquat.validateNull(file)) return console.warn('文件尚未上传完毕,请稍后预览!')
+      if (!file.url) return console.warn('文件尚未上传完毕,请稍后预览!')
       const callback = () => {
         const url = file.url
         const list = this.fileList.map(ele => Object.assign(ele, {
