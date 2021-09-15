@@ -34,9 +34,9 @@
                           @click.native.self="ops.closeOnClickModal?close():''"
         >
           <slot/>
-          <img v-if="$loquat.typeList.img.test(item.url) || $loquat.typeList.video.test(item.url)"
+          <img v-if="$loquat.typeList.img.test(item[ops.urlKey]) || $loquat.typeList.video.test(item[ops.urlKey])"
                ref="item"
-               :src="item.url"
+               :src="item[ops.urlKey]"
                :style="[styleName,styleBoxName]"
                controls="controls"
                v-bind="getIsVideo(item)"
@@ -44,7 +44,7 @@
                @mousedown="move"
           >
           <div v-else class="image-preview__file">
-            <a :href="item.url" target="_blank">
+            <a :href="item[ops.urlKey]" target="_blank">
               <i class="el-icon-document"/>
               <p>{{ item.name }}</p>
             </a>
@@ -78,10 +78,10 @@ export default {
       scale: 1,
       datas: [],
       rotate: 0,
+      loading: false,
       isShow: false,
       index: 0,
-      onClose: null,
-      fullScreen: false
+      onClose: null
     }
   },
   computed: {
@@ -106,7 +106,7 @@ export default {
       return this.imgList.length
     },
     imgList () {
-      return this.datas.map(ele => ele.url)
+      return this.datas.map(ele => ele[this.ops.urlKey])
     }
   },
   methods: {

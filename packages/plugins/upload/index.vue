@@ -73,6 +73,7 @@ import { getFileUrl, byteCapacityCompute, urlJoin } from '@utils'
 export default {
   name: 'Upload',
   props: {
+    value: { type: Array },
     listType: {
       type: String
     },
@@ -185,6 +186,16 @@ export default {
     }
   },
   watch: {
+    text: {
+      handler (n) {
+        this.handleChange(n)
+      }
+    },
+    value: {
+      handler () {
+        this.initVal()
+      }
+    },
     dic: {
       handler (n) {
         if (this.oss && this.$loquat.validateNull(n)) {
@@ -243,7 +254,7 @@ export default {
       return ''
     },
     imgParams () {
-      if (this.$loquat.typeList.video.test(this.imgUrl)) {
+      if (this.$loquat.typeList.video.test()) {
         return Object.assign({
           is: 'video'
         }, this.params)
@@ -252,6 +263,9 @@ export default {
     }
   },
   methods: {
+    initVal () {
+      this.text = this.value
+    },
     // 处理上传移除
     handleRemove (file, fileList) {
       this.uploadRemove && this.uploadRemove(file, fileList)
@@ -270,10 +284,8 @@ export default {
       if (!file.url) return console.warn('文件尚未上传完毕,请稍后预览!')
       const callback = () => {
         const url = file.url
-        const list = this.fileList.map(ele => Object.assign(ele, {
-          type: this.$loquat.typeList.video.test(ele.url) ? 'video' : ''
-        }))
-        const index = this.fileList.findIndex(ele => ele.url === url)
+        const list = this.$loquat.deepClone(this.fileList)
+        const index = list.findIndex(ele => ele.url === url)
         this.$loquat.imagePreview(list, index)
       }
       if (typeof this.uploadPreview === 'function') {
@@ -399,6 +411,10 @@ export default {
           delete reqs[uid]
         })
       }
+    },
+    handleChange (value) {
+      this.$emit('input', value)
+      this.$emit('change', value)
     }
   }
 }
