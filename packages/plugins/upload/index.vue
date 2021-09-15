@@ -318,6 +318,7 @@ export default {
           // 开始发送请求上传文件
           (() => {
             param.append(this.fileName, uploadFile)
+            param.append('key', uploadFile.uid)
             // 使用七牛OSS请求数据处理
             if (this.isQiniuOss) {
               param.append('token', this.dic)

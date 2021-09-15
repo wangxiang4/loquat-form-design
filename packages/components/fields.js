@@ -373,7 +373,7 @@ export default [
         width: '100%'
       },
       tip: '',
-      action: 'http://localhost/api/common/upload',
+      action: 'http://tools-server.making.link/api/transfer',
       headers: [],
       data: [],
       accept: '',

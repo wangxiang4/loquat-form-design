@@ -33,16 +33,7 @@ module.exports =  {
     host: '0.0.0.0',
     port: 80,
     open: true,
-    disableHostCheck: true,
-    proxy: {
-      '/api': {
-        target: `http://localhost:8888`,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
-      }
-    }
+    disableHostCheck: true
   },
 
   css: {
