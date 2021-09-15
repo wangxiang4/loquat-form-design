@@ -286,7 +286,7 @@ export default {
         const url = file.url
         const list = this.$loquat.deepClone(this.fileList)
         const index = list.findIndex(ele => ele.url === url)
-        this.$loquat.imagePreview(list, index)
+        this.$loquat.imagePreview(list, index, { urlKey: this.urlKey })
       }
       if (typeof this.uploadPreview === 'function') {
         this.uploadPreview(file, callback)
