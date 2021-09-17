@@ -284,7 +284,6 @@ export default {
       if (!file.url) return console.warn('文件尚未上传完毕,请稍后预览!')
       const callback = () => {
         const url = file.url
-        debugger
         // 处理如果是目前文件是列表显示直接利用浏览器预览
         if (this.listType !== 'picture-card' && this.listType !== 'picture-img') {
           window.open(url)
@@ -325,7 +324,6 @@ export default {
           // 开始发送请求上传文件
           (() => {
             param.append(this.fileName, uploadFile)
-            param.append('key', uploadFile.uid)
             // 使用七牛OSS请求数据处理
             if (this.isQiniuOss) {
               param.append('token', this.dic)
@@ -411,11 +409,11 @@ export default {
         let uid = file
         if (file.uid) uid = file.uid
         if (reqs[uid]) {
-          reqs[uid].abort()
+          typeof reqs[uid] === 'function' && reqs[uid]()
         }
       } else { // 全部执行取消请求
         Object.keys(reqs).forEach((uid) => {
-          if (reqs[uid]) reqs[uid].abort()
+          typeof reqs[uid] === 'function' && reqs[uid]()
           delete reqs[uid]
         })
       }
