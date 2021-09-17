@@ -138,6 +138,7 @@
                  append-to-body
                  center
                  fullscreen
+                 @close="handleBeforeClose"
       >
         <div :class="['form-preview', adapter]">
           <loquat-form v-if="previewVisible"
