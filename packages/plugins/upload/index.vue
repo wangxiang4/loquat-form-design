@@ -254,7 +254,7 @@ export default {
       return ''
     },
     imgParams () {
-      if (this.$loquat.typeList.video.test()) {
+      if (this.$loquat.typeList.video.test(this.imgUrl)) {
         return Object.assign({
           is: 'video'
         }, this.params)
@@ -284,9 +284,16 @@ export default {
       if (!file.url) return console.warn('文件尚未上传完毕,请稍后预览!')
       const callback = () => {
         const url = file.url
-        const list = this.$loquat.deepClone(this.fileList)
-        const index = list.findIndex(ele => ele.url === url)
-        this.$loquat.imagePreview(list, index, { urlKey: this.urlKey })
+        debugger
+        // 处理如果是目前文件是列表显示直接利用浏览器预览
+        if (this.listType !== 'picture-card' && this.listType !== 'picture-img') {
+          window.open(url)
+        } else {
+          // 使用预览组件查看
+          const list = this.$loquat.deepClone(this.fileList)
+          const index = list.findIndex(ele => ele.url === url)
+          this.$loquat.imagePreview(list, index, { urlKey: this.urlKey })
+        }
       }
       if (typeof this.uploadPreview === 'function') {
         this.uploadPreview(file, callback)
