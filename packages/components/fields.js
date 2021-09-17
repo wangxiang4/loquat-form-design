@@ -373,7 +373,7 @@ export default [
         width: '100%'
       },
       tip: '',
-      action: 'http://tools-server.making.link/api/transfer',
+      action: 'http://localhost:8888/common/upload',
       headers: [],
       data: [],
       accept: '',
@@ -388,7 +388,7 @@ export default [
       byteUnit: 'MB',
       domain: 'http://tcdn.form.making.link/',
       uploadConfig: {
-        home: 'http://localhost/api',
+        home: 'http://localhost:8888',
         url: '',
         fileName: '',
         res: '',
