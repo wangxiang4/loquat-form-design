@@ -234,10 +234,8 @@ export default {
       return this.accept
     },
     fileList () {
-      // 添加额外的参数
       return (this.text || []).map(ele => {
-        // url考虑自己设置 || 响应后更新后的
-        const url = ele.response?.[this.urlKey] || ele[this.urlKey]
+        const url = this.handleExternalLinkUrl(ele.response) || ele[this.urlKey]
         const files = Object.assign(ele, { url: getFileUrl(this.homeUrl, url) })
         return files
       })
@@ -247,8 +245,7 @@ export default {
     },
     imgUrl () {
       if (!this.$loquat.validateNull(this.text)) {
-        // url考虑自己设置 || 响应后更新后的
-        const url = this.text[0]?.response?.[this.urlKey] || this.text[0]?.[this.urlKey]
+        const url = this.handleExternalLinkUrl(this.text[0]?.response) || this.text[0]?.[this.urlKey]
         return getFileUrl(this.homeUrl, url)
       }
       return ''
@@ -265,6 +262,14 @@ export default {
   methods: {
     initVal () {
       this.text = this.value
+    },
+    // 处理上传外部链接地址
+    handleExternalLinkUrl (response) {
+      if (this.isQiniuOss) {
+        return urlJoin(this.domain, this.$loquat.get(response, this.externalLinkQiniuKey, ''))
+      } else {
+        return this.$loquat.get(response, this.externalLinkKey, '')
+      }
     },
     // 处理上传移除
     handleRemove (file, fileList) {
@@ -346,12 +351,6 @@ export default {
             })
           })().then(res => {
             const responseData = this.$loquat.get(res.data, this.resKey, '')
-            responseData[this.urlKey] = this.$loquat.get(responseData, this.externalLinkKey, '')
-            // 使用七牛OSS响应数据处理
-            if (this.isQiniuOss) {
-              responseData[this.urlKey] =
-                  urlJoin(this.domain, this.$loquat.get(responseData, this.externalLinkQiniuKey, ''))
-            }
             // 成功调用外部提供上传后接口
             if (typeof this.uploadAfter === 'function') {
               this.uploadAfter(responseData, config.onSuccess(responseData))
