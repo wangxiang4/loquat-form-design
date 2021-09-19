@@ -422,6 +422,64 @@ export default [
         uploadError: '',
         uploadRemove: ''
       }
+    }, {
+      type: 'upload',
+      label: '图片',
+      icon: 'icon-file-upload',
+      labelWidth: '',
+      customizeStyle: {
+        width: '100%'
+      },
+      tip: '',
+      action: 'http://localhost:8888/common/upload',
+      headers: [],
+      data: [],
+      accept: '',
+      listType: 'text',
+      drag: false,
+      withCredentials: false,
+      showFileList: true,
+      multiple: false,
+      limit: 10,
+      fileSize: 2,
+      oss: '',
+      byteUnit: 'MB',
+      domain: 'http://tcdn.form.making.link/',
+      uploadConfig: {
+        home: 'http://localhost:8888',
+        url: '',
+        fileName: '',
+        res: '',
+        externalLink: 'data',
+        externalLinkQiniu: 'key'
+      },
+      canvasOption: {
+        fontSize: 16,
+        opacity: 100,
+        bottom: 10,
+        right: 10,
+        ratio: 1,
+        text: '商用通用大水印',
+        fontFamily: 'microsoft yahei',
+        color: '#999'
+      },
+      showCanvas: false,
+      disabled: false,
+      hideLabel: false,
+      hide: false,
+      static: false,
+      remoteType: 'datasource',
+      remoteFunc: 'funcGetToken',
+      remoteDataSource: '',
+      customClass: [],
+      validateConfig: {
+        required: false
+      },
+      events: {
+        uploadSuccess: '',
+        uploadError: '',
+        uploadRemove: ''
+      }
     }]
   },
   {
