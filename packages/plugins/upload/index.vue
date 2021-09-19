@@ -367,7 +367,7 @@ export default {
         } else callback()
       }
       // 是否开启水印
-      if (this.showCanvas) {
+      if (this.showCanvas && file.type.indexOf('image') !== -1) {
         detailImg(file, this.canvasOption).then(res => {
           file = res
           done()
