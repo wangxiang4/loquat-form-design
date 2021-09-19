@@ -131,12 +131,6 @@ export function designTransformPreview (_this) {
   const autoDataSource = data.dataSource && data.dataSource.filter(item => item.auto)
   for (let i = 0; i < data.column.length; ++i) {
     const col = data.column[i]
-    // 处理上传数据
-    if (col.type === 'upload') {
-      // 转换请求头部与请求参数数据格式
-      col.headers = col.headers && Object(...col.headers.map(({ key, value }) => ({ [key]: value })))
-      col.data = col.data && Object(...col.data.map(({ key, value }) => ({ [key]: value })))
-    }
     // 处理动作转换数据
     if (!validateNull(col.events)) {
       for (const key in col.events) {
@@ -146,6 +140,15 @@ export function designTransformPreview (_this) {
           col.events[key] = new Function(event?.func)
         } else delete col.events[key]
       }
+    }
+    // 处理上传数据
+    if (col.type === 'upload') {
+      // 转换请求头部与请求参数数据格式
+      col.headers = col.headers && Object(...col.headers.map(({ key, value }) => ({ [key]: value })))
+      col.data = col.data && Object(...col.data.map(({ key, value }) => ({ [key]: value })))
+      // 处理动作数据
+      for (const key in col.events) col[key] = col.events[key]
+      delete col.events
     }
     // 处理远端请求数据转换
     if (SELECT_LIST.includes(col.type) || col.type === 'upload') {

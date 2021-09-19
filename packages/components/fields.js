@@ -418,7 +418,9 @@ export default [
         required: false
       },
       events: {
-        change: ''
+        uploadSuccess: '',
+        uploadError: '',
+        uploadRemove: ''
       }
     }]
   },

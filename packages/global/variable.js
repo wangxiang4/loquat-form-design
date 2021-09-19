@@ -48,7 +48,10 @@ export const JS_EXECUTE_INCLUDE = ['mounted']
 export const EVENT_DICT = {
   change: '值发生变化',
   focus: '获取焦点',
-  blur: '失去焦点'
+  blur: '失去焦点',
+  uploadSuccess: '上传成功',
+  uploadError: '上传失败',
+  uploadRemove: '移除'
 }
 export const DIC_PROPS = {
   nodeKey: 'id',
