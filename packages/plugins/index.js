@@ -14,6 +14,7 @@ import Switch from './switch'
 import slider from './slider'
 import font from './font'
 import upload from './upload'
+import cascader from './cascader'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
   empty,
@@ -31,7 +32,8 @@ const components = [
   Switch,
   slider,
   font,
-  upload
+  upload,
+  cascader
 ]
 
 const Plugins = {

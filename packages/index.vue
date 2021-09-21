@@ -586,6 +586,30 @@
           </el-container>
         </el-container>
       </el-dialog>
+      <el-dialog title="选项"
+                 class="loquat-dialog"
+                 :visible.sync="cascadeOptionVisible"
+                 :close-on-click-modal="false"
+                 width="800px"
+                 append-to-body
+                 top="3vh"
+                 center
+      >
+        <ace-editor v-model="cascadeOption"
+                    lang="json"
+                    theme="textmate"
+                    style="height: 400px;"
+        />
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary"
+                     size="medium"
+                     @click="handleCascadeOptionSubmit"
+          >确定</el-button>
+          <el-button size="medium"
+                     @click="cascadeOptionVisible = false"
+          >取消</el-button>
+        </span>
+      </el-dialog>
     </el-container>
   </div>
 </template>
@@ -737,7 +761,9 @@ export default {
       dataSourceMenuItemDisabled: false,
       dataSourceMainContainerVisible: false,
       styleSheets: '',
-      previewDisableSwitch: false
+      previewDisableSwitch: false,
+      cascadeOptionVisible: false,
+      cascadeOption: ''
     }
   },
   computed: {
@@ -1217,6 +1243,26 @@ export default {
           deadline: new Date().getTime() + (oss.deadline || 1) * 3600
         })
       }
+    },
+    // 处理级联静态数据设置对话框提交
+    handleCascadeOptionSubmit () {
+      try {
+        const cascadeOptionData = JSON.parse(this.cascadeOption)
+        this.$set(this.widgetFormSelect, 'dicData', cascadeOptionData)
+        this.cascadeOptionVisible = false
+      } catch (e) {
+        this.$message.error(e.message)
+      }
+    },
+    // 处理级联静态数据设置对话框初始值
+    handleCascadeOptionSetData (obj) {
+      this.$loquat.validateNull(obj) ? this.$message.error('目前插件级联静态数据为空!') : ''
+      const clone = this.$loquat.deepClone(obj)
+      this.generateJson = beautifier(clone, {
+        quoteType: 'double',
+        dropQuotesOnKeys: false
+      })
+      this.cascadeOptionVisible = true
     }
   }
 }

@@ -422,6 +422,66 @@ export default [
         uploadError: '',
         uploadRemove: ''
       }
+    }, {
+      type: 'cascader',
+      label: '级联选择器',
+      icon: 'icon-cascade',
+      value: [],
+      multiple: false,
+      disabled: false,
+      clearable: false,
+      placeholder: '',
+      validateConfig: {
+        required: false
+      },
+      customizeStyle: {
+        width: '100%'
+      },
+      dicData: [
+        {
+          value: 'Option 1',
+          label: 'Option 1',
+          children: [
+            {
+              value: 'Option 1 - children',
+              label: 'Option 1 - children'
+            }
+          ]
+        },
+        {
+          value: 'Option 2',
+          label: 'Option 2',
+          children: [
+            {
+              value: 'Option 2 - children',
+              label: 'Option 2 - children'
+            }
+          ]
+        },
+        {
+          value: 'Option 3',
+          label: 'Option 3'
+        }
+      ],
+      static: true,
+      remoteType: '',
+      remoteOption: 'optionDefault',
+      filterable: false,
+      props: {
+        label: 'label',
+        value: 'value'
+      },
+      remoteFunc: 'funcDefault',
+      customClass: [],
+      labelWidth: '',
+      hideLabel: false,
+      hide: false,
+      remoteDataSource: '',
+      events: {
+        change: '',
+        focus: '',
+        blur: ''
+      }
     }]
   },
   {

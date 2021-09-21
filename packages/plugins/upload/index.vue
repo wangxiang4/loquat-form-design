@@ -4,6 +4,7 @@
                :action="action"
                :accept="acceptList"
                :multiple="multiple"
+               :style="customizeStyle"
                :limit="limit"
                :drag="drag"
                :show-file-list="isPictureImg?false:showFileList"
@@ -72,8 +73,12 @@ import { detailImg } from '@utils/watermark'
 import { getFileUrl, byteCapacityCompute, urlJoin } from '@utils'
 export default {
   name: 'Upload',
+  inheritAttrs: false,
   props: {
     value: { type: Array },
+    customizeStyle: {
+      type: Object
+    },
     listType: {
       type: String
     },

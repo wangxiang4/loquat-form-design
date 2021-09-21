@@ -110,8 +110,6 @@ export function getComponentConfig (type, component) {
     result = 'input'
   } else if (['array', 'img'].includes(type)) {
     result = 'array'
-  } else if (['tree', 'cascader'].includes(type)) {
-    result = 'tree'
   } else if (['time', 'timerange'].includes(type)) {
     result = 'time'
   } else if (DATE_LIST.includes(type)) {
