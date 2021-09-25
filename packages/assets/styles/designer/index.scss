@@ -3,10 +3,12 @@
 $primary-color: #409eff;
 $primary-active-color: #ecf5ff;
 $primary-background-color: #ecf8ff;
-$primary-hide-color: #FEF0F0;
+$primary-hide-color: #fef0f0;
 $primary-readonly-color: #F2F2F2;
 $primary-ghost-color: #67C23A;
-
+$coral-layout-color: #e6a23c;
+$coral-layout-ghost-color: #fff700;
+$coral-layout-background-color: #fdf6ec;
 
 *,
 ::after,
@@ -210,7 +212,7 @@ $primary-ghost-color: #67C23A;
       .widget-view {
         position: relative;
         border: 1px dashed hsla(0,0%,66.7%,.5);
-        background-color: rgba(236,245,255,.3);
+        background-color: rgba(236, 245, 255, 0.3);
         margin: 2px;
         overflow: hidden;
         min-height: 50px;
@@ -301,6 +303,98 @@ $primary-ghost-color: #67C23A;
           top: 0;
           display: block;
           z-index: 1000;
+        }
+      }
+
+      .coral-layout {
+        &-row {
+          padding-bottom: 0;
+          padding: 5px;
+          position: relative;
+          background-color: rgba(253, 246, 236, 0.3);
+          &.active{
+            outline: 2px solid $coral-layout-color;
+            border: 1px solid $coral-layout-color;
+          }
+
+          &:hover{
+            outline: 1px solid $coral-layout-color;
+            background: $coral-layout-background-color;
+            outline-offset: 0;
+
+            &.active{
+              outline: 2px solid $coral-layout-color;
+              border: 1px solid $coral-layout-color;
+              outline-offset: 0;
+            }
+          }
+
+          &.ghost{
+            background: white;
+            border-top: 4px solid $coral-layout-ghost-color;
+            box-sizing: border-box;
+            font-size: 0;
+            content: "";
+            overflow: hidden;
+            padding: 0 !important;
+            position: relative;
+            outline: none 0;
+            height: 0 !important;
+            width: 100%;
+            margin: 2px 0;
+          }
+
+          &::after {
+            display: none;
+          }
+
+          .widget-view-action.widget-col-action{
+            background: $coral-layout-color;
+          }
+
+          .widget-view-drag.widget-col-drag{
+            background: $coral-layout-color;
+          }
+
+          .el-col {
+            min-height: 50px;
+          }
+        }
+        &-col {
+          padding: 5px;
+          position: relative;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          border: 1px dashed #999;
+
+          &.active{
+            outline: 2px solid $coral-layout-color;
+            border: 1px solid $coral-layout-color;
+            outline-offset: -1px;
+          }
+
+          &:hover{
+            outline: 2px solid $coral-layout-color;
+            background: $coral-layout-background-color;
+            outline-offset: -1px;
+
+            &.active{
+              outline: 2px solid $coral-layout-color;
+              border: 1px solid $coral-layout-color;
+              outline-offset: -1px;
+            }
+          }
+
+          &::after {
+            display: none;
+          }
+
+          .widget-col-list {
+            min-height: 50px;
+            min-width: 50px;
+            border: 2px inset rgba(0,0,0,.1);
+            background: #fff;
+          }
         }
       }
     }

@@ -486,6 +486,34 @@ export default [
   },
   {
     title: '布局字段',
-    list: []
+    list: [
+      {
+        type: 'coralLayout',
+        label: '珊瑚布局',
+        icon: 'icon-coral',
+        gutter: 0,
+        justify: 'start',
+        align: 'top',
+        customClass: [],
+        hidden: false,
+        flex: true,
+        cols: [
+          {
+            type: 'col',
+            span: 24,
+            offset: 0,
+            push: 0,
+            pull: 0,
+            xs: 24,
+            sm: 24,
+            md: 24,
+            lg: 24,
+            xl: 24,
+            customClass: [],
+            list: []
+          }
+        ]
+      }
+    ]
   }
 ]

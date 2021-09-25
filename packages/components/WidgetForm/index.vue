@@ -20,7 +20,13 @@
         <transition-group name="fade" tag="div" class="widget-form-list">
           <template v-for="(column, index) in data.column">
             <template v-if="column.type == 'coralLayout'">
-              珊瑚布局组件区域
+              <coral-layout :key="index"
+                            :column="column"
+                            :data="data"
+                            :select.sync="selectWidget"
+                            :index="index"
+                            @selectWidget="handleSelectWidget"
+              />
             </template>
             <template v-else>
               <div :key="index" @click.stop="handleSelectWidget(index)">
@@ -72,9 +78,10 @@ import widgetEmpty from '@/assets/images/widget-empty.png'
 import { getLabelWidth } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
+import coralLayout from '@components/CoralLayout'
 export default {
   name: 'WidgetForm',
-  components: { Draggable },
+  components: { Draggable, coralLayout },
   props: {
     data: {
       type: Object
@@ -120,6 +127,14 @@ export default {
       const data = this.$loquat.deepClone(this.data.column[newIndex])
       if (!data.prop) data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
       delete data.icon
+      // todo: 可以自定义处理插件的数据
+      switch (data.type) {
+        case 'coralLayout' :
+          data.cols && data.cols.forEach(item => {
+            if (!item.prop) item.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+          })
+          break
+      }
       this.$set(this.data.column, newIndex, data)
       this.handleSelectWidget(newIndex)
       this.$emit('change')
