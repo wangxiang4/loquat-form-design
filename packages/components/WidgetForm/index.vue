@@ -30,12 +30,16 @@
             </template>
             <template v-else>
               <div :key="index" @click.stop="handleSelectWidget(index)">
-                <div :class="['widget-view', { active: selectWidget.prop == column.prop }]">
+                <div :class="[
+                  'widget-view', {
+                    active: selectWidget.prop == column.prop,
+                    readonly: column.readonly,
+                    hide: column.hide
+                  }]"
+                >
                   <el-form-item class="widget-form-item"
                                 :class="[{
-                                  'readonly': column.readonly,
-                                  'hide': column.hide,
-                                  'required': $loquat.get(column, 'validateConfig.required')
+                                  required: $loquat.get(column, 'validateConfig.required')
                                 }].concat(column.customClass||[])"
                                 :prop="column.prop"
                                 :label="column.hideLabel ? '' : column.label"

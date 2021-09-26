@@ -1,6 +1,6 @@
 <template>
   <div class="widget-view coral-layout-row"
-       :class="{active: selectWidget.prop == column.prop}"
+       :class="{active: selectWidget.prop == column.prop, hide: column.hide}"
        @click.stop="handleSelectWidget(index)"
   >
     <el-row :type="column.flex ? 'flex' : undefined"
@@ -44,12 +44,16 @@
             </template>
             <template v-else>
               <div :key="index" @click.stop="handleWidgetDataSelect(col.list[index])">
-                <div :class="['widget-view', { active: selectWidget.prop == column.prop }]">
+                <div :class="[
+                  'widget-view', {
+                    active: selectWidget.prop == column.prop,
+                    readonly: column.readonly,
+                    hide: column.hide
+                  }]"
+                >
                   <el-form-item class="widget-form-item"
                                 :class="[{
-                                  'readonly': column.readonly,
-                                  'hide': column.hide,
-                                  'required': $loquat.get(column, 'validateConfig.required')
+                                  required: $loquat.get(column, 'validateConfig.required')
                                 }].concat(column.customClass||[])"
                                 :prop="column.prop"
                                 :label="column.hideLabel ? '' : column.label"

@@ -228,14 +228,14 @@ $coral-layout-background-color: #fdf6ec;
               margin-right: 4px;
             }
           }
+        }
 
-          &.readonly {
-            background: $primary-readonly-color;
-          }
+        &.readonly {
+          background: $primary-readonly-color;
+        }
 
-          &.hide {
-            background: $primary-hide-color;
-          }
+        &.hide {
+          background: $primary-hide-color;
         }
 
         .widget-view-action {
