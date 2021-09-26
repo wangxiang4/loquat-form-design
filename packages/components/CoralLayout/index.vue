@@ -7,12 +7,19 @@
             :gutter="column.gutter"
             :justify="column.justify"
             :align="column.align"
+            :class="column.customClass"
     >
       <el-col v-for="(col, colIndex) in column.cols"
               :key="colIndex"
               class="coral-layout-col"
-              :class="{active: selectWidget.prop == col.prop}"
-              :span="col.span"
+              :class="[{
+                active: selectWidget.prop == col.prop
+              }].concat(col.customClass||[])"
+              :xs="col.xs"
+              :sm="col.sm"
+              :md="col.md"
+              :lg="col.lg"
+              :xl="col.xl"
               @click.native.stop="handleWidgetDataSelect(col)"
       >
         <draggable :list="col.list"
@@ -175,7 +182,6 @@ export default {
     handleColumnAdd () {
       const colPreset = {
         type: 'coralLayoutCol',
-        span: 24,
         offset: 0,
         push: 0,
         pull: 0,

@@ -13,6 +13,8 @@ import slider from './slider'
 import font from './font'
 import upload from './upload'
 import cascader from './cascader'
+import row from './coral-layout/row'
+import column from './coral-layout/column'
 import { KEY_COMPONENT_CONFIG_NAME } from '@/global/variable'
 const components = [
   custom,
@@ -29,7 +31,9 @@ const components = [
   slider,
   font,
   upload,
-  cascader
+  cascader,
+  row,
+  column
 ]
 
 const Config = {

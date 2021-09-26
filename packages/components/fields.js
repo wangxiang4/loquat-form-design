@@ -498,7 +498,6 @@ export default [
         cols: [
           {
             type: 'coralLayoutCol',
-            span: 24,
             offset: 0,
             push: 0,
             pull: 0,
@@ -511,7 +510,7 @@ export default [
             customClass: []
           }
         ],
-        hidden: false,
+        hide: false,
         customClass: []
       }
     ]
