@@ -1,5 +1,11 @@
 <template>
   <div>
+    <el-form-item v-loquat-has-perm="[data, 'md']" label="栅格占据的列数">
+      <el-input-number v-model.number="data.md"
+                       :min="1"
+                       :max="24"
+      />
+    </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'offset']" label="栅格左侧的间隔格数">
       <el-input-number v-model.number="data.offset"
                        :min="0"
@@ -15,36 +21,6 @@
     <el-form-item v-loquat-has-perm="[data, 'pull']" label="栅格向左移动格数">
       <el-input-number v-model.number="data.pull"
                        :min="0"
-                       :max="24"
-      />
-    </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'xs']" label="响应式栅格占据的列数(超小|xs)">
-      <el-input-number v-model.number="data.xs"
-                       :min="1"
-                       :max="24"
-      />
-    </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'sm']" label="响应式栅格占据的列数(小|sm)">
-      <el-input-number v-model.number="data.sm"
-                       :min="1"
-                       :max="24"
-      />
-    </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'md']" label="响应式栅格占据的列数(中等|md)">
-      <el-input-number v-model.number="data.md"
-                       :min="1"
-                       :max="24"
-      />
-    </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'lg']" label="响应式栅格占据的列数(大|lg)">
-      <el-input-number v-model.number="data.lg"
-                       :min="1"
-                       :max="24"
-      />
-    </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'xl']" label="响应式栅格占据的列数(超大|xl)">
-      <el-input-number v-model.number="data.xl"
-                       :min="1"
                        :max="24"
       />
     </el-form-item>

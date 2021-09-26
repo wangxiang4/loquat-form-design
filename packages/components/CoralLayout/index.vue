@@ -15,11 +15,7 @@
               :class="[{
                 active: selectWidget.prop == col.prop
               }].concat(col.customClass||[])"
-              :xs="col.xs"
-              :sm="col.sm"
               :md="col.md"
-              :lg="col.lg"
-              :xl="col.xl"
               @click.native.stop="handleWidgetDataSelect(col)"
       >
         <draggable :list="col.list"
