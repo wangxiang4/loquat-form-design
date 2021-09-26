@@ -16,6 +16,7 @@ import permission from './directive'
 import { deepClone, setPx, validateNull, get } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 import imagePreview from '@components/ImagePreview'
+import log from '@utils/log'
 
 export default {
   install (Vue, opts = {}) {
@@ -27,6 +28,7 @@ export default {
       deepClone: deepClone,
       validateNull: validateNull,
       get: get,
+      log: log,
       axios: opts.axios || {},
       remoteOption: opts.remoteOption || {},
       remoteFunc: opts.remoteFunc || {},

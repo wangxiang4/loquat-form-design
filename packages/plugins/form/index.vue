@@ -11,7 +11,7 @@
              @submit.native.prevent
     >
       <template v-for="(column, index) in columnOption">
-        <template v-if="column.type == 'coralLayout'">
+        <template v-if="column.type == 'coralLayoutRow'">
           珊瑚布局组件区域
         </template>
         <template v-else>

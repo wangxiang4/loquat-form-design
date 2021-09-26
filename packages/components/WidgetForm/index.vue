@@ -19,13 +19,13 @@
       >
         <transition-group name="fade" tag="div" class="widget-form-list">
           <template v-for="(column, index) in data.column">
-            <template v-if="column.type == 'coralLayout'">
+            <template v-if="column.type == 'coralLayoutRow'">
               <coral-layout :key="index"
                             :column="column"
                             :data="data"
-                            :select.sync="selectWidget"
                             :index="index"
-                            @selectWidget="handleSelectWidget"
+                            :select.sync="selectWidget"
+                            @change="$emit('change')"
               />
             </template>
             <template v-else>
@@ -76,6 +76,7 @@
 <script>
 import widgetEmpty from '@/assets/images/widget-empty.png'
 import { getLabelWidth } from '@utils/dataFormat'
+import { getObjType } from '@utils'
 import Draggable from 'vuedraggable'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
 import coralLayout from '@components/CoralLayout'
@@ -130,7 +131,7 @@ export default {
       // todo: 可以自定义处理插件的数据
       switch (data.type) {
         case 'coralLayout' :
-          data.cols && data.cols.forEach(item => {
+          getObjType(data.cols) === 'array' && data.cols.forEach(item => {
             if (!item.prop) item.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
           })
           break
