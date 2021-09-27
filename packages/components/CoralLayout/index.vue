@@ -35,7 +35,8 @@
             <template v-if="column.type == 'coralLayoutRow'">
               <coral-layout :key="index"
                             :column="column"
-                            :data="col.list"
+                            :data="data"
+                            :widgets="col.list"
                             :index="index"
                             :select.sync="selectWidget"
                             @change="$emit('change')"
@@ -111,8 +112,9 @@
 <script>
 import draggable from 'vuedraggable'
 import { getObjType } from '@utils'
-import { getLabelWidth } from '@utils/dataFormat'
+import { getLabelWidth, fieldTransformWidget } from '@utils/dataFormat'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
+import { handleRowDeepClone, handleColumnDeepClone } from '@utils/layout'
 export default {
   name: 'CoralLayout',
   props: {
@@ -127,6 +129,10 @@ export default {
     },
     index: {
       type: Number
+    },
+    widgets: {
+      required: true,
+      type: Array
     }
   },
   components: { draggable },
@@ -160,7 +166,7 @@ export default {
     getLabelWidth,
     // 处理选择部件,根据索引
     handleSelectWidget (index) {
-      this.selectWidget = this.data.column[index]
+      this.selectWidget = this.widgets[index]
     },
     // 处理选择部件,根据数据
     handleWidgetDataSelect (data) {
@@ -168,7 +174,7 @@ export default {
     },
     // 处理行克隆操作
     handleRowClone () {
-      this.data.column.splice(this.index, 0, this.handleRowDeepClone(this.column))
+      this.widgets.splice(this.index, 0, handleRowDeepClone(this.column))
       this.$nextTick(() => {
         this.handleSelectWidget(this.index + 1)
         this.$emit('change')
@@ -176,12 +182,12 @@ export default {
     },
     // 处理行删除操作
     handleRowDelete () {
-      if (this.data.column.length - 1 === this.index) {
+      if (this.widgets.length - 1 === this.index) {
         if (this.index === 0) this.selectWidget = {}
         else this.handleSelectWidget(this.index - 1)
       } else this.handleSelectWidget(this.index + 1)
       this.$nextTick(() => {
-        this.data.column.splice(this.index, 1)
+        this.widgets.splice(this.index, 1)
         this.$emit('change')
       })
     },
@@ -194,7 +200,7 @@ export default {
     },
     // 处理列克隆操作
     handleColumnClone (index) {
-      this.column.cols.splice(index, 0, this.handleColumnDeepClone(this.column.cols[index]))
+      this.column.cols.splice(index, 0, handleColumnDeepClone(this.column.cols[index]))
       this.$nextTick(() => {
         this.handleWidgetDataSelect(this.column.cols[index])
         this.$emit('change')
@@ -214,18 +220,8 @@ export default {
     // 处理部件列拖拽新增
     handleWidgetColAdd (evt, list) {
       const newIndex = evt.newIndex
-      let data = this.$loquat.deepClone(list[newIndex])
-      delete data.icon
-      switch (data.type) {
-        // 珊瑚布局数据处理
-        case 'coralLayout' :
-          data = this.handleRowDeepClone(data)
-          break
-        // 插件数据处理
-        default:
-          data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-      }
-      this.$set(list, newIndex, data)
+      const data = this.$loquat.deepClone(list[newIndex])
+      this.$set(list, newIndex, fieldTransformWidget(data))
       this.handleWidgetDataSelect(list[newIndex])
       this.$emit('change')
     },
@@ -249,43 +245,6 @@ export default {
         list.splice(index, 1)
         this.$emit('change')
       })
-    },
-    // 处理行克隆递归
-    handleRowDeepClone (data) {
-      const cloneData = this.$loquat.deepClone(data)
-      // todo:行布局数据处理
-      cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-      cloneData.cols = getObjType(cloneData.cols) === 'array' ? cloneData.cols.map(item => {
-        // todo:列布局数据处理
-        item.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-        item.list = getObjType(item.list) === 'array' ? item.list.map(plugin => {
-          // todo:插件数据处理
-          if (plugin.type === 'coralLayoutRow') {
-            plugin = this.handleRowDeepClone(plugin)
-          } else {
-            plugin.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-          }
-          return plugin
-        }) : []
-        return item
-      }) : []
-      return cloneData
-    },
-    // 处理列克隆递归
-    handleColumnDeepClone (data) {
-      const cloneData = this.$loquat.deepClone(data)
-      // todo:列布局数据处理
-      cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-      cloneData.list = getObjType(cloneData.list) === 'array' ? cloneData.list.map(plugin => {
-        // todo:插件数据处理
-        if (plugin.type === 'coralLayoutRow') {
-          plugin = this.handleRowDeepClone(plugin)
-        } else {
-          plugin.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-        }
-        return plugin
-      }) : []
-      return cloneData
     }
   }
 }

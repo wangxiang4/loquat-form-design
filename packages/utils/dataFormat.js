@@ -22,6 +22,7 @@ import { validateNull, setPx, deepClone, responseDataAccept } from './index'
 import request from '@utils/request'
 import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
+import { handleRowDeepClone } from '@utils/layout'
 
 /** 获取控件提示 **/
 export function getPlaceholder (item) {
@@ -235,3 +236,17 @@ export function designTransformPreview (_this) {
   return data
 }
 
+/** 字段数据转换为插件数据 **/
+export function fieldTransformWidget (data) {
+  delete data.icon
+  switch (data.type) {
+    // 珊瑚布局数据处理
+    case 'coralLayoutRow':
+      data = handleRowDeepClone(data)
+      break
+    // 插件数据处理
+    default:
+      data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+  }
+  return data
+}

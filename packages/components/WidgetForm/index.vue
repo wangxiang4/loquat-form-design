@@ -21,9 +21,9 @@
           <template v-for="(column, index) in data.column">
             <template v-if="column.type == 'coralLayoutRow'">
               <coral-layout :key="index"
-                            ref="coralLayout"
                             :column="column"
                             :data="data"
+                            :widgets="data.column"
                             :index="index"
                             :select.sync="selectWidget"
                             @change="$emit('change')"
@@ -80,7 +80,7 @@
 
 <script>
 import widgetEmpty from '@/assets/images/widget-empty.png'
-import { getLabelWidth } from '@utils/dataFormat'
+import { getLabelWidth, fieldTransformWidget } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
 import coralLayout from '@components/CoralLayout'
@@ -129,18 +129,8 @@ export default {
     },
     handleWidgetAdd (evt) {
       const newIndex = evt.newIndex
-      let data = this.$loquat.deepClone(this.data.column[newIndex])
-      delete data.icon
-      switch (data.type) {
-        // 珊瑚布局数据处理
-        case 'coralLayout' :
-          data = this.$refs.coralLayout.handleRowDeepClone(data)
-          break
-        // 插件数据处理
-        default:
-          data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-      }
-      this.$set(this.data.column, newIndex, data)
+      const data = this.$loquat.deepClone(this.data.column[newIndex])
+      this.$set(this.data.column, newIndex, fieldTransformWidget(data))
       this.handleSelectWidget(newIndex)
       this.$emit('change')
     },
