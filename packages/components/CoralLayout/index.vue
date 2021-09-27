@@ -4,7 +4,7 @@
        @click.stop="handleSelectWidget(index)"
   >
     <el-row :type="column.flex ? 'flex' : undefined"
-            :gutter="column.gutter"
+            :gutter="column.gutter ? column.gutter : 0"
             :justify="column.justify"
             :align="column.align"
             :class="column.customClass"
@@ -16,6 +16,9 @@
                 active: selectWidget.prop == col.prop
               }].concat(col.customClass||[])"
               :md="col.md"
+              :offset="col.offset"
+              :push="col.push"
+              :pull="col.pull"
               @click.native.stop="handleWidgetDataSelect(col)"
       >
         <draggable :list="col.list"
@@ -185,11 +188,7 @@ export default {
         offset: 0,
         push: 0,
         pull: 0,
-        xs: 24,
-        sm: 24,
         md: 24,
-        lg: 24,
-        xl: 24,
         list: [],
         customClass: []
       }
