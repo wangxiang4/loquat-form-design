@@ -21,6 +21,7 @@
           <template v-for="(column, index) in data.column">
             <template v-if="column.type == 'coralLayoutRow'">
               <coral-layout :key="index"
+                            ref="coralLayout"
                             :column="column"
                             :data="data"
                             :index="index"
@@ -80,7 +81,6 @@
 <script>
 import widgetEmpty from '@/assets/images/widget-empty.png'
 import { getLabelWidth } from '@utils/dataFormat'
-import { getObjType } from '@utils'
 import Draggable from 'vuedraggable'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
 import coralLayout from '@components/CoralLayout'
@@ -129,16 +129,16 @@ export default {
     },
     handleWidgetAdd (evt) {
       const newIndex = evt.newIndex
-      const data = this.$loquat.deepClone(this.data.column[newIndex])
-      if (!data.prop) data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+      let data = this.$loquat.deepClone(this.data.column[newIndex])
       delete data.icon
-      // todo: 可以自定义处理插件的数据
       switch (data.type) {
+        // 珊瑚布局数据处理
         case 'coralLayout' :
-          getObjType(data.cols) === 'array' && data.cols.forEach(item => {
-            if (!item.prop) item.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-          })
+          data = this.$refs.coralLayout.handleRowDeepClone(data)
           break
+        // 插件数据处理
+        default:
+          data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
       }
       this.$set(this.data.column, newIndex, data)
       this.handleSelectWidget(newIndex)

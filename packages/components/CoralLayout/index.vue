@@ -132,8 +132,17 @@ export default {
   components: { draggable },
   data () {
     return {
+      ...FORM_DEFAULT_PROP,
       selectWidget: this.select,
-      ...FORM_DEFAULT_PROP
+      colPreset: {
+        type: 'coralLayoutCol',
+        offset: 0,
+        push: 0,
+        pull: 0,
+        md: 24,
+        list: [],
+        customClass: []
+      }
     }
   },
   watch: {
@@ -159,12 +168,7 @@ export default {
     },
     // 处理行克隆操作
     handleRowClone () {
-      const cloneData = this.$loquat.deepClone(this.column)
-      cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-      getObjType(cloneData.cols) === 'array' && cloneData.cols.forEach(item => {
-        if (!item.prop) item.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-      })
-      this.data.column.splice(this.index, 0, cloneData)
+      this.data.column.splice(this.index, 0, this.handleRowDeepClone(this.column))
       this.$nextTick(() => {
         this.handleSelectWidget(this.index + 1)
         this.$emit('change')
@@ -183,24 +187,14 @@ export default {
     },
     // 处理列添加操作
     handleColumnAdd () {
-      const colPreset = {
-        type: 'coralLayoutCol',
-        offset: 0,
-        push: 0,
-        pull: 0,
-        md: 24,
-        list: [],
-        customClass: []
-      }
+      const colPreset = this.$loquat.deepClone(this.colPreset)
       colPreset.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
       getObjType(this.column.cols) === 'array'
         ? this.column.cols.push(colPreset) : this.$loquat.log.warning('未设置cols参数,注意类型为Array')
     },
     // 处理列克隆操作
     handleColumnClone (index) {
-      const cloneData = this.$loquat.deepClone(this.column.cols[index])
-      cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-      this.column.cols.splice(index, 0, cloneData)
+      this.column.cols.splice(index, 0, this.handleColumnDeepClone(this.column.cols[index]))
       this.$nextTick(() => {
         this.handleWidgetDataSelect(this.column.cols[index])
         this.$emit('change')
@@ -209,7 +203,7 @@ export default {
     // 处理列删除操作
     handleColumnDelete (index) {
       if (this.column.cols.length - 1 === index) {
-        if (index === 0) this.handleWidgetDataSelect({})
+        if (index === 0) this.selectWidget = {}
         else this.handleWidgetDataSelect(this.column.cols[index - 1])
       } else this.handleWidgetDataSelect(this.column.cols[index + 1])
       this.$nextTick(() => {
@@ -220,22 +214,22 @@ export default {
     // 处理部件列拖拽新增
     handleWidgetColAdd (evt, list) {
       const newIndex = evt.newIndex
-      const data = this.$loquat.deepClone(list[newIndex])
-      if (!data.prop) data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+      let data = this.$loquat.deepClone(list[newIndex])
       delete data.icon
-      // todo: 可以自定义处理插件的数据
       switch (data.type) {
+        // 珊瑚布局数据处理
         case 'coralLayout' :
-          getObjType(data.cols) === 'array' && data.cols.forEach(item => {
-            if (!item.prop) item.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-          })
+          data = this.handleRowDeepClone(data)
           break
+        // 插件数据处理
+        default:
+          data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
       }
       this.$set(list, newIndex, data)
       this.handleWidgetDataSelect(list[newIndex])
       this.$emit('change')
     },
-    // 处理部件克隆
+    // 处理插件克隆
     handleWidgetClone (list, index) {
       const cloneData = this.$loquat.deepClone(list[index])
       cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
@@ -245,7 +239,7 @@ export default {
         this.$emit('change')
       })
     },
-    // 处理部件删除
+    // 处理插件删除
     handleWidgetDelete (list, index) {
       if (list.length - 1 === index) {
         if (index === 0) this.selectWidget = {}
@@ -255,6 +249,43 @@ export default {
         list.splice(index, 1)
         this.$emit('change')
       })
+    },
+    // 处理行克隆递归
+    handleRowDeepClone (data) {
+      const cloneData = this.$loquat.deepClone(data)
+      // todo:行布局数据处理
+      cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+      cloneData.cols = getObjType(cloneData.cols) === 'array' ? cloneData.cols.map(item => {
+        // todo:列布局数据处理
+        item.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+        item.list = getObjType(item.list) === 'array' ? item.list.map(plugin => {
+          // todo:插件数据处理
+          if (plugin.type === 'coralLayoutRow') {
+            plugin = this.handleRowDeepClone(plugin)
+          } else {
+            plugin.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+          }
+          return plugin
+        }) : []
+        return item
+      }) : []
+      return cloneData
+    },
+    // 处理列克隆递归
+    handleColumnDeepClone (data) {
+      const cloneData = this.$loquat.deepClone(data)
+      // todo:列布局数据处理
+      cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+      cloneData.list = getObjType(cloneData.list) === 'array' ? cloneData.list.map(plugin => {
+        // todo:插件数据处理
+        if (plugin.type === 'coralLayoutRow') {
+          plugin = this.handleRowDeepClone(plugin)
+        } else {
+          plugin.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+        }
+        return plugin
+      }) : []
+      return cloneData
     }
   }
 }
