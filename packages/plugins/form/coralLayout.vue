@@ -92,7 +92,7 @@
 <script>
 import { FORM_DEFAULT_PROP } from '@/global/variable'
 import { getLabelWidth } from '@utils/dataFormat'
-import formItem from './item'
+import formItem from './formItem'
 export default {
   name: 'CoralLayout',
   components: { formItem },
@@ -105,6 +105,7 @@ export default {
       type: Array
     },
     loquatForm: {
+      required: true,
       type: Object
     }
   },

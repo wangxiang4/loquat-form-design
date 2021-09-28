@@ -1,7 +1,6 @@
 import empty from './empty'
 import input from './input'
 import form from './form'
-import formItem from './form/item'
 import select from './select'
 import inputNumber from './input-number'
 import radio from './radio'
@@ -20,7 +19,6 @@ const components = [
   empty,
   input,
   form,
-  formItem,
   select,
   inputNumber,
   radio,

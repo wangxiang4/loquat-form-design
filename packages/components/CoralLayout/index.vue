@@ -60,15 +60,15 @@
                                 :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, labelWidth)"
                                 :label-position="column.labelPosition || data.labelPosition || labelPosition"
                   >
-                    <loquat-form-item :column="column"
-                                      :props="data.props"
-                                      :value="column.value"
-                                      :readonly="data.readonly || column.readonly"
-                                      :disabled="data.disabled || column.disabled"
-                                      :size="data.size || column.size"
-                                      :dic="column.dicData"
-                                      :type="column._type"
-                                      :preview="false"
+                    <form-item :column="column"
+                               :props="data.props"
+                               :value="column.value"
+                               :readonly="data.readonly || column.readonly"
+                               :disabled="data.disabled || column.disabled"
+                               :size="data.size || column.size"
+                               :dic="column.dicData"
+                               :type="column._type"
+                               :preview="false"
                     />
                   </el-form-item>
                   <div v-if="selectWidget.prop == column.prop" class="widget-view-action">
@@ -115,6 +115,7 @@ import { getObjType } from '@utils'
 import { getLabelWidth, fieldTransformWidget } from '@utils/dataFormat'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
 import { handleRowDeepClone, handleColumnDeepClone } from '@utils/layout'
+import formItem from '@/plugins/form/formItem'
 export default {
   name: 'CoralLayout',
   props: {
@@ -135,7 +136,7 @@ export default {
       type: Array
     }
   },
-  components: { draggable },
+  components: { draggable, formItem },
   data () {
     return {
       ...FORM_DEFAULT_PROP,

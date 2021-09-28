@@ -90,7 +90,7 @@
 <script>
 import { clearVal, formInitVal, getLabelWidth, designTransformPreview } from '@utils/dataFormat'
 import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
-import formItem from './item'
+import formItem from './formItem'
 import { randomId } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
 import coralLayout from './coralLayout'
