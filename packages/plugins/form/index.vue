@@ -1,18 +1,22 @@
 <template>
-  <div :class="['loquat-form', formId]" :style="{ width: $loquat.setPx(parentOption.formWidth, '100%') }">
+  <div :class="['loquat-form', formId]" :style="{ width: $loquat.setPx(widgetForm.formWidth, '100%') }">
     <el-form ref="form"
-             :status-icon="parentOption.statusIcon"
+             :status-icon="widgetForm.statusIcon"
              :model="form"
-             :label-suffix="parentOption.labelSuffix || labelSuffix"
-             :size="parentOption.size || size"
-             :label-position="parentOption.labelPosition || labelPosition"
-             :label-width="$loquat.setPx(parentOption.labelWidth, labelWidth)"
-             :class="parentOption.customClass"
+             :label-suffix="widgetForm.labelSuffix || labelSuffix"
+             :size="widgetForm.size || size"
+             :label-position="widgetForm.labelPosition || labelPosition"
+             :label-width="$loquat.setPx(widgetForm.labelWidth, labelWidth)"
+             :class="widgetForm.customClass"
              @submit.native.prevent
     >
-      <template v-for="(column, index) in columnOption">
+      <template v-for="(column, index) in columns">
         <template v-if="column.type == 'coralLayoutRow'">
-          珊瑚布局组件区域
+          <coral-layout :key="index"
+                        :column="column"
+                        :widgets="columns"
+                        :loquat-form="loquatForm"
+          />
         </template>
         <template v-else>
           <el-form-item v-if="!column.hide"
@@ -20,17 +24,17 @@
                         :prop="column.prop"
                         :label="column.hideLabel ? '' : column.label"
                         :rules="column.rules"
-                        :class="['loquat-form__item--' + (column.labelPosition || parentOption.labelPosition || labelPosition)].concat(column.customClass || [])"
-                        :label-position="column.labelPosition || parentOption.labelPosition || labelPosition"
-                        :label-width="column.hideLabel ? '0' :getLabelWidth(column, parentOption, labelWidth)"
+                        :class="['loquat-form__item--' + (column.labelPosition || widgetForm.labelPosition || labelPosition)].concat(column.customClass || [])"
+                        :label-position="column.labelPosition || widgetForm.labelPosition || labelPosition"
+                        :label-width="column.hideLabel ? '0' :getLabelWidth(column, widgetForm, labelWidth)"
           >
             <template v-if="$scopedSlots[column.prop + 'Label']" slot="label">
               <slot :name="column.prop + 'Label'"
                     :column="column"
                     :value="form[column.prop]"
-                    :readonly="parentOption.readonly || column.readonly || readonly"
+                    :readonly="widgetForm.readonly || column.readonly || readonly"
                     :disabled="getDisabled(column)"
-                    :size="parentOption.size || column.size || size"
+                    :size="widgetForm.size || column.size || size"
                     :dic="DIC[column.prop]"
               />
             </template>
@@ -39,9 +43,9 @@
                     v-bind="Object.assign(scope, {
                       column,
                       value:form[column.prop],
-                      readonly: parentOption.readonly || column.readonly || readonly,
-                      disabled: parentOption.disabled || column.disabled || disabled,
-                      size: parentOption.size || column.size || size,
+                      readonly: widgetForm.readonly || column.readonly || readonly,
+                      disabled: widgetForm.disabled || column.disabled || disabled,
+                      size: widgetForm.size || column.size || size,
                       dic: DIC[column.prop]
                     })"
               />
@@ -50,9 +54,9 @@
                   :name="column.prop"
                   :value="form[column.prop]"
                   :column="column"
-                  :readonly="parentOption.readonly || column.readonly || readonly"
+                  :readonly="widgetForm.readonly || column.readonly || readonly"
                   :disabled="getDisabled(column)"
-                  :size="parentOption.size || column.size || size"
+                  :size="widgetForm.size || column.size || size"
                   :dic="DIC[column.prop]"
             />
             <form-item v-else
@@ -61,11 +65,11 @@
                        :dic="DIC[column.prop]"
                        :type="column._type"
                        :column="column"
-                       :props="parentOption.props"
-                       :readonly="parentOption.readonly || column.readonly || readonly"
+                       :props="widgetForm.props"
+                       :readonly="widgetForm.readonly || column.readonly || readonly"
                        :disabled="getDisabled(column)"
-                       :size="parentOption.size || column.size || size"
-                       :enter="parentOption.enter"
+                       :size="widgetForm.size || column.size || size"
+                       :enter="widgetForm.enter"
                        @enter="submit"
                        @change="propChange(column)"
             >
@@ -89,10 +93,11 @@ import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
 import formItem from './item'
 import { randomId } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
+import coralLayout from './coralLayout'
 export default {
   name: 'Form',
   inheritAttrs: false,
-  components: { formItem },
+  components: { formItem, coralLayout },
   props: {
     reset: {
       type: Boolean,
@@ -115,6 +120,7 @@ export default {
   },
   data () {
     return {
+      loquatForm: this,
       ...FORM_DEFAULT_PROP,
       form: {},
       formCreate: false,
@@ -126,11 +132,11 @@ export default {
     }
   },
   computed: {
-    parentOption () {
+    widgetForm () {
       return designTransformPreview(this)
     },
-    columnOption () {
-      return this.parentOption.column || []
+    columns () {
+      return this.widgetForm.column || []
     }
   },
   watch: {
@@ -158,7 +164,7 @@ export default {
       this.clearValidate()
       this.formCreate = true
       this.formId = KEY_COMPONENT_NAME_LINE + randomId()
-      const css = parseCss(this.parentOption.styleSheets)
+      const css = parseCss(this.widgetForm.styleSheets)
       insertCss(css, this.formId)
     })
   },
@@ -168,7 +174,7 @@ export default {
   methods: {
     getLabelWidth,
     dataFormat () {
-      this.formDefault = formInitVal(this.columnOption)
+      this.formDefault = formInitVal(this.columns)
       const value = this.$loquat.deepClone(this.formDefault.tableForm)
       this.setForm(this.$loquat.deepClone(Object.assign(value, this.formVal)))
     },
@@ -217,14 +223,14 @@ export default {
       this.$emit('reset-change')
     },
     clearVal () {
-      const row = this.parentOption.rowKey || 'id'
-      this.form = clearVal(this.form, (this.parentOption.clearExclude || []).concat([row]))
+      const row = this.widgetForm.rowKey || 'id'
+      this.form = clearVal(this.form, (this.widgetForm.clearExclude || []).concat([row]))
     },
     resetFields () {
       this.$refs.form.resetFields()
     },
     getDisabled (column) {
-      return this.parentOption.disabled || column.disabled || this.allDisabled
+      return this.widgetForm.disabled || column.disabled || this.allDisabled
     },
     useActivation () {
       this.allDisabled = false
