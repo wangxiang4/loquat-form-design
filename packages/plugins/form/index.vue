@@ -91,7 +91,7 @@
 import { clearVal, formInitVal, getLabelWidth, designTransformPreview } from '@utils/dataFormat'
 import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
 import formItem from './formItem'
-import { randomId } from '@utils'
+import { randomId, deepClone } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
 import coralLayout from './coralLayout'
 export default {
@@ -175,8 +175,8 @@ export default {
     getLabelWidth,
     dataFormat () {
       this.formDefault = formInitVal(this.columns)
-      const value = this.$loquat.deepClone(this.formDefault.tableForm)
-      this.setForm(this.$loquat.deepClone(Object.assign(value, this.formVal)))
+      const value = deepClone(this.formDefault)
+      this.setForm(deepClone(Object.assign(value, this.formVal)))
     },
     setForm (value) {
       Object.keys(value).forEach(ele => {

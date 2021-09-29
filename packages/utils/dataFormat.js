@@ -64,24 +64,32 @@ export function getComponent (type, component) {
   return KEY_COMPONENT_NAME_LINE + result
 }
 
-/** 初始化表单默认值 **/
+/** 表单初始化默认模型设置prop **/
 export function formInitVal (list = []) {
-  const tableForm = {}
+  let formModel = {}
   list.forEach(ele => {
-    if (ARRAY_VALUE_LIST.includes(ele.type) || (MULTIPLE_LIST.includes(ele.type) && ele.multiple) ||
-      ele.range || ele.dataType === 'array') {
-      tableForm[ele.prop] = []
-    } else if (['rate', 'slider', 'number'].includes(ele.type) || ele.dataType === 'number') {
-      tableForm[ele.prop] = undefined
-    } else {
-      tableForm[ele.prop] = ''
-    }
-    // 表单默认值设置
-    if (!validateNull(ele.value)) {
-      tableForm[ele.prop] = ele.value
+    switch (ele.type) {
+      // 珊瑚布局数据处理
+      case 'coralLayoutRow':
+        ele.cols.forEach(col => {
+          formModel = Object.assign(formModel, formInitVal(col.list))
+        })
+        break
+      // 插件数据处理
+      default:
+        if (ARRAY_VALUE_LIST.includes(ele.type) || (MULTIPLE_LIST.includes(ele.type) && ele.multiple) || ele.isRange) {
+          formModel[ele.prop] = []
+        } else if (['rate', 'slider', 'number'].includes(ele.type)) {
+          formModel[ele.prop] = undefined
+        } else {
+          formModel[ele.prop] = ''
+        }
+        if (!validateNull(ele.value)) {
+          formModel[ele.prop] = ele.value
+        }
     }
   })
-  return { tableForm }
+  return formModel
 }
 
 /** 清空表单值 **/
