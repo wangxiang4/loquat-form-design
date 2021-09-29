@@ -66,13 +66,14 @@ export function getComponent (type, component) {
 
 /** 表单初始化默认模型设置prop **/
 export function formInitVal (list = []) {
-  let formModel = {}
+  const formModel = {}
   list.forEach(ele => {
     switch (ele.type) {
       // 珊瑚布局数据处理
       case 'coralLayoutRow':
         ele.cols.forEach(col => {
-          formModel = Object.assign(formModel, formInitVal(col.list))
+          const deepModel = formInitVal(col.list)
+          for (const [key, value] of Object.entries(deepModel)) formModel[key] = value
         })
         break
       // 插件数据处理
