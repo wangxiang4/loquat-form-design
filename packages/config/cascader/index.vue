@@ -77,6 +77,7 @@
     </el-form-item>
     <el-form-item v-if="data.static" v-loquat-has-perm="[data, 'value']" label="默认值">
       <el-cascader v-model="data.value"
+                   style="width: 100%;"
                    :options="data.dicData"
                    clearable
       />

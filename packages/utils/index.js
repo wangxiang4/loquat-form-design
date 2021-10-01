@@ -157,6 +157,7 @@ export function responseDataAccept (data, type) {
   switch (type) {
     case 'select':
     case 'tree':
+    case 'cascader':
       if (getObjType(data) === 'array') return data
       else return []
     case 'upload':

@@ -153,8 +153,6 @@ export default {
       }
     }
   },
-  created () { },
-  mounted () { },
   methods: {
     initVal () {
       this.text = this.value
