@@ -1256,9 +1256,8 @@ export default {
     },
     // 处理级联静态数据设置对话框初始值
     handleCascadeOptionSetData (obj) {
-      this.$loquat.validateNull(obj) ? this.$message.error('目前插件级联静态数据为空!') : ''
       const clone = this.$loquat.deepClone(obj)
-      this.generateJson = beautifier(clone, {
+      this.cascadeOption = beautifier(clone, {
         quoteType: 'double',
         dropQuotesOnKeys: false
       })
