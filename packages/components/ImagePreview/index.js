@@ -31,8 +31,7 @@ const ImagePreview = function (Vue) {
       index: index,
       ops: Object.assign({
         closeOnClickModal: false,
-        modal: true,
-        urlKey: 'url'
+        modal: true
       }, ops)
     }
     const userOnClose = options.onClose

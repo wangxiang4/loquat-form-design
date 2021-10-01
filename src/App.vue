@@ -4,12 +4,15 @@
                         :options="options"
                         :custom-fields="customFields"
     />
+    <loquat-upload-demo/>
   </div>
 </template>
 
 <script>
+import LoquatUploadDemo from '/demo/LoquatUploadDemo'
 export default {
   name: 'App',
+  components: { LoquatUploadDemo },
   data () {
     return {
       customFields: [{

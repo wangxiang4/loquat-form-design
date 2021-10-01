@@ -15,7 +15,6 @@
                :before-remove="handleBeforeRemove"
                :on-remove="handleRemove"
                :on-preview="handlePreview"
-               :on-change="handleFileChange"
                :on-exceed="handleExceed"
                :on-error="handleError"
                :on-success="handleSuccess"
@@ -24,10 +23,10 @@
         <i class="el-icon-plus"/>
       </template>
       <template v-else-if="listType=='picture-img'">
-        <slot v-if="$scopedSlots.default" :file="{url:imgUrl}"/>
+        <slot v-if="$scopedSlots.default" :file="pictureImg"/>
         <template v-else>
-          <img v-if="imgUrl"
-               :src="imgUrl"
+          <img v-if="pictureImg.url"
+               :src="pictureImg.url"
                v-bind="imgParams"
                class="loquat-upload__avatar"
                @mouseover="menu=true"
@@ -40,11 +39,11 @@
                @click.stop="()=>{return false}"
           >
             <i class="el-icon-zoom-in"
-               @click.stop="handlePreview({url:imgUrl})"
+               @click.stop="handlePreview(pictureImg)"
             />
             <i v-if="!disabled"
                class="el-icon-delete"
-               @click.stop="handleAvatarRemove(imgUrl)"
+               @click.stop="handleAvatarRemove(pictureImg)"
             />
           </div>
         </template>
@@ -167,7 +166,6 @@ export default {
       type: Boolean,
       default: false
     },
-    // 外链地址
     domain: {
       type: String,
       default: ''
@@ -214,20 +212,15 @@ export default {
     homeUrl () {
       return this.uploadConfig.home || ''
     },
-    urlKey () {
-      return this.uploadConfig.url || 'url'
+    resUrlKey () {
+      if (this.isQiniuOss) return this.uploadConfig.resUrl || 'key'
+      return this.uploadConfig.resUrl || ''
     },
     fileName () {
       return this.uploadConfig.fileName || 'file'
     },
     resKey () {
       return this.uploadConfig.res || ''
-    },
-    externalLinkKey () {
-      return this.uploadConfig.externalLink || ''
-    },
-    externalLinkQiniuKey () {
-      return this.uploadConfig.externalLinkQiniu || 'key'
     },
     isQiniuOss () {
       return this.oss === 'qiniu'
@@ -239,30 +232,29 @@ export default {
       return this.accept
     },
     fileList () {
-      return (this.text || []).map(ele => {
-        const url = this.handleExternalLinkUrl(ele.response) || ele[this.urlKey]
-        const files = Object.assign(ele, { url: getFileUrl(this.homeUrl, url) })
-        return files
+      return this.text.map(ele => {
+        return Object.assign(ele, {
+          url: getFileUrl(this.homeUrl, ele.url)
+        })
       })
     },
     isPictureImg () {
       return this.listType === 'picture-img'
     },
-    imgUrl () {
-      if (!this.$loquat.validateNull(this.text)) {
-        const url = this.handleExternalLinkUrl(this.text[0]?.response) || this.text[0]?.[this.urlKey]
-        return getFileUrl(this.homeUrl, url)
-      }
-      return ''
+    pictureImg () {
+      return this.text[0] || {}
     },
     imgParams () {
-      if (this.$loquat.typeList.video.test(this.imgUrl)) {
+      if (this.$loquat.typeList.video.test(this.pictureImg.url)) {
         return Object.assign({
           is: 'video'
         }, this.params)
       }
       return this.params
     }
+  },
+  created () {
+    this.initVal()
   },
   methods: {
     initVal () {
@@ -271,13 +263,16 @@ export default {
     // 处理上传外部链接地址
     handleExternalLinkUrl (response) {
       if (this.isQiniuOss) {
-        return urlJoin(this.domain, this.$loquat.get(response, this.externalLinkQiniuKey, ''))
+        return urlJoin(this.domain, this.$loquat.get(response, this.resUrlKey, ''))
       } else {
-        return this.$loquat.get(response, this.externalLinkKey, '')
+        return this.$loquat.get(response, this.resUrlKey, '')
       }
     },
     // 处理上传移除
     handleRemove (file, fileList) {
+      this.text.forEach((ele, index) => {
+        if (ele.uid === file.uid) this.text.splice(index, 1)
+      })
       this.uploadRemove && this.uploadRemove(file, fileList)
     },
     // 处理上传移除前
@@ -301,7 +296,7 @@ export default {
           // 使用预览组件查看
           const list = this.$loquat.deepClone(this.fileList)
           const index = list.findIndex(ele => ele.url === url)
-          this.$loquat.imagePreview(list, index, { urlKey: this.urlKey })
+          this.$loquat.imagePreview(list, index)
         }
       }
       if (typeof this.uploadPreview === 'function') {
@@ -371,7 +366,7 @@ export default {
           this.uploadBefore(file, callback)
         } else callback()
       }
-      // 是否开启水印
+      // 是否开启水印,注意只有图片类型可以开启水印
       if (this.showCanvas && file.type.indexOf('image') !== -1) {
         detailImg(file, this.canvasOption).then(res => {
           file = res
@@ -381,12 +376,20 @@ export default {
     },
     // 处理上传成功
     handleSuccess (res, file, fileList) {
-      this.uploadSuccess && this.uploadSuccess(res, file, fileList)
+      // 成功数据包处理
+      const fileData = {
+        uid: file.uid,
+        status: file.status,
+        name: file.name,
+        url: this.handleExternalLinkUrl(res)
+      }
+      if (this.isPictureImg) {
+        this.text.splice(0, 1, fileData)
+      } else {
+        this.text.push(fileData)
+      }
       delete this.reqs[file.uid]
-    },
-    // 处理文件修改
-    handleFileChange (file, fileList) {
-      this.text = fileList
+      this.uploadSuccess && this.uploadSuccess(res, file, fileList)
     },
     // 处理上传超出扩展
     handleExceed (files, fileList) {
@@ -394,12 +397,11 @@ export default {
     },
     // 处理上传异常扩展
     handleError (err, file, fileList) {
-      this.uploadError && this.uploadError(err, file, fileList)
       delete this.reqs[file.uid]
+      this.uploadError && this.uploadError(err, file, fileList)
     },
     // 处理头像移除操作
     handleAvatarRemove (file) {
-      // 考虑到需要做后续处理所以决定把删除前函数抽出来
       this.handleBeforeRemove(file, this.text).then(() => {
         this.text = []
         this.menu = false
@@ -415,7 +417,8 @@ export default {
         if (reqs[uid]) {
           typeof reqs[uid] === 'function' && reqs[uid]()
         }
-      } else { // 全部执行取消请求
+      } else {
+        // 不指定file则全部执行取消请求
         Object.keys(reqs).forEach((uid) => {
           typeof reqs[uid] === 'function' && reqs[uid]()
           delete reqs[uid]

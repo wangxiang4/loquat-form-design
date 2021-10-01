@@ -389,11 +389,9 @@ export default [
       domain: 'http://tcdn.form.making.link/',
       uploadConfig: {
         home: 'http://localhost:8888',
-        url: '',
+        resUrl: '',
         fileName: '',
-        res: '',
-        externalLink: 'data',
-        externalLinkQiniu: 'key'
+        res: ''
       },
       canvasOption: {
         fontSize: 16,

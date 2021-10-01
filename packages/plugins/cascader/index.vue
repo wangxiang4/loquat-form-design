@@ -153,6 +153,9 @@ export default {
       }
     }
   },
+  created () {
+    this.initVal()
+  },
   methods: {
     initVal () {
       this.text = this.value
