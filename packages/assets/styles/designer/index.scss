@@ -7,7 +7,6 @@ $primary-hide-color: #fef0f0;
 $primary-readonly-color: #F2F2F2;
 $primary-ghost-color: #67C23A;
 $coral-layout-color: #e6a23c;
-$coral-layout-ghost-color: #fff700;
 $coral-layout-background-color: #fdf6ec;
 
 *,
@@ -308,7 +307,6 @@ $coral-layout-background-color: #fdf6ec;
 
       .coral-layout {
         &-row {
-          padding-bottom: 0;
           padding: 5px;
           position: relative;
           background-color: rgba(253, 246, 236, 0.3);
@@ -329,21 +327,6 @@ $coral-layout-background-color: #fdf6ec;
             }
           }
 
-          &.ghost{
-            background: white;
-            border-top: 4px solid $coral-layout-ghost-color;
-            box-sizing: border-box;
-            font-size: 0;
-            content: "";
-            overflow: hidden;
-            padding: 0 !important;
-            position: relative;
-            outline: none 0;
-            height: 0 !important;
-            width: 100%;
-            margin: 2px 0;
-          }
-
           &::after {
             display: none;
           }
@@ -360,6 +343,7 @@ $coral-layout-background-color: #fdf6ec;
             min-height: 50px;
           }
         }
+
         &-col {
           padding: 5px;
           position: relative;
