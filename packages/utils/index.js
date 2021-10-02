@@ -200,7 +200,7 @@ export function byteCapacityCompute (fileSize, unit) {
     case 'MB':
       return fileSize / 1024 / 1024
     case 'GB':
-      return fileSize / 1024 / 1024
+      return fileSize / 1024 / 1024 / 1024
   }
 }
 
