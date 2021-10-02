@@ -214,7 +214,7 @@ export default {
     },
     resUrlKey () {
       if (this.isQiniuOss) return this.uploadConfig.resUrl || 'key'
-      return this.uploadConfig.resUrl || ''
+      return this.uploadConfig.resUrl || 'data'
     },
     fileName () {
       return this.uploadConfig.fileName || 'file'
@@ -242,7 +242,7 @@ export default {
       return this.listType === 'picture-img'
     },
     pictureImg () {
-      return this.text[0] || {}
+      return (this.text || [])[0] || {}
     },
     imgParams () {
       if (this.$loquat.typeList.video.test(this.pictureImg.url)) {
