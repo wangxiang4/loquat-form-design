@@ -232,7 +232,7 @@ export default {
       return this.accept
     },
     fileList () {
-      return this.text.map(ele => {
+      return (this.text || []).map(ele => {
         return Object.assign(ele, {
           url: getFileUrl(this.homeUrl, ele.url)
         })
