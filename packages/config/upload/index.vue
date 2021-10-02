@@ -179,13 +179,9 @@
             <span class="horizontal-tip-text">响应数据键:</span>
             <el-input v-model="uploadConfig.res" size="mini" clearable/>
           </div>
-          <div v-loquat-has-perm="[uploadConfig, 'url']">
+          <div v-loquat-has-perm="[uploadConfig, 'resUrl']">
             <span class="horizontal-tip-text">响应数据url键:</span>
-            <el-input v-model="uploadConfig.url" size="mini" clearable/>
-          </div>
-          <div v-loquat-has-perm="[uploadConfig, 'externalLink']">
-            <span class="horizontal-tip-text">外链url键:</span>
-            <el-input v-model="uploadConfig.externalLink" size="mini" clearable/>
+            <el-input v-model="uploadConfig.resUrl" size="mini" clearable/>
           </div>
         </el-collapse-item>
         <el-collapse-item v-loquat-has-perm="[data, canvasOptionPerm, 1]" title="水印配置">
@@ -380,8 +376,8 @@ export default {
       ],
       uploadConfigPerm: [
         'uploadConfig.home',
-        'uploadConfig.url',
         'uploadConfig.fileName',
+        'uploadConfig.resUrl',
         'uploadConfig.res'
       ],
       canvasOptionPerm: [
@@ -408,6 +404,9 @@ export default {
     },
     customizeStyle () {
       return this.data.customizeStyle || {}
+    },
+    params () {
+      return this.data.params || {}
     },
     validateConfig () {
       return this.data.validateConfig || {}
