@@ -7,30 +7,20 @@
  *
  * @create: 2021-07-15
  **/
-export const KEY_COMPONENT_NAME_LINE = 'loquat-'
-export const KEY_COMPONENT_CONFIG_NAME_LINE = 'loquat-config-'
 export const KEY_COMPONENT_NAME = 'Loquat'
+export const KEY_COMPONENT_NAME_LINE = 'loquat-'
 export const KEY_COMPONENT_CONFIG_NAME = 'LoquatConfig'
+export const KEY_COMPONENT_CONFIG_NAME_LINE = 'loquat-config-'
 /** 查找参数路径表达式,比如a[0].b.c对应匹配(a,0,b,c) **/
 export const PROP_PATH_EXPRESSION = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g
-export const DATE_LIST = [
-  'dates',
-  'date',
-  'datetime',
-  'datetimerange',
-  'daterange',
-  'time',
-  'timerange',
-  'week',
-  'month',
-  'monthrange',
-  'year'
-]
-export const INPUT_LIST = ['tree', 'number', 'icon', 'color', 'table', 'map']
-export const ARRAY_LIST = ['img', 'array', 'url']
-export const MULTIPLE_LIST = ['tree', 'select']
-export const ARRAY_VALUE_LIST = ARRAY_LIST.concat(['upload', 'dynamic', 'map', 'checkbox', 'cascader', 'dynamic', 'timerange', 'monthrange', 'daterange', 'datetimerange', 'dates'])
-export const SELECT_LIST = DATE_LIST.concat(['select', 'checkbox', 'radio', 'cascader', 'tree', 'color', 'icon', 'table', 'map'])
+export const DATE_TYPES = ['year', 'month', 'date', 'dates', 'week', 'datetime', 'datetimerange', 'daterange', 'monthrange']
+export const INPUT_FEATURE_TYPES = ['number', 'color']
+export const MULTIPLE_FEATURE_TYPES = ['cascader', 'select']
+export const RANGE_FEATURE_TYPES = ['slider', 'time']
+export const ARRAY_VALUE_TYPES = ['upload', 'checkbox', 'cascader', 'monthrange', 'daterange', 'datetimerange', 'dates']
+export const NUMBER_VALUE_TYPES = ['number', 'rate', 'slider']
+export const SELECT_TYPES = DATE_TYPES.concat(['select', 'checkbox', 'radio', 'cascader', 'color', 'time'])
+export const REMOTE_REQUEST_TYPES = ['upload', 'select', 'radio', 'checkbox', 'cascader']
 export const IMPORT_JSON_TEMPLATE = `{
   "column": [],
   "labelPosition": "left",
@@ -54,15 +44,11 @@ export const EVENT_DICT = {
   uploadRemove: '移除'
 }
 export const DIC_PROPS = {
-  nodeKey: 'id',
   label: 'label',
   value: 'value',
   desc: 'desc',
   groups: 'groups',
-  title: 'title',
-  leaf: 'leaf',
   children: 'children',
-  labelText: '名称',
   disabled: 'disabled'
 }
 /** 更多配置详情参考地址:https://github.com/beautify-web/js-beautify **/

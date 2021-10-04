@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { clearVal, formInitVal, getLabelWidth, designTransformPreview } from '@utils/dataFormat'
+import { formClearVal, formInitVal, getLabelWidth, designTransformPreview } from '@utils/dataFormat'
 import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
 import formItem from './formItem'
 import { randomId, deepClone } from '@utils'
@@ -224,7 +224,7 @@ export default {
     },
     clearVal () {
       const row = this.widgetForm.rowKey || 'id'
-      this.form = clearVal(this.form, (this.widgetForm.clearExclude || []).concat([row]))
+      this.form = formClearVal(this.form, (this.widgetForm.clearExclude || []).concat([row]))
     },
     resetFields () {
       this.$refs.form.resetFields()

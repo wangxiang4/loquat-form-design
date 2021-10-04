@@ -12,19 +12,19 @@
     <el-form-item v-loquat-has-perm="[data, 'customizeStyle.width']" label="组件宽度" >
       <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
-    <el-form-item v-if="!data.isRange" v-loquat-has-perm="[data, 'placeholder']" label="占位内容">
+    <el-form-item v-if="!data.range" v-loquat-has-perm="[data, 'placeholder']" label="占位内容">
       <el-input v-model="data.placeholder"
                 clearable
                 placeholder="占位内容"
       />
     </el-form-item>
-    <el-form-item v-if="data.isRange" v-loquat-has-perm="[data, 'startPlaceholder']" label="开始时间占位内容">
+    <el-form-item v-if="data.range" v-loquat-has-perm="[data, 'startPlaceholder']" label="开始时间占位内容">
       <el-input v-model="data.startPlaceholder"
                 clearable
                 placeholder="开始时间占位内容"
       />
     </el-form-item>
-    <el-form-item v-if="data.isRange" v-loquat-has-perm="[data, 'endPlaceholder']" label="结束时间占位内容">
+    <el-form-item v-if="data.range" v-loquat-has-perm="[data, 'endPlaceholder']" label="结束时间占位内容">
       <el-input v-model="data.endPlaceholder"
                 clearable
                 placeholder="结束时间占位内容"
@@ -37,7 +37,7 @@
       <el-input v-model="data.format" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'value']" label="默认值">
-      <el-time-picker v-if="!data.isRange"
+      <el-time-picker v-if="!data.range"
                       v-model="data.value"
                       key="1"
                       style="width: 100%;"
@@ -45,7 +45,7 @@
                       :value-format="data.valueFormat"
                       :format="data.format"
       />
-      <el-time-picker v-if="data.isRange"
+      <el-time-picker v-if="data.range"
                       v-model="data.value"
                       key="2"
                       style="width: 100%;"
@@ -88,8 +88,8 @@
         <el-col v-loquat-has-perm="[data, 'editable']" :span="operationComputedSpan">
           <el-checkbox v-model="data.editable">文本框可输入</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'isRange']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.isRange"
+        <el-col v-loquat-has-perm="[data, 'range']" :span="operationComputedSpan">
+          <el-checkbox v-model="data.range"
                        @change="$set(data, 'value', '')"
           >是否为范围选择</el-checkbox>
         </el-col>
@@ -184,7 +184,7 @@ export default {
         'hide',
         'hideLabel',
         'editable',
-        'isRange',
+        'range',
         'clearable',
         'arrowControl'
       ]

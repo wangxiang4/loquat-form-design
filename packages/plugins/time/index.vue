@@ -1,7 +1,7 @@
 <template>
   <div class="loquat-time">
     <el-time-picker v-model="text"
-                    :is-range="isRange"
+                    :is-range="range"
                     :size="size"
                     :style="customizeStyle"
                     :editable="editable"
@@ -83,7 +83,7 @@ export default {
     customizeStyle: {
       type: Object
     },
-    isRange: {
+    range: {
       type: Boolean,
       default: false
     }

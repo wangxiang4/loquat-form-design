@@ -1,33 +1,34 @@
 /**
  * @program: loquat-form-design
  *
- * @description: 设置一些通用的数据格式,表单,以及其他地方
- *
- * todo: 等插件加完,要把组件LIST,比如ARRAY_LIST,MULTIPLE_LISTd等等需要统一
+ * @description: 数据格式工具类,格式转换,数据分类,设置表单数据...
  *
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-15
  **/
 import {
-  ARRAY_LIST,
-  ARRAY_VALUE_LIST,
-  INPUT_LIST,
-  DATE_LIST,
+  ARRAY_VALUE_TYPES,
+  INPUT_FEATURE_TYPES,
+  DATE_TYPES,
   KEY_COMPONENT_NAME_LINE,
-  MULTIPLE_LIST, SELECT_LIST,
+  MULTIPLE_FEATURE_TYPES,
+  RANGE_FEATURE_TYPES,
+  SELECT_TYPES,
+  NUMBER_VALUE_TYPES,
+  REMOTE_REQUEST_TYPES,
   KEY_COMPONENT_CONFIG_NAME_LINE
 } from '@/global/variable'
-import { validateNull, setPx, deepClone, responseDataAccept } from './index'
+import { validateNull, setPx, deepClone, responseDataAccept, getObjType } from './index'
 import request from '@utils/request'
 import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
 import { handleRowDeepClone } from '@utils/layout'
 
-/** 获取控件提示 **/
+/** 获取控件默认提示 **/
 export function getPlaceholder (item) {
   const label = item.label
-  if (SELECT_LIST.includes(item.type)) {
+  if (SELECT_TYPES.includes(item.type)) {
     return `请选择 ${label}`
   } else {
     return `请输入 ${label}`
@@ -50,15 +51,11 @@ export function getComponent (type, component) {
   let result = type || 'input'
   if (!validateNull(component)) {
     return component
-  } else if (ARRAY_LIST.includes(type)) {
-    result = 'array'
-  } else if (['time', 'timerange'].includes(type)) {
-    result = 'time'
-  } else if (DATE_LIST.includes(type)) {
-    result = 'date'
-  } else if (['password', 'textarea', 'search'].includes(type)) {
+  } else if (['textarea', 'password'].includes(type)) {
     result = 'input'
-  } else if (INPUT_LIST.includes(type)) {
+  } else if (DATE_TYPES.includes(type)) {
+    result = 'date'
+  } else if (INPUT_FEATURE_TYPES.includes(type)) {
     result = 'input-' + type
   }
   return KEY_COMPONENT_NAME_LINE + result
@@ -78,9 +75,12 @@ export function formInitVal (list = []) {
         break
       // 插件数据处理
       default:
-        if (ARRAY_VALUE_LIST.includes(ele.type) || (MULTIPLE_LIST.includes(ele.type) && ele.multiple) || ele.isRange) {
+        if (ARRAY_VALUE_TYPES.includes(ele.type) ||
+          (MULTIPLE_FEATURE_TYPES.includes(ele.type) && ele.multiple) ||
+          (RANGE_FEATURE_TYPES.includes(ele.type) && ele.range)
+        ) {
           formModel[ele.prop] = []
-        } else if (['rate', 'slider', 'number'].includes(ele.type)) {
+        } else if (NUMBER_VALUE_TYPES.includes(ele.type)) {
           formModel[ele.prop] = undefined
         } else {
           formModel[ele.prop] = ''
@@ -94,15 +94,15 @@ export function formInitVal (list = []) {
 }
 
 /** 清空表单值 **/
-export function clearVal (obj, list = []) {
+export function formClearVal (obj, list = []) {
   if (!obj) return {}
   Object.keys(obj).forEach(ele => {
     if (!list.includes(ele)) {
-      if (Array.isArray(obj[ele])) {
+      if (getObjType(obj[ele]) === 'array') {
         obj[ele] = []
-      } else if (obj[ele] !== null && typeof obj[ele] === 'object') {
+      } else if (getObjType(obj[ele]) === 'boolean') {
         obj[ele] = {}
-      } else if (['number', 'boolean'].includes(typeof obj[ele]) || undefined === obj[ele]) {
+      } else if (['number', 'boolean', 'undefined'].includes(getObjType(obj[ele]))) {
         obj[ele] = undefined
       } else {
         obj[ele] = ''
@@ -114,20 +114,16 @@ export function clearVal (obj, list = []) {
 
 /** 获取配置组件名称 **/
 export function getComponentConfig (type, component) {
-  if ((!type || component) && type !== 'ueditor') return KEY_COMPONENT_CONFIG_NAME_LINE + 'custom'
-  let result = 'input'
-  if ([undefined, 'input', 'password', 'url', 'textarea'].includes(type)) {
+  let result = type || 'input'
+  // 引入第三方组件打开自定义配置面板
+  if (!validateNull(component)) {
+    return KEY_COMPONENT_CONFIG_NAME_LINE + 'custom'
+  } else if (['textarea', 'password'].includes(type)) {
     result = 'input'
-  } else if (['array', 'img'].includes(type)) {
-    result = 'array'
-  } else if (['time', 'timerange'].includes(type)) {
-    result = 'time'
-  } else if (DATE_LIST.includes(type)) {
+  } else if (DATE_TYPES.includes(type)) {
     result = 'date'
-  } else if (INPUT_LIST.includes(type)) {
+  } else if (INPUT_FEATURE_TYPES.includes(type)) {
     result = 'input-' + type
-  } else {
-    result = type
   }
   return KEY_COMPONENT_CONFIG_NAME_LINE + result
 }
@@ -188,9 +184,9 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
           delete col.events
         }
         // 处理远端请求数据转换
-        if (SELECT_LIST.includes(col.type) || col.type === 'upload') {
+        if (REMOTE_REQUEST_TYPES.includes(col.type)) {
           if (col.static) _this.$set(_this.DIC, col.prop, col.dicData)
-          if (!col.static) {
+          else {
             const dataSource = options.autoDataSource.find(item => item.key === col.remoteDataSource)
             // 提取请求参数
             const param = (({ url, method, headers, params }) => {

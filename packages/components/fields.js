@@ -219,7 +219,7 @@ export default [
       labelWidth: '',
       readonly: false,
       disabled: false,
-      isRange: false,
+      range: false,
       editable: true,
       clearable: true,
       arrowControl: true,

@@ -58,8 +58,8 @@ export function deepClone (data) {
 
 /** 获取对象类型 **/
 export function getObjType (obj) {
-  var toString = Object.prototype.toString
-  var map = {
+  const toString = Object.prototype.toString
+  const map = {
     '[object Boolean]': 'boolean',
     '[object Number]': 'number',
     '[object String]': 'string',

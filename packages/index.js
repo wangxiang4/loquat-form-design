@@ -17,6 +17,7 @@ import { deepClone, setPx, validateNull, get } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 import imagePreview from '@components/ImagePreview'
 import log from '@utils/log'
+import { noop } from 'element-ui/src/utils/util'
 
 export default {
   install (Vue, opts = {}) {
@@ -29,7 +30,7 @@ export default {
       validateNull: validateNull,
       get: get,
       log: log,
-      axios: opts.axios || {},
+      axios: opts.axios || noop,
       remoteOption: opts.remoteOption || {},
       remoteFunc: opts.remoteFunc || {},
       typeList: {
