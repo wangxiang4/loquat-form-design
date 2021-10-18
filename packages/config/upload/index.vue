@@ -9,14 +9,14 @@
     <el-form-item v-loquat-has-perm="[data, 'labelWidth']" label="标签宽度">
       <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'customizeStyle.width']" label="组件宽度" >
+    <el-form-item v-loquat-has-perm="[customizeStyle, 'width']" label="组件宽度" >
       <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'tip']" label="字段提示" >
-      <el-input v-model="data.tip" clearable/>
+    <el-form-item v-loquat-has-perm="[plugin, 'tip']" label="字段提示" >
+      <el-input v-model="plugin.tip" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'oss']" label="OSS" >
-      <el-radio-group v-model="data.oss">
+    <el-form-item v-loquat-has-perm="[plugin, 'oss']" label="OSS" >
+      <el-radio-group v-model="plugin.oss">
         <el-radio-button label="">
           普通请求
         </el-radio-button>
@@ -25,13 +25,13 @@
         </el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'action']" v-if="!data.oss" label="上传地址" >
-      <el-input v-model="data.action" clearable/>
+    <el-form-item v-loquat-has-perm="[plugin, 'action']" v-if="!plugin.oss" label="上传地址" >
+      <el-input v-model="plugin.action" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'domain']" v-if="data.oss" label="Domain" >
-      <el-input v-model="data.domain" clearable/>
+    <el-form-item v-loquat-has-perm="[plugin, 'domain']" v-if="plugin.oss" label="Domain" >
+      <el-input v-model="plugin.domain" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, staticPerm, 1]" v-if="data.oss" label="获取Token" >
+    <el-form-item v-loquat-has-perm="[data, remotePerm, 1]" v-if="plugin.oss" label="获取Token" >
       <el-radio-group v-model="data.remoteType">
         <el-radio label="datasource">数据源</el-radio>
         <el-radio label="func">方法函数</el-radio>
@@ -55,11 +55,11 @@
         />
       </template>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'limit']" label="最大上传数" >
-      <el-input v-model.number="data.limit" type="number" clearable/>
+    <el-form-item v-loquat-has-perm="[plugin, 'limit']" label="最大上传数" >
+      <el-input v-model.number="plugin.limit" type="number" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'accept']" label="文件类型">
-      <el-select v-model="data.accept"
+    <el-form-item v-loquat-has-perm="[plugin, 'accept']" label="文件类型">
+      <el-select v-model="plugin.accept"
                  placeholder="请选择文件类型"
                  :style="{ width: '100%' }"
                  clearable
@@ -73,9 +73,9 @@
         <el-option label="txt" value=".txt" />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'headers']" label="设置上传的请求头部" >
+    <el-form-item v-loquat-has-perm="[plugin, 'headers']" label="设置上传的请求头部" >
       <ul>
-        <li v-for="(item, index) in data.headers" :key="index" style="margin-bottom: 5px;">
+        <li v-for="(item, index) in plugin.headers" :key="index" style="margin-bottom: 5px;">
           <el-input v-model="item.key"
                     type="textarea"
                     style="width: 100px;margin-right: 5px;"
@@ -98,17 +98,17 @@
                      size="mini"
                      icon="el-icon-minus"
                      style="padding: 4px;margin-left: 5px;"
-                     @click="data.headers.splice(index, 1)"
+                     @click="plugin.headers.splice(index, 1)"
           />
         </li>
       </ul>
       <div>
-        <el-button type="text" @click="data.headers.push({key: '', value: '' })">添加</el-button>
+        <el-button type="text" @click="plugin.headers.push({key: '', value: '' })">添加</el-button>
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'data']" label="设置上传的请求参数" >
+    <el-form-item v-loquat-has-perm="[plugin, 'data']" label="设置上传的请求参数" >
       <ul>
-        <li v-for="(item, index) in data.data" :key="index" style="margin-bottom: 5px;">
+        <li v-for="(item, index) in plugin.data" :key="index" style="margin-bottom: 5px;">
           <el-input v-model="item.key"
                     type="textarea"
                     style="width: 100px;margin-right: 5px;"
@@ -131,16 +131,16 @@
                      size="mini"
                      icon="el-icon-minus"
                      style="padding: 4px;margin-left: 5px;"
-                     @click="data.data.splice(index, 1)"
+                     @click="plugin.data.splice(index, 1)"
           />
         </li>
       </ul>
       <div>
-        <el-button type="text" @click="data.data.push({key: '', value: '' })">添加</el-button>
+        <el-button type="text" @click="plugin.data.push({key: '', value: '' })">添加</el-button>
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'listType']" label="文件列表类型" >
-      <el-radio-group v-model="data.listType">
+    <el-form-item v-loquat-has-perm="[plugin, 'listType']" label="文件列表类型" >
+      <el-radio-group v-model="plugin.listType">
         <el-radio-button label="text">
           附件
         </el-radio-button>
@@ -155,18 +155,18 @@
         </el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, ['fileSize', 'byteUnit'], 1]" label="文件大小" >
-      <el-input v-model.number="data.fileSize" placeholder="请输入文件大小">
-        <el-select slot="append" v-model="data.byteUnit" :style="{ width: '66px' }">
+    <el-form-item v-loquat-has-perm="[plugin, ['fileSize', 'byteUnit'], 1]" label="文件大小" >
+      <el-input v-model.number="plugin.fileSize" placeholder="请输入文件大小">
+        <el-select slot="append" v-model="plugin.byteUnit" :style="{ width: '66px' }">
           <el-option label="KB" value="KB" />
           <el-option label="MB" value="MB" />
           <el-option label="GB" value="GB" />
         </el-select>
       </el-input>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, configCenterPerm, 1]" label="配置中心">
+    <el-form-item v-loquat-has-perm="[plugin, configCenterPerm, 1]" label="配置中心">
       <el-collapse accordion>
-        <el-collapse-item v-loquat-has-perm="[data, uploadConfigPerm, 1]" title="上传配置">
+        <el-collapse-item v-loquat-has-perm="[plugin, uploadConfigPerm, 1]" title="上传配置">
           <div v-loquat-has-perm="[uploadConfig, 'home']">
             <span class="horizontal-tip-text">首页地址:</span>
             <el-input v-model="uploadConfig.home" size="mini" clearable/>
@@ -184,7 +184,7 @@
             <el-input v-model="uploadConfig.resUrl" size="mini" clearable/>
           </div>
         </el-collapse-item>
-        <el-collapse-item v-loquat-has-perm="[data, canvasOptionPerm, 1]" title="水印配置">
+        <el-collapse-item v-loquat-has-perm="[plugin, canvasOptionPerm, 1]" title="水印配置">
           <div v-loquat-has-perm="[canvasOption, 'text']">
             <span class="horizontal-tip-text">水印文字:</span>
             <el-input v-model="canvasOption.text" size="mini" clearable/>
@@ -247,25 +247,25 @@
       </el-collapse>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
-      <loquat-select v-model="data.customClass"
-                     style="width: 100%;"
-                     filterable
-                     allow-create
-                     default-first-option
-                     multiple
-                     laceholder="请选择"
+      <el-select v-model="data.customClass"
+                 style="width: 100%;"
+                 filterable
+                 allow-create
+                 default-first-option
+                 multiple
+                 laceholder="请选择"
       >
         <el-option v-for="item in home.styleSheetsArray"
                    :key="item"
                    :label="item"
                    :value="item"
         />
-      </loquat-select>
+      </el-select>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, operationPerm, 1]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[data, 'disabled']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.disabled">禁用</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[data, 'hide']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hide">隐藏</el-checkbox>
@@ -273,24 +273,24 @@
         <el-col v-loquat-has-perm="[data, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'showCanvas']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.showCanvas">开启水印</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'showCanvas']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.showCanvas">开启水印</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'drag']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.drag">是否拖拽上传</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'drag']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.drag">是否拖拽上传</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'multiple']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.multiple">是否多选</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'multiple']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.multiple">是否多选</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'withCredentials']" v-if="!data.oss" :span="24">
-          <el-checkbox v-model="data.withCredentials">跨域请求是否提供凭据信息</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'withCredentials']" v-if="!data.oss" :span="24">
+          <el-checkbox v-model="plugin.withCredentials">跨域请求是否提供凭据信息</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'showFileList']" :span="24">
-          <el-checkbox v-model="data.showFileList">是否显示已上传文件列表</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'showFileList']" :span="24">
+          <el-checkbox v-model="plugin.showFileList">是否显示已上传文件列表</el-checkbox>
         </el-col>
       </el-row>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'validateConfig.required']" label="校验">
+    <el-form-item v-loquat-has-perm="[validateConfig, 'required']" label="校验">
       <div class="validate-block">
         <el-checkbox v-model="validateConfig.required">必填</el-checkbox>
         <el-input v-show="validateConfig.required"
@@ -368,11 +368,14 @@ export default {
       EVENT_DICT,
       operationComputedSpan: 24 / 2,
       operationPerm: [
-        'disabled',
         'hide',
         'hideLabel',
-        'drag',
-        'withCredentials'
+        'plugin.drag',
+        'plugin.disabled',
+        'plugin.showCanvas',
+        'plugin.withCredentials',
+        'plugin.multiple',
+        'plugin.showFileList'
       ],
       uploadConfigPerm: [
         'uploadConfig.home',
@@ -390,8 +393,7 @@ export default {
         'canvasOption.fontFamily',
         'canvasOption.color'
       ],
-      staticPerm: [
-        'static',
+      remotePerm: [
         'remoteType',
         'remoteDataSource',
         'remoteFunc'
@@ -402,20 +404,20 @@ export default {
     configCenterPerm () {
       return [...this.uploadConfigPerm, ...this.canvasOptionPerm]
     },
-    customizeStyle () {
-      return this.data.customizeStyle || {}
+    plugin () {
+      return this.data.plugin || {}
     },
-    params () {
-      return this.data.params || {}
+    customizeStyle () {
+      return this.plugin.customizeStyle || {}
+    },
+    uploadConfig () {
+      return this.plugin.uploadConfig || {}
+    },
+    canvasOption () {
+      return this.plugin.canvasOption || {}
     },
     validateConfig () {
       return this.data.validateConfig || {}
-    },
-    uploadConfig () {
-      return this.data.uploadConfig || {}
-    },
-    canvasOption () {
-      return this.data.canvasOption || {}
     },
     events () {
       const clone = this.$loquat.deepClone(this.data.events)

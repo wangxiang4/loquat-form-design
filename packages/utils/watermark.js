@@ -8,7 +8,7 @@
  * @create: 2021-08-04
  **/
 
-import { randomId, dataURLtoFile } from '@utils'
+import { randomId8, dataURLtoFile } from '@utils'
 
 /**
  * 全局大水印
@@ -22,7 +22,7 @@ import { randomId, dataURLtoFile } from '@utils'
  **/
 export class waterMark {
   constructor (opt = {}) {
-    this.CONTAINERID = randomId()
+    this.CONTAINERID = randomId8()
     this.drawCanvas = this.drawCanvas.bind(this)
     this.parentObserver = this.parentObserver.bind(this)
     this.Repaint = this.Repaint.bind(this)

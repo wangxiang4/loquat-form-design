@@ -8,6 +8,7 @@
  * @create: 2021-07-15
  **/
 import { PROP_PATH_EXPRESSION } from '@/global/variable'
+import random from '@utils/random'
 
 /** 设置px像素 **/
 export function setPx (val, defval = '') {
@@ -123,22 +124,19 @@ export function pathFormat (val) {
 
 /** 获取对象值 **/
 export function get (object, path, defaultValue) {
-  if (!path) return object
+  if (!path && typeof path !== 'string') return object
   path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
   let index = 0
   const length = path.length
   while (object != null && index < length) {
     object = object[path[index++]]
   }
-  const result = object == null
-    ? undefined
-    : object || undefined
-  return result === undefined ? defaultValue : result
+  return object == null ? defaultValue : object
 }
 
 /** 生成随机8位ID **/
-export function randomId () {
-  return Math.random().toString(36).slice(-8)
+export function randomId8 () {
+  return random(8)
 }
 
 /** 字符串数据类型转化 **/
@@ -150,21 +148,6 @@ export function detailDataType (value, type) {
   } else {
     return value
   }
-}
-
-/** 处理响应数据数据是否受理,解决dic应对各种类型问题 **/
-export function responseDataAccept (data, type) {
-  switch (type) {
-    case 'select':
-    case 'tree':
-    case 'cascader':
-      if (getObjType(data) === 'array') return data
-      else return []
-    case 'upload':
-      if (getObjType(data) === 'string') return data
-      else return ''
-  }
-  return undefined
 }
 
 /** 将base64地址转换为文件 **/
@@ -206,5 +189,7 @@ export function byteCapacityCompute (fileSize, unit) {
 
 /** 处理url路径拼接是否自动加斜杠 **/
 export function urlJoin (base, url) {
-  return `${base.replace(/([\w\W]+)\/$/, '$1')}/${url.replace(/^\/([\w\W]+)$/, '$1')}`
+  return (getObjType(base) === 'string' && getObjType(url) === 'string')
+    ? `${base.replace(/([\w\W]+)\/$/, '$1')}/${url.replace(/^\/([\w\W]+)$/, '$1')}`
+    : url
 }

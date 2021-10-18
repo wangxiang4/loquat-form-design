@@ -200,11 +200,10 @@ $coral-layout-background-color: #fdf6ec;
       padding-top: 1px;
 
       .fade-enter-active {
-        transition: all .3s linear;
+        transition: opacity .2s;
       }
 
       .fade-enter {
-        transform: translateX(10px);
         opacity: 0;
       }
 

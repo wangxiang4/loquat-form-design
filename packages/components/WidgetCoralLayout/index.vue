@@ -24,67 +24,28 @@
         <draggable :list="col.list"
                    :group="{ name: 'form' }"
                    ghost-class="ghost"
-                   class="widget-col-list"
                    :animation="300"
                    handle=".widget-view-drag"
                    :no-transition-on-drag="true"
                    @add="handleWidgetColAdd($event, col.list)"
                    @end="$emit('change')"
         >
-          <template v-for="(column, index) in col.list">
-            <template v-if="column.type == 'coralLayoutRow'">
-              <coral-layout :key="index"
-                            :column="column"
-                            :data="data"
-                            :widgets="col.list"
-                            :index="index"
-                            :select.sync="selectWidget"
-                            @change="$emit('change')"
+          <transition-group name="fade" tag="div" class="widget-col-list">
+            <template v-for="(column, index) in col.list">
+              <widget-form-item :data="data"
+                                :key="index"
+                                :widgets="col.list"
+                                :index="index"
+                                :column="column"
+                                :select.sync="selectWidget"
+                                layout-type="coralLayout"
+                                @select="handleWidgetDataSelect"
+                                @clone="handleWidgetClone"
+                                @delete="handleWidgetDelete"
+                                @change="$emit('change')"
               />
             </template>
-            <template v-else>
-              <div :key="index" @click.stop="handleWidgetDataSelect(col.list[index])">
-                <div :class="[
-                  'widget-view', {
-                    active: selectWidget.prop == column.prop,
-                    readonly: column.readonly,
-                    hide: column.hide
-                  }]"
-                >
-                  <el-form-item class="widget-form-item"
-                                :class="[{
-                                  required: $loquat.get(column, 'validateConfig.required')
-                                }].concat(column.customClass||[])"
-                                :prop="column.prop"
-                                :label="column.hideLabel ? '' : column.label"
-                                :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, labelWidth)"
-                                :label-position="column.labelPosition || data.labelPosition || labelPosition"
-                  >
-                    <form-item :column="column"
-                               :props="data.props"
-                               :value="column.value"
-                               :readonly="data.readonly || column.readonly"
-                               :disabled="data.disabled || column.disabled"
-                               :size="data.size || column.size"
-                               :dic="column.dicData"
-                               :type="column._type"
-                               :preview="false"
-                    />
-                  </el-form-item>
-                  <div v-if="selectWidget.prop == column.prop" class="widget-view-action">
-                    <i title="复制" class="iconfont icon-clone" @click.stop="handleWidgetClone(col.list, index)"/>
-                    <i title="删除" class="iconfont icon-trash" @click.stop="handleWidgetDelete(col.list, index)"/>
-                  </div>
-                  <div v-if="selectWidget.prop == column.prop" class="widget-view-drag">
-                    <i class="iconfont icon-drag"/>
-                  </div>
-                  <div class="widget-view-model">
-                    <span v-text="column.prop"/>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </template>
+          </transition-group>
         </draggable>
         <div v-if="selectWidget.prop == col.prop" class="widget-view-action widget-col-action">
           <i title="复制"
@@ -113,11 +74,11 @@
 import draggable from 'vuedraggable'
 import { getObjType } from '@utils'
 import { getLabelWidth, fieldTransformWidget } from '@utils/dataFormat'
-import { FORM_DEFAULT_PROP } from '@/global/variable'
 import { handleRowDeepClone, handleColumnDeepClone } from '@utils/layout'
-import formItem from '@/plugins/form/formItem'
+import widgetFormItem from '@components/WidgetFormItem'
 export default {
-  name: 'CoralLayout',
+  name: 'WidgetCoralLayout',
+  components: { draggable, widgetFormItem },
   props: {
     data: {
       type: Object
@@ -136,10 +97,8 @@ export default {
       type: Array
     }
   },
-  components: { draggable, formItem },
   data () {
     return {
-      ...FORM_DEFAULT_PROP,
       selectWidget: this.select,
       colPreset: {
         type: 'coralLayoutCol',

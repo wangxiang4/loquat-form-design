@@ -11,6 +11,7 @@
              :width="len"
              :disabled="disabled"
              :size="size"
+             :style="customizeStyle"
              @click.native="handleClick"
   />
 </template>
@@ -43,6 +44,9 @@ export default {
     size: {
       type: String,
       default: ''
+    },
+    customizeStyle: {
+      type: Object
     }
   },
   data () {

@@ -71,19 +71,13 @@ export default {
   },
   data () {
     return {
-      text: undefined,
-      first: false
+      text: undefined
     }
   },
   watch: {
     text: {
       handler (n) {
-        if (this.first || !this.$loquat.validateNull(n)) {
-          this.first = true
-          this.handleChange(n)
-        } else {
-          this.first = true
-        }
+        this.handleChange(n)
       }
     },
     value: {

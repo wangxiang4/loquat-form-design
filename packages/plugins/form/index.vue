@@ -1,8 +1,8 @@
 <template>
   <div :class="['loquat-form', formId]" :style="{ width: $loquat.setPx(widgetForm.formWidth, '100%') }">
     <el-form ref="form"
-             :status-icon="widgetForm.statusIcon"
              :model="form"
+             :status-icon="widgetForm.statusIcon"
              :label-suffix="widgetForm.labelSuffix || labelSuffix"
              :size="widgetForm.size || size"
              :label-position="widgetForm.labelPosition || labelPosition"
@@ -11,77 +11,11 @@
              @submit.native.prevent
     >
       <template v-for="(column, index) in columns">
-        <template v-if="column.type == 'coralLayoutRow'">
-          <coral-layout :key="index"
-                        :column="column"
-                        :widgets="columns"
-                        :loquat-form="loquatForm"
-          />
-        </template>
-        <template v-else>
-          <el-form-item v-if="!column.hide"
-                        :key="index"
-                        :prop="column.prop"
-                        :label="column.hideLabel ? '' : column.label"
-                        :rules="column.rules"
-                        :class="['loquat-form__item--' + (column.labelPosition || widgetForm.labelPosition || labelPosition)].concat(column.customClass || [])"
-                        :label-position="column.labelPosition || widgetForm.labelPosition || labelPosition"
-                        :label-width="column.hideLabel ? '0' :getLabelWidth(column, widgetForm, labelWidth)"
-          >
-            <template v-if="$scopedSlots[column.prop + 'Label']" slot="label">
-              <slot :name="column.prop + 'Label'"
-                    :column="column"
-                    :value="form[column.prop]"
-                    :readonly="widgetForm.readonly || column.readonly || readonly"
-                    :disabled="getDisabled(column)"
-                    :size="widgetForm.size || column.size || size"
-                    :dic="DIC[column.prop]"
-              />
-            </template>
-            <template v-if="$scopedSlots[column.prop + 'Error']" slot="error" slot-scope="scope">
-              <slot :name="column.prop + 'Error'"
-                    v-bind="Object.assign(scope, {
-                      column,
-                      value:form[column.prop],
-                      readonly: widgetForm.readonly || column.readonly || readonly,
-                      disabled: widgetForm.disabled || column.disabled || disabled,
-                      size: widgetForm.size || column.size || size,
-                      dic: DIC[column.prop]
-                    })"
-              />
-            </template>
-            <slot v-if="$scopedSlots[column.prop]"
-                  :name="column.prop"
-                  :value="form[column.prop]"
-                  :column="column"
-                  :readonly="widgetForm.readonly || column.readonly || readonly"
-                  :disabled="getDisabled(column)"
-                  :size="widgetForm.size || column.size || size"
-                  :dic="DIC[column.prop]"
-            />
-            <form-item v-else
-                       :ref="column.prop"
-                       v-model="form[column.prop]"
-                       :dic="DIC[column.prop]"
-                       :type="column._type"
-                       :column="column"
-                       :props="widgetForm.props"
-                       :readonly="widgetForm.readonly || column.readonly || readonly"
-                       :disabled="getDisabled(column)"
-                       :size="widgetForm.size || column.size || size"
-                       :enter="widgetForm.enter"
-                       @enter="submit"
-                       @change="propChange(column)"
-            >
-              <template v-for="item in $scopedSlots[column.prop + 'Type'] ? [column] : []"
-                        :slot="column.prop + 'Type'"
-                        slot-scope="scope"
-              >
-                <slot :name="item.prop + 'Type'" v-bind="scope"/>
-              </template>
-            </form-item>
-          </el-form-item>
-        </template>
+        <item :key="index"
+              :column="column"
+              :widgets="columns"
+              :loquat-form="loquatForm"
+        />
       </template>
     </el-form>
   </div>
@@ -90,14 +24,13 @@
 <script>
 import { formClearVal, formInitVal, getLabelWidth, designTransformPreview } from '@utils/dataFormat'
 import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
-import formItem from './formItem'
-import { randomId, deepClone } from '@utils'
+import { randomId8, deepClone } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
-import coralLayout from './coralLayout'
+import item from './item'
 export default {
   name: 'Form',
   inheritAttrs: false,
-  components: { formItem, coralLayout },
+  components: { item },
   props: {
     reset: {
       type: Boolean,
@@ -120,14 +53,13 @@ export default {
   },
   data () {
     return {
+      form: {},
       loquatForm: this,
       ...FORM_DEFAULT_PROP,
-      form: {},
       formCreate: false,
       formDefault: {},
       formVal: {},
       formId: '',
-      allDisabled: false,
       DIC: {}
     }
   },
@@ -163,7 +95,7 @@ export default {
       this.setVal()
       this.clearValidate()
       this.formCreate = true
-      this.formId = KEY_COMPONENT_NAME_LINE + randomId()
+      this.formId = KEY_COMPONENT_NAME_LINE + randomId8()
       const css = parseCss(this.widgetForm.styleSheets)
       insertCss(css, this.formId)
     })
@@ -229,14 +161,11 @@ export default {
     resetFields () {
       this.$refs.form.resetFields()
     },
-    getDisabled (column) {
-      return this.widgetForm.disabled || column.disabled || this.allDisabled
-    },
     useActivation () {
-      this.allDisabled = false
+      this.disabled = false
     },
     useDisabled () {
-      this.allDisabled = true
+      this.disabled = true
     }
   }
 }

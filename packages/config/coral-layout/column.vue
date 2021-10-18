@@ -25,20 +25,20 @@
       />
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
-      <loquat-select v-model="data.customClass"
-                     style="width: 100%;"
-                     filterable
-                     allow-create
-                     default-first-option
-                     multiple
-                     laceholder="请选择"
+      <el-select v-model="data.customClass"
+                 style="width: 100%;"
+                 filterable
+                 allow-create
+                 default-first-option
+                 multiple
+                 laceholder="请选择"
       >
         <el-option v-for="item in home.styleSheetsArray"
                    :key="item"
                    :label="item"
                    :value="item"
         />
-      </loquat-select>
+      </el-select>
     </el-form-item>
   </div>
 </template>

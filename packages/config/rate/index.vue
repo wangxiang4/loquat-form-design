@@ -9,36 +9,36 @@
     <el-form-item v-loquat-has-perm="[data, 'labelWidth']" label="标签宽度">
       <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'max']" label="最大值">
-      <loquat-input-number v-model="data.max" :min-rows="1"/>
+    <el-form-item v-loquat-has-perm="[plugin, 'max']" label="最大值">
+      <el-input-number v-model="plugin.max" :min-rows="1"/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'value']" label="默认值">
-      <loquat-rate v-model="data.value"
-                   :max="data.max"
-                   :allow-half="data.allowHalf"
+    <el-form-item v-loquat-has-perm="[plugin, 'value']" label="默认值">
+      <loquat-rate v-model="plugin.value"
+                   :max="plugin.max"
+                   :allow-half="plugin.allowHalf"
                    :show-empty="true"
       />
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
-      <loquat-select v-model="data.customClass"
-                     style="width: 100%;"
-                     filterable
-                     allow-create
-                     default-first-option
-                     multiple
-                     laceholder="请选择"
+      <el-select v-model="data.customClass"
+                 style="width: 100%;"
+                 filterable
+                 allow-create
+                 default-first-option
+                 multiple
+                 laceholder="请选择"
       >
         <el-option v-for="item in home.styleSheetsArray"
                    :key="item"
                    :label="item"
                    :value="item"
         />
-      </loquat-select>
+      </el-select>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, operationPerm, 1]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[data, 'disabled']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.disabled">禁用</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[data, 'hide']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hide">隐藏</el-checkbox>
@@ -46,15 +46,15 @@
         <el-col v-loquat-has-perm="[data, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'showScore']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.showScore">显示分数</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'showScore']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.showScore">显示分数</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'allowHalf']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.allowHalf">允许半选</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'allowHalf']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.allowHalf">允许半选</el-checkbox>
         </el-col>
       </el-row>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'validateConfig.required']" label="校验">
+    <el-form-item v-loquat-has-perm="[validateConfig, 'required']" label="校验">
       <div class="validate-block">
         <el-checkbox v-model="validateConfig.required">必填</el-checkbox>
         <el-input v-show="validateConfig.required"
@@ -132,15 +132,18 @@ export default {
       EVENT_DICT,
       operationComputedSpan: 24 / 2,
       operationPerm: [
-        'disabled',
         'hide',
         'hideLabel',
-        'showScore',
-        'allowHalf'
+        'plugin.disabled',
+        'plugin.showScore',
+        'plugin.allowHalf'
       ]
     }
   },
   computed: {
+    plugin () {
+      return this.data.plugin || {}
+    },
     validateConfig () {
       return this.data.validateConfig || {}
     },

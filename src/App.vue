@@ -20,6 +20,7 @@ export default {
             component: 'el-divider',
             icon: 'iconfont icon-divider',
             label: '',
+            propExclude: true,
             labelWidth: 0,
             params: {
               html: '<h3 style="color:red">分割线标题</h3>',
@@ -31,6 +32,7 @@ export default {
             component: 'el-alert',
             icon: 'el-icon-warning',
             label: '',
+            propExclude: true,
             labelWidth: 0,
             params: {
               title: '警告警告警告警告',

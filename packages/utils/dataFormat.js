@@ -10,7 +10,6 @@
 import {
   ARRAY_VALUE_TYPES,
   INPUT_FEATURE_TYPES,
-  DATE_TYPES,
   KEY_COMPONENT_NAME_LINE,
   MULTIPLE_FEATURE_TYPES,
   RANGE_FEATURE_TYPES,
@@ -19,7 +18,7 @@ import {
   REMOTE_REQUEST_TYPES,
   KEY_COMPONENT_CONFIG_NAME_LINE
 } from '@/global/variable'
-import { validateNull, setPx, deepClone, responseDataAccept, getObjType } from './index'
+import { validateNull, setPx, deepClone, getObjType } from './index'
 import request from '@utils/request'
 import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
@@ -53,8 +52,6 @@ export function getComponent (type, component) {
     return component
   } else if (['textarea', 'password'].includes(type)) {
     result = 'input'
-  } else if (DATE_TYPES.includes(type)) {
-    result = 'date'
   } else if (INPUT_FEATURE_TYPES.includes(type)) {
     result = 'input-' + type
   }
@@ -65,6 +62,7 @@ export function getComponent (type, component) {
 export function formInitVal (list = []) {
   const formModel = {}
   list.forEach(ele => {
+    const plugin = ele.plugin || {}
     switch (ele.type) {
       // 珊瑚布局数据处理
       case 'coralLayoutRow':
@@ -75,9 +73,10 @@ export function formInitVal (list = []) {
         break
       // 插件数据处理
       default:
-        if (ARRAY_VALUE_TYPES.includes(ele.type) ||
-          (MULTIPLE_FEATURE_TYPES.includes(ele.type) && ele.multiple) ||
-          (RANGE_FEATURE_TYPES.includes(ele.type) && ele.range)
+        if (ele.propExclude) break
+        if (ARRAY_VALUE_TYPES.includes(plugin.type || ele.type) ||
+          (MULTIPLE_FEATURE_TYPES.includes(ele.type) && plugin.multiple) ||
+          (RANGE_FEATURE_TYPES.includes(ele.type) && plugin.range)
         ) {
           formModel[ele.prop] = []
         } else if (NUMBER_VALUE_TYPES.includes(ele.type)) {
@@ -85,8 +84,8 @@ export function formInitVal (list = []) {
         } else {
           formModel[ele.prop] = ''
         }
-        if (!validateNull(ele.value)) {
-          formModel[ele.prop] = ele.value
+        if (!validateNull(plugin.value)) {
+          formModel[ele.prop] = plugin.value
         }
     }
   })
@@ -120,8 +119,6 @@ export function getComponentConfig (type, component) {
     return KEY_COMPONENT_CONFIG_NAME_LINE + 'custom'
   } else if (['textarea', 'password'].includes(type)) {
     result = 'input'
-  } else if (DATE_TYPES.includes(type)) {
-    result = 'date'
   } else if (INPUT_FEATURE_TYPES.includes(type)) {
     result = 'input-' + type
   }
@@ -151,6 +148,8 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
   }
   for (let i = 0; i < column.length; ++i) {
     const col = column[i]
+    const plugin = col.plugin || {}
+    const validateConfig = col.validateConfig || {}
     switch (col.type) {
       // 珊瑚布局数据处理
       case 'coralLayoutRow':
@@ -165,7 +164,16 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
       // 插件数据处理
       default:
         // 处理动作转换数据
-        if (!validateNull(col.events)) {
+        if (['object', 'string'].includes(getObjType(col.events))) {
+          if (typeof col.events === 'string') {
+            try {
+              const execute = eval // 将this指向window
+              const parse = execute('(' + col.events + ')')
+              getObjType(parse) === 'object' ? col.events = parse : col.events = {}
+            } catch (e) {
+              col.events = {}
+            }
+          }
           for (const key in col.events) {
             if (typeof col.events[key] !== 'string') continue
             if (col.events[key]) {
@@ -177,15 +185,15 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
         // 处理上传数据
         if (col.type === 'upload') {
           // 转换请求头部与请求参数数据格式
-          col.headers = col.headers && Object(...col.headers.map(({ key, value }) => ({ [key]: value })))
-          col.data = col.data && Object(...col.data.map(({ key, value }) => ({ [key]: value })))
+          plugin.headers = plugin.headers && Object(...plugin.headers.map(({ key, value }) => ({ [key]: value })))
+          plugin.data = plugin.data && Object(...plugin.data.map(({ key, value }) => ({ [key]: value })))
           // 处理动作数据
-          for (const key in col.events) col[key] = col.events[key]
+          for (const key in col.events) plugin[key] = col.events[key]
           delete col.events
         }
         // 处理远端请求数据转换
         if (REMOTE_REQUEST_TYPES.includes(col.type)) {
-          if (col.static) _this.$set(_this.DIC, col.prop, col.dicData)
+          if (!col.remote) _this.$set(_this.DIC, col.prop, col.dicData)
           else {
             const dataSource = options.autoDataSource.find(item => item.key === col.remoteDataSource)
             // 提取请求参数
@@ -193,7 +201,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
               return { url, method, headers, params }
             })(dataSource || {})
             // 远端请求显示标签不能手动控制,设置显示
-            if (hasOwnProperty(col, 'showLabel')) col.showLabel = true
+            if (hasOwnProperty(plugin, 'showLabel')) plugin.showLabel = true
             switch (col.remoteType) {
               case 'option' :
                 if (_this.$loquat.remoteOption[col.remoteOption]) _this.$set(_this.DIC, col.prop, _this.$loquat.remoteOption[col.remoteOption])
@@ -208,7 +216,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
                   !validateNull(_this.$loquat.axios) ? _this.$loquat.axios(param).then(res => {
                     try {
                       const execute = new Function('res', dataSource.responseFunc)(res)
-                      _this.$set(_this.DIC, col.prop, responseDataAccept(execute, col.type))
+                      _this.$set(_this.DIC, col.prop, remoteAccept(execute, col.type))
                     } catch (e) {
                       console.error(e)
                     }
@@ -228,7 +236,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
                   request(param).then(res => {
                     try {
                       const execute = new Function('res', dataSource.responseFunc)(res)
-                      _this.$set(_this.DIC, col.prop, responseDataAccept(execute, col.type))
+                      _this.$set(_this.DIC, col.prop, remoteAccept(execute, col.type))
                     } catch (e) {
                       console.error(e)
                     }
@@ -244,23 +252,19 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
                 break
             }
           }
-          delete col.static
+          delete col.remote
           delete col.dicData
-          delete col.remoteDataSource
           delete col.remoteType
           delete col.remoteFunc
           delete col.remoteOption
+          delete col.remoteDataSource
         }
         // 校验规则处理
-        if (col.validateConfig) {
+        if (getObjType(validateConfig) === 'object') {
           const rules = []
-          if (hasOwnProperty(col, '_type')) col._type = ''
-          col.validateConfig.required && rules.push({ required: true, message: col.validateConfig.requiredMessage || `${col.label}必须填写` })
-          if (col.validateConfig.type) {
-            rules.push({ type: col.validateConfig.typeFormat, message: col.validateConfig.typeMessage || `${col.label}格式不正确` })
-            if (['number', 'integer', 'float'].includes(col.validateConfig.typeFormat) && hasOwnProperty(col, '_type')) col._type = 'number'
-          }
-          col.validateConfig.pattern && rules.push({ pattern: col.validateConfig.patternFormat, message: col.validateConfig.patternMessage || `${col.label}格式不匹配` })
+          validateConfig.required && rules.push({ required: true, message: validateConfig.requiredMessage || `${col.label}必须填写` })
+          validateConfig.type && rules.push({ type: validateConfig.typeFormat, message: validateConfig.typeMessage || `${col.label}格式不正确` })
+          validateConfig.pattern && rules.push({ pattern: validateConfig.patternFormat, message: validateConfig.patternMessage || `${col.label}格式不匹配` })
           delete col.validateConfig
           col.rules = rules
         }
@@ -281,4 +285,21 @@ export function fieldTransformWidget (data) {
       data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
   }
   return data
+}
+
+/** 处理响应数据数据是否受理,解决dic应对各种类型问题 **/
+export function remoteAccept (data, type) {
+  // 远程类型细粒化处理,类型具体参考REMOTE_REQUEST_TYPES
+  switch (type) {
+    case 'radio':
+    case 'select':
+    case 'checkbox':
+    case 'cascader':
+      if (getObjType(data) === 'array') return data
+      else return []
+    case 'upload':
+      if (getObjType(data) === 'string') return data
+      else return ''
+  }
+  return undefined
 }

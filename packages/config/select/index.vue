@@ -6,29 +6,30 @@
     <el-form-item v-loquat-has-perm="[data, 'label']" label="标题">
       <el-input v-model="data.label" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'customizeStyle.width']" label="组件宽度" >
+    <el-form-item v-loquat-has-perm="[customizeStyle, 'width']" label="组件宽度" >
       <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'labelWidth']" label="标签宽度">
       <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'placeholder']" label="占位内容">
-      <el-input v-model="data.placeholder"
+    <el-form-item v-loquat-has-perm="[plugin, 'placeholder']" label="占位内容">
+      <el-input v-model="plugin.placeholder"
                 clearable
                 placeholder="占位内容"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, staticPerm, 1]" label="选项">
-      <el-radio-group v-model="data.static"
+    <el-form-item v-loquat-has-perm="[data, remotePerm, 1]" label="选项">
+      <el-radio-group v-model="data.remote"
                       size="mini"
                       style="margin-bottom: 10px;"
+                      @change="plugin.multiple ? $set(plugin, 'value', []) : $set(plugin, 'value', '')"
       >
-        <el-radio-button :label="true">静态数据</el-radio-button>
-        <el-radio-button :label="false">动态数据</el-radio-button>
+        <el-radio-button :label="false">静态数据</el-radio-button>
+        <el-radio-button :label="true">动态数据</el-radio-button>
       </el-radio-group>
-      <template v-if="data.static">
-        <el-checkbox v-model="data.showLabel">是否显示标签</el-checkbox>
-        <el-checkbox-group v-if="data.multiple" v-model="data.value" size="mini">
+      <template v-if="!data.remote">
+        <el-checkbox v-model="plugin.showLabel">是否显示标签</el-checkbox>
+        <el-checkbox-group v-if="plugin.multiple" v-model="plugin.value" size="mini">
           <draggable tag="ul"
                      :list="data.dicData"
                      :group="{ name: 'selectDicData' }"
@@ -38,11 +39,11 @@
             <li v-for="(item, index) in data.dicData" :key="index">
               <el-checkbox :label="item.value" style="margin-right: 3px;">
                 <el-input v-model="item.value"
-                          :style="{ width: data.showLabel ? '90px' : '180px'}"
+                          :style="{ width: plugin.showLabel ? '90px' : '180px'}"
                           size="mini"
                           clearable
                 />
-                <el-input v-if="data.showLabel"
+                <el-input v-if="plugin.showLabel"
                           v-model="item.label"
                           style="width: 90px;"
                           size="mini"
@@ -63,7 +64,7 @@
             </li>
           </draggable>
         </el-checkbox-group>
-        <el-radio-group v-else v-model="data.value" size="mini">
+        <el-radio-group v-else v-model="plugin.value" size="mini">
           <draggable tag="ul"
                      :list="data.dicData"
                      :group="{ name: 'selectDicData' }"
@@ -73,11 +74,11 @@
             <li v-for="(item, index) in data.dicData" :key="index">
               <el-radio :label="item.value" style="margin-right: 3px;">
                 <el-input v-model="item.value"
-                          :style="{ width: data.showLabel ? '90px' : '180px' }"
+                          :style="{ width: plugin.showLabel ? '90px' : '180px' }"
                           size="mini"
                           clearable
                 />
-                <el-input v-if="data.showLabel"
+                <el-input v-if="plugin.showLabel"
                           v-model="item.label"
                           style="width: 90px"
                           size="mini"
@@ -103,13 +104,13 @@
                      @click="handleAddFields"
           >添加选项</el-button>
           <el-button type="text"
-                     @click="data.multiple ? $set(data, 'value', []) : $set(data, 'value', '')"
+                     @click="plugin.multiple ? $set(plugin, 'value', []) : $set(plugin, 'value', '')"
           >重置选择</el-button>
         </div>
       </template>
-      <div v-if="!data.static">
+      <div v-if="data.remote">
         <el-radio-group v-model="data.remoteType">
-          <el-radio label="datasource" >数据源</el-radio>
+          <el-radio label="datasource">数据源</el-radio>
           <el-radio label="option">赋值变量</el-radio>
           <el-radio label="func">方法函数</el-radio>
         </el-radio-group>
@@ -140,64 +141,61 @@
                     clearable
           />
         </template>
-        <el-input v-model="prop.value" size="mini" clearable>
+        <el-input v-model="props.value" size="mini" clearable>
           <template #prepend>值</template>
         </el-input>
-        <el-input v-model="prop.label" size="mini" clearable>
+        <el-input v-model="props.label" size="mini" clearable>
           <template #prepend>标签</template>
-        </el-input>
-        <el-input v-model="prop.children" size="mini" clearable>
-          <template #prepend>子选项</template>
         </el-input>
       </div>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
-      <loquat-select v-model="data.customClass"
-                     style="width: 100%;"
-                     filterable
-                     allow-create
-                     default-first-option
-                     multiple
-                     laceholder="请选择"
+      <el-select v-model="data.customClass"
+                 style="width: 100%;"
+                 filterable
+                 allow-create
+                 default-first-option
+                 multiple
+                 laceholder="请选择"
       >
         <el-option v-for="item in home.styleSheetsArray"
                    :key="item"
                    :label="item"
                    :value="item"
         />
-      </loquat-select>
+      </el-select>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[data, operationPerm, 1]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[data, 'multiple']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.multiple"
-                       @change="(check) => {
-                         check ? $set(data, 'value', []) : $set(data, 'value', '')
-                         $set(data, 'drag', false)
+        <el-col v-loquat-has-perm="[plugin, 'multiple']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.multiple"
+                       @change="(mark) => {
+                         mark ? $set(plugin, 'value', []) : $set(plugin, 'value', '')
+                         $set(plugin, 'drag', false)
                        }"
           >是否多选</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'filterable']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.filterable">是否可搜索</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'filterable']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.filterable">是否可搜索</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[data, 'hide']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hide">隐藏</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'disabled']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.disabled">禁用</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[data, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'clearable']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.clearable">显示清除按钮</el-checkbox>
+        <el-col v-loquat-has-perm="[plugin, 'clearable']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.clearable">显示清除按钮</el-checkbox>
         </el-col>
-        <el-col v-if="data.multiple" v-loquat-has-perm="[data, 'drag']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.drag">是否可拖拽</el-checkbox>
+        <el-col v-if="plugin.multiple" v-loquat-has-perm="[plugin, 'drag']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.drag">是否可拖拽</el-checkbox>
         </el-col>
       </el-row>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'validateConfig.required']" label="校验">
+    <el-form-item v-loquat-has-perm="[validateConfig, 'required']" label="校验">
       <div class="validate-block">
         <el-checkbox v-model="validateConfig.required">必填</el-checkbox>
         <el-input v-show="validateConfig.required"
@@ -278,52 +276,55 @@ export default {
       EVENT_DICT,
       operationComputedSpan: 24 / 2,
       operationPerm: [
-        'multiple',
-        'filterable',
-        'readonly',
-        'disabled',
         'hide',
         'hideLabel',
-        'drag',
-        'clearable'
+        'plugin.drag',
+        'plugin.clearable',
+        'plugin.multiple',
+        'plugin.filterable',
+        'plugin.readonly',
+        'plugin.disabled'
       ],
-      staticPerm: [
-        'static',
-        'showLabel',
-        'value',
+      remotePerm: [
+        'remote',
         'dicData',
         'remoteType',
         'remoteDataSource',
         'remoteOption',
         'remoteFunc',
-        'prop.value',
-        'prop.label',
-        'prop.children'
+        'plugin.value',
+        'plugin.showLabel',
+        'plugin.props.value',
+        'plugin.props.label'
       ]
     }
   },
   computed: {
-    validateConfig () {
-      return this.data.validateConfig || {}
+    plugin () {
+      return this.data.plugin || {}
+    },
+    props () {
+      return this.plugin.props || {}
     },
     customizeStyle () {
-      return this.data.customizeStyle || {}
+      return this.plugin.customizeStyle || {}
+    },
+    validateConfig () {
+      return this.data.validateConfig || {}
     },
     events () {
       const clone = this.$loquat.deepClone(this.data.events)
       for (const val in clone) this.$loquat.validateNull(clone[val]) && delete clone[val]
       return clone
-    },
-    prop () {
-      return this.data.props || {}
     }
   },
   methods: {
     handleRemoveFields (index) {
+      this.plugin.multiple ? this.$set(this.plugin, 'value', []) : this.$set(this.plugin, 'value', '')
       this.data.dicData.splice(index, 1)
     },
     handleAddFields () {
-      this.data.showLabel
+      this.plugin.showLabel
         ? this.data.dicData.push({ label: '新选项', value: '新选项' })
         : this.data.dicData.push(Object({ value: '新选项' }))
     }

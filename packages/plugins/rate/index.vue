@@ -17,6 +17,7 @@
              :disabled="disabled"
              :colors="colors"
              :score-template="scoreTemplate"
+             :style="customizeStyle"
              @change="handleChange"
              @click.native="handleClick"
     />
@@ -95,6 +96,9 @@ export default {
     showEmpty: {
       type: Boolean,
       default: false
+    },
+    customizeStyle: {
+      type: Object
     }
   },
   data () {

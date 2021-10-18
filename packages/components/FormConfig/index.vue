@@ -9,12 +9,11 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item v-loquat-has-perm="[data, 'labelWidth']" label="标签宽度">
-        <loquat-input-number
-          v-model="data.labelWidth"
-          :min="80"
-          :max="200"
-          :step="10"
-          style="width: 130px;"
+        <el-input-number v-model="data.labelWidth"
+                         :min="80"
+                         :max="200"
+                         :step="10"
+                         style="width: 130px;"
         />
       </el-form-item>
       <el-form-item v-loquat-has-perm="[data, 'size']" label="组件尺寸">
@@ -30,20 +29,20 @@
         >设置</el-button>
       </el-form-item>
       <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
-        <loquat-select v-model="data.customClass"
-                       style="width: 100%;"
-                       filterable
-                       allow-create
-                       default-first-option
-                       multiple
-                       laceholder="请选择"
+        <el-select v-model="data.customClass"
+                   style="width: 100%;"
+                   filterable
+                   allow-create
+                   default-first-option
+                   multiple
+                   laceholder="请选择"
         >
           <el-option v-for="item in home.styleSheetsArray"
                      :key="item"
                      :label="item"
                      :value="item"
           />
-        </loquat-select>
+        </el-select>
       </el-form-item>
       <el-form-item v-loquat-has-perm="[data, 'dataSource']" label="数据源">
         <el-button style="width: 100%;"

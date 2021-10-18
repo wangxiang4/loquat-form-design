@@ -1,21 +1,21 @@
 <template>
-  <component :is="getComponent(col.type, col.component)"
-             ref="formItem"
+  <component :is="getComponent(getColumn.type, getColumn.component)"
+             ref="formPlugin"
              v-model="text"
-             v-bind="col"
-             :column="Object.assign(col, params)"
+             v-bind="plugin"
              :dic="dic"
-             :disabled="col.disabled || disabled"
-             :readonly="col.readonly || readonly"
-             :placeholder="col.placeholder || getPlaceholder(col)"
-             :props="col.props || props"
-             :size="col.size || size"
-             :type="type || col.type"
+             :column="getColumn"
+             :props="plugin.props || props"
+             :disabled="plugin.disabled || disabled"
+             :readonly="plugin.readonly || readonly"
+             :placeholder="plugin.placeholder || getPlaceholder(getColumn)"
+             :size="plugin.size || size"
+             :type="type || plugin.type"
              v-on="events"
              @keyup.enter.native="enterChange"
   >
     <span v-if="params.html" v-html="params.html"/>
-    <template v-for="item in $scopedSlots[col.prop + 'Type'] ? [col] : []" slot-scope="scope">
+    <template v-for="item in $scopedSlots[getColumn.prop + 'Type'] ? [getColumn] : []" slot-scope="scope">
       <slot :name="item.prop + 'Type'" v-bind="scope"/>
     </template>
   </component>
@@ -25,24 +25,18 @@
 import { getComponent, getPlaceholder } from '@utils/dataFormat'
 import { getObjType } from '@utils'
 export default {
-  name: 'FormItem',
+  name: 'Widget',
   props: {
     value: {},
     dic: {},
     props: {
       type: Object
     },
-    clearable: {
-      type: Boolean
-    },
     enter: {
       type: Boolean,
       default: false
     },
     type: {
-      type: String
-    },
-    placeholder: {
       type: String
     },
     size: {
@@ -72,30 +66,33 @@ export default {
     }
   },
   computed: {
-    col () {
-      const col = this.$loquat.deepClone(this.column)
-      // 排除表单设计时插件显示没有经过处理的报错字段
+    getColumn () {
+      const column = this.$loquat.deepClone(this.column)
+      const plugin = column.plugin || {}
       if (!this.preview) {
-        // 处理上传数据
-        delete col.headers
-        delete col.data
+        switch (column.type) {
+          case 'upload':
+            // 处理上传数据
+            delete plugin.headers
+            delete plugin.data
+            break
+        }
         // 处理动作转换数据
-        delete col.events
+        delete column.events
         // 处理远端请求数据转换
-        delete col.static
-        delete col.dicData
-        delete col.remoteDataSource
-        delete col.remoteType
-        delete col.remoteFunc
-        delete col.remoteOption
+        delete column.remote
+        delete column.dicData
+        delete column.remoteType
+        delete column.remoteFunc
+        delete column.remoteOption
+        delete column.remoteDataSource
         // 校验规则处理
-        delete col.validateConfig
+        delete column.validateConfig
       }
-      return col
+      return column
     },
     params () {
-      let params = this.col.params || {}
-      // 解析自定义属性配置
+      let params = this.getColumn.params || {}
       if (getObjType(params) === 'string') {
         try {
           const execute = eval // 将this指向window
@@ -108,18 +105,11 @@ export default {
       return params
     },
     events () {
-      let events = this.col.events || {}
-      // 解析自定义事件配置
-      if (getObjType(events) === 'string') {
-        try {
-          const execute = eval // 将this指向window
-          const parse = execute('(' + events + ')')
-          getObjType(parse) === 'object' ? events = parse : events = {}
-        } catch (e) {
-          events = {}
-        }
-      }
-      return events
+      return this.getColumn.events || {}
+    },
+    plugin () {
+      const plugin = this.getColumn.plugin || {}
+      return Object.assign(plugin, this.params)
     }
   },
   watch: {

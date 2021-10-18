@@ -626,7 +626,7 @@ import beautifier from '@utils/jsonBeautifier'
 import clipboard from '@utils/clipboard'
 import codeBeautifier from 'js-beautify'
 import { KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE, JS_EXECUTE_INCLUDE, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
-import { randomId, getObjType } from '@utils'
+import { randomId8, getObjType } from '@utils'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 import request from '@utils/request'
 import { getToken } from '@utils/qiniuOss'
@@ -820,7 +820,7 @@ export default {
   },
   mounted () {
     this.handleLoadStorage()
-    this.formId = KEY_COMPONENT_NAME_LINE + randomId()
+    this.formId = KEY_COMPONENT_NAME_LINE + randomId8()
     this.handleStyleSheetsCore()
     this.handlePluginDefaultData()
   },
@@ -983,7 +983,7 @@ export default {
     // 处理动作设置添加
     handleActionAdd () {
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
-      const id = randomId()
+      const id = randomId8()
       this.actionForm = {
         'key': id,
         'name': `fun_${id}`,
@@ -1018,7 +1018,7 @@ export default {
     handleActionClone (data) {
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       this.actionForm = { ...data }
-      this.actionForm.key = randomId()
+      this.actionForm.key = randomId8()
       this.actionForm.name += '_copy'
       this.actionMenuItemDisabled = true
       this.actionMainContainerVisible = true
@@ -1044,7 +1044,7 @@ export default {
     // 处理动作设置取消
     handleActionCancel () {
       this.actionForm = {}
-      this.actionMenuActive = randomId()
+      this.actionMenuActive = randomId8()
       this.actionMenuItemDisabled = false
       this.actionMainContainerVisible = false
     },
@@ -1088,7 +1088,7 @@ export default {
     // 处理数据源设置添加
     handleDataSourceAdd () {
       if (this.dataSourceMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
-      const id = randomId()
+      const id = randomId8()
       this.dataSourceForm = {
         key: id,
         name: `DataSource_${id}`,
@@ -1136,7 +1136,7 @@ export default {
     handleDataSourceClone (data) {
       if (this.dataSourceMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       this.dataSourceForm = this.$loquat.deepClone(data)
-      this.dataSourceForm.key = randomId()
+      this.dataSourceForm.key = randomId8()
       this.dataSourceForm.name += '_copy'
       this.dataSourceForm.headers = Object.entries(this.dataSourceForm.headers).map(([k, v]) => ({ key: k, value: v }))
       this.dataSourceForm.params = Object.entries(this.dataSourceForm.params).map(([k, v]) => ({ key: k, value: v }))
@@ -1165,7 +1165,7 @@ export default {
     // 处理数据源设置取消
     handleDataSourceCancel () {
       this.dataSourceForm = {}
-      this.dataSourceMenuActive = randomId()
+      this.dataSourceMenuActive = randomId8()
       this.dataSourceMenuItemDisabled = false
       this.dataSourceMainContainerVisible = false
     },
@@ -1247,8 +1247,10 @@ export default {
     // 处理级联静态数据设置对话框提交
     handleCascadeOptionSubmit () {
       try {
+        const plugin = this.widgetFormSelect.plugin || {}
         const cascadeOptionData = JSON.parse(this.cascadeOption)
         this.$set(this.widgetFormSelect, 'dicData', cascadeOptionData)
+        this.$set(plugin, 'value', [])
         this.cascadeOptionVisible = false
       } catch (e) {
         this.$message.error(e.message)

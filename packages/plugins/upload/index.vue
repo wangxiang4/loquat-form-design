@@ -1,13 +1,13 @@
 <template>
-  <div class="loquat-upload">
-    <el-upload :class="{ 'loquat-upload__img': listType=='picture-img', 'loquat-upload__disabled': (disabled || !tokenOnline) }"
+  <div class="loquat-upload" v-loading.lock="loading">
+    <el-upload :class="{ 'loquat-upload__img': isAvatarImg, 'loquat-upload__disabled': (disabled || !tokenOnline) }"
                :action="action"
                :accept="acceptList"
-               :multiple="multiple"
                :style="customizeStyle"
                :limit="limit"
                :drag="drag"
-               :show-file-list="isPictureImg?false:showFileList"
+               :multiple="isAvatarImg?false:multiple"
+               :show-file-list="isAvatarImg?false:showFileList"
                :list-type="listType"
                :disabled="disabled"
                :file-list="fileList"
@@ -16,17 +16,16 @@
                :on-remove="handleRemove"
                :on-preview="handlePreview"
                :on-exceed="handleExceed"
-               :on-error="handleError"
-               :on-success="handleSuccess"
+               :on-change="handleFileChange"
     >
       <template v-if="listType=='picture-card'">
         <i class="el-icon-plus"/>
       </template>
-      <template v-else-if="listType=='picture-img'">
-        <slot v-if="$scopedSlots.default" :file="pictureImg"/>
+      <template v-else-if="isAvatarImg">
+        <slot v-if="$scopedSlots.default" :file="{url:avatarImgUrl}"/>
         <template v-else>
-          <img v-if="pictureImg.url"
-               :src="pictureImg.url"
+          <img v-if="avatarImgUrl"
+               :src="avatarImgUrl"
                v-bind="imgParams"
                class="loquat-upload__avatar"
                @mouseover="menu=true"
@@ -39,11 +38,11 @@
                @click.stop="()=>{return false}"
           >
             <i class="el-icon-zoom-in"
-               @click.stop="handlePreview(pictureImg)"
+               @click.stop="handlePreview({url:avatarImgUrl})"
             />
             <i v-if="!disabled"
                class="el-icon-delete"
-               @click.stop="handleAvatarRemove(pictureImg)"
+               @click.stop="handleAvatarRemove(avatarImgUrl)"
             />
           </div>
         </template>
@@ -70,6 +69,7 @@
 import axios from 'loquat-axios'
 import { detailImg } from '@utils/watermark'
 import { getFileUrl, byteCapacityCompute, urlJoin } from '@utils'
+import { UPLOAD_CONFIG_PROPS } from '@/global/variable'
 export default {
   name: 'Upload',
   inheritAttrs: false,
@@ -115,9 +115,7 @@ export default {
     },
     uploadConfig: {
       type: Object,
-      default: () => {
-        return {}
-      }
+      default: () => UPLOAD_CONFIG_PROPS
     },
     params: {
       type: Object,
@@ -161,6 +159,12 @@ export default {
         return {}
       }
     },
+    column: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     // 跨域提供凭证,一般用于跨域携带cookie
     withCredentials: {
       type: Boolean,
@@ -169,6 +173,10 @@ export default {
     domain: {
       type: String,
       default: ''
+    },
+    stringMode: {
+      type: Boolean,
+      default: false
     },
     uploadRemove: Function,
     uploadRemoveBefore: Function,
@@ -183,9 +191,10 @@ export default {
   data () {
     return {
       text: [],
-      reqs: {},
       menu: false,
-      tokenOnline: false
+      loading: false,
+      tokenOnline: false,
+      uploadConfigDefault: UPLOAD_CONFIG_PROPS
     }
   },
   watch: {
@@ -210,17 +219,22 @@ export default {
   },
   computed: {
     homeUrl () {
-      return this.uploadConfig.home || ''
-    },
-    resUrlKey () {
-      if (this.isQiniuOss) return this.uploadConfig.resUrl || 'key'
-      return this.uploadConfig.resUrl || 'data'
+      return this.uploadConfig.home || this.uploadConfigDefault.home
     },
     fileName () {
-      return this.uploadConfig.fileName || 'file'
+      return this.uploadConfig.fileName || this.uploadConfigDefault.fileName
     },
     resKey () {
-      return this.uploadConfig.res || ''
+      return this.uploadConfig.res || this.uploadConfigDefault.res
+    },
+    resUrlKey () {
+      return this.uploadConfig.resUrl || this.uploadConfigDefault.resUrl
+    },
+    nameKey: function () {
+      return this.uploadConfig.name || this.uploadConfigDefault.name
+    },
+    urlKey: function () {
+      return this.uploadConfig.url || this.uploadConfigDefault.url
     },
     isQiniuOss () {
       return this.oss === 'qiniu'
@@ -232,25 +246,41 @@ export default {
       return this.accept
     },
     fileList () {
-      return (this.text || []).map(ele => {
-        return Object.assign(ele, {
-          url: getFileUrl(this.homeUrl, ele.url)
-        })
+      const list = [];
+      (this.text || []).forEach((ele, index) => {
+        if (ele) {
+          let name
+          // 处理单个url链接取最后为label
+          if (this.getStringMode) name = ele.substring(ele.lastIndexOf('/') + 1)
+          list.push({
+            uid: index + '',
+            status: 'done',
+            name: this.getStringMode ? name : ele[this.nameKey],
+            url: getFileUrl(this.homeUrl, this.getStringMode ? ele : ele[this.urlKey])
+          })
+        }
       })
+      return list
     },
-    isPictureImg () {
+    isAvatarImg () {
       return this.listType === 'picture-img'
     },
-    pictureImg () {
-      return (this.text || [])[0] || {}
+    avatarImgUrl () {
+      return !this.$loquat.validateNull(this.text) && getFileUrl(this.homeUrl, this.text[0])
+    },
+    getStringMode () {
+      return this.isAvatarImg ? true : this.stringMode
     },
     imgParams () {
-      if (this.$loquat.typeList.video.test(this.pictureImg.url)) {
+      if (this.$loquat.typeList.video.test(this.avatarImgUrl)) {
         return Object.assign({
           is: 'video'
         }, this.params)
       }
       return this.params
+    },
+    previewFileListMode () {
+      return (this.listType !== 'picture-card' && !this.isAvatarImg)
     }
   },
   created () {
@@ -263,34 +293,32 @@ export default {
     // 处理上传外部链接地址
     handleExternalLinkUrl (response) {
       if (this.isQiniuOss) {
-        return urlJoin(this.domain, this.$loquat.get(response, this.resUrlKey, ''))
+        return urlJoin(this.domain, response.key)
       } else {
         return this.$loquat.get(response, this.resUrlKey, '')
       }
     },
     // 处理上传移除
     handleRemove (file, fileList) {
-      this.text.forEach((ele, index) => {
+      this.fileList.forEach((ele, index) => {
         if (ele.uid === file.uid) this.text.splice(index, 1)
       })
       this.uploadRemove && this.uploadRemove(file, fileList)
     },
     // 处理上传移除前
     handleBeforeRemove (file, fileList) {
-      this.handleAbort(file)
       if (typeof this.uploadRemoveBefore === 'function') {
-        return this.uploadRemoveBefore(file, fileList)
+        return this.uploadRemoveBefore(file, fileList, this.column)
       } else {
         return Promise.resolve()
       }
     },
     // 处理预览
     handlePreview (file) {
-      if (!file.url) return console.warn('文件尚未上传完毕,请稍后预览!')
       const callback = () => {
         const url = file.url
         // 处理如果是目前文件是列表显示直接利用浏览器预览
-        if (this.listType !== 'picture-card' && this.listType !== 'picture-img') {
+        if (this.previewFileListMode) {
           window.open(url)
         } else {
           // 使用预览组件查看
@@ -300,7 +328,7 @@ export default {
         }
       }
       if (typeof this.uploadPreview === 'function') {
-        this.uploadPreview(file, callback)
+        this.uploadPreview(file, this.column, callback)
       } else {
         callback()
       }
@@ -311,10 +339,12 @@ export default {
         this.httpRequest(config)
         return
       }
+      this.loading = true
       let file = config.file
+      const originFile = config.file
       const fileSize = byteCapacityCompute(file.size, this.byteUnit)
       if (!this.$loquat.validateNull(fileSize) && fileSize > this.fileSize) {
-        config.onError('文件太大不符合')
+        this.handleError('文件太大不符合')
         return
       }
       const done = () => {
@@ -338,32 +368,38 @@ export default {
             }
             return axios.post(url, param, {
               headers,
-              onUploadProgress: function progress (e) {
-                if (e.total > 0) {
-                  e.percent = e.loaded / e.total * 100
-                }
-                config.onProgress(e)
-              },
-              cancelToken: new axios.CancelToken(c => {
-                this.reqs[file.uid] = c
-              }),
               withCredentials
             })
           })().then(res => {
             const responseData = this.$loquat.get(res.data, this.resKey, '')
             // 成功调用外部提供上传后接口
             if (typeof this.uploadAfter === 'function') {
-              this.uploadAfter(responseData, config.onSuccess(responseData))
-            } else config.onSuccess(responseData)
+              this.uploadAfter(
+                responseData,
+                this.handleSuccess(responseData, uploadFile),
+                () => { this.loading = false },
+                this.column
+              )
+            } else this.handleSuccess(responseData, uploadFile)
           }).catch(error => {
             // 异常调用外部提供上传后接口
             if (typeof this.uploadAfter === 'function') {
-              this.uploadAfter(error, config.onError(error))
-            } else config.onError(error)
+              this.uploadAfter(
+                error,
+                this.handleError,
+                () => { this.loading = false },
+                this.column
+              )
+            } else this.handleError(error)
           })
         }
         if (typeof this.uploadBefore === 'function') {
-          this.uploadBefore(file, callback)
+          this.uploadBefore(
+            originFile,
+            callback,
+            () => { this.loading = false },
+            this.column
+          )
         } else callback()
       }
       // 是否开启水印,注意只有图片类型可以开启水印
@@ -375,59 +411,41 @@ export default {
       } else done()
     },
     // 处理上传成功
-    handleSuccess (res, file, fileList) {
-      // 成功数据包处理
-      const fileData = {
-        uid: file.uid,
-        status: file.status,
-        name: file.name,
-        url: this.handleExternalLinkUrl(res)
-      }
-      if (this.isPictureImg) {
-        this.text.splice(0, 1, fileData)
+    handleSuccess (res, uploadFile) {
+      this.loading = false
+      const url = this.handleExternalLinkUrl(res)
+      if (this.isAvatarImg) {
+        this.text.splice(0, 1, url)
+      } else if (this.getStringMode) {
+        this.text.push(url)
       } else {
-        this.text.push(fileData)
+        this.text.push({ [this.nameKey]: uploadFile.name, [this.urlKey]: url })
       }
-      delete this.reqs[file.uid]
-      this.uploadSuccess && this.uploadSuccess(res, file, fileList)
+      this.uploadSuccess && this.uploadSuccess(res, uploadFile, this.fileList, this.column)
     },
     // 处理上传超出扩展
     handleExceed (files, fileList) {
-      this.uploadExceed && this.uploadExceed(this.limit, files, fileList)
+      this.uploadExceed && this.uploadExceed(this.limit, files, fileList, this.column)
     },
     // 处理上传异常扩展
-    handleError (err, file, fileList) {
-      delete this.reqs[file.uid]
-      this.uploadError && this.uploadError(err, file, fileList)
+    handleError (err) {
+      this.loading = false
+      this.uploadError && this.uploadError(err, this.fileList, this.column)
     },
     // 处理头像移除操作
     handleAvatarRemove (file) {
-      this.handleBeforeRemove(file, this.text).then(() => {
+      this.handleBeforeRemove(file, this.fileList).then(() => {
         this.text = []
         this.menu = false
       }).catch(() => {
       })
     },
-    // 处理取消请求,防止上传还没完成就删除文件
-    handleAbort (file) {
-      const { reqs } = this
-      if (file) {
-        let uid = file
-        if (file.uid) uid = file.uid
-        if (reqs[uid]) {
-          typeof reqs[uid] === 'function' && reqs[uid]()
-        }
-      } else {
-        // 不指定file则全部执行取消请求
-        Object.keys(reqs).forEach((uid) => {
-          typeof reqs[uid] === 'function' && reqs[uid]()
-          delete reqs[uid]
-        })
-      }
-    },
     handleChange (value) {
       this.$emit('input', value)
       this.$emit('change', value)
+    },
+    handleFileChange (file, fileList) {
+      fileList.splice(fileList.length - 1, 1)
     }
   }
 }

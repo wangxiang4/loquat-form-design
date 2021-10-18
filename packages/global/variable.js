@@ -13,13 +13,12 @@ export const KEY_COMPONENT_CONFIG_NAME = 'LoquatConfig'
 export const KEY_COMPONENT_CONFIG_NAME_LINE = 'loquat-config-'
 /** 查找参数路径表达式,比如a[0].b.c对应匹配(a,0,b,c) **/
 export const PROP_PATH_EXPRESSION = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g
-export const DATE_TYPES = ['year', 'month', 'date', 'dates', 'week', 'datetime', 'datetimerange', 'daterange', 'monthrange']
 export const INPUT_FEATURE_TYPES = ['number', 'color']
 export const MULTIPLE_FEATURE_TYPES = ['cascader', 'select']
 export const RANGE_FEATURE_TYPES = ['slider', 'time']
 export const ARRAY_VALUE_TYPES = ['upload', 'checkbox', 'cascader', 'monthrange', 'daterange', 'datetimerange', 'dates']
 export const NUMBER_VALUE_TYPES = ['number', 'rate', 'slider']
-export const SELECT_TYPES = DATE_TYPES.concat(['select', 'checkbox', 'radio', 'cascader', 'color', 'time'])
+export const SELECT_TYPES = ['date', 'select', 'checkbox', 'radio', 'cascader', 'color', 'time']
 export const REMOTE_REQUEST_TYPES = ['upload', 'select', 'radio', 'checkbox', 'cascader']
 export const IMPORT_JSON_TEMPLATE = `{
   "column": [],
@@ -32,7 +31,8 @@ export const FORM_DEFAULT_PROP = {
   labelPosition: 'left',
   labelWidth: 90,
   labelSuffix: ':',
-  readonly: false
+  readonly: false,
+  disabled: false
 }
 export const JS_EXECUTE_INCLUDE = ['mounted']
 export const EVENT_DICT = {
@@ -50,6 +50,14 @@ export const DIC_PROPS = {
   groups: 'groups',
   children: 'children',
   disabled: 'disabled'
+}
+export const UPLOAD_CONFIG_PROPS = {
+  home: '',
+  res: '',
+  name: 'name',
+  url: 'file',
+  resUrl: 'data',
+  fileName: 'file'
 }
 /** 更多配置详情参考地址:https://github.com/beautify-web/js-beautify **/
 export const BEAUTIFIER_DEFAULTS_CONF = {

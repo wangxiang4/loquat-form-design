@@ -4,7 +4,7 @@
              :label-position="data.labelPosition || labelPosition"
              :label-width="$loquat.setPx(data.labelWidth, labelWidth)"
              :label-suffix="data.labelSuffix || labelSuffix"
-             :size="size"
+             :size="data.size || size"
              :style="defaultBackground"
              :class="data.customClass"
     >
@@ -19,58 +19,17 @@
       >
         <transition-group name="fade" tag="div" class="widget-form-list">
           <template v-for="(column, index) in data.column">
-            <template v-if="column.type == 'coralLayoutRow'">
-              <coral-layout :key="index"
-                            :column="column"
-                            :data="data"
-                            :widgets="data.column"
-                            :index="index"
-                            :select.sync="selectWidget"
-                            @change="$emit('change')"
-              />
-            </template>
-            <template v-else>
-              <div :key="index" @click.stop="handleSelectWidget(index)">
-                <div :class="[
-                  'widget-view', {
-                    active: selectWidget.prop == column.prop,
-                    readonly: column.readonly,
-                    hide: column.hide
-                  }]"
-                >
-                  <el-form-item class="widget-form-item"
-                                :class="[{
-                                  required: $loquat.get(column, 'validateConfig.required')
-                                }].concat(column.customClass||[])"
-                                :prop="column.prop"
-                                :label="column.hideLabel ? '' : column.label"
-                                :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, labelWidth)"
-                                :label-position="column.labelPosition || data.labelPosition || labelPosition"
-                  >
-                    <form-item :column="column"
-                               :props="data.props"
-                               :value="column.value"
-                               :readonly="data.readonly || column.readonly"
-                               :disabled="data.disabled || column.disabled"
-                               :size="data.size || column.size"
-                               :dic="column.dicData"
-                               :type="column._type"
-                               :preview="false"
-                    />
-                  </el-form-item>
-                  <div v-if="selectWidget.prop == column.prop" class="widget-view-action">
-                    <i title="复制" class="iconfont icon-clone" @click.stop="handleWidgetClone(index)"/>
-                    <i title="删除" class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"/>
-                  </div>
-                  <div v-if="selectWidget.prop == column.prop" class="widget-view-drag">
-                    <i class="iconfont icon-drag"/>
-                  </div>
-                  <div class="widget-view-model">
-                    <span v-text="column.prop"/>
-                  </div>
-                </div>
-              </div>
-            </template>
+            <widget-form-item :key="index"
+                              :data="data"
+                              :widgets="data.column"
+                              :index="index"
+                              :column="column"
+                              :select.sync="selectWidget"
+                              @select="handleSelectWidget"
+                              @clone="handleWidgetClone"
+                              @delete="handleWidgetDelete"
+                              @change="$emit('change')"
+            />
           </template>
         </transition-group>
       </draggable>
@@ -83,11 +42,10 @@ import widgetEmpty from '@/assets/images/widget-empty.png'
 import { getLabelWidth, fieldTransformWidget } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
-import coralLayout from '@components/CoralLayout'
-import formItem from '@/plugins/form/formItem'
+import widgetFormItem from '@components/WidgetFormItem'
 export default {
   name: 'WidgetForm',
-  components: { Draggable, coralLayout, formItem },
+  components: { Draggable, widgetFormItem },
   props: {
     data: {
       type: Object
