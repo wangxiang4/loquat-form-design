@@ -17,6 +17,7 @@ export default {
         list: [
           {
             title: '分割线',
+            type: 'custom',
             component: 'el-divider',
             icon: 'iconfont icon-divider',
             label: '',
@@ -29,6 +30,7 @@ export default {
           },
           {
             title: '警告',
+            type: 'custom',
             component: 'el-alert',
             icon: 'el-icon-warning',
             label: '',
