@@ -56,8 +56,7 @@ function processString (buf, randomString, matchChars, length, maxByte) {
   for (let i = 0; i < buf.length && string.length < length; i++) {
     const randomByte = buf.readUInt8(i)
     if (randomByte < maxByte) {
-      // 计算获取匹配字符长度
-      // 取余(如果randomByte小于matchChars长度则是randomByte,randomByte大于matchChars长度就取余数)
+      // 取余计算获取匹配字符长度,为了防止随机字节大于匹配字符长度而拿不到匹配字符
       string += matchChars.charAt(randomByte % matchChars.length)
     }
   }
