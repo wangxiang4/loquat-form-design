@@ -625,12 +625,15 @@ import AceEditor from 'v-ace-editor'
 import beautifier from '@utils/jsonBeautifier'
 import clipboard from '@utils/clipboard'
 import codeBeautifier from 'js-beautify'
-import { KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE, JS_EXECUTE_INCLUDE, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
 import { randomId8, getObjType } from '@utils'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 import request from '@utils/request'
 import { getToken } from '@utils/qiniuOss'
 import packages from '@utils/packages'
+import {
+  KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE,
+  JS_EXECUTE_INCLUDE, BEAUTIFIER_DEFAULTS_CONF
+} from '@/global/variable'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor },
@@ -679,13 +682,15 @@ export default {
       }
     },
     customFields: {
-      type: Array
+      type: Array,
+      default: () => []
     }
   },
   data () {
     return {
       fields,
       home: this,
+      formId: '',
       adapter: 'pc',
       JS_EXECUTE_INCLUDE,
       widgetForm: {
@@ -749,7 +754,6 @@ export default {
       },
       jsonOption: {},
       styleSheetsArray: [],
-      formId: '',
       actionForm: {},
       actionMenuActive: '',
       actionMenuItemDisabled: false,
@@ -770,16 +774,12 @@ export default {
     leftWidth () {
       if (typeof this.asideLeftWidth === 'string') {
         return this.asideLeftWidth
-      } else {
-        return `${this.asideLeftWidth}px`
-      }
+      } else return `${this.asideLeftWidth}px`
     },
     rightWidth () {
       if (typeof this.asideRightWidth === 'string') {
         return this.asideRightWidth
-      } else {
-        return `${this.asideRightWidth}px`
-      }
+      } else return `${this.asideRightWidth}px`
     },
     getCustomFields () {
       const customFields = this.$loquat.deepClone(this.customFields)
@@ -985,9 +985,9 @@ export default {
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       const id = randomId8()
       this.actionForm = {
-        'key': id,
-        'name': `fun_${id}`,
-        'func': ''
+        key: id,
+        name: `fun_${id}`,
+        func: ''
       }
       this.actionMenuItemDisabled = true
       this.actionMainContainerVisible = true
@@ -995,7 +995,7 @@ export default {
     },
     // 处理动作设置菜单选择
     handleActionSelect (key) {
-      if (this.actionForm?.key === key) return
+      if (this.actionForm.key === key) return
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       this.actionForm = this.$loquat.deepClone(this.widgetForm.eventScript.find(item => item.key === key))
       this.actionMainContainerVisible = true
@@ -1030,7 +1030,7 @@ export default {
         type: 'warning'
       }).then(() => {
         !this.widgetForm.eventScript ? this.widgetForm.eventScript = [] : ''
-        this.actionForm?.key === data.key ? this.actionMainContainerVisible = false : ''
+        this.actionForm.key === data.key ? this.actionMainContainerVisible = false : ''
         const index = this.widgetForm.eventScript.findIndex(item => item.key === data.key)
         if (index === -1) {
           this.actionForm = {}
@@ -1066,11 +1066,14 @@ export default {
     },
     // 处理动作设置初始值
     handleActionSettingsSetData (obj) {
-      this.eventSelect = obj.eventName
+      const { eventName, funcName } = obj
+      this.eventSelect = eventName
       this.actionSettingsVisible = true
-      if (!this.$loquat.validateNull(obj.funcName)) {
-        this.actionForm = this.widgetForm.eventScript.find(item => item.name === obj.funcName)
-        this.actionMenuActive = this.actionForm?.key
+      if (funcName && getObjType(funcName) === 'string') {
+        const actionForm = this.widgetForm.eventScript.find(item => item.name === obj.funcName)
+        if (!actionForm) return
+        this.actionForm = actionForm
+        this.actionMenuActive = this.actionForm.key
         this.actionMainContainerVisible = true
       }
     },
@@ -1108,7 +1111,7 @@ export default {
     },
     // 处理数据源设置菜单选择
     handleDataSourceSelect (key) {
-      if (this.dataSourceForm?.key === key) return
+      if (this.dataSourceForm.key === key) return
       if (this.dataSourceMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       const dataSource = this.$loquat.deepClone(this.widgetForm.dataSource.find(item => item.key === key))
       dataSource.headers = Object.entries(dataSource.headers).map(([k, v]) => ({ key: k, value: v }))
