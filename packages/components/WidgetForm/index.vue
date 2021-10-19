@@ -39,7 +39,7 @@
 
 <script>
 import widgetEmpty from '@/assets/images/widget-empty.png'
-import { getLabelWidth, fieldTransformWidget } from '@utils/dataFormat'
+import { getLabelWidth, getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
 import widgetFormItem from '@components/WidgetFormItem'
@@ -88,8 +88,7 @@ export default {
     },
     handleWidgetAdd (evt) {
       const newIndex = evt.newIndex
-      const data = this.$loquat.deepClone(this.data.column[newIndex])
-      this.$set(this.data.column, newIndex, fieldTransformWidget(data))
+      this.$set(this.data.column, newIndex, getWidgetAddData(this.data.column[newIndex]))
       this.handleSelectWidget(newIndex)
       this.$emit('change')
     },
@@ -105,9 +104,7 @@ export default {
       })
     },
     handleWidgetClone (index) {
-      const cloneData = this.$loquat.deepClone(this.data.column[index])
-      cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-      this.data.column.splice(index, 0, cloneData)
+      this.data.column.splice(index, 0, getWidgetCloneData(this.data.column[index]))
       this.$nextTick(() => {
         this.handleSelectWidget(index + 1)
         this.$emit('change')

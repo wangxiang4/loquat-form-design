@@ -73,8 +73,8 @@
 <script>
 import draggable from 'vuedraggable'
 import { getObjType } from '@utils'
-import { getLabelWidth, fieldTransformWidget } from '@utils/dataFormat'
-import { handleRowDeepClone, handleColumnDeepClone } from '@utils/layout'
+import { getLabelWidth, getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
+import { rowDeepClone, columnDeepClone } from '@utils/layout'
 import widgetFormItem from '@components/WidgetFormItem'
 export default {
   name: 'WidgetCoralLayout',
@@ -134,7 +134,7 @@ export default {
     },
     // 处理行克隆操作
     handleRowClone () {
-      this.widgets.splice(this.index, 0, handleRowDeepClone(this.column))
+      this.widgets.splice(this.index, 0, rowDeepClone(this.column))
       this.$nextTick(() => {
         this.handleSelectWidget(this.index + 1)
         this.$emit('change')
@@ -153,14 +153,13 @@ export default {
     },
     // 处理列添加操作
     handleColumnAdd () {
-      const colPreset = this.$loquat.deepClone(this.colPreset)
-      colPreset.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
       getObjType(this.column.cols) === 'array'
-        ? this.column.cols.push(colPreset) : this.$loquat.log.warning('未设置cols参数,注意类型为Array')
+        ? this.column.cols.push(getWidgetAddData(this.colPreset))
+        : this.$loquat.log.warning('未设置cols参数,注意类型为Array')
     },
     // 处理列克隆操作
     handleColumnClone (index) {
-      this.column.cols.splice(index, 0, handleColumnDeepClone(this.column.cols[index]))
+      this.column.cols.splice(index, 0, columnDeepClone(this.column.cols[index]))
       this.$nextTick(() => {
         this.handleWidgetDataSelect(this.column.cols[index])
         this.$emit('change')
@@ -180,16 +179,13 @@ export default {
     // 处理部件列拖拽新增
     handleWidgetColAdd (evt, list) {
       const newIndex = evt.newIndex
-      const data = this.$loquat.deepClone(list[newIndex])
-      this.$set(list, newIndex, fieldTransformWidget(data))
+      this.$set(list, newIndex, getWidgetAddData(list[newIndex]))
       this.handleWidgetDataSelect(list[newIndex])
       this.$emit('change')
     },
     // 处理插件克隆
     handleWidgetClone (list, index) {
-      const cloneData = this.$loquat.deepClone(list[index])
-      cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-      list.splice(index, 0, cloneData)
+      list.splice(index, 0, getWidgetCloneData(list[index]))
       this.$nextTick(() => {
         this.handleWidgetDataSelect(list[index])
         this.$emit('change')

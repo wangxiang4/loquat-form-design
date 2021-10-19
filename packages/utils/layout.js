@@ -7,39 +7,30 @@
  *
  * @create: 2021-09-27
  **/
-import { getObjType, deepClone } from '@/utils/index'
+import { getObjType } from '@/utils/index'
+import { getWidgetCloneData } from '@utils/dataFormat'
 
 // 处理行克隆递归
-export function handleRowDeepClone (data) {
-  const cloneData = deepClone(data)
-  // todo:行布局数据处理
-  cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-  cloneData.cols = getObjType(cloneData.cols) === 'array' ? cloneData.cols.map(item => {
-    // todo:列布局数据处理
-    item.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-    item.list = handlePluginDeepClone(item.list)
-    return item
-  }) : []
-  return cloneData
+export function rowDeepClone (data) {
+  data = getWidgetCloneData(data)
+  data.cols = getObjType(data.cols) === 'array' ? data.cols.map(item => columnDeepClone(item)) : []
+  return data
 }
 
 // 处理列克隆递归
-export function handleColumnDeepClone (data) {
-  const cloneData = deepClone(data)
-  // todo:列布局数据处理
-  cloneData.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
-  cloneData.list = handlePluginDeepClone(cloneData.list)
-  return cloneData
+export function columnDeepClone (data) {
+  data = getWidgetCloneData(data)
+  data.list = pluginDeepClone(data.list)
+  return data
 }
 
 // 处理插件克隆递归
-function handlePluginDeepClone (list) {
+function pluginDeepClone (list) {
   return getObjType(list) === 'array' ? list.map(plugin => {
-    // todo:插件数据处理
     if (plugin.type === 'coralLayoutRow') {
-      plugin = handleRowDeepClone(plugin)
+      plugin = rowDeepClone(plugin)
     } else {
-      plugin.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+      plugin = getWidgetCloneData(plugin)
     }
     return plugin
   }) : []

@@ -18,11 +18,11 @@ import {
   REMOTE_REQUEST_TYPES,
   KEY_COMPONENT_CONFIG_NAME_LINE
 } from '@/global/variable'
-import { validateNull, setPx, deepClone, getObjType } from './index'
+import { validateNull, setPx, deepClone, getObjType, randomId8 } from './index'
 import request from '@utils/request'
 import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
-import { handleRowDeepClone } from '@utils/layout'
+import { rowDeepClone } from '@utils/layout'
 
 /** 获取控件默认提示 **/
 export function getPlaceholder (item) {
@@ -272,19 +272,34 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
   }
 }
 
-/** 字段数据转换为插件数据 **/
-export function fieldTransformWidget (data) {
+/** 表单部件添加数据处理 **/
+export function getWidgetAddData (data) {
+  data = deepClone(data)
   delete data.icon
   switch (data.type) {
     // 珊瑚布局数据处理
     case 'coralLayoutRow':
-      data = handleRowDeepClone(data)
+      data = rowDeepClone(data)
       break
     // 插件数据处理
     default:
-      data.prop = Date.now() + '_' + Math.ceil(Math.random() * 99999)
+      // todo: 处理不同插件属性又互不影响,可采用switch
+      data.prop = randomIdentity(data.type)
   }
   return data
+}
+
+/** 表单部件克隆数据处理 **/
+export function getWidgetCloneData (data) {
+  data = deepClone(data)
+  // todo: 处理不同插件属性又互不影响,可采用switch
+  data.prop = randomIdentity(data.type)
+  return data
+}
+
+/** 表单部件prop身份生成 **/
+export function randomIdentity (type = '') {
+  return `${type}_${randomId8()}`
 }
 
 /** 处理响应数据数据是否受理,解决dic应对各种类型问题 **/
