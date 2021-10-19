@@ -15,6 +15,7 @@ import {
   RANGE_FEATURE_TYPES,
   SELECT_TYPES,
   NUMBER_VALUE_TYPES,
+  BOOLEAN_VALUE_TYPES,
   REMOTE_REQUEST_TYPES,
   KEY_COMPONENT_CONFIG_NAME_LINE
 } from '@/global/variable'
@@ -80,7 +81,9 @@ export function formInitVal (list = []) {
         ) {
           formModel[ele.prop] = []
         } else if (NUMBER_VALUE_TYPES.includes(ele.type)) {
-          formModel[ele.prop] = undefined
+          formModel[ele.prop] = 0
+        } else if (BOOLEAN_VALUE_TYPES.includes(ele.type)) {
+          formModel[ele.prop] = false
         } else {
           formModel[ele.prop] = ''
         }

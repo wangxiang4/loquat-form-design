@@ -813,8 +813,8 @@ export default {
     },
     previewDisableSwitch: {
       handler (val) {
-        if (val) this.$refs.previewForm.useDisabled()
-        else this.$refs.previewForm.useActivation()
+        if (val) this.$refs.previewForm.formDisable()
+        else this.$refs.previewForm.formActivation()
       }
     }
   },

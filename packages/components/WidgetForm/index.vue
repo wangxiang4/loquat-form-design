@@ -39,7 +39,7 @@
 
 <script>
 import widgetEmpty from '@/assets/images/widget-empty.png'
-import { getLabelWidth, getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
+import { getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
 import { FORM_DEFAULT_PROP } from '@/global/variable'
 import widgetFormItem from '@components/WidgetFormItem'
@@ -82,7 +82,6 @@ export default {
     }
   },
   methods: {
-    getLabelWidth,
     handleSelectWidget (index) {
       this.selectWidget = this.data.column[index]
     },

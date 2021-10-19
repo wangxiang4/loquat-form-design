@@ -18,6 +18,7 @@ export const MULTIPLE_FEATURE_TYPES = ['cascader', 'select']
 export const RANGE_FEATURE_TYPES = ['slider', 'time']
 export const ARRAY_VALUE_TYPES = ['upload', 'checkbox', 'cascader', 'monthrange', 'daterange', 'datetimerange', 'dates']
 export const NUMBER_VALUE_TYPES = ['number', 'rate', 'slider']
+export const BOOLEAN_VALUE_TYPES = ['switch']
 export const SELECT_TYPES = ['date', 'select', 'checkbox', 'radio', 'cascader', 'color', 'time']
 export const REMOTE_REQUEST_TYPES = ['upload', 'select', 'radio', 'checkbox', 'cascader']
 export const IMPORT_JSON_TEMPLATE = `{

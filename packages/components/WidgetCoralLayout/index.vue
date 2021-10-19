@@ -73,7 +73,7 @@
 <script>
 import draggable from 'vuedraggable'
 import { getObjType } from '@utils'
-import { getLabelWidth, getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
+import { getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
 import { rowDeepClone, columnDeepClone } from '@utils/layout'
 import widgetFormItem from '@components/WidgetFormItem'
 export default {
@@ -123,7 +123,6 @@ export default {
     }
   },
   methods: {
-    getLabelWidth,
     // 处理选择部件,根据索引
     handleSelectWidget (index) {
       this.selectWidget = this.widgets[index]
