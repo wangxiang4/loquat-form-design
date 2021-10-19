@@ -537,7 +537,7 @@
                       </div>
                     </el-form-item>
                     <el-form-item label="是否使用第三方axios" prop="thirdPartyAxios" label-width="155px">
-                      <el-switch v-model="dataSourceForm.thirdPartyAxios" @change="handleThirdPartyAxios"/>
+                      <el-switch v-model="dataSourceForm.thirdPartyAxios"/>
                     </el-form-item>
                     <el-form-item label="是否表单初始化发送请求" prop="auto" label-width="175px">
                       <el-switch v-model="dataSourceForm.auto"/>
@@ -1186,41 +1186,56 @@ export default {
     handleDataSourceRequestTest () {
       this.$refs.dataSourceForm.validate((valid, msg) => {
         if (valid) {
-          request.interceptors.request.empty()
-          this.dataSourceForm.method !== 'GET' && request.interceptors.request.use(config => {
-            return new Function('config', this.dataSourceForm.requestFunc)(config)
-          }, undefined)
           const param = (({ url, method, headers, params }) => {
             const requestParam = { url, method, headers, params }
             requestParam.headers = Object(...requestParam.headers.map(({ key, value }) => ({ [key]: value })))
             requestParam.params = Object(...requestParam.params.map(({ key, value }) => ({ [key]: value })))
             return requestParam
           })(this.dataSourceForm)
-          request(param).then(res => {
-            try {
-              const execute = new Function('res', this.dataSourceForm.responseFunc)(res)
-              this.$alert(JSON.stringify(execute), { confirmButtonText: '确定' })
-            } catch (e) {
-              this.$alert(e, { confirmButtonText: '确定' })
-            }
-          }).catch(error => {
-            try {
-              const execute = new Function('error', this.dataSourceForm.errorFunc)(error)
-              this.$alert(execute, { confirmButtonText: '确定' })
-            } catch (e) {
-              this.$alert(e, { confirmButtonText: '确定' })
-            }
-          })
+          // 是否使用第三方Axios请求
+          if (this.dataSourceForm.thirdPartyAxios) {
+            !this.$loquat.validateNull(this.$loquat.axios) ? this.$loquat.axios(param).then(res => {
+              try {
+                const execute = new Function('res', this.dataSourceForm.responseFunc)(res)
+                this.$alert(JSON.stringify(execute), { confirmButtonText: '确定' })
+              } catch (e) {
+                this.$alert(e, { confirmButtonText: '确定' })
+              }
+            }).catch(error => {
+              try {
+                const execute = new Function('error', this.dataSourceForm.errorFunc)(error)
+                this.$alert(JSON.stringify(execute), { confirmButtonText: '确定' })
+              } catch (e) {
+                this.$alert(e, { confirmButtonText: '确定' })
+              }
+            }) : packages.logs('thirdPartyAxios')
+          } else {
+            request.interceptors.request.empty()
+            this.dataSourceForm.method !== 'GET' && request.interceptors.request.use(config => {
+              return new Function('config', this.dataSourceForm.requestFunc)(config)
+            }, undefined)
+            request(param).then(res => {
+              try {
+                const execute = new Function('res', this.dataSourceForm.responseFunc)(res)
+                this.$alert(JSON.stringify(execute), { confirmButtonText: '确定' })
+              } catch (e) {
+                this.$alert(e, { confirmButtonText: '确定' })
+              }
+            }).catch(error => {
+              try {
+                const execute = new Function('error', this.dataSourceForm.errorFunc)(error)
+                this.$alert(execute, { confirmButtonText: '确定' })
+              } catch (e) {
+                this.$alert(e, { confirmButtonText: '确定' })
+              }
+            })
+          }
         }
       })
     },
     // 处理预览表单重置
     handlePreviewFormReset () {
       this.$refs.previewForm.resetFields()
-    },
-    // 处理使用第三方axios重置请求发送前
-    handleThirdPartyAxios (change) {
-      if (change) this.$refs.requestFuncAce.setValue('return config;')
     },
     // 处理插件的一些默认数据
     handlePluginDefaultData () {
