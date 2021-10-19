@@ -298,8 +298,8 @@ export function getWidgetCloneData (data) {
 }
 
 /** 表单部件prop身份生成 **/
-export function randomIdentity (type = '') {
-  return `${type}_${randomId8()}`
+export function randomIdentity (type) {
+  return (validateNull(type) ? '' : `${type}_`) + randomId8()
 }
 
 /** 处理响应数据数据是否受理,解决dic应对各种类型问题 **/
