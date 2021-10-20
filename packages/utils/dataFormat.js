@@ -97,7 +97,6 @@ export function formInitVal (list = []) {
 
 /** 清空表单值 **/
 export function formClearVal (obj, list = []) {
-  debugger
   if (!obj) return {}
   Object.keys(obj).forEach(key => {
     if (validateNull(obj[key]) || list.includes(key)) return
