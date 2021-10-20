@@ -97,18 +97,25 @@ export function formInitVal (list = []) {
 
 /** 清空表单值 **/
 export function formClearVal (obj, list = []) {
+  debugger
   if (!obj) return {}
-  Object.keys(obj).forEach(ele => {
-    if (!list.includes(ele)) {
-      if (getObjType(obj[ele]) === 'array') {
-        obj[ele] = []
-      } else if (getObjType(obj[ele]) === 'boolean') {
-        obj[ele] = {}
-      } else if (['number', 'boolean', 'undefined'].includes(getObjType(obj[ele]))) {
-        obj[ele] = undefined
-      } else {
-        obj[ele] = ''
-      }
+  Object.keys(obj).forEach(key => {
+    if (validateNull(obj[key]) || list.includes(key)) return
+    switch (getObjType(obj[key])) {
+      case 'array':
+        obj[key] = []
+        break
+      case 'object':
+        obj[key] = {}
+        break
+      case 'number':
+        obj[key] = 0
+        break
+      case 'boolean':
+        obj[key] = false
+        break
+      default:
+        obj[key] = ''
     }
   })
   return obj

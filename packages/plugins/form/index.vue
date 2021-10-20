@@ -110,9 +110,9 @@ export default {
     validate (callback) {
       this.$refs.form.validate((valid, msg) => {
         if (valid) {
-          callback(true, this.formDisable)
+          callback(true)
         } else {
-          callback(false, this.formDisable, msg)
+          callback(false, msg)
         }
       })
     },
@@ -135,9 +135,6 @@ export default {
         this.clearValidate()
         this.$emit('reset-change')
       })
-    },
-    resetFields () {
-      this.$refs.form.resetFields()
     },
     handleChange (value) {
       this.$emit('input', value)

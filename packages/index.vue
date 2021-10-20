@@ -161,7 +161,7 @@
                      @click="previewDisableSwitch = !previewDisableSwitch"
           > {{ previewDisableSwitch ? '启动编辑' : '禁用编辑' }} </el-button>
           <el-button size="medium"
-                     @click="handleBeforeClose"
+                     @click="previewVisible = false"
           >关闭</el-button>
         </span>
       </el-dialog>
@@ -842,12 +842,6 @@ export default {
         }
       })
     },
-    // 处理预览关闭前重置数据
-    handleBeforeClose () {
-      this.$refs.previewForm.resetForm()
-      this.widgetModels = {}
-      this.previewVisible = false
-    },
     // 处理清空动作
     handleClear () {
       if (this.widgetForm && this.widgetForm.column && this.widgetForm.column.length > 0) {
@@ -1190,7 +1184,7 @@ export default {
     },
     // 处理预览表单重置
     handlePreviewFormReset () {
-      this.$refs.previewForm.resetFields()
+      this.$refs.previewForm.resetForm()
     },
     // 处理插件的一些默认数据
     handlePluginDefaultData () {
