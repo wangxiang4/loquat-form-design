@@ -63,7 +63,7 @@
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
                             :key="index"
-                            :title="`${key} ${$loquat.get(EVENT_DICT, key, '')}`"
+                            :title="`${key} ${$loquat.get(eventsDic, key, '')}`"
                             :name="key"
           >
             <div class="event-panel-item">
@@ -100,7 +100,7 @@
                                 home.handleActionSettingsSetData({ eventName: key })
                                 home.handleActionAdd()
                               }"
-            >{{ `${key} ${$loquat.get(EVENT_DICT, key, '')}` }}</el-dropdown-item>
+            >{{ `${key} ${$loquat.get(eventsDic, key, '')}` }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { EVENT_DICT } from '@/global/variable'
+import { EVENTS_DIC } from '@/global/variable'
 export default {
   name: 'InputColor',
   props: {
@@ -122,7 +122,7 @@ export default {
   },
   data () {
     return {
-      EVENT_DICT,
+      eventsDic: EVENTS_DIC,
       operationComputedSpan: 24 / 2,
       operationPerm: [
         'hide',

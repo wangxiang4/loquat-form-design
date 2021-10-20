@@ -1,10 +1,10 @@
 <template>
   <div :class="['widget-form-container', adapter]" @contextmenu.prevent="">
     <el-form ref="widgetForm"
-             :label-position="data.labelPosition || labelPosition"
-             :label-width="$loquat.setPx(data.labelWidth, labelWidth)"
-             :label-suffix="data.labelSuffix || labelSuffix"
-             :size="data.size || size"
+             :label-position="data.labelPosition || formDefaultConfig.labelPosition"
+             :label-width="$loquat.setPx(data.labelWidth, formDefaultConfig.labelWidth)"
+             :label-suffix="data.labelSuffix || formDefaultConfig.labelSuffix"
+             :size="data.size || formDefaultConfig.size"
              :style="defaultBackground"
              :class="data.customClass"
     >
@@ -41,7 +41,7 @@
 import widgetEmpty from '@/assets/images/widget-empty.png'
 import { getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
 import Draggable from 'vuedraggable'
-import { FORM_DEFAULT_PROP } from '@/global/variable'
+import { DEFAULT_CONFIG_INSIDE_FORM } from '@/global/variable'
 import widgetFormItem from '@components/WidgetFormItem'
 export default {
   name: 'WidgetForm',
@@ -61,7 +61,7 @@ export default {
   data () {
     return {
       widgetEmpty,
-      ...FORM_DEFAULT_PROP,
+      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
       selectWidget: this.select
     }
   },

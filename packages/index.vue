@@ -145,6 +145,7 @@
                        v-model="widgetModels"
                        ref="previewForm"
                        :option="widgetFormPreview"
+                       :disabled="previewDisableSwitch"
                        @submit="handlePreviewSubmit"
           />
         </div>
@@ -323,7 +324,7 @@
                       <div>
                         <span class="event-script-menu-i">Function</span>
                         <div class="event-script-menu-label">{{ item.name }}</div>
-                        <div v-if="!JS_EXECUTE_INCLUDE.includes(item.key)" class="event-script-menu-action">
+                        <div v-if="!formCallbackHooks.includes(item.key)" class="event-script-menu-action">
                           <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(item)"/>
                           <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(item)"/>
                         </div>
@@ -367,7 +368,7 @@
                                   label-width="130px"
                     >
                       <el-input v-model="actionForm.name"
-                                :disabled="JS_EXECUTE_INCLUDE.includes(actionForm.key)"
+                                :disabled="formCallbackHooks.includes(actionForm.key)"
                       />
                     </el-form-item>
                     <el-form-item prop="func" label-width="0">
@@ -625,15 +626,12 @@ import AceEditor from 'v-ace-editor'
 import beautifier from '@utils/jsonBeautifier'
 import clipboard from '@utils/clipboard'
 import codeBeautifier from 'js-beautify'
-import { randomId8, getObjType } from '@utils'
+import { randomId8, getObjType, getWidgetFormDefaultConfig } from '@utils'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 import request from '@utils/request'
 import { getToken } from '@utils/qiniuOss'
 import packages from '@utils/packages'
-import {
-  KEY_COMPONENT_NAME_LINE, IMPORT_JSON_TEMPLATE,
-  JS_EXECUTE_INCLUDE, BEAUTIFIER_DEFAULTS_CONF
-} from '@/global/variable'
+import { KEY_COMPONENT_NAME_LINE, FORM_EXECUTE_CALLBACK_HOOKS, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor },
@@ -692,50 +690,8 @@ export default {
       home: this,
       formId: '',
       adapter: 'pc',
-      JS_EXECUTE_INCLUDE,
-      widgetForm: {
-        column: [],
-        labelPosition: 'right',
-        labelWidth: 90,
-        size: 'small',
-        styleSheets: '',
-        customClass: [],
-        eventScript: [
-          {
-            'key': 'mounted',
-            'name': 'mounted',
-            'func': ''
-          }
-        ],
-        dataSource: [
-          {
-            key: 'upload',
-            name: 'Get Upload Token',
-            url: 'http://tools-server.making.link/api/uptoken',
-            method: 'GET',
-            auto: true,
-            thirdPartyAxios: false,
-            headers: {},
-            params: {},
-            requestFunc: 'return config;',
-            responseFunc: 'return res.uptoken;',
-            errorFunc: ''
-          },
-          {
-            key: 'options',
-            name: 'Get Options',
-            url: 'http://tools-server.making.link/api/new/options',
-            method: 'GET',
-            auto: true,
-            thirdPartyAxios: false,
-            headers: {},
-            params: {},
-            requestFunc: 'return config;',
-            responseFunc: 'return res.data;',
-            errorFunc: ''
-          }
-        ]
-      },
+      formCallbackHooks: FORM_EXECUTE_CALLBACK_HOOKS,
+      widgetForm: getWidgetFormDefaultConfig(),
       configTab: 'widget',
       widgetFormSelect: {},
       widgetFormPreview: {},
@@ -807,20 +763,13 @@ export default {
             options = { column: [] }
           }
         }
-        this.widgetForm = { ...this.widgetForm, ...options }
+        this.widgetForm = this.$loquat.deepClone({ ...this.widgetForm, ...options })
       },
       deep: true
-    },
-    previewDisableSwitch: {
-      handler (val) {
-        if (val) this.$refs.previewForm.formDisable()
-        else this.$refs.previewForm.formActivation()
-      }
     }
   },
   mounted () {
     this.handleLoadStorage()
-    this.formId = KEY_COMPONENT_NAME_LINE + randomId8()
     this.handleStyleSheetsCore()
     this.handlePluginDefaultData()
   },
@@ -839,7 +788,6 @@ export default {
           options = { column: [] }
         }
       }
-      if (!options.column) options.column = []
       this.widgetForm = this.initHistory({
         index: 0,
         maxStep: 20,
@@ -911,13 +859,19 @@ export default {
     },
     // 初始化导入JSON
     handleImportJson () {
-      this.importJson = IMPORT_JSON_TEMPLATE
+      const data = getWidgetFormDefaultConfig()
+      this.importJson = beautifier(data, {
+        quoteType: 'double',
+        dropQuotesOnKeys: false
+      })
       this.importJsonVisible = true
     },
     // 导入JSON确定
     handleImportJsonSubmit () {
       try {
-        this.widgetForm = JSON.parse(this.importJson)
+        const data = getWidgetFormDefaultConfig()
+        const options = eval('(' + this.importJson + ')')
+        this.widgetForm = this.$loquat.deepClone({ ...data, ...options })
         this.importJsonVisible = false
         this.handleHistoryChange(this.widgetForm)
       } catch (e) {
@@ -976,6 +930,7 @@ export default {
     },
     // 处理样式表核心逻辑
     handleStyleSheetsCore () {
+      this.formId = KEY_COMPONENT_NAME_LINE + randomId8()
       const css = parseCss(this.widgetForm.styleSheets)
       insertCss(css, this.formId)
       this.styleSheetsArray = classCss(css)

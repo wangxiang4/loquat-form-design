@@ -18,7 +18,7 @@
         <item :key="index"
               :column="column"
               :widgets="col.list"
-              :loquat-form="loquatForm"
+              :home="home"
         />
       </template>
     </el-col>
@@ -37,7 +37,7 @@ export default {
       required: true,
       type: Array
     },
-    loquatForm: {
+    home: {
       required: true,
       type: Object
     }

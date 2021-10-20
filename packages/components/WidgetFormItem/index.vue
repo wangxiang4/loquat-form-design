@@ -24,16 +24,16 @@
                         }].concat(column.customClass||[])"
                         :prop="column.prop"
                         :label="column.hideLabel ? '' : column.label"
-                        :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, labelWidth)"
-                        :label-position="column.labelPosition || data.labelPosition || labelPosition"
+                        :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, formDefaultConfig.labelWidth)"
+                        :label-position="column.labelPosition || data.labelPosition || formDefaultConfig.labelPosition"
           >
             <widget v-model="plugin.value"
                     :column="column"
                     :dic="column.dicData"
                     :props="data.props"
-                    :readonly="data.readonly || readonly"
-                    :disabled="data.disabled || disabled"
-                    :size="data.size || size"
+                    :readonly="data.readonly || formDefaultConfig.readonly"
+                    :disabled="data.disabled || formDefaultConfig.disabled"
+                    :size="data.size || formDefaultConfig.size"
                     :preview="false"
             />
           </el-form-item>
@@ -55,7 +55,7 @@
 
 <script>
 import { getLabelWidth } from '@utils/dataFormat'
-import { FORM_DEFAULT_PROP } from '@/global/variable'
+import { DEFAULT_CONFIG_INSIDE_FORM } from '@/global/variable'
 import widget from '@/plugins/form/widget'
 export default {
   name: 'WidgetFormItem',
@@ -84,7 +84,7 @@ export default {
   },
   data () {
     return {
-      ...FORM_DEFAULT_PROP,
+      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
       selectWidget: this.select
     }
   },

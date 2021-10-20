@@ -21,13 +21,50 @@ export const NUMBER_VALUE_TYPES = ['number', 'rate', 'slider']
 export const BOOLEAN_VALUE_TYPES = ['switch']
 export const SELECT_TYPES = ['date', 'select', 'checkbox', 'radio', 'cascader', 'color', 'time']
 export const REMOTE_REQUEST_TYPES = ['upload', 'select', 'radio', 'checkbox', 'cascader']
-export const IMPORT_JSON_TEMPLATE = `{
-  "column": [],
-  "labelPosition": "left",
-  "labelWidth": 120,
-  "size": "small"
-}`
-export const FORM_DEFAULT_PROP = {
+export const WIDGET_FORM_DEFAULT_CONFIG = {
+  column: [],
+  labelPosition: 'right',
+  labelWidth: 90,
+  size: 'small',
+  styleSheets: '',
+  customClass: [],
+  eventScript: [
+    {
+      'key': 'mounted',
+      'name': 'mounted',
+      'func': ''
+    }
+  ],
+  dataSource: [
+    {
+      key: 'upload',
+      name: 'Get Upload Token',
+      url: 'http://tools-server.making.link/api/uptoken',
+      method: 'GET',
+      auto: true,
+      thirdPartyAxios: false,
+      headers: {},
+      params: {},
+      requestFunc: 'return config;',
+      responseFunc: 'return res.uptoken;',
+      errorFunc: ''
+    },
+    {
+      key: 'options',
+      name: 'Get Options',
+      url: 'http://tools-server.making.link/api/new/options',
+      method: 'GET',
+      auto: true,
+      thirdPartyAxios: false,
+      headers: {},
+      params: {},
+      requestFunc: 'return config;',
+      responseFunc: 'return res.data;',
+      errorFunc: ''
+    }
+  ]
+}
+export const DEFAULT_CONFIG_INSIDE_FORM = {
   size: 'small',
   labelPosition: 'left',
   labelWidth: 90,
@@ -35,8 +72,8 @@ export const FORM_DEFAULT_PROP = {
   readonly: false,
   disabled: false
 }
-export const JS_EXECUTE_INCLUDE = ['mounted']
-export const EVENT_DICT = {
+export const FORM_EXECUTE_CALLBACK_HOOKS = ['mounted']
+export const EVENTS_DIC = {
   change: '值发生变化',
   focus: '获取焦点',
   blur: '失去焦点',

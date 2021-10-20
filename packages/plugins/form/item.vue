@@ -3,7 +3,7 @@
     <template v-if="column.type == 'coralLayoutRow'">
       <coral-layout :column="column"
                     :widgets="widgets"
-                    :loquat-form="loquatForm"
+                    :home="home"
       />
     </template>
     <template v-else>
@@ -11,53 +11,53 @@
                     :prop="column.prop"
                     :rules="column.rules"
                     :label="column.hideLabel ? '' : column.label"
-                    :class="['loquat-form__item--' + (column.labelPosition || loquatForm.widgetForm.labelPosition || loquatForm.labelPosition)].concat(column.customClass || [])"
-                    :label-position="column.labelPosition || loquatForm.widgetForm.labelPosition || loquatForm.labelPosition"
-                    :label-width="column.hideLabel ? '0' : getLabelWidth(column, loquatForm.widgetForm, loquatForm.labelWidth)"
+                    :class="['loquat-form__item--' + (column.labelPosition || home.widgetForm.labelPosition || home.formDefaultConfig.labelPosition)].concat(column.customClass || [])"
+                    :label-position="column.labelPosition || home.widgetForm.labelPosition || home.formDefaultConfig.labelPosition"
+                    :label-width="column.hideLabel ? '0' : getLabelWidth(column, home.widgetForm, home.formDefaultConfig.labelWidth)"
       >
         <template v-if="$scopedSlots[column.prop + 'Label']" slot="label">
           <slot :name="column.prop + 'Label'"
                 :column="column"
-                :value="loquatForm.form[column.prop]"
-                :readonly="loquatForm.widgetForm.readonly || column.readonly || loquatForm.readonly"
-                :disabled="loquatForm.widgetForm.disabled || column.disabled || loquatForm.disabled"
-                :size="loquatForm.widgetForm.size || column.size || loquatForm.size"
-                :dic="loquatForm.DIC[column.prop]"
+                :value="home.form[column.prop]"
+                :readonly="home.widgetForm.readonly || column.readonly || home.formDefaultConfig.readonly"
+                :disabled="home.widgetForm.disabled || column.disabled || home.disabled"
+                :size="home.widgetForm.size || column.size || home.formDefaultConfig.size"
+                :dic="home.DIC[column.prop]"
           />
         </template>
         <template v-if="$scopedSlots[column.prop + 'Error']" slot="error" slot-scope="scope">
           <slot :name="column.prop + 'Error'"
                 v-bind="Object.assign(scope, {
                   column: column,
-                  value:loquatForm.form[column.prop],
-                  readonly: loquatForm.widgetForm.readonly || column.readonly || loquatForm.readonly,
-                  disabled: loquatForm.widgetForm.disabled || column.disabled || loquatForm.disabled,
-                  size: loquatForm.widgetForm.size || column.size || loquatForm.size,
-                  dic: loquatForm.DIC[column.prop]
+                  value:home.form[column.prop],
+                  readonly: home.widgetForm.readonly || column.readonly || home.formDefaultConfig.readonly,
+                  disabled: home.widgetForm.disabled || column.disabled || home.disabled,
+                  size: home.widgetForm.size || column.size || home.formDefaultConfig.size,
+                  dic: home.DIC[column.prop]
                 })"
           />
         </template>
         <slot v-if="$scopedSlots[column.prop]"
               :name="column.prop"
               :column="column"
-              :value="loquatForm.form[column.prop]"
-              :readonly="loquatForm.widgetForm.readonly || column.readonly || loquatForm.readonly"
-              :disabled="loquatForm.widgetForm.disabled || column.disabled || loquatForm.disabled"
-              :size="loquatForm.widgetForm.size || column.size || loquatForm.size"
-              :dic="loquatForm.DIC[column.prop]"
+              :value="home.form[column.prop]"
+              :readonly="home.widgetForm.readonly || column.readonly || home.formDefaultConfig.readonly"
+              :disabled="home.widgetForm.disabled || column.disabled || home.disabled"
+              :size="home.widgetForm.size || column.size || home.formDefaultConfig.size"
+              :dic="home.DIC[column.prop]"
         />
         <widget v-else
                 :ref="column.prop"
-                v-model="loquatForm.form[column.prop]"
-                :dic="loquatForm.DIC[column.prop]"
+                v-model="home.form[column.prop]"
+                :dic="home.DIC[column.prop]"
                 :column="column"
-                :props="loquatForm.widgetForm.props"
-                :readonly="loquatForm.widgetForm.readonly || loquatForm.readonly"
-                :disabled="loquatForm.widgetForm.disabled || loquatForm.disabled"
-                :size="loquatForm.widgetForm.size || loquatForm.size"
-                :enter="loquatForm.widgetForm.enter"
-                @enter="loquatForm.submit"
-                @change="loquatForm.propChange(column)"
+                :props="home.widgetForm.props"
+                :readonly="home.widgetForm.readonly || home.formDefaultConfig.readonly"
+                :disabled="home.widgetForm.disabled || home.disabled"
+                :size="home.widgetForm.size || home.formDefaultConfig.size"
+                :enter="home.widgetForm.enter"
+                @enter="home.submit"
+                @change="home.propChange(column)"
         >
           <template v-for="item in $scopedSlots[column.prop + 'Type'] ? [column] : []"
                     :slot="column.prop + 'Type'"
@@ -85,7 +85,7 @@ export default {
       required: true,
       type: Array
     },
-    loquatForm: {
+    home: {
       required: true,
       type: Object
     }

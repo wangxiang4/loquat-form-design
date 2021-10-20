@@ -3,10 +3,10 @@
     <el-form ref="form"
              :model="form"
              :status-icon="widgetForm.statusIcon"
-             :label-suffix="widgetForm.labelSuffix || labelSuffix"
-             :size="widgetForm.size || size"
-             :label-position="widgetForm.labelPosition || labelPosition"
-             :label-width="$loquat.setPx(widgetForm.labelWidth, labelWidth)"
+             :label-suffix="widgetForm.labelSuffix || formDefaultConfig.labelSuffix"
+             :size="widgetForm.size || formDefaultConfig.size"
+             :label-position="widgetForm.labelPosition || formDefaultConfig.labelPosition"
+             :label-width="$loquat.setPx(widgetForm.labelWidth, formDefaultConfig.labelWidth)"
              :class="widgetForm.customClass"
              @submit.native.prevent
     >
@@ -14,7 +14,7 @@
         <item :key="index"
               :column="column"
               :widgets="columns"
-              :loquat-form="loquatForm"
+              :home="home"
         />
       </template>
     </el-form>
@@ -23,7 +23,7 @@
 
 <script>
 import { formClearVal, formInitVal, designTransformPreview } from '@utils/dataFormat'
-import { FORM_DEFAULT_PROP, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
+import { DEFAULT_CONFIG_INSIDE_FORM, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
 import { randomId8, deepClone } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
 import item from './item'
@@ -54,9 +54,9 @@ export default {
   data () {
     return {
       form: {},
+      home: this,
       first: false,
-      loquatForm: this,
-      ...FORM_DEFAULT_PROP,
+      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
       formId: '',
       DIC: {}
     }
@@ -87,9 +87,6 @@ export default {
         this.form = val
       },
       deep: true
-    },
-    disabled (val) {
-      this.$emit('update:disabled', val)
     }
   },
   created () {
@@ -145,12 +142,6 @@ export default {
     handleChange (value) {
       this.$emit('input', value)
       this.$emit('change', value)
-    },
-    formActivation () {
-      this.disabled = false
-    },
-    formDisable () {
-      this.disabled = true
     }
   }
 }

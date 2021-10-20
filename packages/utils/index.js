@@ -7,7 +7,7 @@
  *
  * @create: 2021-07-15
  **/
-import { PROP_PATH_EXPRESSION } from '@/global/variable'
+import { PROP_PATH_EXPRESSION, WIDGET_FORM_DEFAULT_CONFIG } from '@/global/variable'
 import random from '@utils/random'
 
 /** 设置px像素 **/
@@ -192,4 +192,9 @@ export function urlJoin (base, url) {
   return (getObjType(base) === 'string' && getObjType(url) === 'string')
     ? `${base.replace(/([\w\W]+)\/$/, '$1')}/${url.replace(/^\/([\w\W]+)$/, '$1')}`
     : url
+}
+
+/** 获取部件表单默认配置 **/
+export function getWidgetFormDefaultConfig () {
+  return deepClone(WIDGET_FORM_DEFAULT_CONFIG)
 }

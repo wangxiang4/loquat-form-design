@@ -8,7 +8,7 @@
  * @create: 2021-08-04
  **/
 
-export const getToken = (accessKey, secretKey, putPolicy) => {
+export function getToken (accessKey, secretKey, putPolicy) {
   // SETP 1 : json格式化上传策略,https://developer.qiniu.com/kodo/1206/put-policy
   var _putPolicy = JSON.stringify(putPolicy)
   process.env.NODE_ENV === 'development' && console && console.log('put_policy = ', _putPolicy)
