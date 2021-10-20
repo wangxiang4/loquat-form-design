@@ -57,7 +57,7 @@
                 :size="home.widgetForm.size || home.formDefaultConfig.size"
                 :enter="home.widgetForm.enter"
                 @enter="home.submit"
-                @change="home.propChange(column)"
+                @change="home.handleWidgetChange(column)"
         >
           <template v-for="item in $scopedSlots[column.prop + 'Type'] ? [column] : []"
                     :slot="column.prop + 'Type'"

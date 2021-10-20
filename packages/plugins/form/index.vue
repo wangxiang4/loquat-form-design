@@ -104,7 +104,7 @@ export default {
       insertCss(parseCss(this.widgetForm.styleSheets), this.formId)
       this.form = deepClone({ ...formInitVal(this.columns), ...this.form })
     },
-    propChange (column) {
+    handleWidgetChange (column) {
       if (this.$refs.form) this.$refs.form.validateField(column.prop)
     },
     validate (callback) {
