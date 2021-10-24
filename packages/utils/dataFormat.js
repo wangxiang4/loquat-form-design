@@ -53,8 +53,7 @@ export function getComponent (type, component) {
   } else if (['textarea', 'password'].includes(type)) {
     result = 'input'
   }
-  const name = kebabCase(result)
-  return KEY_COMPONENT_NAME.concat(name)
+  return KEY_COMPONENT_NAME.concat(kebabCase(result))
 }
 
 /** 表单初始化默认模型设置prop **/
@@ -127,8 +126,7 @@ export function getComponentConfig (type, component) {
   } else if (['textarea', 'password'].includes(type)) {
     result = 'input'
   }
-  const name = kebabCase(result)
-  return KEY_COMPONENT_CONFIG_NAME.concat(name)
+  return KEY_COMPONENT_CONFIG_NAME.concat(kebabCase(result))
 }
 
 /** 设计器配置转换设计器预览配置 **/
