@@ -626,11 +626,11 @@ import AceEditor from 'v-ace-editor'
 import beautifier from '@utils/jsonBeautifier'
 import clipboard from '@utils/clipboard'
 import codeBeautifier from 'js-beautify'
-import { randomId8, getObjType, getWidgetFormDefaultConfig } from '@utils'
-import { insertCss, parseCss, classCss } from '@utils/dom'
 import request from '@utils/request'
 import { getToken } from '@utils/qiniuOss'
 import packages from '@utils/packages'
+import { insertCss, parseCss, classCss } from '@utils/dom'
+import { randomId8, getObjType, getWidgetFormDefaultConfig } from '@utils'
 import { KEY_COMPONENT_NAME, FORM_EXECUTE_CALLBACK_HOOKS, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
 export default {
   name: 'FormDesign',
