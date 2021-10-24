@@ -1016,12 +1016,11 @@ export default {
     handleActionFormNameValidate (rule, value, callback) {
       !this.widgetForm.eventScript ? this.widgetForm.eventScript = [] : ''
       const eventScript = this.$loquat.deepClone(this.widgetForm.eventScript)
-      // 如果是编辑模式,则需把当前的对象剔除
-      if (!this.actionMenuItemDisabled) {
-        const index = eventScript.findIndex(item => item.key === this.actionForm.key)
-        index !== -1 && eventScript.splice(index, 1)
-      }
-      eventScript.find(item => item.name === value) ? callback(new Error('方法名称不能重复')) : callback()
+      eventScript.find(item => {
+        // 如果是编辑模式,则需把当前的对象剔除
+        if (item.key !== this.actionForm.key) return item.name === value
+        else return false
+      }) ? callback(new Error('方法名称不能重复')) : callback()
     },
     // 处理数据源设置添加
     handleDataSourceAdd () {
@@ -1110,12 +1109,11 @@ export default {
     // 处理数据源名称不能重复校验
     handleDataSourceFormNameValidate (rule, value, callback) {
       const dataSource = this.$loquat.deepClone(this.widgetForm.dataSource)
-      // 如果是编辑模式,则需把当前的对象剔除
-      if (!this.dataSourceMenuItemDisabled) {
-        const index = dataSource.findIndex(item => item.key === this.dataSourceForm.key)
-        index !== -1 && dataSource.splice(index, 1)
-      }
-      dataSource.find(item => item.name === value) ? callback(new Error('数据源名称不能重复')) : callback()
+      dataSource.find(item => {
+        // 如果是编辑模式,则需把当前的对象剔除
+        if (item.key !== this.dataSourceForm.key) return item.name === value
+        else return false
+      }) ? callback(new Error('数据源名称不能重复')) : callback()
     },
     // 处理数据源设置请求测试
     handleDataSourceRequestTest () {
