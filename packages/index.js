@@ -13,11 +13,10 @@ import Config from './config'
 import Plugins from './plugins'
 import FormDesign from './index.vue'
 import permission from './directive'
-import { deepClone, setPx, validateNull, get } from '@utils'
+import { deepClone, setPx, validateNull, get, kebabCase, noop } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 import imagePreview from '@components/ImagePreview'
 import log from '@utils/log'
-import { noop } from 'element-ui/src/utils/util'
 
 export default {
   install (Vue, opts = {}) {
@@ -46,6 +45,6 @@ export default {
         deadline: 1 // token过期时间(单位:h)
       }
     }
-    Vue.component(KEY_COMPONENT_NAME + FormDesign.name, FormDesign)
+    Vue.component(KEY_COMPONENT_NAME.concat(kebabCase(FormDesign.name)), FormDesign)
   }
 }

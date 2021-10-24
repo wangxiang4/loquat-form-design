@@ -73,7 +73,7 @@ export default [
         disabled: false
       }
     }, {
-      type: 'number',
+      type: 'inputNumber',
       label: '计数器',
       icon: 'icon-number',
       labelWidth: '',
@@ -315,7 +315,7 @@ export default [
         disabled: false
       }
     }, {
-      type: 'color',
+      type: 'inputColor',
       label: '颜色选择器',
       icon: 'icon-color',
       labelWidth: '',
@@ -524,7 +524,7 @@ export default [
     title: '布局字段',
     list: [
       {
-        type: 'coralLayoutRow',
+        type: 'coralLayout',
         label: '珊瑚布局',
         icon: 'icon-coral',
         flex: true,

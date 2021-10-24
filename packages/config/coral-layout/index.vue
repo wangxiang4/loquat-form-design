@@ -53,7 +53,7 @@
 
 <script>
 export default {
-  name: 'CoralLayoutRow',
+  name: 'CoralLayout',
   props: {
     data: {
       type: Object

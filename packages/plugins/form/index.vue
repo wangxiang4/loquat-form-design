@@ -23,7 +23,7 @@
 
 <script>
 import { formClearVal, formInitVal, designTransformPreview } from '@utils/dataFormat'
-import { DEFAULT_CONFIG_INSIDE_FORM, KEY_COMPONENT_NAME_LINE } from '@/global/variable'
+import { DEFAULT_CONFIG_INSIDE_FORM, KEY_COMPONENT_NAME } from '@/global/variable'
 import { randomId8, deepClone } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
 import item from './item'
@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     initialize () {
-      this.formId = KEY_COMPONENT_NAME_LINE + randomId8()
+      this.formId = KEY_COMPONENT_NAME.concat(randomId8())
       insertCss(parseCss(this.widgetForm.styleSheets), this.formId)
       this.form = deepClone({ ...formInitVal(this.columns), ...this.form })
     },

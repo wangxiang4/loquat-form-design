@@ -9,17 +9,16 @@
  **/
 import {
   ARRAY_VALUE_TYPES,
-  INPUT_FEATURE_TYPES,
-  KEY_COMPONENT_NAME_LINE,
+  KEY_COMPONENT_NAME,
   MULTIPLE_FEATURE_TYPES,
   RANGE_FEATURE_TYPES,
   SELECT_TYPES,
   NUMBER_VALUE_TYPES,
   BOOLEAN_VALUE_TYPES,
   REMOTE_REQUEST_TYPES,
-  KEY_COMPONENT_CONFIG_NAME_LINE
+  KEY_COMPONENT_CONFIG_NAME
 } from '@/global/variable'
-import { validateNull, setPx, deepClone, getObjType, randomId8 } from './index'
+import { validateNull, setPx, deepClone, getObjType, randomId8, kebabCase } from './index'
 import request from '@utils/request'
 import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
@@ -53,10 +52,9 @@ export function getComponent (type, component) {
     return component
   } else if (['textarea', 'password'].includes(type)) {
     result = 'input'
-  } else if (INPUT_FEATURE_TYPES.includes(type)) {
-    result = 'input-' + type
   }
-  return KEY_COMPONENT_NAME_LINE + result
+  const name = kebabCase(result)
+  return KEY_COMPONENT_NAME.concat(name)
 }
 
 /** 表单初始化默认模型设置prop **/
@@ -66,7 +64,7 @@ export function formInitVal (list = []) {
     const plugin = ele.plugin || {}
     switch (ele.type) {
       // 珊瑚布局数据处理
-      case 'coralLayoutRow':
+      case 'coralLayout':
         ele.cols.forEach(col => {
           const deepModel = formInitVal(col.list)
           for (const [key, value] of Object.entries(deepModel)) formModel[key] = value
@@ -125,13 +123,12 @@ export function getComponentConfig (type, component) {
   let result = type || 'input'
   // 引入第三方组件打开自定义配置面板
   if (!validateNull(component)) {
-    return KEY_COMPONENT_CONFIG_NAME_LINE + 'custom'
+    result = 'custom'
   } else if (['textarea', 'password'].includes(type)) {
     result = 'input'
-  } else if (INPUT_FEATURE_TYPES.includes(type)) {
-    result = 'input-' + type
   }
-  return KEY_COMPONENT_CONFIG_NAME_LINE + result
+  const name = kebabCase(result)
+  return KEY_COMPONENT_CONFIG_NAME.concat(name)
 }
 
 /** 设计器配置转换设计器预览配置 **/
@@ -161,7 +158,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
     const validateConfig = col.validateConfig || {}
     switch (col.type) {
       // 珊瑚布局数据处理
-      case 'coralLayoutRow':
+      case 'coralLayout':
         for (let colIndex = 0; colIndex < col.cols.length; ++colIndex) {
           const coralCol = col.cols[colIndex]
           handleDeepDesignTransformPreview(_this, coralCol.list, {
@@ -287,7 +284,7 @@ export function getWidgetAddData (data) {
   delete data.icon
   switch (data.type) {
     // 珊瑚布局数据处理
-    case 'coralLayoutRow':
+    case 'coralLayout':
       data = rowDeepClone(data)
       break
     // 插件数据处理

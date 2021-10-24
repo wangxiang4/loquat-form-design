@@ -27,7 +27,7 @@ export function columnDeepClone (data) {
 // 处理插件克隆递归
 function pluginDeepClone (list) {
   return getObjType(list) === 'array' ? list.map(plugin => {
-    if (plugin.type === 'coralLayoutRow') {
+    if (plugin.type === 'coralLayout') {
       plugin = rowDeepClone(plugin)
     } else {
       plugin = getWidgetCloneData(plugin)

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="column.type == 'coralLayoutRow'">
+    <template v-if="column.type == 'coralLayout'">
       <widget-coral-layout :column="column"
                            :data="data"
                            :index="index"

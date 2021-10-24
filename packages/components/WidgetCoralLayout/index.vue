@@ -1,5 +1,5 @@
 <template>
-  <div class="widget-view coral-layout-row"
+  <div class="widget-view coral-layout"
        :class="{active: selectWidget.prop == column.prop, hide: column.hide}"
        @click.stop="handleSelectWidget(index)"
   >

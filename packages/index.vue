@@ -631,7 +631,7 @@ import { insertCss, parseCss, classCss } from '@utils/dom'
 import request from '@utils/request'
 import { getToken } from '@utils/qiniuOss'
 import packages from '@utils/packages'
-import { KEY_COMPONENT_NAME_LINE, FORM_EXECUTE_CALLBACK_HOOKS, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
+import { KEY_COMPONENT_NAME, FORM_EXECUTE_CALLBACK_HOOKS, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor },
@@ -924,7 +924,7 @@ export default {
     },
     // 处理样式表核心逻辑
     handleStyleSheetsCore () {
-      this.formId = KEY_COMPONENT_NAME_LINE + randomId8()
+      this.formId = KEY_COMPONENT_NAME.concat(randomId8())
       const css = parseCss(this.widgetForm.styleSheets)
       insertCss(css, this.formId)
       this.styleSheetsArray = classCss(css)

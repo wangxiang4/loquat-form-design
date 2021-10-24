@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="column.type == 'coralLayoutRow'">
+    <template v-if="column.type == 'coralLayout'">
       <coral-layout :column="column"
                     :widgets="widgets"
                     :home="home"

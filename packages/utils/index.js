@@ -7,7 +7,11 @@
  *
  * @create: 2021-07-15
  **/
-import { PROP_PATH_EXPRESSION, WIDGET_FORM_DEFAULT_CONFIG } from '@/global/variable'
+import { WIDGET_FORM_DEFAULT_CONFIG, BASIC_LATIN_MAPPING } from '@/global/variable'
+import {
+  RE_PROP_NAME, RE_LATIN, RE_COMBO_RANGE, RE_APOS,
+  RE_HAS_UNICODE_WORD, RE_UNICODE_WORD, RE_ASCII_WORD
+} from '@/global/regex'
 import random from '@utils/random'
 
 /** 设置px像素 **/
@@ -116,7 +120,7 @@ export function pathFormat (val) {
   if (val.charCodeAt(0) === 46) {
     result.push('')
   }
-  val.replace(PROP_PATH_EXPRESSION, function (match, number, quote, subString) {
+  val.replace(RE_PROP_NAME, function (match, number, quote, subString) {
     result.push(quote ? subString.replace(/\\(\\)?/g, '$1') : (number || match))
   })
   return result
@@ -198,3 +202,122 @@ export function urlJoin (base, url) {
 export function getWidgetFormDefaultConfig () {
   return deepClone(WIDGET_FORM_DEFAULT_CONFIG)
 }
+
+/** 驼峰转下划线 **/
+export function kebabCase (str) {
+  return createCompounder(str, (result, word, index) =>
+    result + (index ? '-' : '') + word.toLowerCase())
+}
+
+/** 下划线转驼峰 **/
+export function camelCase (str) {
+  return createCompounder(str, (result, word, index) => {
+    word = word.toLowerCase()
+    return result + (index ? (word.charAt(0).toUpperCase() + word.slice(1)) : word)
+  })
+}
+
+/**
+ * 创建字符串单词复合器
+ * 字符串先按特定字符串的写法分割
+ * 根据组合每个单词的函数进行复合
+ *
+ * @private
+ * @param {string} [string=''] 要检查的字符串.
+ * @param {Function} callback 组合每个单词的函数。
+ * @returns {Function} 返回新的复合函数。
+ * @example
+ *
+ * (wang xiang)
+ * // => ['wang','xiang']
+ *
+ * ('wangXiang')
+ * // => ['wang','Xiang']
+ *
+ * ('__WANG_XIANG__')
+ * // => ['WANG','XIANG']
+ */
+function createCompounder (string, callback) {
+  return arrayReduce(words(deburr(string).replace(RE_APOS, '')), callback, '')
+}
+
+/**
+ * 数组累加器
+ * 使用迭代函数进行迭代累加处理
+ * @private
+ * @param {Array} [array] 要迭代的数组.
+ * @param {Function} iteratee 每次迭代调用的函数.
+ * @param {*} [accumulator] 初始值.
+ * @param {boolean} [initAccum] 指定使用 `array` 的第一个元素作为初始值.
+ * @returns {*} 返回累计值.
+ */
+function arrayReduce (array, iteratee, accumulator, initAccum) {
+  let index = -1
+  const length = array == null ? 0 : array.length
+
+  if (initAccum && length) {
+    accumulator = array[++index]
+  }
+  while (++index < length) {
+    accumulator = iteratee(accumulator, array[index], index, array)
+  }
+  return accumulator
+}
+
+/**
+ * 去除字符串中的一些毛刺
+ * 带发音符号的拉丁字母,组合变音符号
+ *
+ * 替换说明:替换那些带发音符号的拉丁字母(á->a)
+ * Latin-1补充块: https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table
+ * 拉丁语扩展A块.: https://en.wikipedia.org/wiki/Latin_Extended-A
+ * 删除说明:删除变音符号
+ * 结合变音符号: https://en.wikipedia.org/wiki/Combining_Diacritical_Marks
+ * @public
+ * @param {string} [string='']  要去毛刺的字符串.
+ * @returns {string} 返回去毛刺的字符串.
+ * @example
+ *
+ * deburr('wángxiáng');
+ * // => 'wangxiang'
+ */
+export function deburr (string) {
+  string = String(string)
+  return string && string.replace(RE_LATIN, (match) => BASIC_LATIN_MAPPING[match]).replace(RE_COMBO_RANGE, '')
+}
+
+/**
+ * 将字符串拆分为其单词的数组
+ *
+ * @public
+ * @param {string} [string=''] 要检查的字符串.
+ * @param {RegExp|string} [pattern] 匹配单词的模式.
+ * @returns {Array} 返回 `string` 的单词.
+ * @example
+ *
+ * 分割规则:可以使用(数学运算符,除了字母数字外的符号,常用标点符号,空白,驼峰命名写法,表情符号)分割
+ * 具体实现请参考: RE_UNICODE_WORD正则表达式
+ * 具体正则分割逻辑:
+ * (?=' + [RS_BREAK, RS_UPPER, '$'].join('|')
+ * (?=' + [RS_BREAK, RS_UPPER + RS_MISC_LOWER, '$'].join('|')
+ *
+ * words('wangXiang')
+ * // => ['wang', 'Xiang']
+ *
+ * words('wang&,&xiang')
+ * // => ['wang', 'xiang']
+ *
+ * words('wang&,&xiang', /[^, ]+/g)
+ * // => ["'wang&", '&xiang']
+ */
+export function words (string, pattern) {
+  string = String(string)
+  if (pattern === undefined) {
+    return RE_HAS_UNICODE_WORD.test(string)
+      ? string.match(RE_UNICODE_WORD) || []
+      : string.match(RE_ASCII_WORD) || []
+  }
+  return string.match(pattern) || []
+}
+
+export function noop () {}
