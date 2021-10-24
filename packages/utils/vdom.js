@@ -8,15 +8,10 @@
  * @create: 2021-08-04
  **/
 
-const hasOwnProperty = Object.prototype.hasOwnProperty
-
-export function hasOwn (obj, key) {
-  return hasOwnProperty.call(obj, key)
-}
-
 /** 是否是虚拟dom节点 **/
 export function isVNode (node) {
-  return node !== null && typeof node === 'object' && hasOwn(node, 'componentOptions')
+  const hasOwnProperty = Object.prototype.hasOwnProperty
+  return node !== null && typeof node === 'object' && hasOwnProperty.call(node, 'componentOptions')
 }
 
 /** 是否是真实dom节点 **/
