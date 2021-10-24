@@ -59,6 +59,15 @@ export const WIDGET_FORM_DEFAULT_CONFIG = {
     }
   ]
 }
+export const JSON_OPTION_DEFAULT_CONFIG = {
+  space: 2,
+  dropQuotesOnKeys: true,
+  dropQuotesOnNumbers: false,
+  inlineShortArrays: false,
+  inlineShortArraysDepth: 1,
+  quoteType: 'single',
+  minify: false
+}
 export const DEFAULT_CONFIG_INSIDE_FORM = {
   size: 'small',
   labelPosition: 'left',
@@ -88,7 +97,7 @@ export const UPLOAD_CONFIG_PROPS = {
   home: '',
   res: '',
   name: 'name',
-  url: 'file',
+  url: 'url',
   resUrl: 'data',
   fileName: 'file'
 }

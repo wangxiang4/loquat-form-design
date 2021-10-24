@@ -23,6 +23,7 @@ import request from '@utils/request'
 import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
 import { rowDeepClone } from '@utils/layout'
+import { getToken } from '@utils/qiniuOss'
 
 /** 获取控件默认提示 **/
 export function getPlaceholder (item) {
@@ -148,7 +149,10 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
   // 设置参数配置,为了后面好扩展单独提出来
   const options = {
     eventScript: ops.eventScript || [],
-    autoDataSource: ops.autoDataSource || []
+    autoDataSource: ops.autoDataSource || [],
+    remoteOption: { ...pluginDefaultData(_this).remoteOption, ..._this.$loquat.remoteOption },
+    remoteFunc: { ...pluginDefaultData(_this).remoteFunc, ..._this.$loquat.remoteFunc },
+    axios: _this.$loquat.axios
   }
   for (let i = 0; i < column.length; ++i) {
     const col = column[i]
@@ -208,16 +212,16 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
             if (hasOwnProperty(plugin, 'showLabel')) plugin.showLabel = true
             switch (col.remoteType) {
               case 'option' :
-                if (_this.$loquat.remoteOption[col.remoteOption]) _this.$set(_this.DIC, col.prop, _this.$loquat.remoteOption[col.remoteOption])
+                if (options.remoteOption[col.remoteOption]) _this.$set(_this.DIC, col.prop, options.remoteOption[col.remoteOption])
                 break
               case 'func' :
-                if (_this.$loquat.remoteFunc[col.remoteFunc]) _this.$set(_this.DIC, col.prop, _this.$loquat.remoteFunc[col.remoteFunc]())
+                if (options.remoteFunc[col.remoteFunc]) _this.$set(_this.DIC, col.prop, options.remoteFunc[col.remoteFunc]())
                 break
               case 'datasource' :
                 if (!dataSource) break
                 // 是否使用第三方Axios请求
                 if (dataSource.thirdPartyAxios) {
-                  !validateNull(_this.$loquat.axios) ? _this.$loquat.axios(param).then(res => {
+                  !validateNull(options.axios) ? options.axios(param).then(res => {
                     try {
                       const execute = new Function('res', dataSource.responseFunc)(res)
                       _this.$set(_this.DIC, col.prop, remoteAccept(execute, col.type))
@@ -321,4 +325,37 @@ export function remoteAccept (data, type) {
       else return ''
   }
   return undefined
+}
+
+/** 设置插件的一些默认数据 **/
+function pluginDefaultData (_this) {
+  return {
+    remoteOption: {
+      optionDefault: [
+        { value: '4399小游戏', label: '4399小游戏' },
+        { value: '7k7k小游戏', label: '7k7k小游戏' },
+        { value: '拇指玩小游戏', label: '拇指玩小游戏' }
+      ]
+    },
+    remoteFunc: {
+      funcDefault () {
+        return [
+          { value: '小白兔', label: '小白兔' },
+          { value: '煎饼果子', label: '煎饼果子' },
+          { value: '彩虹猫', label: '彩虹猫' }
+        ]
+      },
+      funcGetToken () {
+        if (!window.CryptoJS) {
+          packages.logs('CryptoJS')
+          return
+        }
+        const oss = _this.$loquat.qiniu
+        return getToken(oss.ak, oss.sk, {
+          scope: oss.bucket,
+          deadline: new Date().getTime() + (oss.deadline || 1) * 3600
+        })
+      }
+    }
+  }
 }

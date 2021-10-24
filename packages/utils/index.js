@@ -7,7 +7,9 @@
  *
  * @create: 2021-07-15
  **/
-import { WIDGET_FORM_DEFAULT_CONFIG, BASIC_LATIN_MAPPING } from '@/global/variable'
+import {
+  WIDGET_FORM_DEFAULT_CONFIG, BASIC_LATIN_MAPPING,
+  JSON_OPTION_DEFAULT_CONFIG } from '@/global/variable'
 import {
   RE_PROP_NAME, RE_LATIN, RE_COMBO_RANGE, RE_APOS,
   RE_HAS_UNICODE_WORD, RE_UNICODE_WORD, RE_ASCII_WORD
@@ -128,7 +130,7 @@ export function pathFormat (val) {
 
 /** 获取对象值 **/
 export function get (object, path, defaultValue) {
-  if (!path && typeof path !== 'string') return object
+  if (!path || typeof path !== 'string') return object
   path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
   let index = 0
   const length = path.length
@@ -201,6 +203,11 @@ export function urlJoin (base, url) {
 /** 获取部件表单默认配置 **/
 export function getWidgetFormDefaultConfig () {
   return deepClone(WIDGET_FORM_DEFAULT_CONFIG)
+}
+
+/** 获取json选项默认配置 **/
+export function getJsonOptionDefaultConfig () {
+  return deepClone(JSON_OPTION_DEFAULT_CONFIG)
 }
 
 /** 驼峰转下划线 **/

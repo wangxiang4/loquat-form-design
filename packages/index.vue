@@ -627,10 +627,9 @@ import beautifier from '@utils/jsonBeautifier'
 import clipboard from '@utils/clipboard'
 import codeBeautifier from 'js-beautify'
 import request from '@utils/request'
-import { getToken } from '@utils/qiniuOss'
 import packages from '@utils/packages'
 import { insertCss, parseCss, classCss } from '@utils/dom'
-import { randomId8, getObjType, getWidgetFormDefaultConfig } from '@utils'
+import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig } from '@utils'
 import { KEY_COMPONENT_NAME, FORM_EXECUTE_CALLBACK_HOOKS, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
 export default {
   name: 'FormDesign',
@@ -708,7 +707,7 @@ export default {
         maxStep: 20,
         steps: []
       },
-      jsonOption: {},
+      jsonOption: getJsonOptionDefaultConfig(),
       styleSheetsArray: [],
       actionForm: {},
       actionMenuActive: '',
@@ -771,7 +770,6 @@ export default {
   mounted () {
     this.handleLoadStorage()
     this.handleStyleSheetsCore()
-    this.handlePluginDefaultData()
   },
   beforeDestroy () {
     insertCss([], this.formId)
@@ -830,7 +828,7 @@ export default {
     },
     // 处理预览确定动作
     handlePreviewSubmit () {
-      this.handleResetJson()
+      this.jsonOption = getJsonOptionDefaultConfig()
       this.$refs.previewForm.validate(valid => {
         if (valid) {
           const clone = this.$loquat.deepClone(this.widgetModels)
@@ -846,8 +844,8 @@ export default {
     handleClear () {
       if (this.widgetForm && this.widgetForm.column && this.widgetForm.column.length > 0) {
         this.$set(this.widgetForm, 'column', [])
-        this.$set(this, 'widgetModels', {})
-        this.$set(this, 'widgetFormSelect', {})
+        this.widgetModels = {}
+        this.widgetFormSelect = {}
         this.handleHistoryChange(this.widgetForm)
       } else this.$message.error('没有需要清空的内容')
     },
@@ -874,7 +872,7 @@ export default {
     },
     // 初始化生成JSON
     handleGenerateJson () {
-      this.handleResetJson()
+      this.jsonOption = getJsonOptionDefaultConfig()
       const clone = this.$loquat.deepClone(this.widgetForm)
       this.generateJson = beautifier(clone, {
         quoteType: 'double',
@@ -903,18 +901,6 @@ export default {
       a.href = href //  URL对象
       a.click() // 模拟点击
       URL.revokeObjectURL(a.href) // 释放URL 对象
-    },
-    // 重置Json配置数据
-    handleResetJson () {
-      this.jsonOption = {
-        space: 2,
-        dropQuotesOnKeys: true,
-        dropQuotesOnNumbers: false,
-        inlineShortArrays: false,
-        inlineShortArraysDepth: 1,
-        quoteType: 'single',
-        minify: false
-      }
     },
     // 处理样式表提交
     handleStyleSheetsSubmit () {
@@ -1186,36 +1172,11 @@ export default {
     handlePreviewFormReset () {
       this.$refs.previewForm.resetForm()
     },
-    // 处理插件的一些默认数据
-    handlePluginDefaultData () {
-      this.$loquat.remoteOption.optionDefault = [
-        { value: '4399小游戏', label: '4399小游戏' },
-        { value: '7k7k小游戏', label: '7k7k小游戏' },
-        { value: '拇指玩小游戏', label: '拇指玩小游戏' }
-      ]
-      this.$loquat.remoteFunc.funcDefault = () => [
-        { value: '小白兔', label: '小白兔' },
-        { value: '煎饼果子', label: '煎饼果子' },
-        { value: '彩虹猫', label: '彩虹猫' }
-      ]
-      // 处理七牛云Token函数
-      this.$loquat.remoteFunc.funcGetToken = () => {
-        if (!window.CryptoJS) {
-          packages.logs('CryptoJS')
-          return
-        }
-        const oss = this.$loquat.qiniu
-        return getToken(oss.ak, oss.sk, {
-          scope: oss.bucket,
-          deadline: new Date().getTime() + (oss.deadline || 1) * 3600
-        })
-      }
-    },
     // 处理级联静态数据设置对话框提交
     handleCascadeOptionSubmit () {
       try {
         const plugin = this.widgetFormSelect.plugin || {}
-        const cascadeOptionData = JSON.parse(this.cascadeOption)
+        const cascadeOptionData = eval('(' + this.cascadeOption + ')')
         this.$set(this.widgetFormSelect, 'dicData', cascadeOptionData)
         this.$set(plugin, 'value', [])
         this.cascadeOptionVisible = false
