@@ -2,7 +2,7 @@
  * @program: loquat-form-design
  *
  * @description: 导出表单设计器
- * todo:考虑稳定一段时间加入按需加载
+ * todo:考虑稳定一段时间加入Config,Plugins按需加载
  *
  * @author: entfrm开发团队-王翔
  *
