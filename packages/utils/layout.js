@@ -7,13 +7,12 @@
  *
  * @create: 2021-09-27
  **/
-import { getObjType } from '@/utils/index'
 import { getWidgetCloneData } from '@utils/dataFormat'
 
 // 处理行克隆递归
 export function rowDeepClone (data) {
   data = getWidgetCloneData(data)
-  data.cols = getObjType(data.cols) === 'array' ? data.cols.map(item => columnDeepClone(item)) : []
+  data.cols = data.cols.map(item => columnDeepClone(item))
   return data
 }
 
@@ -26,12 +25,12 @@ export function columnDeepClone (data) {
 
 // 处理插件克隆递归
 function pluginDeepClone (list) {
-  return getObjType(list) === 'array' ? list.map(plugin => {
+  return list.map(plugin => {
     if (plugin.type === 'coralLayout') {
       plugin = rowDeepClone(plugin)
     } else {
       plugin = getWidgetCloneData(plugin)
     }
     return plugin
-  }) : []
+  })
 }

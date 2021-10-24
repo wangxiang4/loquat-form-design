@@ -10,20 +10,20 @@
 
 export function getToken (accessKey, secretKey, putPolicy) {
   // SETP 1 : json格式化上传策略,https://developer.qiniu.com/kodo/1206/put-policy
-  var _putPolicy = JSON.stringify(putPolicy)
+  const _putPolicy = JSON.stringify(putPolicy)
   process.env.NODE_ENV === 'development' && console && console.log('put_policy = ', _putPolicy)
 
   // SETP 2 : 使用base64编码上传策略
-  var encoded = base64encode(utf16to8(_putPolicy))
+  const encoded = base64encode(utf16to8(_putPolicy))
   process.env.NODE_ENV === 'development' && console && console.log('encoded = ', encoded)
 
   // SETP 3 : 使用加密JS-HmacSHA1签名认证加密
-  var hash = window.CryptoJS.HmacSHA1(encoded, secretKey)
-  var encodedSigned = hash.toString(window.CryptoJS.enc.Base64)
+  const hash = window.CryptoJS.HmacSHA1(encoded, secretKey)
+  const encodedSigned = hash.toString(window.CryptoJS.enc.Base64)
   process.env.NODE_ENV === 'development' && console && console.log('encoded_signed=', encodedSigned)
 
   // SETP 5 : 访问密钥拼接base64访问七牛云
-  var uploadToken = accessKey + ':' + safe64(encodedSigned) + ':' + encoded
+  const uploadToken = accessKey + ':' + safe64(encodedSigned) + ':' + encoded
   process.env.NODE_ENV === 'development' && console && console.log('upload_token=', uploadToken)
 
   return uploadToken
@@ -31,9 +31,9 @@ export function getToken (accessKey, secretKey, putPolicy) {
 
 /** UTF16转换UTF8 **/
 function utf16to8 (str) {
-  var out, i, len, c
+  let out, i, c
   out = ''
-  len = str.length
+  const len = str.length
   for (i = 0; i < len; i++) {
     c = str.charCodeAt(i)
     if ((c >= 0x0001) && (c <= 0x007F)) {
@@ -53,10 +53,10 @@ function utf16to8 (str) {
 /** UTF8转换UTF16 **/
 // eslint-disable-next-line no-unused-vars
 function utf8to16 (str) {
-  var out, i, len, c
-  var char2, char3
+  let out, i, c
+  let char2, char3
   out = ''
-  len = str.length
+  const len = str.length
   i = 0
   while (i < len) {
     c = str.charCodeAt(i++)
@@ -94,17 +94,17 @@ function utf8to16 (str) {
  * b64 = base64encode(data);
  * data = base64decode(b64);
  */
-var base64EncodeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
-var base64DecodeChars = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
+const base64EncodeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
+const base64DecodeChars = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
   52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
   15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1, -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
   41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1]
 
 /** base64编码 **/
 function base64encode (str) {
-  var out, i, len
-  var c1, c2, c3
-  len = str.length
+  let out, i
+  let c1, c2, c3
+  const len = str.length
   i = 0
   out = ''
   while (i < len) {
@@ -135,9 +135,9 @@ function base64encode (str) {
 /** base64解码 **/
 // eslint-disable-next-line no-unused-vars
 function base64decode (str) {
-  var c1, c2, c3, c4
-  var i, len, out
-  len = str.length
+  let c1, c2, c3, c4
+  let i, out
+  const len = str.length
   i = 0
   out = ''
   while (i < len) {
@@ -173,7 +173,7 @@ function base64decode (str) {
 }
 
 /** 去除base64不安全的字符 **/
-var safe64 = function (base64) {
+const safe64 = function (base64) {
   base64 = base64.replace(/\+/g, '-')
   base64 = base64.replace(/\//g, '_')
   return base64
