@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './App'
-import '/packages/assets/styles/index.scss'
-import LoquatFormDesign from '../packages/'
 import request from './request'
+import '/packages/assets/iconfont/iconfont.css'
+import LoquatFormDesign from '../packages/'
 Vue.use(LoquatFormDesign, { axios: request })
 
 /** 调式ElementUI源码,打包时可以注释 **/

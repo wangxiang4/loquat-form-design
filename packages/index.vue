@@ -1237,5 +1237,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'packages/assets/styles/designer/index';
+@import 'packages/assets/styles';
 </style>
