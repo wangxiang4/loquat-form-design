@@ -204,7 +204,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
             const param = (({ url, method, headers, params }) => {
               return { url, method, headers, params }
             })(dataSource || {})
-            // 远端请求显示标签不能手动控制,设置显示
+            // 插件中存在静态数据设置显示隐藏标签的,远端请求强制设置显示
             if (hasOwnProperty(plugin, 'showLabel')) plugin.showLabel = true
             switch (col.remoteType) {
               case 'option' :
