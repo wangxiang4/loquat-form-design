@@ -46,17 +46,6 @@ export function getLabelWidth (column, item, defval) {
   return setPx(result, defval)
 }
 
-/** 获取组件名称 **/
-export function getComponent (type, component) {
-  let result = type || 'input'
-  if (!validateNull(component)) {
-    return component
-  } else if (['textarea', 'password'].includes(type)) {
-    result = 'input'
-  }
-  return KEY_COMPONENT_NAME.concat(kebabCase(result))
-}
-
 /** 表单初始化默认模型设置prop **/
 export function formInitVal (list = []) {
   const formModel = {}
@@ -116,6 +105,17 @@ export function formClearVal (obj, list = []) {
     }
   })
   return obj
+}
+
+/** 获取组件名称 **/
+export function getComponent (type, component) {
+  let result = type || 'input'
+  if (!validateNull(component)) {
+    return component
+  } else if (['textarea', 'password'].includes(type)) {
+    result = 'input'
+  }
+  return KEY_COMPONENT_NAME.concat(kebabCase(result))
 }
 
 /** 获取配置组件名称 **/
