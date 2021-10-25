@@ -68,10 +68,6 @@ export default {
     home: {
       type: Object
     }
-  },
-  data () {
-    return {
-    }
   }
 }
 </script>
