@@ -171,6 +171,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
         break
       // 插件数据处理
       default:
+        debugger
         // 处理动作转换数据
         if (typeof col.events === 'string') {
           try {
@@ -182,7 +183,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
           }
         }
         for (const key in col.events) {
-          if (col.events[key]) {
+          if (col.events[key] && getObjType(col.events[key]) !== 'function') {
             const event = options.eventScript.find(item => item.name === col.events[key])
             col.events[key] = event && new Function(event.func)
           }
