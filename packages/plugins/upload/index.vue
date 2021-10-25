@@ -3,7 +3,6 @@
     <el-upload :class="{ 'loquat-upload__img': isAvatarImg, 'loquat-upload__disabled': (disabled || !tokenOnline) }"
                :action="action"
                :accept="acceptList"
-               :style="customizeStyle"
                :limit="limit"
                :drag="drag"
                :multiple="isAvatarImg?false:multiple"
@@ -11,6 +10,7 @@
                :list-type="listType"
                :disabled="disabled"
                :file-list="fileList"
+               :style="customizeStyle"
                :http-request="httpUpload"
                :before-remove="handleBeforeRemove"
                :on-remove="handleRemove"
@@ -75,9 +75,6 @@ export default {
   inheritAttrs: false,
   props: {
     value: { type: Array },
-    customizeStyle: {
-      type: Object
-    },
     listType: {
       type: String
     },
@@ -178,6 +175,9 @@ export default {
       type: Boolean,
       default: false
     },
+    customizeStyle: {
+      type: Object
+    },
     uploadRemove: Function,
     uploadRemoveBefore: Function,
     uploadPreview: Function,
@@ -195,26 +195,6 @@ export default {
       loading: false,
       tokenOnline: false,
       uploadConfigDefault: UPLOAD_CONFIG_PROPS
-    }
-  },
-  watch: {
-    text: {
-      handler (n) {
-        this.handleChange(n)
-      }
-    },
-    value: {
-      handler () {
-        this.initVal()
-      }
-    },
-    dic: {
-      handler (n) {
-        if (this.oss && this.$loquat.validateNull(n)) {
-          this.tokenOnline = false
-        } else this.tokenOnline = true
-      },
-      immediate: true
     }
   },
   computed: {
@@ -281,6 +261,26 @@ export default {
     },
     previewFileListMode () {
       return (this.listType !== 'picture-card' && !this.isAvatarImg)
+    }
+  },
+  watch: {
+    text: {
+      handler (n) {
+        this.handleChange(n)
+      }
+    },
+    value: {
+      handler () {
+        this.initVal()
+      }
+    },
+    dic: {
+      handler (n) {
+        if (this.oss && this.$loquat.validateNull(n)) {
+          this.tokenOnline = false
+        } else this.tokenOnline = true
+      },
+      immediate: true
     }
   },
   created () {

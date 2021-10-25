@@ -1,9 +1,6 @@
 <template>
   <el-input-number v-model.number="text"
                    class="loquat-input-number"
-                   @click.native="handleClick"
-                   @focus="handleFocus"
-                   @blur="handleBlur"
                    :precision="precision"
                    :placeholder="placeholder"
                    :size="size"
@@ -16,6 +13,9 @@
                    :label="placeholder"
                    :disabled="disabled"
                    :style="customizeStyle"
+                   @focus="handleFocus"
+                   @blur="handleBlur"
+                   @click.native="handleClick"
   />
 </template>
 
@@ -23,7 +23,6 @@
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'InputNumber',
-  inheritAttrs: false,
   props: {
     value: {},
     controls: {
@@ -89,7 +88,6 @@ export default {
   created () {
     this.initVal()
   },
-  mounted () { },
   methods: {
     initVal () {
       this.text = this.value

@@ -4,13 +4,13 @@
                :placeholder="placeholder"
                :props="allProps"
                :size="size"
-               :style="customizeStyle"
                :clearable="disabled?false:clearable"
                :show-all-levels="showAllLevels"
                :filterable="filterable"
                :separator="separator"
                :disabled="disabled"
                :collapse-tags="tags"
+               :style="customizeStyle"
                @focus="handleFocus"
                @blur="handleBlur"
                @click.native="handleClick"
@@ -43,9 +43,6 @@ export default {
     tags: {
       type: Boolean,
       default: false
-    },
-    customizeStyle: {
-      type: Object
     },
     showAllLevels: {
       type: Boolean,
@@ -94,24 +91,15 @@ export default {
     multiple: {
       type: Boolean,
       default: false
+    },
+    customizeStyle: {
+      type: Object
     }
   },
   data () {
     return {
       text: undefined,
       propsDefault: DIC_PROPS
-    }
-  },
-  watch: {
-    text: {
-      handler (n) {
-        this.handleChange(n)
-      }
-    },
-    value: {
-      handler () {
-        this.initVal()
-      }
     }
   },
   computed: {
@@ -150,6 +138,18 @@ export default {
           this.lazyLoad && this.lazyLoad(node, callback)
         },
         expandTrigger: this.expandTrigger
+      }
+    }
+  },
+  watch: {
+    text: {
+      handler (n) {
+        this.handleChange(n)
+      }
+    },
+    value: {
+      handler () {
+        this.initVal()
       }
     }
   },

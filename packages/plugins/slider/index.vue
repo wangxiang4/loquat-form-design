@@ -20,7 +20,6 @@
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Slider',
-  inheritAttrs: false,
   props: {
     value: {
       type: Number,
@@ -84,7 +83,6 @@ export default {
   created () {
     this.initVal()
   },
-  mounted () { },
   methods: {
     initVal () {
       this.text = this.value

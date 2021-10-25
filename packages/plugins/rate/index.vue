@@ -34,7 +34,6 @@
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Rate',
-  inheritAttrs: false,
   props: {
     value: {
       type: Number,
@@ -121,7 +120,6 @@ export default {
   created () {
     this.initVal()
   },
-  mounted () { },
   methods: {
     initVal () {
       this.text = this.value

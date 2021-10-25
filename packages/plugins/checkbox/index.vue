@@ -12,9 +12,9 @@
                        :size="size"
                        :min="min"
                        :max="max"
+                       :style="customizeStyle"
                        @change="handleCheckChange"
                        @click.native="handleClick"
-                       :style="customizeStyle"
     >
       <component :is="componentName"
                  v-for="(item,index) in dic"
@@ -34,7 +34,6 @@ import { DIC_PROPS } from '@/global/variable'
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Checkbox',
-  inheritAttrs: false,
   props: {
     value: {
       type: Array,
@@ -132,7 +131,6 @@ export default {
   created () {
     this.initVal()
   },
-  mounted () { },
   methods: {
     initVal () {
       this.text = this.value

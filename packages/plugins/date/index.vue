@@ -6,7 +6,6 @@
                     :editable="editable"
                     :unlink-panels="unlinkPanels"
                     :readonly="readonly"
-                    :style="customizeStyle"
                     :default-value="defaultValue"
                     :default-time="defaultTime"
                     :range-separator="rangeSeparator"
@@ -18,6 +17,7 @@
                     :value-format="valueFormat"
                     :placeholder="placeholder"
                     :disabled="disabled"
+                    :style="customizeStyle"
                     @blur="handleBlur"
                     @focus="handleFocus"
                     @click.native="handleClick"
@@ -29,7 +29,6 @@
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Date',
-  inheritAttrs: false,
   props: {
     value: {},
     editable: {
@@ -115,7 +114,6 @@ export default {
   created () {
     this.initVal()
   },
-  mounted () { },
   methods: {
     initVal () {
       this.text = this.value

@@ -2,10 +2,10 @@
   <div class="loquat-radio">
     <el-radio-group v-model="text"
                     :size="size"
-                    @change="handleChange"
-                    @click.native="handleClick"
                     :disabled="disabled"
                     :style="customizeStyle"
+                    @change="handleChange"
+                    @click.native="handleClick"
     >
       <component :is="componentName"
                  v-for="(item,index) in dic"
@@ -25,7 +25,6 @@ import { bindEvent } from '@utils/plugins'
 import { DIC_PROPS } from '@/global/variable'
 export default {
   name: 'Radio',
-  inheritAttrs: false,
   data () {
     return {
       name: 'radio',
@@ -107,7 +106,6 @@ export default {
   created () {
     this.initVal()
   },
-  mounted () { },
   methods: {
     initVal () {
       this.text = this.value

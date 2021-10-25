@@ -40,7 +40,6 @@ import { detailDataType } from '@utils'
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Input',
-  inheritAttrs: false,
   props: {
     value: {},
     clearable: {

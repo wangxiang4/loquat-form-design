@@ -21,7 +21,6 @@ import { DIC_PROPS } from '@/global/variable'
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Switch',
-  inheritAttrs: false,
   props: {
     value: {},
     dic: {
@@ -55,6 +54,20 @@ export default {
       propsDefault: DIC_PROPS
     }
   },
+  computed: {
+    active () {
+      return this.dic[1] || {}
+    },
+    inactive () {
+      return this.dic[0] || {}
+    },
+    valueKey () {
+      return this.props.value || this.propsDefault.value
+    },
+    labelKey () {
+      return this.props.label || this.propsDefault.label
+    }
+  },
   watch: {
     text: {
       handler (n) {
@@ -69,21 +82,6 @@ export default {
   },
   created () {
     this.initVal()
-  },
-  mounted () { },
-  computed: {
-    active () {
-      return this.dic[1] || {}
-    },
-    inactive () {
-      return this.dic[0] || {}
-    },
-    valueKey () {
-      return this.props.value || this.propsDefault.value
-    },
-    labelKey () {
-      return this.props.label || this.propsDefault.label
-    }
   },
   methods: {
     initVal () {

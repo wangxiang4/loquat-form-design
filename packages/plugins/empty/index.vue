@@ -13,7 +13,6 @@
 <script>
 export default {
   name: 'Empty',
-  inheritAttrs: false,
   props: {
     size: {
       type: String
@@ -26,8 +25,7 @@ export default {
       type: String,
       default: '暂无数据'
     }
-  },
-  methods: {}
+  }
 }
 </script>
 

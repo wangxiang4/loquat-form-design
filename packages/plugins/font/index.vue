@@ -15,7 +15,6 @@
 <script>
 export default {
   name: 'Font',
-  inheritAttrs: false,
   props: {
     value: {},
     center: {
@@ -54,7 +53,6 @@ export default {
   created () {
     this.initVal()
   },
-  mounted () { },
   methods: {
     initVal () {
       this.text = this.value

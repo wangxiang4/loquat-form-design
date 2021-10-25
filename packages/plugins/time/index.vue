@@ -3,7 +3,6 @@
     <el-time-picker v-model="text"
                     :is-range="range"
                     :size="size"
-                    :style="customizeStyle"
                     :editable="editable"
                     :default-value="defaultValue"
                     :range-separator="rangeSeparator"
@@ -15,9 +14,10 @@
                     :clearable="disabled?false:clearable"
                     :value-format="valueFormat"
                     :placeholder="placeholder"
+                    :disabled="disabled"
+                    :style="customizeStyle"
                     @change="handleChange"
                     @click.native="handleClick"
-                    :disabled="disabled"
     />
   </div>
 </template>
@@ -26,7 +26,6 @@
 import { bindEvent } from '@utils/plugins'
 export default {
   name: 'Time',
-  inheritAttrs: false,
   props: {
     value: {},
     editable: {
@@ -80,12 +79,12 @@ export default {
       type: Boolean,
       default: false
     },
-    customizeStyle: {
-      type: Object
-    },
     range: {
       type: Boolean,
       default: false
+    },
+    customizeStyle: {
+      type: Object
     }
   },
   data () {
@@ -110,7 +109,6 @@ export default {
   created () {
     this.initVal()
   },
-  mounted () { },
   methods: {
     initVal () {
       this.text = this.value
