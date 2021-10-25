@@ -96,7 +96,6 @@ export default {
         if (index === 0) this.selectWidget = {}
         else this.handleSelectWidget(index - 1)
       } else this.handleSelectWidget(index + 1)
-
       this.$nextTick(() => {
         this.data.column.splice(index, 1)
         this.$emit('change')

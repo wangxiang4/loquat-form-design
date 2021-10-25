@@ -4,7 +4,7 @@
        @click.stop="handleSelectWidget(index)"
   >
     <el-row :type="column.flex ? 'flex' : undefined"
-            :gutter="column.gutter ? column.gutter : 0"
+            :gutter="column.gutter"
             :justify="column.justify"
             :align="column.align"
             :class="column.customClass"
@@ -72,9 +72,8 @@
 </template>
 <script>
 import draggable from 'vuedraggable'
-import { getObjType } from '@utils'
 import { getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
-import { rowDeepClone, columnDeepClone } from '@utils/layout'
+import { coralLayoutRowDeepClone, coralLayoutColumnDeepClone } from '@utils/layout'
 import widgetFormItem from '@components/WidgetFormItem'
 export default {
   name: 'WidgetCoralLayout',
@@ -133,7 +132,7 @@ export default {
     },
     // 处理行克隆操作
     handleRowClone () {
-      this.widgets.splice(this.index, 0, rowDeepClone(this.column))
+      this.widgets.splice(this.index, 0, coralLayoutRowDeepClone(this.column))
       this.$nextTick(() => {
         this.handleSelectWidget(this.index + 1)
         this.$emit('change')
@@ -152,15 +151,13 @@ export default {
     },
     // 处理列添加操作
     handleColumnAdd () {
-      getObjType(this.column.cols) === 'array'
-        ? this.column.cols.push(getWidgetAddData(this.colPreset))
-        : this.$loquat.log.warning('未设置cols参数,注意类型为Array')
+      this.column.cols.push(getWidgetAddData(this.colPreset))
     },
     // 处理列克隆操作
     handleColumnClone (index) {
-      this.column.cols.splice(index, 0, columnDeepClone(this.column.cols[index]))
+      this.column.cols.splice(index, 0, coralLayoutColumnDeepClone(this.column.cols[index]))
       this.$nextTick(() => {
-        this.handleWidgetDataSelect(this.column.cols[index])
+        this.handleWidgetDataSelect(this.column.cols[index + 1])
         this.$emit('change')
       })
     },
@@ -186,7 +183,7 @@ export default {
     handleWidgetClone (list, index) {
       list.splice(index, 0, getWidgetCloneData(list[index]))
       this.$nextTick(() => {
-        this.handleWidgetDataSelect(list[index])
+        this.handleWidgetDataSelect(list[index + 1])
         this.$emit('change')
       })
     },

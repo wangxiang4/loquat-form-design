@@ -9,25 +9,25 @@
  **/
 import { getWidgetCloneData } from '@utils/dataFormat'
 
-// 处理行克隆递归
-export function rowDeepClone (data) {
+// 处理珊瑚布局行克隆递归
+export function coralLayoutRowDeepClone (data) {
   data = getWidgetCloneData(data)
-  data.cols = data.cols.map(item => columnDeepClone(item))
+  data.cols = data.cols.map(item => coralLayoutColumnDeepClone(item))
   return data
 }
 
-// 处理列克隆递归
-export function columnDeepClone (data) {
+// 处理珊瑚布局列克隆递归
+export function coralLayoutColumnDeepClone (data) {
   data = getWidgetCloneData(data)
-  data.list = pluginDeepClone(data.list)
+  data.list = coralLayoutPluginDeepClone(data.list)
   return data
 }
 
-// 处理插件克隆递归
-function pluginDeepClone (list) {
+// 处理珊瑚布局插件克隆递归
+function coralLayoutPluginDeepClone (list) {
   return list.map(plugin => {
     if (plugin.type === 'coralLayout') {
-      plugin = rowDeepClone(plugin)
+      plugin = coralLayoutRowDeepClone(plugin)
     } else {
       plugin = getWidgetCloneData(plugin)
     }

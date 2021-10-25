@@ -79,7 +79,7 @@ export default {
     },
     layoutType: {
       type: String,
-      default: 'plugin'
+      default: 'widgets'
     }
   },
   data () {
@@ -111,7 +111,7 @@ export default {
     getLabelWidth,
     emitInvoke (methodName) {
       switch (this.layoutType) {
-        case 'plugin':
+        case 'widgets':
           if (methodName === 'select') this.$emit('select', this.index)
           if (methodName === 'clone') this.$emit('clone', this.index)
           if (methodName === 'delete') this.$emit('delete', this.index)

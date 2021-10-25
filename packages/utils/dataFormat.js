@@ -22,7 +22,7 @@ import { validateNull, setPx, deepClone, getObjType, randomId8, kebabCase } from
 import request from '@utils/request'
 import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
-import { rowDeepClone } from '@utils/layout'
+import { coralLayoutRowDeepClone } from '@utils/layout'
 import { getToken } from '@utils/qiniuOss'
 
 /** 获取控件默认提示 **/
@@ -287,7 +287,7 @@ export function getWidgetAddData (data) {
   switch (data.type) {
     // 珊瑚布局数据处理
     case 'coralLayout':
-      data = rowDeepClone(data)
+      data = coralLayoutRowDeepClone(data)
       break
     // 插件数据处理
     default:
