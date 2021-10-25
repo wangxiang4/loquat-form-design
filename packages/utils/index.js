@@ -130,7 +130,7 @@ export function pathFormat (val) {
 
 /** 获取对象值 **/
 export function get (object, path, defaultValue) {
-  if (!path || typeof path !== 'string') return object
+  if (validateNull(path)) return object
   path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
   let index = 0
   const length = path.length

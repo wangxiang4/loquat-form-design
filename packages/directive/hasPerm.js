@@ -19,12 +19,11 @@
  *
  * @create: 2021-07-12
  **/
-import { getObjType, validateNull, pathFormat } from '@utils'
+import { getObjType, pathFormat } from '@utils'
 
 export default {
   inserted (el, binding) {
     const { value } = binding
-    if (getObjType(value) !== 'array' && getObjType(value) !== 'object') throw new Error(`请设置校验权限标签值"`)
     const [data, path, multi] = deconstruction(value)
     if (multi && !hasOwnMultiProperty(data, path)) el.hidden = true
     else if (!multi && !hasOwnProperty(data, path)) el.hidden = true
@@ -40,7 +39,6 @@ export default {
 
 /** 查找多个属性如果发现全部不存在返回失败 **/
 export function hasOwnMultiProperty (data, path) {
-  if (getObjType(path) !== 'array') return false
   for (const item of path) {
     if (hasOwnProperty(data, item)) return true
   }
@@ -49,21 +47,23 @@ export function hasOwnMultiProperty (data, path) {
 
 /** 采用正则对路径进行解析查找对象key **/
 export function hasOwnProperty (object, path) {
-  if (validateNull(object) && validateNull(path)) return false
-  if (getObjType(path) !== 'array') path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
+  path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
   let index = 0
   const length = path.length - 1
   while (object != null && index < length) {
     object = object[path[index++]]
   }
-  if (validateNull(object) || getObjType(object) !== 'object') return false
-  const lastKey = path[path.length - 1]
-  return (lastKey in object)
+  const lastKey = path[length]
+  return object == null ? false : (lastKey in object)
 }
 
 /** 解构格式转换 **/
 function deconstruction (data) {
-  if (getObjType(data) === 'array') return data
-  return Object.values(data)
+  switch (getObjType(data)) {
+    case 'array':
+      return data
+    case 'object':
+      return Object.values(data)
+  }
 }
 
