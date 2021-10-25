@@ -171,7 +171,6 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
         break
       // 插件数据处理
       default:
-        debugger
         // 处理动作转换数据
         if (typeof col.events === 'string') {
           try {
