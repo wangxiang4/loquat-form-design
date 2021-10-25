@@ -1,6 +1,5 @@
 <template>
   <component :is="getComponent(getColumn.type, getColumn.component)"
-             ref="formPlugin"
              v-model="text"
              v-bind="plugin"
              :dic="dic"
@@ -117,25 +116,33 @@ export default {
       handler (val) {
         if (this.first || !this.$loquat.validateNull(val)) {
           this.first = true
-          this.$emit('input', val)
-          this.$emit('change', val)
+          this.handleChange(val)
         } else {
           this.first = true
         }
       }
     },
     value: {
-      immediate: true,
-      handler (val) {
-        this.text = val
+      handler () {
+        this.initVal()
       }
     }
   },
+  created () {
+    this.initVal()
+  },
   methods: {
+    initVal () {
+      this.text = this.value
+    },
     getComponent,
     getPlaceholder,
     enterChange () {
       if (this.enter) this.$emit('enter')
+    },
+    handleChange (value) {
+      this.$emit('input', value)
+      this.$emit('change', value)
     }
   }
 }

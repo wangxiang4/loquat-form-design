@@ -29,7 +29,6 @@ import { insertCss, parseCss } from '@utils/dom'
 import item from './item'
 export default {
   name: 'Form',
-  inheritAttrs: false,
   components: { item },
   props: {
     option: {
@@ -82,7 +81,6 @@ export default {
       deep: true
     },
     value: {
-      immediate: true,
       handler (val) {
         this.form = val
       },
@@ -90,16 +88,14 @@ export default {
     }
   },
   created () {
-    this.$nextTick(() => {
-      this.initialize()
-      this.$nextTick(() => this.clearValidate())
-    })
+    this.initVal()
+    this.$nextTick(() => this.clearValidate())
   },
   beforeDestroy () {
     insertCss([], this.formId)
   },
   methods: {
-    initialize () {
+    initVal () {
       this.formId = KEY_COMPONENT_NAME.concat(randomId8())
       insertCss(parseCss(this.widgetForm.styleSheets), this.formId)
       this.form = deepClone({ ...formInitVal(this.columns), ...this.form })

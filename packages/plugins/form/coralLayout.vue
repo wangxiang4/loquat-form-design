@@ -1,7 +1,7 @@
 <template>
   <el-row v-if="!column.hide"
           :type="column.flex ? 'flex' : undefined"
-          :gutter="column.gutter ? column.gutter : 0"
+          :gutter="column.gutter"
           :justify="column.justify"
           :align="column.align"
           :class="column.customClass"
@@ -40,10 +40,6 @@ export default {
     home: {
       required: true,
       type: Object
-    }
-  },
-  data () {
-    return {
     }
   }
 }
