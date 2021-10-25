@@ -152,6 +152,7 @@ export default {
     // 处理列添加操作
     handleColumnAdd () {
       this.column.cols.push(getWidgetAddData(this.colPreset))
+      this.$emit('change')
     },
     // 处理列克隆操作
     handleColumnClone (index) {
