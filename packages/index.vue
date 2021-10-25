@@ -75,7 +75,7 @@
                 <el-button type="text"
                            size="medium"
                            icon="iconfont icon-redo"
-                           :disabled="historySteps.index == historySteps.steps.length - 1"
+                           :disabled="historySteps.index == (historySteps.steps.length - 1)"
                            @click="widgetForm = handleRedo()"
                 />
               </el-tooltip>
