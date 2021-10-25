@@ -43,7 +43,7 @@ export default {
       if (this.historySteps.index == this.historySteps.maxStep - 1) this.historySteps.steps.shift()
       else this.historySteps.index++
       this.historySteps.steps[this.historySteps.index] = deepClone(data)
-
+      // 当历史步骤数据数组记录项大于当前索引时,重新截取设置历史步骤数据数组0到当前索引的数据
       if (this.historySteps.index < this.historySteps.steps.length - 1) {
         this.historySteps.steps = this.historySteps.steps.slice(0, this.historySteps.index + 1)
       }
