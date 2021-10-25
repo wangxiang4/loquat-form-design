@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getComponent, getPlaceholder } from '@utils/dataFormat'
+import { getComponent, getPlaceholder, clearTransformDirtyData } from '@utils/dataFormat'
 import { getObjType } from '@utils'
 export default {
   name: 'Widget',
@@ -67,27 +67,7 @@ export default {
   computed: {
     getColumn () {
       const column = this.$loquat.deepClone(this.column)
-      const plugin = column.plugin || {}
-      if (!this.preview) {
-        switch (column.type) {
-          case 'upload':
-            // 处理上传数据
-            delete plugin.headers
-            delete plugin.data
-            break
-        }
-        // 处理动作转换数据
-        delete column.events
-        // 处理远端请求数据转换
-        delete column.remote
-        delete column.dicData
-        delete column.remoteType
-        delete column.remoteFunc
-        delete column.remoteOption
-        delete column.remoteDataSource
-        // 校验规则处理
-        delete column.validateConfig
-      }
+      if (!this.preview) clearTransformDirtyData(column)
       return column
     },
     params () {

@@ -172,22 +172,19 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
       // 插件数据处理
       default:
         // 处理动作转换数据
-        if (['object', 'string'].includes(getObjType(col.events))) {
-          if (typeof col.events === 'string') {
-            try {
-              const execute = eval // 将this指向window
-              const parse = execute('(' + col.events + ')')
-              getObjType(parse) === 'object' ? col.events = parse : col.events = {}
-            } catch (e) {
-              col.events = {}
-            }
+        if (typeof col.events === 'string') {
+          try {
+            const execute = eval // 将this指向window
+            const parse = execute('(' + col.events + ')')
+            getObjType(parse) === 'object' ? col.events = parse : col.events = {}
+          } catch (e) {
+            col.events = {}
           }
-          for (const key in col.events) {
-            if (typeof col.events[key] !== 'string') continue
-            if (col.events[key]) {
-              const event = options.eventScript.find(item => item.name === col.events[key])
-              col.events[key] = new Function(event?.func)
-            } else delete col.events[key]
+        }
+        for (const key in col.events) {
+          if (col.events[key]) {
+            const event = options.eventScript.find(item => item.name === col.events[key])
+            col.events[key] = event && new Function(event.func)
           }
         }
         // 处理上传数据
@@ -195,9 +192,8 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
           // 转换请求头部与请求参数数据格式
           plugin.headers = plugin.headers && Object(...plugin.headers.map(({ key, value }) => ({ [key]: value })))
           plugin.data = plugin.data && Object(...plugin.data.map(({ key, value }) => ({ [key]: value })))
-          // 处理动作数据
-          for (const key in col.events) plugin[key] = col.events[key]
-          delete col.events
+          // 设置上传动作数据
+          for (const key in col.events) col.events[key] ? plugin[key] = col.events[key] : ''
         }
         // 处理远端请求数据转换
         if (REMOTE_REQUEST_TYPES.includes(col.type)) {
@@ -260,12 +256,6 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
                 break
             }
           }
-          delete col.remote
-          delete col.dicData
-          delete col.remoteType
-          delete col.remoteFunc
-          delete col.remoteOption
-          delete col.remoteDataSource
         }
         // 校验规则处理
         if (getObjType(validateConfig) === 'object') {
@@ -273,11 +263,37 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
           validateConfig.required && rules.push({ required: true, message: validateConfig.requiredMessage || `${col.label}必须填写` })
           validateConfig.type && rules.push({ type: validateConfig.typeFormat, message: validateConfig.typeMessage || `${col.label}格式不正确` })
           validateConfig.pattern && rules.push({ pattern: validateConfig.patternFormat, message: validateConfig.patternMessage || `${col.label}格式不匹配` })
-          delete col.validateConfig
           col.rules = rules
         }
+        clearTransformDirtyData(col)
     }
   }
+}
+
+/** 清除设计转换预览脏数据  **/
+export function clearTransformDirtyData (column) {
+  const plugin = column.plugin || {}
+  // 清除动作转换数据
+  if (getObjType(column.events) === 'object') {
+    for (const key in column.events) !column.events[key] && delete column.events[key]
+  } else delete column.events
+  switch (column.type) {
+    // 清除上传数据
+    case 'upload':
+      getObjType(column.events) === 'object' && delete plugin.headers
+      getObjType(column.events) === 'object' && delete plugin.data
+      delete column.events
+      break
+  }
+  // 清除远端请求数据转换
+  delete column.remote
+  delete column.dicData
+  delete column.remoteType
+  delete column.remoteFunc
+  delete column.remoteOption
+  delete column.remoteDataSource
+  // 清除校验规则处理数据
+  delete column.validateConfig
 }
 
 /** 表单部件添加数据处理 **/
