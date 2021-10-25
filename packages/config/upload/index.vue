@@ -16,7 +16,12 @@
       <el-input v-model="plugin.tip" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[plugin, 'oss']" label="OSS" >
-      <el-radio-group v-model="plugin.oss">
+      <el-radio-group v-model="plugin.oss"
+                      @change="option => {
+                        if(!option) $set(data, 'remote', false)
+                        else $set(data, 'remote', true)
+                      }"
+      >
         <el-radio-button label="">
           普通请求
         </el-radio-button>

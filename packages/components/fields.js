@@ -17,9 +17,9 @@ export default [
       label: '单行文本',
       icon: 'icon-input',
       labelWidth: '',
-      customClass: [],
       hide: false,
       hideLabel: false,
+      customClass: [],
       validateConfig: {
         required: false,
         type: false,
@@ -37,22 +37,22 @@ export default [
         append: '',
         maxlength: '',
         placeholder: '',
-        customizeStyle: {
-          width: '100%'
-        },
         readonly: false,
         showWordLimit: false,
         disabled: false,
-        showPassword: false
+        showPassword: false,
+        customizeStyle: {
+          width: '100%'
+        }
       }
     }, {
       type: 'textarea',
       label: '多行文本',
       icon: 'icon-textarea',
       labelWidth: '',
-      customClass: [],
       hide: false,
       hideLabel: false,
+      customClass: [],
       validateConfig: {
         required: false,
         pattern: false
@@ -66,20 +66,20 @@ export default [
         type: 'textarea',
         value: '',
         placeholder: '',
+        readonly: false,
+        disabled: false,
         customizeStyle: {
           width: '100%'
-        },
-        readonly: false,
-        disabled: false
+        }
       }
     }, {
       type: 'inputNumber',
       label: '计数器',
       icon: 'icon-number',
       labelWidth: '',
-      customClass: [],
       hide: false,
       hideLabel: false,
+      customClass: [],
       validateConfig: {
         required: false
       },
@@ -90,15 +90,15 @@ export default [
       },
       plugin: {
         value: 0,
-        customizeStyle: {
-          width: '100%'
-        },
         minRows: 0,
         maxRows: 9,
         step: 1,
         precision: 0,
         controlsPosition: '',
-        disabled: false
+        disabled: false,
+        customizeStyle: {
+          width: '100%'
+        }
       }
     }, {
       type: 'select',
@@ -111,7 +111,7 @@ export default [
         { label: '选项二', value: 'Option 2' },
         { label: '选项三', value: 'Option 3' }
       ],
-      remoteType: '',
+      remoteType: 'datasource',
       remoteOption: 'optionDefault',
       remoteFunc: 'funcDefault',
       remoteDataSource: '',
@@ -133,15 +133,15 @@ export default [
         clearable: false,
         placeholder: '',
         showLabel: false,
-        customizeStyle: {
-          width: '100%'
-        },
         filterable: false,
+        drag: false,
         props: {
           label: 'label',
           value: 'value'
         },
-        drag: false
+        customizeStyle: {
+          width: '100%'
+        }
       }
     }, {
       type: 'radio',
@@ -163,7 +163,7 @@ export default [
           label: 'Option 3'
         }
       ],
-      remoteType: '',
+      remoteType: 'datasource',
       remoteOption: 'optionDefault',
       remoteFunc: 'funcDefault',
       remoteDataSource: '',
@@ -180,11 +180,11 @@ export default [
         value: '',
         disabled: false,
         showLabel: false,
+        inline: false,
         props: {
           label: 'label',
           value: 'value'
-        },
-        inline: false
+        }
       }
     }, {
       type: 'checkbox',
@@ -203,13 +203,13 @@ export default [
           value: 'Option 3'
         }
       ],
-      remoteType: '',
+      remoteType: 'datasource',
       remoteOption: 'optionDefault',
       remoteFunc: 'funcDefault',
+      remoteDataSource: '',
       hide: false,
       hideLabel: false,
       customClass: [],
-      remoteDataSource: '',
       validateConfig: {
         required: false
       },
@@ -220,12 +220,12 @@ export default [
         value: [],
         disabled: false,
         showLabel: false,
+        inline: false,
+        all: false,
         props: {
           label: 'label',
           value: 'value'
-        },
-        inline: false,
-        all: false
+        }
       }
     }, {
       type: 'time',
@@ -247,9 +247,6 @@ export default [
         value: '',
         format: 'HH:mm:ss',
         valueFormat: 'HH:mm:ss',
-        customizeStyle: {
-          width: '100%'
-        },
         readonly: false,
         disabled: false,
         range: false,
@@ -258,7 +255,10 @@ export default [
         arrowControl: true,
         placeholder: '',
         startPlaceholder: '',
-        endPlaceholder: ''
+        endPlaceholder: '',
+        customizeStyle: {
+          width: '100%'
+        }
       }
     }, {
       type: 'date',
@@ -330,11 +330,11 @@ export default [
       },
       plugin: {
         value: '',
+        showAlpha: false,
+        disabled: false,
         customizeStyle: {
           width: '100%'
-        },
-        showAlpha: false,
-        disabled: false
+        }
       }
     }, {
       type: 'switch',
@@ -370,14 +370,14 @@ export default [
       },
       plugin: {
         value: 0,
-        customizeStyle: {
-          width: '100%'
-        },
         min: 0,
         max: 100,
         step: 1,
         disabled: false,
-        showInput: false
+        showInput: false,
+        customizeStyle: {
+          width: '100%'
+        }
       }
     }, {
       type: 'font',
@@ -402,7 +402,7 @@ export default [
       label: '文件',
       icon: 'icon-file-upload',
       labelWidth: '',
-      remote: true,
+      remote: false,
       remoteType: 'datasource',
       remoteFunc: 'funcGetToken',
       remoteDataSource: '',
@@ -418,7 +418,6 @@ export default [
         uploadRemove: ''
       },
       plugin: {
-        tip: '',
         action: 'http://localhost:8888/common/upload',
         headers: [],
         data: [],
@@ -430,12 +429,12 @@ export default [
         multiple: false,
         limit: 10,
         fileSize: 2,
+        tip: '',
         oss: '',
         byteUnit: 'MB',
         domain: 'http://tcdn.form.making.link/',
-        customizeStyle: {
-          width: '100%'
-        },
+        showCanvas: false,
+        disabled: false,
         uploadConfig: {
           home: 'http://localhost:8888',
           resUrl: '',
@@ -452,8 +451,9 @@ export default [
           fontFamily: 'microsoft yahei',
           color: '#999'
         },
-        showCanvas: false,
-        disabled: false
+        customizeStyle: {
+          width: '100%'
+        }
       }
     }, {
       type: 'cascader',
@@ -487,16 +487,16 @@ export default [
           label: 'Option 3'
         }
       ],
-      remoteType: '',
+      remoteType: 'datasource',
       remoteOption: 'optionDefault',
       remoteFunc: 'funcDefault',
       remoteDataSource: '',
-      validateConfig: {
-        required: false
-      },
       hide: false,
       hideLabel: false,
       customClass: [],
+      validateConfig: {
+        required: false
+      },
       events: {
         change: '',
         focus: '',
@@ -508,14 +508,14 @@ export default [
         disabled: false,
         clearable: false,
         placeholder: '',
-        customizeStyle: {
-          width: '100%'
-        },
         filterable: false,
         props: {
           label: 'label',
           value: 'value',
           children: 'children'
+        },
+        customizeStyle: {
+          width: '100%'
         }
       }
     }]
