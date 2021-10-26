@@ -62,23 +62,23 @@ const meta = {
 let rep
 
 export default function convert (object, options = {}) {
-  var space = options.space || 2
-  var dropQuotesOnKeys = options.dropQuotesOnKeys != false
-  var dropQuotesOnNumbers = options.dropQuotesOnNumbers || false
-  var inlineShortArrays = options.inlineShortArrays || false
-  var inlineShortArraysDepth = options.inlineShortArraysDepth || 1
-  var quoteType = options.quoteType || 'single'
-  var minify = options.minify || false
+  const space = options.space || 2
+  const dropQuotesOnKeys = options.dropQuotesOnKeys != false
+  const dropQuotesOnNumbers = options.dropQuotesOnNumbers || false
+  const inlineShortArrays = options.inlineShortArrays || false
+  const inlineShortArraysDepth = options.inlineShortArraysDepth || 1
+  const quoteType = options.quoteType || 'single'
+  const minify = options.minify || false
 
   if (dropQuotesOnNumbers) walkObjectAndDropQuotesOnNumbers(object)
 
-  var result = stringify(object, null, minify ? undefined : space, dropQuotesOnKeys, quoteType)
+  let result = stringify(object, null, minify ? undefined : space, dropQuotesOnKeys, quoteType)
 
   if (inlineShortArrays && !minify) {
-    var newResult = inlineShortArraysInResult(result)
+    let newResult = inlineShortArraysInResult(result)
     // 深度递归折叠,默认深度折叠为1
     if (inlineShortArraysDepth > 1) {
-      for (var i = 1; i < inlineShortArraysDepth; i++) {
+      for (let i = 1; i < inlineShortArraysDepth; i++) {
         result = newResult
         newResult = inlineShortArraysInResult(result)
         if (newResult == result) break
@@ -93,13 +93,13 @@ export default function convert (object, options = {}) {
 // 删除对象值是数字里的引号
 function walkObjectAndDropQuotesOnNumbers (object) {
   if (!isObject(object)) return
-  var keys = Object.keys(object)
+  const keys = Object.keys(object)
   if (!keys) return
 
   keys.forEach(function (key) {
-    var value = object[key]
+    const value = object[key]
     if (typeof value === 'string') {
-      var number = value - 0
+      const number = value - 0
       object[key] = isNaN(number) ? value : number
     } else if (isObject(value) || Array.isArray(value)) {
       walkObjectAndDropQuotesOnNumbers(value)
@@ -117,20 +117,20 @@ function inlineShortArraysInResult (result, width) {
   if (typeof width !== 'number' || width < 20) {
     throw "Invalid width '" + width + "'. Expecting number equal or larger than 20."
   }
-  var list = result.split('\n')
-  var i = 0
-  var start = null
-  var content = []
+  const list = result.split('\n')
+  let i = 0
+  let start = null
+  let content = []
   while (i < list.length) {
-    var startMatch = !!list[i].match(/\[/)
-    var endMatch = !!list[i].match(/\],?/)
+    const startMatch = !!list[i].match(/\[/)
+    const endMatch = !!list[i].match(/\],?/)
 
     if (startMatch && !endMatch) {
       content = [list[i]]
       start = i
     } else if (endMatch && !startMatch && start) {
       content.push((list[i] || '').trim())
-      var inline = content.join(' ')
+      const inline = content.join(' ')
       if (inline.length < width) {
         list.splice(start, i - start + 1, inline)
         i = start
@@ -152,7 +152,7 @@ function stringify (value, replacer, space, dropQuotesOnKeys, quoteType) {
   // 可以提供默认的替换方法。空间参数的使用可以
   // 生成更易于阅读的文本。
 
-  var i
+  let i
   gap = ''
   indent = ''
 
@@ -180,15 +180,15 @@ function stringify (value, replacer, space, dropQuotesOnKeys, quoteType) {
 function str (key, holder, dropQuotesOnKeys, quoteType) {
   // 从 holder[key] 生成一个字符串。
 
-  var i          // 循环计数器。
-  var k          // 成员密钥。
-  var v          // 值.
-  var length
-  var mind = gap
-  var partial
-  var value = holder[key]
+  let i           // 循环计数器。
+  let k           // 成员密钥。
+  let v           // 值.
+  let length
+  const mind = gap
+  let partial
+  let value = holder[key]
 
-  // 如果该值具有 tojson 方法,则调用它以获取替换值。
+  // 如果该值具有 toJson 方法,则调用它以获取替换值。
   if (value && typeof value === 'object' && typeof value.toJSON === 'function') {
     value = value.toJSON(key)
   }
@@ -200,27 +200,18 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
 
   // 接下来发生的事情取决于值的类型。
   switch (typeof value) {
-    case 'function':
-      return value
     case 'string':
       return quote(value, quoteType)
 
     case 'number':
       // JSON数字必须是有限的,将非有限数编码为空。
-      return isFinite(value) ? String(value) : 'null'
-
-    case 'boolean':
-    case 'null':
-      // 如果值是布尔值或空值,则将其转换为字符串。
-      return String(value)
+      return isFinite(value) ? String(value) : 'undefined'
 
     // 如果类型是对象,我们可能正在处理一个对象或一个数组
     case 'object':
 
       // 由于ECMAScript中的规范错误,typeof null是'object',所以要注意这种情况。
-      if (!value) {
-        return 'null'
-      }
+      if (!value) return 'null'
 
       // 制作一个数组来保存字符串化这个对象值的部分结果。
       gap += indent
@@ -230,7 +221,7 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
       if (Object.prototype.toString.apply(value) === '[object Array]') {
         length = value.length
         for (i = 0; i < length; i += 1) {
-          partial[i] = str(i, value, dropQuotesOnKeys, quoteType) || 'null'
+          partial[i] = str(i, value, dropQuotesOnKeys, quoteType)
         }
 
         // 将所有元素连接在一起,用逗号分隔,并将它们包裹在大括号中。
@@ -250,9 +241,7 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
           if (typeof rep[i] === 'string') {
             k = rep[i]
             v = str(k, value, dropQuotesOnKeys, quoteType)
-            if (v) {
-              partial.push((dropQuotesOnKeys ? condQuoteKey(k, quoteType) : quote(k, quoteType)) + (gap ? ': ' : ':') + v)
-            }
+            partial.push((dropQuotesOnKeys ? condQuoteKey(k, quoteType) : quote(k, quoteType)) + (gap ? ': ' : ':') + v)
           }
         }
       } else {
@@ -260,9 +249,7 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
         for (k in value) {
           if (Object.prototype.hasOwnProperty.call(value, k)) {
             v = str(k, value, dropQuotesOnKeys, quoteType)
-            if (v) {
-              partial.push((dropQuotesOnKeys ? condQuoteKey(k, quoteType) : quote(k, quoteType)) + (gap ? ': ' : ':') + v)
-            }
+            partial.push((dropQuotesOnKeys ? condQuoteKey(k, quoteType) : quote(k, quoteType)) + (gap ? ': ' : ':') + v)
           }
         }
       }
@@ -275,6 +262,9 @@ function str (key, holder, dropQuotesOnKeys, quoteType) {
           : '{' + partial.join(',') + '}'
       gap = mind
       return v
+
+    default:
+      return String(value)
   }
 }
 
@@ -286,13 +276,13 @@ function quote (string, quoteType) {
   // 指定目标字符串的下一次搜索开始
   escapable.lastIndex = 0
 
-  var surroundingQuote = '"'
+  let surroundingQuote = '"'
   if (quoteType === 'single') {
     surroundingQuote = "'"
   }
   // 有问题的字符进行转义,匹配上方制定的字符替换表,如果字符替换表没有则生成对应unicode编码,匹配编码值最大数值4
   return escapable.test(string) ? surroundingQuote + string.replace(escapable, function (a) {
-    var c = meta[a]
+    const c = meta[a]
     return typeof c === 'string' ? c : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4)
   }) + surroundingQuote : surroundingQuote + string + surroundingQuote
 }
