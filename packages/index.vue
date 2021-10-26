@@ -68,7 +68,7 @@
                            size="medium"
                            icon="iconfont icon-undo"
                            :disabled="historySteps.index == 0"
-                           @click="widgetForm = handleUndo()"
+                           @click="handleWidgetFormUndo"
                 />
               </el-tooltip>
               <el-tooltip effect="dark" content="重做" placement="bottom">
@@ -76,7 +76,7 @@
                            size="medium"
                            icon="iconfont icon-redo"
                            :disabled="historySteps.index == (historySteps.steps.length - 1)"
-                           @click="widgetForm = handleRedo()"
+                           @click="handleWidgetFormRedo"
                 />
               </el-tooltip>
             </div>
@@ -116,7 +116,10 @@
                        :data="widgetForm"
                        :select.sync="widgetFormSelect"
                        :adapter="adapter"
-                       @change="handleHistoryChange(widgetForm)"
+                       @change="handleHistoryChange({
+                         widgetForm: widgetForm,
+                         widgetFormSelect: widgetFormSelect
+                       })"
           />
         </el-main>
       </el-container>
@@ -786,21 +789,25 @@ export default {
           options = { column: [] }
         }
       }
-      this.widgetForm = this.initHistory({
+      const initData = this.initHistory({
         index: 0,
         maxStep: 20,
-        steps: [this.$loquat.deepClone({ ...this.widgetForm, ...options })],
+        steps: [this.$loquat.deepClone({
+          widgetForm: { ...this.widgetForm, ...options },
+          widgetFormSelect: this.widgetFormSelect
+        })],
         storage: this.storage
       })
+      this.widgetForm = initData.widgetForm
       if (this.undoRedo) {
         window.addEventListener('keydown', (evt) => {
           // 监听 cmd + z / ctrl + z 撤销
           if ((evt.metaKey && !evt.shiftKey && evt.keyCode == 90) || (evt.ctrlKey && !evt.shiftKey && evt.keyCode == 90)) {
-            this.widgetForm = this.handleUndo()
+            this.handleWidgetFormUndo()
           }
           // 监听 cmd + shift + z / ctrl + shift + z / ctrl + y 重做
           if ((evt.metaKey && evt.shiftKey && evt.keyCode == 90) || (evt.ctrlKey && evt.shiftKey && evt.keyCode == 90) || (evt.ctrlKey && evt.keyCode == 89)) {
-            this.widgetForm = this.handleRedo()
+            this.handleWidgetFormRedo()
           }
         }, false)
       }
@@ -846,7 +853,10 @@ export default {
         this.$set(this.widgetForm, 'column', [])
         this.widgetModels = {}
         this.widgetFormSelect = {}
-        this.handleHistoryChange(this.widgetForm)
+        this.handleHistoryChange({
+          widgetForm: this.widgetForm,
+          widgetFormSelect: {}
+        })
       } else this.$message.error('没有需要清空的内容')
     },
     // 初始化导入JSON
@@ -865,7 +875,10 @@ export default {
         const options = eval('(' + this.importJson + ')')
         this.widgetForm = this.$loquat.deepClone({ ...data, ...options })
         this.importJsonVisible = false
-        this.handleHistoryChange(this.widgetForm)
+        this.handleHistoryChange({
+          widgetForm: this.widgetForm,
+          widgetFormSelect: {}
+        })
       } catch (e) {
         this.$message.error(e.message)
       }
@@ -1190,6 +1203,18 @@ export default {
         dropQuotesOnKeys: false
       })
       this.cascadeOptionVisible = true
+    },
+    // 处理部件表单撤回
+    handleWidgetFormUndo () {
+      const undo = this.handleUndo()
+      this.widgetForm = undo.widgetForm
+      this.widgetFormSelect = undo.widgetFormSelect
+    },
+    // 处理部件表单重做
+    handleWidgetFormRedo () {
+      const redo = this.handleRedo()
+      this.widgetForm = redo.widgetForm
+      this.widgetFormSelect = redo.widgetFormSelect
     }
   }
 }

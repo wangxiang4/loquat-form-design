@@ -89,7 +89,9 @@ export default {
       const newIndex = evt.newIndex
       this.$set(this.data.column, newIndex, getWidgetAddData(this.data.column[newIndex]))
       this.handleSelectWidget(newIndex)
-      this.$emit('change')
+      this.$nextTick(() => {
+        this.$emit('change')
+      })
     },
     handleWidgetDelete (index) {
       if (this.data.column.length - 1 === index) {

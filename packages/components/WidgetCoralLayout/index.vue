@@ -152,7 +152,9 @@ export default {
     // 处理列添加操作
     handleColumnAdd () {
       this.column.cols.push(getWidgetAddData(this.colPreset))
-      this.$emit('change')
+      this.$nextTick(() => {
+        this.$emit('change')
+      })
     },
     // 处理列克隆操作
     handleColumnClone (index) {
@@ -178,7 +180,9 @@ export default {
       const newIndex = evt.newIndex
       this.$set(list, newIndex, getWidgetAddData(list[newIndex]))
       this.handleWidgetDataSelect(list[newIndex])
-      this.$emit('change')
+      this.$nextTick(() => {
+        this.$emit('change')
+      })
     },
     // 处理插件克隆
     handleWidgetClone (list, index) {
