@@ -19,9 +19,6 @@ export default {
       type: Object
     }
   },
-  data () {
-    return {}
-  },
   methods: {
     getComponentConfig
   }

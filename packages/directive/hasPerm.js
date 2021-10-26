@@ -22,12 +22,6 @@
 import { getObjType, pathFormat } from '@utils'
 
 export default {
-  inserted (el, binding) {
-    const { value } = binding
-    const [data, path, multi] = deconstruction(value)
-    if (multi && !hasOwnMultiProperty(data, path)) el.hidden = true
-    else if (!multi && !hasOwnProperty(data, path)) el.hidden = true
-  },
   update (el, binding) {
     const { value } = binding
     const [data, path, multi] = deconstruction(value)
