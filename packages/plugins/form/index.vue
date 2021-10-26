@@ -66,6 +66,9 @@ export default {
     },
     columns () {
       return this.widgetForm.column || []
+    },
+    callbackHooks () {
+      return this.widgetForm.callbackHooks || {}
     }
   },
   watch: {
@@ -90,6 +93,9 @@ export default {
   created () {
     this.initVal()
     this.$nextTick(() => this.clearValidate())
+  },
+  mounted () {
+    this.callbackHooks.mounted && this.callbackHooks.mounted()
   },
   beforeDestroy () {
     insertCss([], this.formId)

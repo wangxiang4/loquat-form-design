@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getComponent, getPlaceholder, clearTransformDirtyData } from '@utils/dataFormat'
+import { getComponent, getPlaceholder, clearTransformColumnDirtyData } from '@utils/dataFormat'
 import { getObjType } from '@utils'
 export default {
   name: 'Widget',
@@ -67,7 +67,7 @@ export default {
   computed: {
     getColumn () {
       const column = this.$loquat.deepClone(this.column)
-      if (!this.preview) clearTransformDirtyData(column)
+      if (!this.preview) clearTransformColumnDirtyData(column)
       return column
     },
     params () {
