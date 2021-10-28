@@ -189,6 +189,7 @@
 </template>
 
 <script>
+import permission from '@/config/perm'
 import { EVENTS_DIC } from '@/global/variable'
 export default {
   name: 'Input',
@@ -202,6 +203,7 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
       operationComputedSpan: 24 / 2,
@@ -221,6 +223,15 @@ export default {
     }
   },
   computed: {
+    permConfig () {
+      return permission.find(item => this.component.name === item.component) || {}
+    },
+    somePermission () {
+      return this.permConfig.somePermission || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },

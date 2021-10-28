@@ -1,42 +1,56 @@
 /**
  * @program: loquat-form-design
  *
- * @description: 验证权限
+ * @description: 参数规范许可验证
  *
- * 支持两种模式进行验证,对象格式,数组格式
- * 对象格式: {data:{},path:''}
- * 数组格式: [{},'']
- * path支持两种写法:
- * 字符串写法: 数据:{a:[{b:1}]} 写法:a[0].b
- * 数组写法:  数据:{a:[{b:1}]} 写法:['a',0,'b']
+ * 参数说明:
+ * data:
+ *  * description: 要检查的数据
+ *  * type: Object
+ * path:
+ *  * description: 设置检查数据的路径
+ *  数据:{a:[{b:1}]} 写法:a[0].b
+ *  数据:{a:[{b:1}]} 写法:['a',0,'b']
+ *  * type: Object (Array|string)
+ * policy:
+ *  * description: 策略模式
+ *  0:查找数据中其中一个属性是否存在
+ *  1:查找数据中多个属性其中一个属性是否存在,相当于||判断
+ *  2:查找数据中多个属性全部属性是否存在,相当于&&判断
+ *  * type: Number
  *
  * 支持多参数验证:
- * 写法: 把第三个参数multi:设置为(1||true||'yes'),即可启动
- * 格式: 注意启动后,第二个path参数必须为数组格式,否则无效,始终校验为 false
- * path写法: 校验b跟b1 数据:{a:[{b:1,a1:{b1:2}}]} 写法:['a[0].b',['a',0,'a1','b1']]
+ * format: 注意启动后,第二个path参数必须为数组格式,否则报错
+ * description:
+ * 由于javascript不能像typescript声明变量数据类型,
+ * 虽然可以使用类型判断,但是没必要,显得代码太雍肿了,让内部自行处理就行
+ * @example
+ * v-loquat-has-perm="[{ fruit: 'loquat', hobby: 'daze' }, 'fruit']"
+ * v-loquat-has-perm="[{ fruit: 'loquat', hobby: 'daze' }, ['fruit', 'hobby'], 1]"
+ * v-loquat-has-perm="[{ fruit: 'loquat', hobby: 'daze' }, ['fruit', 'hobby'], 2]"
  *
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-12
  **/
-import { getObjType, pathFormat } from '@utils'
+import { pathFormat } from '@utils'
 
 export default {
   update (el, binding) {
     const { value } = binding
-    const [data, path, multi] = deconstruction(value)
-    if (multi && !hasOwnMultiProperty(data, path)) el.hidden = true
-    else if (!multi && !hasOwnProperty(data, path)) el.hidden = true
-    else el.hidden = false
+    const [data, path, policy] = value
+    el.hidden = false
+    switch (policy) {
+      case 1:
+        if (!path.some(item => hasOwnProperty(data, item))) el.hidden = true
+        break
+      case 2:
+        if (!path.every(item => !hasOwnProperty(data, item))) el.hidden = true
+        break
+      default:
+        if (!hasOwnProperty(data, path)) el.hidden = true
+    }
   }
-}
-
-/** 查找多个属性如果发现全部不存在返回失败 **/
-export function hasOwnMultiProperty (data, path) {
-  for (const item of path) {
-    if (hasOwnProperty(data, item)) return true
-  }
-  return false
 }
 
 /** 采用正则对路径进行解析查找对象key **/
@@ -50,14 +64,3 @@ export function hasOwnProperty (object, path) {
   const lastKey = path[length]
   return object == null ? false : (lastKey in object)
 }
-
-/** 解构格式转换 **/
-function deconstruction (data) {
-  switch (getObjType(data)) {
-    case 'array':
-      return data
-    case 'object':
-      return Object.values(data)
-  }
-}
-
