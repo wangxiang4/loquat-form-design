@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-form-item label="字段标识">
-      <el-input v-model="data.prop" clearable/>
+      <el-input v-model="column.prop" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'label']" label="标题">
-      <el-input v-model="data.label" clearable/>
+    <el-form-item v-loquat-has-perm="[column, 'label']" label="标题">
+      <el-input v-model="column.label" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'labelWidth']" label="标签宽度">
-      <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
+    <el-form-item v-loquat-has-perm="[column, 'labelWidth']" label="标签宽度">
+      <el-input v-model.number="column.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
     <el-form-item v-loquat-has-perm="[plugin, 'effect']" label="主题">
       <el-switch v-model="plugin.effect"
@@ -37,8 +37,8 @@
                 clearable
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
-      <el-select v-model="data.customClass"
+    <el-form-item v-loquat-has-perm="[column, 'customClass']" label="自定义Class">
+      <el-select v-model="column.customClass"
                  style="width: 100%;"
                  filterable
                  allow-create
@@ -53,13 +53,13 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[data, 'hide']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.hide">隐藏</el-checkbox>
+        <el-col v-loquat-has-perm="[column, 'hide']" :span="operationComputedSpan">
+          <el-checkbox v-model="column.hide">隐藏</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'hideLabel']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
+        <el-col v-loquat-has-perm="[column, 'hideLabel']" :span="operationComputedSpan">
+          <el-checkbox v-model="column.hideLabel">隐藏标签</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[plugin, 'center']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.center">文字居中</el-checkbox>
@@ -82,6 +82,7 @@ export default {
   },
   data () {
     return {
+      first: false,
       operationComputedSpan: 24 / 2,
       operationPerm: [
         'hide',
@@ -91,9 +92,15 @@ export default {
     }
   },
   computed: {
+    column () {
+      return this.first ? this.data : {}
+    },
     plugin () {
-      return this.data.plugin || {}
+      return this.column.plugin || {}
     }
+  },
+  mounted () {
+    this.first = true
   }
 }
 </script>

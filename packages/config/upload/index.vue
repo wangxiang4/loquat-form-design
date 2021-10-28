@@ -1,13 +1,13 @@
 `<template>
   <div>
     <el-form-item label="字段标识">
-      <el-input v-model="data.prop" clearable/>
+      <el-input v-model="column.prop" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'label']" label="标题">
-      <el-input v-model="data.label" clearable/>
+    <el-form-item v-loquat-has-perm="[column, 'label']" label="标题">
+      <el-input v-model="column.label" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'labelWidth']" label="标签宽度">
-      <el-input v-model.number="data.labelWidth" type="number" placeholder="请输入标签宽度" />
+    <el-form-item v-loquat-has-perm="[column, 'labelWidth']" label="标签宽度">
+      <el-input v-model.number="column.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
     <el-form-item v-loquat-has-perm="[customizeStyle, 'width']" label="组件宽度" >
       <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
@@ -18,8 +18,8 @@
     <el-form-item v-loquat-has-perm="[plugin, 'oss']" label="OSS" >
       <el-radio-group v-model="plugin.oss"
                       @change="option => {
-                        if(!option) $set(data, 'remote', false)
-                        else $set(data, 'remote', true)
+                        if(!option) $set(column, 'remote', false)
+                        else $set(column, 'remote', true)
                       }"
       >
         <el-radio-button label="">
@@ -36,13 +36,13 @@
     <el-form-item v-loquat-has-perm="[plugin, 'domain']" v-if="plugin.oss" label="Domain" >
       <el-input v-model="plugin.domain" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, remotePerm, 1]" v-if="plugin.oss" label="获取Token" >
-      <el-radio-group v-model="data.remoteType">
+    <el-form-item v-loquat-has-perm="[column, remotePerm, 1]" v-if="plugin.oss" label="获取Token" >
+      <el-radio-group v-model="column.remoteType">
         <el-radio label="datasource">数据源</el-radio>
         <el-radio label="func">方法函数</el-radio>
       </el-radio-group>
-      <template v-if="data.remoteType === 'datasource'">
-        <el-select v-model="data.remoteDataSource"
+      <template v-if="column.remoteType === 'datasource'">
+        <el-select v-model="column.remoteDataSource"
                    style="width: 100%; margin-bottom: 5px;"
                    placeholder="请选择"
         >
@@ -53,8 +53,8 @@
           />
         </el-select>
       </template>
-      <template v-if="data.remoteType === 'func'">
-        <el-input v-model="data.remoteFunc"
+      <template v-if="column.remoteType === 'func'">
+        <el-input v-model="column.remoteFunc"
                   style="margin-bottom: 5px;"
                   clearable
         />
@@ -200,7 +200,7 @@
           </div>
           <div v-loquat-has-perm="[canvasOption, 'color']">
             <span class="horizontal-tip-text">字体颜色:</span>
-            <loquat-input-color v-model="canvasOption.color" size="mini" clearable/>
+            <plugin-input-color v-model="canvasOption.color" size="mini" clearable/>
           </div>
           <div v-loquat-has-perm="[canvasOption, 'fontSize']">
             <span class="horizontal-tip-text">字体大小:</span>
@@ -251,8 +251,8 @@
         </el-collapse-item>
       </el-collapse>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'customClass']" label="自定义Class">
-      <el-select v-model="data.customClass"
+    <el-form-item v-loquat-has-perm="[column, 'customClass']" label="自定义Class">
+      <el-select v-model="column.customClass"
                  style="width: 100%;"
                  filterable
                  allow-create
@@ -267,16 +267,16 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'hide']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.hide">隐藏</el-checkbox>
+        <el-col v-loquat-has-perm="[column, 'hide']" :span="operationComputedSpan">
+          <el-checkbox v-model="column.hide">隐藏</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[data, 'hideLabel']" :span="operationComputedSpan">
-          <el-checkbox v-model="data.hideLabel">隐藏标签</el-checkbox>
+        <el-col v-loquat-has-perm="[column, 'hideLabel']" :span="operationComputedSpan">
+          <el-checkbox v-model="column.hideLabel">隐藏标签</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[plugin, 'showCanvas']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.showCanvas">开启水印</el-checkbox>
@@ -287,7 +287,7 @@
         <el-col v-loquat-has-perm="[plugin, 'multiple']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.multiple">是否多选</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[plugin, 'withCredentials']" v-if="!data.oss" :span="24">
+        <el-col v-loquat-has-perm="[plugin, 'withCredentials']" v-if="!column.oss" :span="24">
           <el-checkbox v-model="plugin.withCredentials">跨域请求是否提供凭据信息</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[plugin, 'showFileList']" :span="24">
@@ -306,7 +306,7 @@
         />
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[data, 'events']" label="动作设置">
+    <el-form-item v-loquat-has-perm="[column, 'events']" label="动作设置">
       <div class="event-panel-config">
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
@@ -315,7 +315,7 @@
                             :name="key"
           >
             <div class="event-panel-item">
-              <el-select v-model="data.events[key]"
+              <el-select v-model="column.events[key]"
                          size="mini"
                          style="width: 100%; margin-bottom: 5px;"
               >
@@ -326,7 +326,7 @@
                 />
               </el-select>
               <i title="编辑代码" class="iconfont icon-code-generation" @click.stop="home.handleActionSettingsSetData({ eventName: key, funcName: val })"/>
-              <i title="删除" class="iconfont icon-trash" @click.stop="data.events[key] = ''"/>
+              <i title="删除" class="iconfont icon-trash" @click.stop="column.events[key] = ''"/>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -341,7 +341,7 @@
           >新增动作<i class="el-icon-plus"/>
           </el-button>
           <el-dropdown-menu slot="dropdown" style="width: 280px;">
-            <el-dropdown-item v-for="(val,key,index) in data.events"
+            <el-dropdown-item v-for="(val,key,index) in column.events"
                               :key="index"
                               :disabled="!!val"
                               @click.native="() => {
@@ -357,9 +357,11 @@
 </template>
 
 <script>
+import pluginInputColor from '@/plugins/input-color'
 import { EVENTS_DIC } from '@/global/variable'
 export default {
   name: 'Upload',
+  components: { pluginInputColor },
   props: {
     data: {
       type: Object
@@ -370,6 +372,7 @@ export default {
   },
   data () {
     return {
+      first: false,
       eventsDic: EVENTS_DIC,
       operationComputedSpan: 24 / 2,
       operationPerm: [
@@ -406,11 +409,14 @@ export default {
     }
   },
   computed: {
+    column () {
+      return this.first ? this.data : {}
+    },
     configCenterPerm () {
       return [...this.uploadConfigPerm, ...this.canvasOptionPerm]
     },
     plugin () {
-      return this.data.plugin || {}
+      return this.column.plugin || {}
     },
     customizeStyle () {
       return this.plugin.customizeStyle || {}
@@ -422,13 +428,16 @@ export default {
       return this.plugin.canvasOption || {}
     },
     validateConfig () {
-      return this.data.validateConfig || {}
+      return this.column.validateConfig || {}
     },
     events () {
-      const clone = this.$loquat.deepClone(this.data.events)
+      const clone = this.$loquat.deepClone(this.column.events)
       for (const val in clone) this.$loquat.validateNull(clone[val]) && delete clone[val]
       return clone
     }
+  },
+  mounted () {
+    this.first = true
   }
 }
 </script>

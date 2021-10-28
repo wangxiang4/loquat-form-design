@@ -144,7 +144,7 @@
                  @close="widgetModels = {}"
       >
         <div :class="['form-preview', adapter]">
-          <loquat-form v-if="previewVisible"
+          <plugin-form v-if="previewVisible"
                        v-model="widgetModels"
                        ref="previewForm"
                        :option="widgetFormPreview"
@@ -631,12 +631,13 @@ import clipboard from '@utils/clipboard'
 import codeBeautifier from 'js-beautify'
 import request from '@utils/request'
 import packages from '@utils/packages'
+import pluginForm from '@/plugins/form'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig } from '@utils'
 import { KEY_COMPONENT_NAME, FORM_EXECUTE_CALLBACK_HOOKS, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
 export default {
   name: 'FormDesign',
-  components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor },
+  components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor, pluginForm },
   mixins: [history],
   props: {
     options: {
