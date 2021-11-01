@@ -25,6 +25,7 @@
  * description:
  * 由于javascript不能像typescript声明变量数据类型,
  * 虽然可以使用类型判断,但是没必要,显得代码太雍肿了,让内部自行处理就行
+ *
  * @example
  * v-loquat-has-perm="[{ fruit: 'loquat', hobby: 'daze' }, 'fruit']"
  * v-loquat-has-perm="[{ fruit: 'loquat', hobby: 'daze' }, ['fruit', 'hobby'], 1]"
