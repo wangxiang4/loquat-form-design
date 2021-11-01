@@ -12,7 +12,7 @@
     <el-form-item v-loquat-has-perm="[customizeStyle, 'width']" label="组件宽度" >
       <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'value']" label="默认值">
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
       <plugin-input-color v-model="plugin.value" :show-alpha="plugin.showAlpha"/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[column, 'customClass']" label="自定义Class">
@@ -31,7 +31,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
@@ -109,8 +109,10 @@
 </template>
 
 <script>
+import permission from '@/config/perm'
 import pluginInputColor from '@/plugins/input-color'
 import { EVENTS_DIC } from '@/global/variable'
+import { originComponentName } from '@utils'
 export default {
   name: 'InputColor',
   components: { pluginInputColor },
@@ -124,18 +126,23 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'hide',
-        'hideLabel',
-        'plugin.disabled',
-        'plugin.showAlpha'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    somePermission () {
+      return this.permConfig.somePermission || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },

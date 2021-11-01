@@ -32,6 +32,18 @@ const permission = {
       'validateConfig.type',
       'plugin.type'
     ]
+  },
+  inputColor: {
+    operate: [
+      'hide',
+      'hideLabel',
+      'plugin.disabled',
+      'plugin.showAlpha'
+    ],
+    defaultValue: [
+      'value',
+      'showAlpha'
+    ]
   }
 }
 
@@ -50,6 +62,15 @@ export default [
         permission.input.validate,
         [permission.input.validateType]
       ]
+    }
+  },
+  {
+    component: 'InputColor',
+    somePermission: {
+      operate: permission.inputColor.operate
+    },
+    everyPermission: {
+      defaultValue: permission.inputColor.defaultValue
     }
   }
 ]

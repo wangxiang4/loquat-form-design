@@ -145,8 +145,8 @@
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
                             :key="index"
-                            :name="key"
                             :title="`${key} ${$loquat.get(eventsDic, key, '')}`"
+                            :name="key"
           >
             <div class="event-panel-item">
               <el-select v-model="column.events[key]"
