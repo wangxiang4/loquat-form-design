@@ -18,7 +18,7 @@
                 placeholder="占位内容"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'value']" label="默认值">
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
       <el-input v-model="plugin.value"
                 clearable
                 :type="plugin.type"
@@ -61,7 +61,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[plugin, 'readonly']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.readonly">只读</el-checkbox>
@@ -83,7 +83,7 @@
         </el-col>
       </el-row>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[validateConfig, validatePerm, 1]" label="校验">
+    <el-form-item v-loquat-has-perm="[column, someAndEveryPermission.validate, 3]" label="校验">
       <div v-loquat-has-perm="[validateConfig, 'required']" class="validate-block">
         <el-checkbox v-model="validateConfig.required">必填</el-checkbox>
         <el-input v-show="validateConfig.required"
@@ -93,12 +93,14 @@
                   placeholder="自定义错误提示"
         />
       </div>
-      <div v-loquat-has-perm="[validateConfig, 'type']" class="validate-block">
+      <div v-loquat-has-perm="[column, everyPermission.validateType, 2]" class="validate-block">
         <el-checkbox v-model="validateConfig.type"
                      style="margin-right: 10px;"
                      @change="(mark) => {
                        plugin.type = ''
-                       mark ? ['number', 'integer', 'float'].includes(validateConfig.typeFormat) ? plugin.type = 'number' : '' : ''
+                       mark && ['number', 'integer', 'float'].includes(validateConfig.typeFormat)
+                         ? plugin.type = 'number'
+                         : ''
                      }"
         />
         <el-select v-model.lazy="validateConfig.typeFormat"
@@ -138,13 +140,13 @@
         />
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column,'events']" label="动作设置">
+    <el-form-item v-loquat-has-perm="[column, 'events']" label="动作设置">
       <div class="event-panel-config">
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
                             :key="index"
-                            :title="`${key} ${$loquat.get(eventsDic, key, '')}`"
                             :name="key"
+                            :title="`${key} ${$loquat.get(eventsDic, key, '')}`"
           >
             <div class="event-panel-item">
               <el-select v-model="column.events[key]"
@@ -190,6 +192,7 @@
 
 <script>
 import permission from '@/config/perm'
+import { originComponentName } from '@utils'
 import { EVENTS_DIC } from '@/global/variable'
 export default {
   name: 'Input',
@@ -206,31 +209,22 @@ export default {
       permission,
       first: false,
       eventsDic: EVENTS_DIC,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'plugin.readonly',
-        'plugin.showWordLimit',
-        'plugin.disabled',
-        'plugin.showPassword',
-        'hide',
-        'hideLabel'
-      ],
-      validatePerm: [
-        'required',
-        'type',
-        'pattern'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
     permConfig () {
-      return permission.find(item => this.component.name === item.component) || {}
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
     },
     somePermission () {
       return this.permConfig.somePermission || {}
     },
     everyPermission () {
       return this.permConfig.everyPermission || {}
+    },
+    someAndEveryPermission () {
+      return this.permConfig.someAndEveryPermission || {}
     },
     column () {
       return this.first ? this.data : {}

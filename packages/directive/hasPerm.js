@@ -17,6 +17,7 @@
  *  0:查找数据中其中一个属性是否存在
  *  1:查找数据中多个属性其中一个属性是否存在,相当于||判断
  *  2:查找数据中多个属性全部属性是否存在,相当于&&判断
+ *  3:查找数据中多个属性全部属性是否存在与多个属性其中一个属性是否存在,相当于&&与||判断
  *  * type: Number
  *
  * 支持多参数验证:
@@ -34,19 +35,32 @@
  * @create: 2021-07-12
  **/
 import { pathFormat } from '@utils'
-
 export default {
   update (el, binding) {
     const { value } = binding
     const [data, path, policy] = value
     el.hidden = false
+    // 采用java策略模式,运行时可动态执行对应策略
     switch (policy) {
       case 1:
         if (!path.some(item => hasOwnProperty(data, item))) el.hidden = true
         break
       case 2:
-        if (!path.every(item => !hasOwnProperty(data, item))) el.hidden = true
+        if (!path.every(item => hasOwnProperty(data, item))) el.hidden = true
         break
+      case 3: {
+        const [somePath, everyPath] = path
+        const hideEveryPath = []
+        for (const path of everyPath) {
+          if (!path.every(item => hasOwnProperty(data, item))) {
+            path.forEach(e => hideEveryPath.includes(e) || hideEveryPath.push(e))
+          }
+        }
+        if (!somePath.filter(item =>
+          !hideEveryPath.includes(item)
+        ).some(item => hasOwnProperty(data, item))) el.hidden = true
+        break
+      }
       default:
         if (!hasOwnProperty(data, path)) el.hidden = true
     }

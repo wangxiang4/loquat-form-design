@@ -9,7 +9,8 @@
  **/
 import {
   WIDGET_FORM_DEFAULT_CONFIG, BASIC_LATIN_MAPPING,
-  JSON_OPTION_DEFAULT_CONFIG } from '@/global/variable'
+  JSON_OPTION_DEFAULT_CONFIG, KEY_COMPONENT_CONFIG_NAME, KEY_COMPONENT_NAME
+} from '@/global/variable'
 import {
   RE_PROP_NAME, RE_LATIN, RE_COMBO_RANGE, RE_APOS,
   RE_HAS_UNICODE_WORD, RE_UNICODE_WORD, RE_ASCII_WORD
@@ -328,3 +329,9 @@ export function words (string, pattern) {
 }
 
 export function noop () {}
+
+/** 源组件名称 **/
+export function originComponentName (name, type = 'config') {
+  const str = camelCase(name.replace(type === 'plugin' ? KEY_COMPONENT_NAME : KEY_COMPONENT_CONFIG_NAME, ''))
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

@@ -7,19 +7,49 @@
  *
  * @create: 2021-10-29
  **/
+
+/** 许可配置映射标识 **/
+const permission = {
+  input: {
+    operate: [
+      'plugin.readonly',
+      'plugin.showWordLimit',
+      'plugin.disabled',
+      'plugin.showPassword',
+      'hide',
+      'hideLabel'
+    ],
+    defaultValue: [
+      'value',
+      'type'
+    ],
+    validate: [
+      'validateConfig.required',
+      'validateConfig.type',
+      'validateConfig.pattern'
+    ],
+    validateType: [
+      'validateConfig.type',
+      'plugin.type'
+    ]
+  }
+}
+
 export default [
   {
     component: 'Input',
     somePermission: {
-      operation: [
-        'plugin.readonly',
-        'plugin.showWordLimit',
-        'plugin.disabled',
-        'plugin.showPassword',
-        'hide',
-        'hideLabel'
-      ]
+      operate: permission.input.operate
     },
-    everyPermission: {}
+    everyPermission: {
+      defaultValue: permission.input.defaultValue,
+      validateType: permission.input.validateType
+    },
+    someAndEveryPermission: {
+      validate: [
+        permission.input.validate,
+        [permission.input.validateType]
+      ]
+    }
   }
 ]
