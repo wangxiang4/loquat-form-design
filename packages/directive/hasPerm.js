@@ -41,7 +41,7 @@ export default {
     const { value } = binding
     const [data, path, policy] = value
     el.hidden = false
-    // 采用java策略模式,运行时可动态执行对应策略
+    // 采用java策略模式,运行时动态执行对应策略
     switch (policy) {
       case 1:
         if (!path.some(item => hasOwnProperty(data, item))) el.hidden = true
