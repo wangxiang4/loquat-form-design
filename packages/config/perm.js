@@ -44,6 +44,19 @@ const permission = {
       'value',
       'showAlpha'
     ]
+  },
+  inputNumber: {
+    operate: [
+      'hide',
+      'hideLabel',
+      'plugin.disabled'
+    ],
+    defaultValue: [
+      'value',
+      'step',
+      'minRows',
+      'maxRows'
+    ]
   }
 }
 
@@ -71,6 +84,15 @@ export default [
     },
     everyPermission: {
       defaultValue: permission.inputColor.defaultValue
+    }
+  },
+  {
+    component: 'InputNumber',
+    somePermission: {
+      operate: permission.inputNumber.operate
+    },
+    everyPermission: {
+      defaultValue: permission.inputNumber.defaultValue
     }
   }
 ]

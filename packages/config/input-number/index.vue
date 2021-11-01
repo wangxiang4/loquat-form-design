@@ -30,7 +30,7 @@
         <el-radio-button label="right">右侧</el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'value']" label="默认值">
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
       <el-input-number v-model.number="plugin.value"
                        :step="plugin.step"
                        :min="plugin.minRows"
@@ -53,7 +53,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
@@ -77,7 +77,7 @@
         />
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column,'events']" label="动作设置">
+    <el-form-item v-loquat-has-perm="[column, 'events']" label="动作设置">
       <div class="event-panel-config">
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
@@ -128,7 +128,9 @@
 </template>
 
 <script>
+import permission from '@/config/perm'
 import { EVENTS_DIC } from '@/global/variable'
+import { originComponentName } from '@utils'
 export default {
   name: 'InputNumber',
   props: {
@@ -141,6 +143,7 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
       operationComputedSpan: 24 / 2,
@@ -152,6 +155,16 @@ export default {
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    somePermission () {
+      return this.permConfig.somePermission || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },
