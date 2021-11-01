@@ -4,12 +4,12 @@
 
 # 枇杷表单设计器 ![img.png](public/loquat.png)
 
-![img.png](public/demo/sample2.jpg)
+![img.png](public/image/sample2.jpg)
 
 ## 简介
 <hr/>
 
-![img.png](public/demo/sample1.gif)
+![img.png](public/image/sample1.gif)
 
 <hr/>
 <h4>枇杷的名字是怎么来的？</h4>
