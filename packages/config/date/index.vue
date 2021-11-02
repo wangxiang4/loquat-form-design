@@ -31,7 +31,7 @@
         <el-option value="daterange"/>
       </el-select>
     </el-form-item>
-    <el-form-item v-if="!plugin.type && plugin.type.includes('range')"
+    <el-form-item v-if="!(plugin.type && plugin.type.includes('range'))"
                   v-loquat-has-perm="[plugin, 'placeholder']"
                   label="占位内容"
     >
@@ -72,7 +72,7 @@
       <el-input v-model="plugin.format" clearable/>
     </el-form-item>
     <el-form-item v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
-      <el-date-picker v-if="!plugin.type && plugin.type.includes('range')"
+      <el-date-picker v-if="!(plugin.type && plugin.type.includes('range'))"
                       v-model="plugin.value"
                       key="1"
                       style="width: 100%;"
