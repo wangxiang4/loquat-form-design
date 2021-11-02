@@ -201,27 +201,7 @@ export default {
       permission,
       first: false,
       eventsDic: EVENTS_DIC,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'hide',
-        'hideLabel',
-        'plugin.multiple',
-        'plugin.filterable',
-        'plugin.readonly',
-        'plugin.disabled',
-        'plugin.clearable'
-      ],
-      remotePerm: [
-        'remote',
-        'dicData',
-        'remoteType',
-        'remoteDataSource',
-        'remoteOption',
-        'remoteFunc',
-        'plugin.props.value',
-        'plugin.props.label',
-        'plugin.props.children'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
