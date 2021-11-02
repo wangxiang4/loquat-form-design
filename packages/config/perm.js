@@ -307,7 +307,8 @@ export default [
     component: 'Cascader',
     everyPermission: {
       defaultValue: permission.cascader.defaultValue,
-      options: permission.cascader.options
+      options: permission.cascader.options,
+      operateMultiple: permission.cascader.operateMultiple
     },
     someAndEveryPermission: {
       operate: [
@@ -403,7 +404,7 @@ export default [
       operate: permission.rate.operate
     },
     everyPermission: {
-      options: permission.rate.options
+      defaultValue: permission.rate.defaultValue
     }
   },
   {

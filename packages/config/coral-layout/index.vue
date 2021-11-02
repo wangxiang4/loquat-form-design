@@ -54,7 +54,6 @@
 <script>
 import { originComponentName } from '@utils'
 import permission from '@/config/perm'
-
 export default {
   name: 'CoralLayout',
   props: {

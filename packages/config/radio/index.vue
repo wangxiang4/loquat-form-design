@@ -202,7 +202,6 @@
 </template>
 
 <script>
-
 import Draggable from 'vuedraggable'
 import { EVENTS_DIC } from '@/global/variable'
 import { originComponentName } from '@utils'
