@@ -12,7 +12,7 @@
     <el-form-item v-loquat-has-perm="[customizeStyle, 'width']" label="组件宽度" >
       <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, everyPermission.displayType]" label="显示类型" >
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.displayType, 2]" label="显示类型" >
       <el-select v-model="plugin.type"
                  clearable
                  style="width: 100%;"
