@@ -12,7 +12,7 @@
     <el-form-item v-loquat-has-perm="[customizeStyle, 'width']" label="组件宽度" >
       <el-input v-model="customizeStyle.width" placeholder="请输入组件宽度" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'type']" label="显示类型" >
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.displayType]" label="显示类型" >
       <el-select v-model="plugin.type"
                  clearable
                  style="width: 100%;"
@@ -31,19 +31,28 @@
         <el-option value="daterange"/>
       </el-select>
     </el-form-item>
-    <el-form-item v-if="!plugin.type.includes('range')" v-loquat-has-perm="[plugin, 'placeholder']" label="占位内容">
+    <el-form-item v-if="!plugin.type && plugin.type.includes('range')"
+                  v-loquat-has-perm="[plugin, 'placeholder']"
+                  label="占位内容"
+    >
       <el-input v-model="plugin.placeholder"
                 clearable
                 placeholder="占位内容"
       />
     </el-form-item>
-    <el-form-item v-if="plugin.type.includes('range')" v-loquat-has-perm="[plugin, 'startPlaceholder']" label="开始时间占位内容">
+    <el-form-item v-if="plugin.type && plugin.type.includes('range')"
+                  v-loquat-has-perm="[plugin, 'startPlaceholder']"
+                  label="开始时间占位内容"
+    >
       <el-input v-model="plugin.startPlaceholder"
                 clearable
                 placeholder="开始时间占位内容"
       />
     </el-form-item>
-    <el-form-item v-if="plugin.type.includes('range')" v-loquat-has-perm="[plugin, 'endPlaceholder']" label="结束时间占位内容">
+    <el-form-item v-if="plugin.type && plugin.type.includes('range')"
+                  v-loquat-has-perm="[plugin, 'endPlaceholder']"
+                  label="结束时间占位内容"
+    >
       <el-input v-model="plugin.endPlaceholder"
                 clearable
                 placeholder="结束时间占位内容"
@@ -62,8 +71,8 @@
     <el-form-item v-loquat-has-perm="[plugin, 'format']" label="显示格式化">
       <el-input v-model="plugin.format" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'value']" label="默认值">
-      <el-date-picker v-if="!plugin.type.includes('range')"
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
+      <el-date-picker v-if="!plugin.type && plugin.type.includes('range')"
                       v-model="plugin.value"
                       key="1"
                       style="width: 100%;"
@@ -71,7 +80,7 @@
                       :value-format="plugin.valueFormat"
                       :format="plugin.format"
       />
-      <el-date-picker v-if="plugin.type.includes('range')"
+      <el-date-picker v-if="plugin.type && plugin.type.includes('range')"
                       v-model="plugin.value"
                       key="2"
                       style="width: 100%;"
@@ -96,7 +105,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, someAndEveryPermission.operate, 3]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[plugin, 'readonly']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.readonly">只读</el-checkbox>
@@ -116,7 +125,7 @@
         <el-col v-loquat-has-perm="[plugin, 'clearable']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.clearable">显示清除按钮</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[column, 'timestamp']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[column, everyPermission.operateTimestamp, 2]" :span="operationComputedSpan">
           <el-checkbox v-model="column.timestamp"
                        @change="(check) => {
                          $set(plugin, 'value', '')
@@ -189,6 +198,8 @@
 
 <script>
 import { EVENTS_DIC } from '@/global/variable'
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
 export default {
   name: 'Date',
   props: {
@@ -201,6 +212,7 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
       operationComputedSpan: 24 / 2,
@@ -215,6 +227,16 @@ export default {
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
+    someAndEveryPermission () {
+      return this.permConfig.someAndEveryPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },

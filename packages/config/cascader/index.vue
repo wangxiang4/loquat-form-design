@@ -18,7 +18,7 @@
                 placeholder="占位内容"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, remotePerm, 1]" label="选项">
+    <el-form-item v-loquat-has-perm="[column, everyPermission.options, 2]" label="选项">
       <el-radio-group v-model="column.remote"
                       size="mini"
                       style="margin-bottom: 10px;"
@@ -76,7 +76,7 @@
         </el-input>
       </div>
     </el-form-item>
-    <el-form-item v-if="!column.remote" v-loquat-has-perm="[plugin, 'value']" label="默认值">
+    <el-form-item v-if="!column.remote" v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
       <el-cascader v-model="plugin.value"
                    style="width: 100%;"
                    :options="column.dicData"
@@ -99,9 +99,9 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, someAndEveryPermission.operate, 3]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[plugin, 'multiple']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[plugin, everyPermission.operateMultiple, 2]" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.multiple" @change="$set(plugin, 'value', [])">是否多选</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[plugin, 'filterable']" :span="operationComputedSpan">
@@ -132,7 +132,7 @@
         />
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column,'events']" label="动作设置">
+    <el-form-item v-loquat-has-perm="[column, 'events']" label="动作设置">
       <div class="event-panel-config">
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
@@ -184,6 +184,8 @@
 
 <script>
 import { EVENTS_DIC } from '@/global/variable'
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
 export default {
   name: 'Cascader',
   props: {
@@ -196,6 +198,7 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
       operationComputedSpan: 24 / 2,
@@ -222,6 +225,16 @@ export default {
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
+    someAndEveryPermission () {
+      return this.permConfig.someAndEveryPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },

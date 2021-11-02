@@ -38,7 +38,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[column, 'flex']" :span="operationComputedSpan">
           <el-checkbox v-model="column.flex">Flex布局</el-checkbox>
@@ -52,6 +52,9 @@
 </template>
 
 <script>
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
+
 export default {
   name: 'CoralLayout',
   props: {
@@ -64,15 +67,19 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'flex',
-        'hide'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    somePermission () {
+      return this.permConfig.somePermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     }

@@ -54,7 +54,10 @@ export default {
         const hideEveryPath = []
         for (const path of everyPath) {
           if (!path.every(item => hasOwnProperty(data, item))) {
-            path.forEach(e => hideEveryPath.includes(e) || hideEveryPath.push(e))
+            path.forEach(e => {
+              const text = String(e).trim()
+              hideEveryPath.includes(text) || hideEveryPath.push(text)
+            })
           }
         }
         if (!somePath.filter(item =>

@@ -9,7 +9,7 @@
     <el-form-item v-loquat-has-perm="[column, 'labelWidth']" label="标签宽度">
       <el-input v-model.number="column.labelWidth" type="number" placeholder="请输入标签宽度" />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'effect']" label="主题">
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.theme, 2]" label="主题">
       <el-switch v-model="plugin.effect"
                  :disabled="plugin.effectType === 'default'"
                  active-value="dark"
@@ -53,7 +53,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[column, 'hide']" :span="operationComputedSpan">
           <el-checkbox v-model="column.hide">隐藏</el-checkbox>
@@ -70,6 +70,8 @@
 </template>
 
 <script>
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
 export default {
   name: 'Font',
   props: {
@@ -82,16 +84,22 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'hide',
-        'hideLabel',
-        'plugin.center'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    somePermission () {
+      return this.permConfig.somePermission || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },

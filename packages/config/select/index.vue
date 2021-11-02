@@ -18,7 +18,7 @@
                 placeholder="占位内容"
       />
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, remotePerm, 1]" label="选项">
+    <el-form-item v-loquat-has-perm="[column, everyPermission.options, 2]" label="选项">
       <el-radio-group v-model="column.remote"
                       size="mini"
                       style="margin-bottom: 10px;"
@@ -165,9 +165,9 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, someAndEveryPermission.operate, 3]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[plugin, 'multiple']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[column, everyPermission.operateMultiple, 2]" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.multiple"
                        @change="(mark) => {
                          mark ? $set(plugin, 'value', []) : $set(plugin, 'value', '')
@@ -206,7 +206,7 @@
         />
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column,'events']" label="动作设置">
+    <el-form-item v-loquat-has-perm="[column, 'events']" label="动作设置">
       <div class="event-panel-config">
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
@@ -259,7 +259,8 @@
 <script>
 import Draggable from 'vuedraggable'
 import { EVENTS_DIC } from '@/global/variable'
-
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
 export default {
   name: 'Select',
   components: { Draggable },
@@ -273,34 +274,23 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'hide',
-        'hideLabel',
-        'plugin.drag',
-        'plugin.clearable',
-        'plugin.multiple',
-        'plugin.filterable',
-        'plugin.readonly',
-        'plugin.disabled'
-      ],
-      remotePerm: [
-        'remote',
-        'dicData',
-        'remoteType',
-        'remoteDataSource',
-        'remoteOption',
-        'remoteFunc',
-        'plugin.value',
-        'plugin.showLabel',
-        'plugin.props.value',
-        'plugin.props.label'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
+    someAndEveryPermission () {
+      return this.permConfig.someAndEveryPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },

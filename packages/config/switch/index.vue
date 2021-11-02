@@ -28,7 +28,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
@@ -104,6 +104,8 @@
 
 <script>
 import { EVENTS_DIC } from '@/global/variable'
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
 export default {
   name: 'Switch',
   props: {
@@ -116,6 +118,7 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
       operationComputedSpan: 24 / 2,
@@ -127,6 +130,13 @@ export default {
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    somePermission () {
+      return this.permConfig.somePermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },

@@ -15,7 +15,7 @@
     <el-form-item v-loquat-has-perm="[plugin, 'tip']" label="字段提示" >
       <el-input v-model="plugin.tip" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'oss']" label="OSS" >
+    <el-form-item v-loquat-has-perm="[column, everyPermission.oss, 2]" label="OSS" >
       <el-radio-group v-model="plugin.oss"
                       @change="option => {
                         if(!option) $set(column, 'remote', false)
@@ -30,13 +30,13 @@
         </el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'action']" v-if="!plugin.oss" label="上传地址" >
+    <el-form-item v-if="!plugin.oss" v-loquat-has-perm="[plugin, 'action']" label="上传地址" >
       <el-input v-model="plugin.action" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'domain']" v-if="plugin.oss" label="Domain" >
+    <el-form-item v-if="plugin.oss" v-loquat-has-perm="[plugin, 'domain']" label="Domain" >
       <el-input v-model="plugin.domain" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, remotePerm, 1]" v-if="plugin.oss" label="获取Token" >
+    <el-form-item v-if="plugin.oss" v-loquat-has-perm="[column, everyPermission.getToken, 2]" label="获取Token" >
       <el-radio-group v-model="column.remoteType">
         <el-radio label="datasource">数据源</el-radio>
         <el-radio label="func">方法函数</el-radio>
@@ -78,7 +78,7 @@
         <el-option label="txt" value=".txt" />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'headers']" label="设置上传的请求头部" >
+    <el-form-item v-loquat-has-perm="[plugin, 'headers']" label="设置上传的请求头部">
       <ul>
         <li v-for="(item, index) in plugin.headers" :key="index" style="margin-bottom: 5px;">
           <el-input v-model="item.key"
@@ -160,7 +160,7 @@
         </el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, ['fileSize', 'byteUnit'], 1]" label="文件大小" >
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.fileSize, 2]" label="文件大小" >
       <el-input v-model.number="plugin.fileSize" placeholder="请输入文件大小">
         <el-select slot="append" v-model="plugin.byteUnit" :style="{ width: '66px' }">
           <el-option label="KB" value="KB" />
@@ -169,9 +169,9 @@
         </el-select>
       </el-input>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, configCenterPerm, 1]" label="配置中心">
+    <el-form-item v-loquat-has-perm="[plugin, somePermission.configCenterPerm, 1]" label="配置中心">
       <el-collapse accordion>
-        <el-collapse-item v-loquat-has-perm="[plugin, uploadConfigPerm, 1]" title="上传配置">
+        <el-collapse-item v-loquat-has-perm="[plugin, somePermission.uploadConfig, 1]" title="上传配置">
           <div v-loquat-has-perm="[uploadConfig, 'home']">
             <span class="horizontal-tip-text">首页地址:</span>
             <el-input v-model="uploadConfig.home" size="mini" clearable/>
@@ -189,7 +189,7 @@
             <el-input v-model="uploadConfig.resUrl" size="mini" clearable/>
           </div>
         </el-collapse-item>
-        <el-collapse-item v-loquat-has-perm="[plugin, canvasOptionPerm, 1]" title="水印配置">
+        <el-collapse-item v-loquat-has-perm="[plugin, somePermission.canvasConfig, 1]" title="水印配置">
           <div v-loquat-has-perm="[canvasOption, 'text']">
             <span class="horizontal-tip-text">水印文字:</span>
             <el-input v-model="canvasOption.text" size="mini" clearable/>
@@ -237,7 +237,7 @@
                              size="mini"
             />
           </div>
-          <div v-loquat-has-perm="[canvasOption, 'fontSize']">
+          <div v-loquat-has-perm="[canvasOption, 'ratio']">
             <span class="horizontal-tip-text">压缩图片比率:</span>
             <el-input-number v-model="canvasOption.ratio"
                              style="width: 100%;"
@@ -267,7 +267,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
@@ -287,7 +287,7 @@
         <el-col v-loquat-has-perm="[plugin, 'multiple']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.multiple">是否多选</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[plugin, 'withCredentials']" v-if="!column.oss" :span="24">
+        <el-col v-if="!column.oss" v-loquat-has-perm="[plugin, 'withCredentials']" :span="24">
           <el-checkbox v-model="plugin.withCredentials">跨域请求是否提供凭据信息</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[plugin, 'showFileList']" :span="24">
@@ -359,6 +359,8 @@
 <script>
 import pluginInputColor from '@/plugins/input-color'
 import { EVENTS_DIC } from '@/global/variable'
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
 export default {
   name: 'Upload',
   components: { pluginInputColor },
@@ -372,48 +374,25 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'hide',
-        'hideLabel',
-        'plugin.drag',
-        'plugin.disabled',
-        'plugin.showCanvas',
-        'plugin.withCredentials',
-        'plugin.multiple',
-        'plugin.showFileList'
-      ],
-      uploadConfigPerm: [
-        'uploadConfig.home',
-        'uploadConfig.fileName',
-        'uploadConfig.resUrl',
-        'uploadConfig.res'
-      ],
-      canvasOptionPerm: [
-        'canvasOption.fontSize',
-        'canvasOption.opacity',
-        'canvasOption.bottom',
-        'canvasOption.right',
-        'canvasOption.ratio',
-        'canvasOption.text',
-        'canvasOption.fontFamily',
-        'canvasOption.color'
-      ],
-      remotePerm: [
-        'remoteType',
-        'remoteDataSource',
-        'remoteFunc'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    somePermission () {
+      return this.permConfig.somePermission || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
-    },
-    configCenterPerm () {
-      return [...this.uploadConfigPerm, ...this.canvasOptionPerm]
     },
     plugin () {
       return this.column.plugin || {}

@@ -36,7 +36,7 @@
     <el-form-item v-loquat-has-perm="[plugin, 'format']" label="显示格式化">
       <el-input v-model="plugin.format" clearable/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'value']" label="默认值">
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
       <el-time-picker v-if="!plugin.range"
                       v-model="plugin.value"
                       key="1"
@@ -69,7 +69,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, someAndEveryPermission.operate, 3]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[plugin, 'readonly']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.readonly">只读</el-checkbox>
@@ -86,7 +86,7 @@
         <el-col v-loquat-has-perm="[plugin, 'editable']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.editable">文本框可输入</el-checkbox>
         </el-col>
-        <el-col v-loquat-has-perm="[plugin, 'range']" :span="operationComputedSpan">
+        <el-col v-loquat-has-perm="[column, everyPermission.operateRange, 2]" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.range"
                        @change="$set(plugin, 'value', '')"
           >是否为范围选择</el-checkbox>
@@ -162,6 +162,8 @@
 
 <script>
 import { EVENTS_DIC } from '@/global/variable'
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
 export default {
   name: 'Time',
   props: {
@@ -174,22 +176,23 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'hide',
-        'hideLabel',
-        'plugin.range',
-        'plugin.editable',
-        'plugin.readonly',
-        'plugin.disabled',
-        'plugin.clearable',
-        'plugin.arrowControl'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
+    someAndEveryPermission () {
+      return this.permConfig.someAndEveryPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },

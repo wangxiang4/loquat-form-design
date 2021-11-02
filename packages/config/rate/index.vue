@@ -12,7 +12,7 @@
     <el-form-item v-loquat-has-perm="[plugin, 'max']" label="最大值">
       <el-input-number v-model="plugin.max" :min-rows="1"/>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[plugin, 'value']" label="默认值">
+    <el-form-item v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
       <plugin-rate v-model="plugin.value"
                    :max="plugin.max"
                    :allow-half="plugin.allowHalf"
@@ -35,7 +35,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
@@ -118,6 +118,8 @@
 <script>
 import pluginRate from '@/plugins/rate'
 import { EVENTS_DIC } from '@/global/variable'
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
 export default {
   name: 'Rate',
   components: { pluginRate },
@@ -131,19 +133,23 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'hide',
-        'hideLabel',
-        'plugin.disabled',
-        'plugin.showScore',
-        'plugin.allowHalf'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    somePermission () {
+      return this.permConfig.somePermission || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },

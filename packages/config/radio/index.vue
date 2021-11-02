@@ -15,7 +15,7 @@
         <el-radio-button :label="true">行内</el-radio-button>
       </el-radio-group>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, remotePerm, 1]" label="选项">
+    <el-form-item v-loquat-has-perm="[column, everyPermission.options, 2]" label="选项">
       <el-radio-group v-model="column.remote"
                       size="mini"
                       style="margin-bottom: 10px;"
@@ -127,7 +127,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column, operationPerm, 1]" label="操作属性">
+    <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
         <el-col v-loquat-has-perm="[column, 'hide']" :span="operationComputedSpan">
           <el-checkbox v-model="column.hide">隐藏</el-checkbox>
@@ -151,7 +151,7 @@
         />
       </div>
     </el-form-item>
-    <el-form-item v-loquat-has-perm="[column,'events']" label="动作设置">
+    <el-form-item v-loquat-has-perm="[column, 'events']" label="动作设置">
       <div class="event-panel-config">
         <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
@@ -202,9 +202,11 @@
 </template>
 
 <script>
+
 import Draggable from 'vuedraggable'
 import { EVENTS_DIC } from '@/global/variable'
-
+import { originComponentName } from '@utils'
+import permission from '@/config/perm'
 export default {
   name: 'Radio',
   components: { Draggable },
@@ -218,30 +220,23 @@ export default {
   },
   data () {
     return {
+      permission,
       first: false,
       eventsDic: EVENTS_DIC,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'hide',
-        'hideLabel',
-        'plugin.disabled'
-      ],
-      remotePerm: [
-        'remote',
-        'dicData',
-        'remoteType',
-        'remoteFunc',
-        'remoteOption',
-        'remoteDataSource',
-        'plugin.value',
-        'plugin.showLabel',
-        'plugin.props.value',
-        'plugin.props.label',
-        'plugin.props.children'
-      ]
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
+    permConfig () {
+      const name = originComponentName(this.$options.name)
+      return this.permission.find(item => name === item.component) || {}
+    },
+    somePermission () {
+      return this.permConfig.somePermission || {}
+    },
+    everyPermission () {
+      return this.permConfig.everyPermission || {}
+    },
     column () {
       return this.first ? this.data : {}
     },
