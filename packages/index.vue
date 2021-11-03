@@ -619,7 +619,7 @@
 </template>
 
 <script>
-import fields from './components/fields.js'
+import fields from '@components/fields'
 import history from './mixins/history'
 import Draggable from 'vuedraggable'
 import WidgetForm from './components/WidgetForm'

@@ -37,18 +37,14 @@ const components = [
   column
 ]
 
-const Config = {
+const Configs = {
   install (Vue) {
-    if (this.installed) return
-    this.installed = true
-
-    components.map(component => {
+    components.forEach(component => {
       const name = kebabCase(component.name)
-      // 检查当前name是否有唯一标识,没有加上,确保注册组件唯一
-      !name.includes(KEY_COMPONENT_CONFIG_NAME) ? component.name = KEY_COMPONENT_CONFIG_NAME.concat(name) : ''
+      component.name = KEY_COMPONENT_CONFIG_NAME.concat(name)
       Vue.component(component.name, component)
     })
   }
 }
 
-export default Config
+export default Configs
