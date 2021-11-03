@@ -12,6 +12,12 @@ module.exports =  {
 
   productionSourceMap: false,
 
+  configureWebpack: {
+    output: {
+      libraryExport: 'default'
+    }
+  },
+
   chainWebpack: config => {
 
     config.externals({
@@ -28,19 +34,9 @@ module.exports =  {
     config.plugin('banner')
       .use(require('webpack').BannerPlugin, [banner])
 
-    //  需要判断下只在生产环境中运用
-    //  如果在开发环境中也这样配置， 会导致devtool的map功能失效
-    if (process.env.NODE_ENV !== "development") {
-
-      //  使用 limitChunkCountPlugin 插件关闭代码拆分
-      config
-        .plugin("limitChunkCountPlugin")
-        .use(require("webpack").optimize.LimitChunkCountPlugin, [
-          {
-            maxChunks: 1
-          }
-        ]);
-    }
+    config
+      .plugin("limitChunkCountPlugin")
+      .use(require("webpack").optimize.LimitChunkCountPlugin, [{ maxChunks: 1 }])
 
   },
 
