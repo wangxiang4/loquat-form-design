@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App'
 import request from './request'
-import '/packages/assets/iconfont/iconfont.css'
 import LoquatFormDesign from '../packages/'
 Vue.use(LoquatFormDesign, { axios: request })
 
