@@ -1,6 +1,6 @@
 <template>
-  <el-cascader :options="dic"
-               v-model="text"
+  <el-cascader v-model="text"
+               :options="dic"
                :placeholder="placeholder"
                :props="allProps"
                :size="size"
@@ -20,7 +20,7 @@
             :data="data"
             :node="node"
       />
-      <span v-else>{{data[labelKey]}}</span>
+      <span v-else>{{ data[labelKey] }}</span>
     </template>
   </el-cascader>
 </template>

@@ -15,7 +15,7 @@
                  :border="border"
                  :readonly="readonly"
                  :disabled="item[disabledKey]"
-      >{{showLabel ? item[labelKey] : item[valueKey]}}</component>
+      >{{ showLabel ? item[labelKey] : item[valueKey] }}</component>
     </el-radio-group>
   </div>
 </template>
@@ -25,13 +25,6 @@ import { bindEvent } from '@utils/plugins'
 import { DIC_PROPS } from '@/global/variable'
 export default {
   name: 'Radio',
-  data () {
-    return {
-      name: 'radio',
-      text: undefined,
-      propsDefault: DIC_PROPS
-    }
-  },
   props: {
     value: {},
     size: {
@@ -72,6 +65,13 @@ export default {
     },
     customizeStyle: {
       type: Object
+    }
+  },
+  data () {
+    return {
+      name: 'radio',
+      text: undefined,
+      propsDefault: DIC_PROPS
     }
   },
   computed: {

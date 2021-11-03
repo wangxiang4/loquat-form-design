@@ -38,15 +38,15 @@
     </el-form-item>
     <el-form-item v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
       <el-time-picker v-if="!plugin.range"
-                      v-model="plugin.value"
                       key="1"
+                      v-model="plugin.value"
                       style="width: 100%;"
                       :value-format="plugin.valueFormat"
                       :format="plugin.format"
       />
       <el-time-picker v-if="plugin.range"
-                      v-model="plugin.value"
                       key="2"
+                      v-model="plugin.value"
                       style="width: 100%;"
                       is-range
                       :value-format="plugin.valueFormat"

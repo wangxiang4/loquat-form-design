@@ -145,8 +145,8 @@
       >
         <div :class="['form-preview', adapter]">
           <plugin-form v-if="previewVisible"
-                       v-model="widgetModels"
                        ref="previewForm"
+                       v-model="widgetModels"
                        :option="widgetFormPreview"
                        :disabled="previewDisableSwitch"
                        @submit="handlePreviewSubmit"

@@ -32,8 +32,8 @@
         >
           <transition-group name="fade" tag="div" class="widget-col-list">
             <template v-for="(column, index) in col.list">
-              <widget-form-item :data="data"
-                                :key="index"
+              <widget-form-item :key="index"
+                                :data="data"
                                 :widgets="col.list"
                                 :index="index"
                                 :column="column"

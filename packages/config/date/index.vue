@@ -73,16 +73,16 @@
     </el-form-item>
     <el-form-item v-loquat-has-perm="[plugin, everyPermission.defaultValue, 2]" label="默认值">
       <el-date-picker v-if="!(plugin.type && plugin.type.includes('range'))"
-                      v-model="plugin.value"
                       key="1"
+                      v-model="plugin.value"
                       style="width: 100%;"
                       :type="plugin.type"
                       :value-format="plugin.valueFormat"
                       :format="plugin.format"
       />
       <el-date-picker v-if="plugin.type && plugin.type.includes('range')"
-                      v-model="plugin.value"
                       key="2"
+                      v-model="plugin.value"
                       style="width: 100%;"
                       :type="plugin.type"
                       :value-format="plugin.valueFormat"

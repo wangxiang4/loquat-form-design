@@ -12,7 +12,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint ./packages",
-    "lib": "vue-cli-service build --target lib --name LoquatAvueFormDesign --dest lib --filename index --formats umd-min ./packages/index.js"
+    "lib": "vue-cli-service build --target lib --name LoquatFormDesign --dest dest --filename index --formats umd-min ./packages/index.js"
   },
   "bundleDependencies": false,
   "dependencies": {

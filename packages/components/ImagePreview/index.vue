@@ -65,12 +65,6 @@
 <script>
 export default {
   name: 'ImagePreview',
-  mounted () {
-    document.addEventListener('keydown', this.keydown)
-  },
-  beforeDestroy () {
-    document.removeEventListener('keydown', this.keydown)
-  },
   data () {
     return {
       left: 0,
@@ -108,6 +102,12 @@ export default {
     imgList () {
       return this.datas.map(ele => ele.url)
     }
+  },
+  mounted () {
+    document.addEventListener('keydown', this.keydown)
+  },
+  beforeDestroy () {
+    document.removeEventListener('keydown', this.keydown)
   },
   methods: {
     handlePrev () {

@@ -1,5 +1,5 @@
 <template>
-  <div class="loquat-upload" v-loading.lock="loading">
+  <div v-loading.lock="loading" class="loquat-upload">
     <el-upload :class="{ 'loquat-upload__img': isAvatarImg, 'loquat-upload__disabled': (disabled || !tokenOnline) }"
                :action="action"
                :accept="acceptList"

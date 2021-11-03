@@ -24,7 +24,7 @@
                  :border="border"
                  :size="size"
                  :disabled="item[disabledKey]"
-      >{{showLabel ? item[labelKey] : item[valueKey]}}</component>
+      >{{ showLabel ? item[labelKey] : item[valueKey] }}</component>
     </el-checkbox-group>
   </div>
 </template>
