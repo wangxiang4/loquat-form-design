@@ -8,6 +8,8 @@
   "version": "1.0.0",
   "deprecated": false,
   "main": "lib/index.umd.min.js",
+  "jsdelivr": "lib/index.umd.min.js",
+  "unpkg": "lib/index.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
