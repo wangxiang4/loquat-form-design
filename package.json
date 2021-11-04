@@ -6,7 +6,6 @@
     "email": "1827945911@qq.com"
   },
   "version": "1.0.0",
-  "deprecated": false,
   "main": "lib/index.umd.min.js",
   "jsdelivr": "lib/index.umd.min.js",
   "unpkg": "lib/index.umd.min.js",
@@ -16,7 +15,6 @@
     "lint": "vue-cli-service lint ./packages",
     "lib": "vue-cli-service build --target lib --name LoquatFormDesign --dest lib --filename index --formats umd-min ./packages/index.js"
   },
-  "bundleDependencies": false,
   "dependencies": {
     "js-beautify": "^1.14.0",
     "loquat-axios": "0.0.1",
