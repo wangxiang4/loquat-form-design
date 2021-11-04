@@ -36,9 +36,6 @@
     "vue": "^2.6.14",
     "vue-template-compiler": "^2.6.12"
   },
-  "files": [
-    "lib"
-  ],
   "repository": {
     "type": "gitee",
     "url": "https://gitee.com/CodeZealot1024/loquat-from-design"
