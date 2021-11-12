@@ -774,21 +774,11 @@ export default {
   mounted () {
     this.handleLoadStorage()
     this.handleStyleSheetsCore()
-    this.handleLoadCss()
   },
   beforeDestroy () {
     insertCss([], this.formId)
   },
   methods: {
-    // 加载icon
-    handleLoadCss () {
-      const head = document.getElementsByTagName('head')[0]
-      const script = document.createElement('link')
-      script.rel = 'stylesheet'
-      script.type = 'text/css'
-      script.href = 'https://cdn.jsdelivr.net/npm/loquat-icon-font@1.0.0/dist/iconfont.css'
-      head.appendChild(script)
-    },
     // 处理加载历史数据
     handleLoadStorage () {
       let options = this.options

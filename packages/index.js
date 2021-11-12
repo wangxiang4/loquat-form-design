@@ -20,6 +20,7 @@ import { deepClone, setPx, validateNull, get, kebabCase, noop } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 import imagePreview from '@components/ImagePreview'
 import log from '@utils/log'
+import '@/assets/iconfont/iconfont.css'
 
 export default {
   install (Vue, opts = {}) {
