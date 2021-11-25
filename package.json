@@ -5,7 +5,7 @@
     "url": "https://gitee.com/CodeZealot1024",
     "email": "1827945911@qq.com"
   },
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "lib/loquat-form-design.umd.min.js",
   "jsdelivr": "lib/loquat-form-design.umd.min.js",
   "unpkg": "lib/loquat-form-design.umd.min.js",
