@@ -225,7 +225,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
                 if (!dataSource) break
                 // 是否使用第三方Axios请求
                 if (dataSource.thirdPartyAxios) {
-                  !validateNull(options.axiosInstance) ? options.axios(param).then(res => {
+                  !validateNull(options.axiosInstance) ? options.axiosInstance(param).then(res => {
                     try {
                       const execute = new Function('res', dataSource.responseFunc)(res)
                       _this.$set(_this.DIC, col.prop, remoteAccept(execute, col.type))
