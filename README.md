@@ -47,3 +47,9 @@ npm run serve
 插件配置面板不要出现这种逻辑判断,考虑代码后期很难维护,看起来很烦人,
 如果出现两个插件共用配置面板功能一致或者少于时可以通过参数配置共用,
 出现共用配置面板功能多于时推荐新加一个配置面板组件,不推荐使用共用。
+
+## 5. 目前吸收了那些开源或者收费的主流表单设计器的优点
+> 1.由阿里巴巴语雀推出的表单设计器(收费):http://form.making.link/sample/#/zh-CN/ <br/>
+> 2.由avue推出表单设计器(开源): https://form.avuejs.com/ <br/>
+> 3.由JakHuang推出的ElementUI表单设计(开源): https://mrhj.gitee.io/form-generator/#/ <br/>
+> 4.以及表单设计器整体架构布局借鉴的vxe-table,后期会全部采用typescript进行重构项目(开源): https://github.com/x-extends/vxe-table
