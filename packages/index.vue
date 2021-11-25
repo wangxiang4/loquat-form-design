@@ -149,13 +149,13 @@
                        v-model="widgetModels"
                        :option="widgetFormPreview"
                        :disabled="previewDisableSwitch"
-                       @submit="handlePreviewSubmit"
+                       @submit="handlePreviewGetData"
           />
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary"
                      size="medium"
-                     @click="handlePreviewSubmit"
+                     @click="handlePreviewGetData"
           >获取数据</el-button>
           <el-button size="medium"
                      @click="handlePreviewFormReset"
@@ -634,7 +634,7 @@ import pluginForm from '@/plugins/form'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 import GlobalConfig from './global/config'
 import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig, validateNull, deepClone } from '@utils'
-import { KEY_COMPONENT_NAME, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
+import { KEY_COMPONENT_NAME } from '@/global/variable'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor, pluginForm },
@@ -746,9 +746,9 @@ export default {
       customFields.forEach(item => {
         getObjType(item.list) === 'array' && item.list.forEach(field => {
           !validateNull(field.params)
-            ? field.params = codeBeautifier.js(beautifier(field.params), BEAUTIFIER_DEFAULTS_CONF) : ''
+            ? field.params = codeBeautifier.js(beautifier(field.params), GlobalConfig.beautifierDefaultsConf) : ''
           !validateNull(field.events)
-            ? field.events = codeBeautifier.js(beautifier(field.events), BEAUTIFIER_DEFAULTS_CONF) : ''
+            ? field.events = codeBeautifier.js(beautifier(field.events), GlobalConfig.beautifierDefaultsConf) : ''
         })
       })
       return customFields
@@ -835,16 +835,16 @@ export default {
         this.previewVisible = true
       }
     },
-    // 处理预览确定动作
-    handlePreviewSubmit () {
+    // 处理预览获取模型数据动作
+    handlePreviewGetData () {
       this.jsonOption = getJsonOptionDefaultConfig()
       this.$refs.previewForm.validate(valid => {
         if (valid) {
           const clone = deepClone(this.widgetModels)
-          this.generateJson = beautifier(clone, {
+          this.generateJson = codeBeautifier.js(beautifier(clone, {
             quoteType: 'double',
             dropQuotesOnKeys: false
-          })
+          }), GlobalConfig.beautifierDefaultsConf)
           this.generateJsonVisible = true
         }
       })
@@ -864,10 +864,10 @@ export default {
     // 初始化导入JSON
     handleImportJson () {
       const data = getWidgetFormDefaultConfig()
-      this.importJson = beautifier(data, {
+      this.importJson = codeBeautifier.js(beautifier(data, {
         quoteType: 'double',
         dropQuotesOnKeys: false
-      })
+      }), GlobalConfig.beautifierDefaultsConf)
       this.importJsonVisible = true
     },
     // 导入JSON确定
@@ -889,10 +889,10 @@ export default {
     handleGenerateJson () {
       this.jsonOption = getJsonOptionDefaultConfig()
       const clone = deepClone(this.widgetForm)
-      this.generateJson = beautifier(clone, {
+      this.generateJson = codeBeautifier.js(beautifier(clone, {
         quoteType: 'double',
         dropQuotesOnKeys: false
-      })
+      }), GlobalConfig.beautifierDefaultsConf)
       this.generateJsonVisible = true
     },
     // 生成JSON复制
@@ -1200,10 +1200,10 @@ export default {
     // 处理级联静态数据设置对话框初始值
     handleCascadeOptionSetData (obj) {
       const clone = deepClone(obj)
-      this.cascadeOption = beautifier(clone, {
+      this.cascadeOption = codeBeautifier.js(beautifier(clone, {
         quoteType: 'double',
         dropQuotesOnKeys: false
-      })
+      }), GlobalConfig.beautifierDefaultsConf)
       this.cascadeOptionVisible = true
     },
     // 处理部件表单撤回
