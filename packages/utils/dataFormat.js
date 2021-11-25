@@ -160,7 +160,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
     autoDataSource: ops.autoDataSource || [],
     remoteOption: { ...GlobalConfig.defaultRemoteOption, ...remoteOption },
     remoteFunc: { ...GlobalConfig.defaultRemoteFunc, ...remoteFunc },
-    axios: GlobalConfig.axios
+    axiosInstance: GlobalConfig.axiosInstance
   }
   for (let i = 0; i < column.length; ++i) {
     const col = column[i]
@@ -225,7 +225,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
                 if (!dataSource) break
                 // 是否使用第三方Axios请求
                 if (dataSource.thirdPartyAxios) {
-                  !validateNull(options.axios) ? options.axios(param).then(res => {
+                  !validateNull(options.axiosInstance) ? options.axios(param).then(res => {
                     try {
                       const execute = new Function('res', dataSource.responseFunc)(res)
                       _this.$set(_this.DIC, col.prop, remoteAccept(execute, col.type))

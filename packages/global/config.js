@@ -11,7 +11,7 @@ import fields from '@components/fields'
 
 export const GlobalConfig = {
   fields: fields,
-  axios: () => {},
+  axiosInstance: () => {},
   qiniu: {
     up: 'https://upload.qiniup.com', // 存储地区，默认为华东，其他的如下表
     bucket: 'loquat', // 存储空间名称

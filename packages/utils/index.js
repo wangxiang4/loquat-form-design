@@ -73,7 +73,8 @@ export function getObjType (obj) {
     '[object RegExp]': 'regExp',
     '[object Undefined]': 'undefined',
     '[object Null]': 'null',
-    '[object Object]': 'object'
+    '[object Object]': 'object',
+    '[object Promise]': 'promise'
   }
   if (obj instanceof Element) {
     return 'element'
@@ -348,13 +349,15 @@ function handleDeepMerge (target, source) {
   if (targetType === 'array' && sourceType === 'array') {
     for (let i = 0, len = source.length; i < len; ++i) {
       const obj = source[i]
-      target[i] = merge(target[i], obj)
+      target[i] = handleDeepMerge(target[i], obj)
     }
   } else if (targetType === 'object' && sourceType === 'object') {
     for (const key in source) {
       const obj = source[key]
-      target[key] = merge(target[key], obj)
+      target[key] = handleDeepMerge(target[key], obj)
     }
+  } else if (targetType === 'function' && sourceType === 'function') {
+    return source
   }
   // 如果类型不匹配就不准合并返回源数据
   return target
@@ -362,7 +365,7 @@ function handleDeepMerge (target, source) {
 
 /** 将一个或多个源对象合并到目标对象中(递归合并) */
 export function merge (target = {}, ...sources) {
-  for (let index = 1; index < sources.length; ++index) {
+  for (let index = 0; index < sources.length; ++index) {
     const source = sources[index]
     source && handleDeepMerge(target, source)
   }

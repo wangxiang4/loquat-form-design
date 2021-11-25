@@ -1142,7 +1142,7 @@ export default {
           })(this.dataSourceForm)
           // 是否使用第三方Axios请求
           if (this.dataSourceForm.thirdPartyAxios) {
-            !validateNull(GlobalConfig.axios) ? GlobalConfig.axios(param).then(res => {
+            !validateNull(GlobalConfig.axiosInstance) ? GlobalConfig.axiosInstance(param).then(res => {
               try {
                 const execute = new Function('res', this.dataSourceForm.responseFunc)(res)
                 this.$alert(JSON.stringify(execute), { confirmButtonText: '确定' })
