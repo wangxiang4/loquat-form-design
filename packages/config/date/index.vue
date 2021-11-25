@@ -148,10 +148,10 @@
     </el-form-item>
     <el-form-item v-loquat-has-perm="[column, 'events']" label="动作设置">
       <div class="event-panel-config">
-        <el-collapse v-if="!$loquat.validateNull(events)" :value="Object.keys(events)">
+        <el-collapse v-if="!validateNull(events)" :value="Object.keys(events)">
           <el-collapse-item v-for="(val,key,index) in events"
                             :key="index"
-                            :title="`${key} ${$loquat.get(eventsDic, key, '')}`"
+                            :title="`${key} ${get(eventsDic, key, '')}`"
                             :name="key"
           >
             <div class="event-panel-item">
@@ -188,7 +188,7 @@
                                 home.handleActionSettingsSetData({ eventName: key })
                                 home.handleActionAdd()
                               }"
-            >{{ `${key} ${$loquat.get(eventsDic, key, '')}` }}</el-dropdown-item>
+            >{{ `${key} ${get(eventsDic, key, '')}` }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -197,8 +197,8 @@
 </template>
 
 <script>
-import { EVENTS_DIC } from '@/global/variable'
-import { originComponentName } from '@utils'
+import GlobalConfig from '@/global/config'
+import { originComponentName, validateNull, get, deepClone } from '@utils'
 import permission from '@/config/perm'
 export default {
   name: 'Date',
@@ -214,16 +214,8 @@ export default {
     return {
       permission,
       first: false,
-      eventsDic: EVENTS_DIC,
-      operationComputedSpan: 24 / 2,
-      operationPerm: [
-        'readonly',
-        'disabled',
-        'hide',
-        'hideLabel',
-        'editable',
-        'clearable'
-      ]
+      eventsDic: GlobalConfig.eventsDic,
+      operationComputedSpan: 24 / 2
     }
   },
   computed: {
@@ -250,8 +242,8 @@ export default {
       return this.column.validateConfig || {}
     },
     events () {
-      const clone = this.$loquat.deepClone(this.column.events)
-      for (const val in clone) this.$loquat.validateNull(clone[val]) && delete clone[val]
+      const clone = deepClone(this.column.events)
+      for (const val in clone) validateNull(clone[val]) && delete clone[val]
       return clone
     }
   },
@@ -259,6 +251,8 @@ export default {
     this.first = true
   },
   methods: {
+    get,
+    validateNull,
     // 获取格式类型,可以通过设置选择显示格式(1)或值格式(0)
     handleFormatType (type, option) {
       switch (type) {

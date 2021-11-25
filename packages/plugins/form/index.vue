@@ -1,12 +1,12 @@
 <template>
-  <div :class="['loquat-form', formId]" :style="{ width: $loquat.setPx(widgetForm.formWidth, '100%') }">
+  <div :class="['loquat-form', formId]" :style="{ width: setPx(widgetForm.formWidth, '100%') }">
     <el-form ref="form"
              :model="form"
              :status-icon="widgetForm.statusIcon"
              :label-suffix="widgetForm.labelSuffix || formDefaultConfig.labelSuffix"
              :size="widgetForm.size || formDefaultConfig.size"
              :label-position="widgetForm.labelPosition || formDefaultConfig.labelPosition"
-             :label-width="$loquat.setPx(widgetForm.labelWidth, formDefaultConfig.labelWidth)"
+             :label-width="setPx(widgetForm.labelWidth, formDefaultConfig.labelWidth)"
              :class="widgetForm.customClass"
              @submit.native.prevent
     >
@@ -24,9 +24,10 @@
 <script>
 import { formClearVal, formInitVal, designTransformPreview } from '@utils/dataFormat'
 import { DEFAULT_CONFIG_INSIDE_FORM, KEY_COMPONENT_NAME } from '@/global/variable'
-import { randomId8, deepClone } from '@utils'
+import { randomId8, deepClone, validateNull } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
 import item from './item'
+import { setPx } from '@utils'
 export default {
   name: 'Form',
   components: { item },
@@ -74,7 +75,7 @@ export default {
   watch: {
     form: {
       handler (val) {
-        if (this.first || !this.$loquat.validateNull(val)) {
+        if (this.first || !validateNull(val)) {
           this.first = true
           this.handleChange(val)
         } else {
@@ -101,6 +102,7 @@ export default {
     insertCss([], this.formId)
   },
   methods: {
+    setPx,
     initVal () {
       this.formId = KEY_COMPONENT_NAME.concat(randomId8())
       insertCss(parseCss(this.widgetForm.styleSheets), this.formId)

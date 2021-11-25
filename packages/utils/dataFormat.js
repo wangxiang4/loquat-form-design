@@ -16,15 +16,15 @@ import {
   NUMBER_VALUE_TYPES,
   BOOLEAN_VALUE_TYPES,
   REMOTE_REQUEST_TYPES,
-  KEY_COMPONENT_CONFIG_NAME,
-  FORM_EXECUTE_CALLBACK_HOOKS
+  KEY_COMPONENT_CONFIG_NAME
 } from '@/global/variable'
+import GlobalConfig from '@/global/config'
+import { remoteOption, remoteFunc } from '@/core'
 import { validateNull, setPx, deepClone, getObjType, randomId8, kebabCase } from './index'
 import request from '@utils/request'
 import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
 import { coralLayoutRowDeepClone } from '@utils/layout'
-import { getToken } from '@utils/qiniuOss'
 
 /** 获取控件默认提示 **/
 export function getPlaceholder (item) {
@@ -39,9 +39,9 @@ export function getPlaceholder (item) {
 /** 获取标签长度 **/
 export function getLabelWidth (column, item, defval) {
   let result
-  if (!this.$loquat.validateNull(column.labelWidth)) {
+  if (!validateNull(column.labelWidth)) {
     result = column.labelWidth
-  } else if (!this.$loquat.validateNull(item.labelWidth)) {
+  } else if (!validateNull(item.labelWidth)) {
     result = item.labelWidth
   }
   return setPx(result, defval)
@@ -142,7 +142,7 @@ export function designTransformPreview (_this) {
   })
   // 获取表单执行回调钩子函数
   const executeCallbackHooks = {}
-  for (const item of FORM_EXECUTE_CALLBACK_HOOKS) {
+  for (const item of GlobalConfig.formExecuteCallbackHooks) {
     const event = eventScript.find(e => e.key === item)
     executeCallbackHooks[item] = event && new Function(event.func)
   }
@@ -158,9 +158,9 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
   const options = {
     eventScript: ops.eventScript || [],
     autoDataSource: ops.autoDataSource || [],
-    remoteOption: { ...pluginDefaultData(_this).remoteOption, ..._this.$loquat.remoteOption },
-    remoteFunc: { ...pluginDefaultData(_this).remoteFunc, ..._this.$loquat.remoteFunc },
-    axios: _this.$loquat.axios
+    remoteOption: { ...GlobalConfig.defaultRemoteOption, ...remoteOption },
+    remoteFunc: { ...GlobalConfig.defaultRemoteFunc, ...remoteFunc },
+    axios: GlobalConfig.axios
   }
   for (let i = 0; i < column.length; ++i) {
     const col = column[i]
@@ -349,37 +349,4 @@ export function remoteAccept (data, type) {
       else return ''
   }
   return undefined
-}
-
-/** 设置插件的一些默认数据 **/
-function pluginDefaultData (_this) {
-  return {
-    remoteOption: {
-      optionDefault: [
-        { value: '4399小游戏', label: '4399小游戏' },
-        { value: '7k7k小游戏', label: '7k7k小游戏' },
-        { value: '拇指玩小游戏', label: '拇指玩小游戏' }
-      ]
-    },
-    remoteFunc: {
-      funcDefault () {
-        return [
-          { value: '小白兔', label: '小白兔' },
-          { value: '煎饼果子', label: '煎饼果子' },
-          { value: '彩虹猫', label: '彩虹猫' }
-        ]
-      },
-      funcGetToken () {
-        if (!window.CryptoJS) {
-          packages.logs('CryptoJS')
-          return
-        }
-        const oss = _this.$loquat.qiniu
-        return getToken(oss.ak, oss.sk, {
-          scope: oss.bucket,
-          deadline: new Date().getTime() + (oss.deadline || 1) * 3600
-        })
-      }
-    }
-  }
 }

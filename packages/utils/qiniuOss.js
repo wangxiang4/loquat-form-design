@@ -29,6 +29,8 @@ export function getToken (accessKey, secretKey, putPolicy) {
   return uploadToken
 }
 
+export default getToken
+
 /** UTF16转换UTF8 **/
 function utf16to8 (str) {
   let out, i, c

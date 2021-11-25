@@ -6,14 +6,14 @@
     "email": "1827945911@qq.com"
   },
   "version": "1.0.0",
-  "main": "lib/index.umd.min.js",
-  "jsdelivr": "lib/index.umd.min.js",
-  "unpkg": "lib/index.umd.min.js",
+  "main": "lib/loquat-form-design.umd.min.js",
+  "jsdelivr": "lib/loquat-form-design.umd.min.js",
+  "unpkg": "lib/loquat-form-design.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint ./packages",
-    "lib": "vue-cli-service build --target lib --name LoquatFormDesign --dest lib --filename index --formats umd-min ./packages/index.js"
+    "lib": "vue-cli-service build --target lib --name LoquatFormDesign --dest lib --formats umd-min ./packages/index.js"
   },
   "dependencies": {
     "js-beautify": "^1.14.0",

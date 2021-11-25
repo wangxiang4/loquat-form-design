@@ -22,7 +22,7 @@
 
 <script>
 import { getComponent, getPlaceholder, clearTransformColumnDirtyData } from '@utils/dataFormat'
-import { getObjType } from '@utils'
+import { getObjType, deepClone, validateNull } from '@utils'
 export default {
   name: 'Widget',
   props: {
@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     getColumn () {
-      const column = this.$loquat.deepClone(this.column)
+      const column = deepClone(this.column)
       if (!this.preview) clearTransformColumnDirtyData(column)
       return column
     },
@@ -94,7 +94,7 @@ export default {
   watch: {
     text: {
       handler (val) {
-        if (this.first || !this.$loquat.validateNull(val)) {
+        if (this.first || !validateNull(val)) {
           this.first = true
           this.handleChange(val)
         } else {

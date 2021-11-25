@@ -67,9 +67,11 @@
 
 <script>
 import axios from 'loquat-axios'
+import GlobalConfig from '@/global/config'
 import { detailImg } from '@utils/watermark'
-import { getFileUrl, byteCapacityCompute, urlJoin } from '@utils'
-import { UPLOAD_CONFIG_PROPS } from '@/global/variable'
+import ImagePreview from '@components/ImagePreview'
+import { getFileUrl, byteCapacityCompute, urlJoin, get, validateNull, deepClone } from '@utils'
+import { UPLOAD_CONFIG_PROPS, TYPE_LIST } from '@/global/variable'
 export default {
   name: 'Upload',
   inheritAttrs: false,
@@ -246,13 +248,13 @@ export default {
       return this.listType === 'picture-img'
     },
     avatarImgUrl () {
-      return !this.$loquat.validateNull(this.text) && getFileUrl(this.homeUrl, this.text[0])
+      return !validateNull(this.text) && getFileUrl(this.homeUrl, this.text[0])
     },
     getStringMode () {
       return this.isAvatarImg ? true : this.stringMode
     },
     imgParams () {
-      if (this.$loquat.typeList.video.test(this.avatarImgUrl)) {
+      if (TYPE_LIST.video.test(this.avatarImgUrl)) {
         return Object.assign({
           is: 'video'
         }, this.params)
@@ -276,7 +278,7 @@ export default {
     },
     dic: {
       handler (n) {
-        if (this.oss && this.$loquat.validateNull(n)) {
+        if (this.oss && validateNull(n)) {
           this.tokenOnline = false
         } else this.tokenOnline = true
       },
@@ -295,7 +297,7 @@ export default {
       if (this.isQiniuOss) {
         return urlJoin(this.domain, response.key)
       } else {
-        return this.$loquat.get(response, this.resUrlKey, '')
+        return get(response, this.resUrlKey, '')
       }
     },
     // 处理上传移除
@@ -322,9 +324,10 @@ export default {
           window.open(url)
         } else {
           // 使用预览组件查看
-          const list = this.$loquat.deepClone(this.fileList)
+          const list = deepClone(this.fileList)
           const index = list.findIndex(ele => ele.url === url)
-          this.$loquat.imagePreview(list, index)
+          const imagePreview = ImagePreview(this)
+          imagePreview(list, index)
         }
       }
       if (typeof this.uploadPreview === 'function') {
@@ -343,7 +346,7 @@ export default {
       let file = config.file
       const originFile = config.file
       const fileSize = byteCapacityCompute(file.size, this.byteUnit)
-      if (!this.$loquat.validateNull(fileSize) && fileSize > this.fileSize) {
+      if (!validateNull(fileSize) && fileSize > this.fileSize) {
         this.handleError('文件太大不符合')
         return
       }
@@ -362,7 +365,7 @@ export default {
             // 使用七牛OSS请求数据处理
             if (this.isQiniuOss) {
               param.append('token', this.dic)
-              ossConfig = this.$loquat.qiniu
+              ossConfig = GlobalConfig.qiniu
               url = ossConfig.up
               withCredentials = false
             }
@@ -371,7 +374,7 @@ export default {
               withCredentials
             })
           })().then(res => {
-            const responseData = this.$loquat.get(res.data, this.resKey, '')
+            const responseData = get(res.data, this.resKey, '')
             // 成功调用外部提供上传后接口
             if (typeof this.uploadAfter === 'function') {
               this.uploadAfter(

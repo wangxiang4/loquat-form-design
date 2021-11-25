@@ -77,6 +77,7 @@
 import packages from '@utils/packages'
 import { bindEvent } from '@utils/plugins'
 import { DIC_PROPS } from '@/global/variable'
+import { validateNull } from '@utils'
 export default {
   name: 'Select',
   props: {
@@ -196,7 +197,7 @@ export default {
       handler (val) {
         this.initVal()
         // 值改变时候请求远端接口
-        if (!this.$loquat.validateNull(val)) {
+        if (!validateNull(val)) {
           if (this.remote && !this.created) {
             this.created = true
             this.handleRemoteMethod(this.multiple ? this.text.join(',') : this.text)
@@ -260,7 +261,7 @@ export default {
       bindEvent(this, 'click', event)
     },
     getLabelText (item) {
-      if (this.$loquat.validateNull(item)) return ''
+      if (validateNull(item)) return ''
       if (typeof this.typeFormat === 'function') {
         return this.typeFormat(item, this.labelKey, this.valueKey)
       }

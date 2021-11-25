@@ -23,7 +23,7 @@
               </draggable>
             </template>
           </div>
-          <template v-if="!$loquat.validateNull(getCustomFields)">
+          <template v-if="!validateNull(getCustomFields)">
             <div v-for="(field, index) in getCustomFields" :key="index + fields.length">
               <div class="field-title">{{ field.title }}</div>
               <draggable tag="ul"
@@ -619,7 +619,6 @@
 </template>
 
 <script>
-import fields from '@components/fields'
 import history from './mixins/history'
 import Draggable from 'vuedraggable'
 import WidgetForm from './components/WidgetForm'
@@ -633,8 +632,9 @@ import request from '@utils/request'
 import packages from '@utils/packages'
 import pluginForm from '@/plugins/form'
 import { insertCss, parseCss, classCss } from '@utils/dom'
-import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig } from '@utils'
-import { KEY_COMPONENT_NAME, FORM_EXECUTE_CALLBACK_HOOKS, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
+import GlobalConfig from './global/config'
+import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig, validateNull, deepClone } from '@utils'
+import { KEY_COMPONENT_NAME, BEAUTIFIER_DEFAULTS_CONF } from '@/global/variable'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor, pluginForm },
@@ -674,7 +674,7 @@ export default {
       type: Array,
       default: () => {
         const arr = []
-        fields.forEach(f => {
+        GlobalConfig.fields.forEach(f => {
           f.list.forEach(c => {
             arr.push(c.type)
           })
@@ -689,11 +689,11 @@ export default {
   },
   data () {
     return {
-      fields,
       home: this,
       formId: '',
       adapter: 'pc',
-      formCallbackHooks: FORM_EXECUTE_CALLBACK_HOOKS,
+      fields: GlobalConfig.fields,
+      formCallbackHooks: GlobalConfig.formExecuteCallbackHooks,
       widgetForm: getWidgetFormDefaultConfig(),
       configTab: 'widget',
       widgetFormSelect: {},
@@ -741,13 +741,13 @@ export default {
       } else return `${this.asideRightWidth}px`
     },
     getCustomFields () {
-      const customFields = this.$loquat.deepClone(this.customFields)
+      const customFields = deepClone(this.customFields)
       // 处理第三方传入的自定义属性与自定义事件代码美化
       customFields.forEach(item => {
         getObjType(item.list) === 'array' && item.list.forEach(field => {
-          !this.$loquat.validateNull(field.params)
+          !validateNull(field.params)
             ? field.params = codeBeautifier.js(beautifier(field.params), BEAUTIFIER_DEFAULTS_CONF) : ''
-          !this.$loquat.validateNull(field.events)
+          !validateNull(field.events)
             ? field.events = codeBeautifier.js(beautifier(field.events), BEAUTIFIER_DEFAULTS_CONF) : ''
         })
       })
@@ -766,7 +766,7 @@ export default {
             options = { column: [] }
           }
         }
-        this.widgetForm = this.$loquat.deepClone({ ...this.widgetForm, ...options })
+        this.widgetForm = deepClone({ ...this.widgetForm, ...options })
       },
       deep: true
     }
@@ -779,6 +779,7 @@ export default {
     insertCss([], this.formId)
   },
   methods: {
+    validateNull,
     // 处理加载历史数据
     handleLoadStorage () {
       let options = this.options
@@ -793,7 +794,7 @@ export default {
       const initData = this.initHistory({
         index: 0,
         maxStep: 20,
-        steps: [this.$loquat.deepClone({
+        steps: [deepClone({
           widgetForm: { ...this.widgetForm, ...options },
           widgetFormSelect: this.widgetFormSelect
         })],
@@ -830,7 +831,7 @@ export default {
     handlePreview () {
       if (!this.widgetForm.column || this.widgetForm.column.length == 0) this.$message.error('没有需要展示的内容')
       else {
-        this.widgetFormPreview = this.$loquat.deepClone(this.widgetForm)
+        this.widgetFormPreview = deepClone(this.widgetForm)
         this.previewVisible = true
       }
     },
@@ -839,7 +840,7 @@ export default {
       this.jsonOption = getJsonOptionDefaultConfig()
       this.$refs.previewForm.validate(valid => {
         if (valid) {
-          const clone = this.$loquat.deepClone(this.widgetModels)
+          const clone = deepClone(this.widgetModels)
           this.generateJson = beautifier(clone, {
             quoteType: 'double',
             dropQuotesOnKeys: false
@@ -874,7 +875,7 @@ export default {
       try {
         const data = getWidgetFormDefaultConfig()
         const options = eval('(' + this.importJson + ')')
-        this.widgetForm = this.$loquat.deepClone({ ...data, ...options })
+        this.widgetForm = deepClone({ ...data, ...options })
         this.importJsonVisible = false
         this.handleHistoryChange({
           widgetForm: this.widgetForm,
@@ -887,7 +888,7 @@ export default {
     // 初始化生成JSON
     handleGenerateJson () {
       this.jsonOption = getJsonOptionDefaultConfig()
-      const clone = this.$loquat.deepClone(this.widgetForm)
+      const clone = deepClone(this.widgetForm)
       this.generateJson = beautifier(clone, {
         quoteType: 'double',
         dropQuotesOnKeys: false
@@ -946,7 +947,7 @@ export default {
     handleActionSelect (key) {
       if (this.actionForm.key === key) return
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
-      this.actionForm = this.$loquat.deepClone(this.widgetForm.eventScript.find(item => item.key === key))
+      this.actionForm = deepClone(this.widgetForm.eventScript.find(item => item.key === key))
       this.actionMainContainerVisible = true
     },
     // 处理动作设置保存
@@ -1029,7 +1030,7 @@ export default {
     // 处理函数名称不能重复校验
     handleActionFormNameValidate (rule, value, callback) {
       !this.widgetForm.eventScript ? this.widgetForm.eventScript = [] : ''
-      const eventScript = this.$loquat.deepClone(this.widgetForm.eventScript)
+      const eventScript = deepClone(this.widgetForm.eventScript)
       eventScript.find(item => {
         // 如果是编辑模式,则需把当前的对象剔除
         if (item.key !== this.actionForm.key) return item.name === value
@@ -1061,7 +1062,7 @@ export default {
     handleDataSourceSelect (key) {
       if (this.dataSourceForm.key === key) return
       if (this.dataSourceMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
-      const dataSource = this.$loquat.deepClone(this.widgetForm.dataSource.find(item => item.key === key))
+      const dataSource = deepClone(this.widgetForm.dataSource.find(item => item.key === key))
       dataSource.headers = Object.entries(dataSource.headers).map(([k, v]) => ({ key: k, value: v }))
       dataSource.params = Object.entries(dataSource.params).map(([k, v]) => ({ key: k, value: v }))
       !dataSource.requestFunc ? dataSource.requestFunc = 'return config;' : ''
@@ -1073,7 +1074,7 @@ export default {
     handleDataSourceSave () {
       this.$refs.dataSourceForm.validate((valid, msg) => {
         if (valid) {
-          const dataSource = this.$loquat.deepClone(this.dataSourceForm)
+          const dataSource = deepClone(this.dataSourceForm)
           dataSource.headers = Object(...dataSource.headers.map(({ key, value }) => ({ [key]: value })))
           dataSource.params = Object(...dataSource.params.map(({ key, value }) => ({ [key]: value })))
           const index = this.widgetForm.dataSource.findIndex(item => item.key === this.dataSourceForm.key)
@@ -1086,7 +1087,7 @@ export default {
     // 处理数据源设置克隆
     handleDataSourceClone (data) {
       if (this.dataSourceMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
-      this.dataSourceForm = this.$loquat.deepClone(data)
+      this.dataSourceForm = deepClone(data)
       this.dataSourceForm.key = randomId8()
       this.dataSourceForm.name += '_copy'
       this.dataSourceForm.headers = Object.entries(this.dataSourceForm.headers).map(([k, v]) => ({ key: k, value: v }))
@@ -1122,7 +1123,7 @@ export default {
     },
     // 处理数据源名称不能重复校验
     handleDataSourceFormNameValidate (rule, value, callback) {
-      const dataSource = this.$loquat.deepClone(this.widgetForm.dataSource)
+      const dataSource = deepClone(this.widgetForm.dataSource)
       dataSource.find(item => {
         // 如果是编辑模式,则需把当前的对象剔除
         if (item.key !== this.dataSourceForm.key) return item.name === value
@@ -1141,7 +1142,7 @@ export default {
           })(this.dataSourceForm)
           // 是否使用第三方Axios请求
           if (this.dataSourceForm.thirdPartyAxios) {
-            !this.$loquat.validateNull(this.$loquat.axios) ? this.$loquat.axios(param).then(res => {
+            !validateNull(GlobalConfig.axios) ? GlobalConfig.axios(param).then(res => {
               try {
                 const execute = new Function('res', this.dataSourceForm.responseFunc)(res)
                 this.$alert(JSON.stringify(execute), { confirmButtonText: '确定' })
@@ -1198,7 +1199,7 @@ export default {
     },
     // 处理级联静态数据设置对话框初始值
     handleCascadeOptionSetData (obj) {
-      const clone = this.$loquat.deepClone(obj)
+      const clone = deepClone(obj)
       this.cascadeOption = beautifier(clone, {
         quoteType: 'double',
         dropQuotesOnKeys: false

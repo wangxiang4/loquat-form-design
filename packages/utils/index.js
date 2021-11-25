@@ -8,14 +8,16 @@
  * @create: 2021-07-15
  **/
 import {
-  WIDGET_FORM_DEFAULT_CONFIG, BASIC_LATIN_MAPPING,
-  JSON_OPTION_DEFAULT_CONFIG, KEY_COMPONENT_CONFIG_NAME, KEY_COMPONENT_NAME
+  BASIC_LATIN_MAPPING, KEY_COMPONENT_CONFIG_NAME,
+  KEY_COMPONENT_NAME
 } from '@/global/variable'
 import {
   RE_PROP_NAME, RE_LATIN, RE_COMBO_RANGE, RE_APOS,
   RE_HAS_UNICODE_WORD, RE_UNICODE_WORD, RE_ASCII_WORD
 } from '@/global/regex'
 import random from '@utils/random'
+
+import GlobalConfig from '@/global/config'
 
 /** 设置px像素 **/
 export function setPx (val, defval = '') {
@@ -203,12 +205,12 @@ export function urlJoin (base, url) {
 
 /** 获取部件表单默认配置 **/
 export function getWidgetFormDefaultConfig () {
-  return deepClone(WIDGET_FORM_DEFAULT_CONFIG)
+  return deepClone(GlobalConfig.widgetFormDefaultConfig)
 }
 
 /** 获取json选项默认配置 **/
 export function getJsonOptionDefaultConfig () {
-  return deepClone(JSON_OPTION_DEFAULT_CONFIG)
+  return deepClone(GlobalConfig.jsonOptionDefaultConfig)
 }
 
 /** 驼峰转下划线 **/
@@ -328,10 +330,19 @@ export function words (string, pattern) {
   return string.match(pattern) || []
 }
 
-export function noop () {}
-
 /** 源组件名称 **/
 export function originComponentName (name, type = 'config') {
   const str = camelCase(name.replace(type === 'plugin' ? KEY_COMPONENT_NAME : KEY_COMPONENT_CONFIG_NAME, ''))
   return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+/** 对象迭代器  */
+export function objectEach (obj, iterate, context) {
+  if (obj) {
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        iterate.call(context, obj[key], key, obj)
+      }
+    }
+  }
 }

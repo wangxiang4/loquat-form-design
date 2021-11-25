@@ -1,6 +1,6 @@
 <template>
   <div class="widget-config">
-    <el-form v-if="!$loquat.validateNull(data)" label-position="top" size="small">
+    <el-form v-if="!validateNull(data)" label-position="top" size="small">
       <component :is="getComponentConfig(data.type, data.component)" :data="data" :home="home"/>
     </el-form>
     <plugin-empty v-else desc="拖拽字段进行配置" style="margin-top: 100%;"/>
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { validateNull } from '@utils'
 import pluginEmpty from '@/plugins/empty'
 import { getComponentConfig } from '@utils/dataFormat'
 export default {
@@ -22,6 +23,7 @@ export default {
     }
   },
   methods: {
+    validateNull,
     getComponentConfig
   }
 }

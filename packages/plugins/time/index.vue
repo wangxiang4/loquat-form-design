@@ -24,6 +24,7 @@
 
 <script>
 import { bindEvent } from '@utils/plugins'
+import { validateNull } from '@utils'
 export default {
   name: 'Time',
   props: {
@@ -96,7 +97,7 @@ export default {
     text (n) {
       this.handleChange(n)
       // 当范围选择数组为空时设置位字符串,因为el-time-picker内部规则,空数组会出问题
-      if (Array.isArray(this.text) && this.$loquat.validateNull(this.text)) {
+      if (Array.isArray(this.text) && validateNull(this.text)) {
         this.text = this.text.join(',')
       }
     },

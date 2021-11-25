@@ -1,7 +1,7 @@
 /**
  * @program: loquat-form-design
  *
- * @description: 全局变量
+ * @description: 内置变量
  *
  * @author: entfrm开发团队-王翔
  *
@@ -16,57 +16,10 @@ export const NUMBER_VALUE_TYPES = ['inputNumber', 'rate', 'slider']
 export const BOOLEAN_VALUE_TYPES = ['switch']
 export const SELECT_TYPES = ['date', 'select', 'checkbox', 'radio', 'cascader', 'inputColor', 'time']
 export const REMOTE_REQUEST_TYPES = ['upload', 'select', 'radio', 'checkbox', 'cascader']
-export const WIDGET_FORM_DEFAULT_CONFIG = {
-  column: [],
-  labelPosition: 'right',
-  labelWidth: 90,
-  size: 'small',
-  styleSheets: '',
-  customClass: [],
-  eventScript: [
-    {
-      'key': 'mounted',
-      'name': 'mounted',
-      'func': ''
-    }
-  ],
-  dataSource: [
-    {
-      key: 'upload',
-      name: 'Get Upload Token',
-      url: 'http://tools-server.making.link/api/uptoken',
-      method: 'GET',
-      auto: true,
-      thirdPartyAxios: false,
-      headers: {},
-      params: {},
-      requestFunc: 'return config;',
-      responseFunc: 'return res.uptoken;',
-      errorFunc: ''
-    },
-    {
-      key: 'options',
-      name: 'Get Options',
-      url: 'http://tools-server.making.link/api/new/options',
-      method: 'GET',
-      auto: true,
-      thirdPartyAxios: false,
-      headers: {},
-      params: {},
-      requestFunc: 'return config;',
-      responseFunc: 'return res.data;',
-      errorFunc: ''
-    }
-  ]
-}
-export const JSON_OPTION_DEFAULT_CONFIG = {
-  space: 2,
-  dropQuotesOnKeys: true,
-  dropQuotesOnNumbers: false,
-  inlineShortArrays: false,
-  inlineShortArraysDepth: 1,
-  quoteType: 'single',
-  minify: false
+/** 文件类型定义 todo:目前这种方式存在一定的限制,后期会拔除 */
+export const TYPE_LIST = {
+  img: /\.(gif|jpg|jpeg|png|GIF|JPG|PNG)/,
+  video: /\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|ogg|mp4)/
 }
 export const DEFAULT_CONFIG_INSIDE_FORM = {
   size: 'small',
@@ -76,14 +29,13 @@ export const DEFAULT_CONFIG_INSIDE_FORM = {
   readonly: false,
   disabled: false
 }
-export const FORM_EXECUTE_CALLBACK_HOOKS = ['mounted']
-export const EVENTS_DIC = {
-  change: '值发生变化',
-  focus: '获取焦点',
-  blur: '失去焦点',
-  uploadSuccess: '上传成功',
-  uploadError: '上传失败',
-  uploadRemove: '移除'
+export const UPLOAD_CONFIG_PROPS = {
+  home: '',
+  res: '',
+  name: 'name',
+  url: 'url',
+  resUrl: 'data',
+  fileName: 'file'
 }
 export const DIC_PROPS = {
   label: 'label',
@@ -92,14 +44,6 @@ export const DIC_PROPS = {
   groups: 'groups',
   children: 'children',
   disabled: 'disabled'
-}
-export const UPLOAD_CONFIG_PROPS = {
-  home: '',
-  res: '',
-  name: 'name',
-  url: 'url',
-  resUrl: 'data',
-  fileName: 'file'
 }
 /** 更多配置详情参考地址:https://github.com/beautify-web/js-beautify **/
 export const BEAUTIFIER_DEFAULTS_CONF = {

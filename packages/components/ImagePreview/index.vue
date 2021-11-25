@@ -34,7 +34,7 @@
                           @click.native.self="ops.closeOnClickModal?close():''"
         >
           <slot/>
-          <img v-if="$loquat.typeList.img.test(item.url) || $loquat.typeList.video.test(item.url)"
+          <img v-if="typeList.img.test(item.url) || typeList.video.test(item.url)"
                ref="item"
                :src="item.url"
                :style="[styleName,styleBoxName]"
@@ -63,10 +63,13 @@
   </div>
 </template>
 <script>
+import { TYPE_LIST } from '@/global/variable'
+import { setPx } from '@utils'
 export default {
   name: 'ImagePreview',
   data () {
     return {
+      typeList: TYPE_LIST,
       left: 0,
       top: 0,
       scale: 1,
@@ -81,8 +84,8 @@ export default {
   computed: {
     styleBoxName () {
       return {
-        marginLeft: this.$loquat.setPx(this.left),
-        marginTop: this.$loquat.setPx(this.top)
+        marginLeft: setPx(this.left),
+        marginTop: setPx(this.top)
       }
     },
     styleName () {
@@ -128,7 +131,7 @@ export default {
       })
     },
     getIsVideo (item) {
-      if (this.$loquat.typeList.video.test(item.url) || item.type == 'video') {
+      if (this.typeList.video.test(item.url) || item.type == 'video') {
         return { is: 'video' }
       }
       return {}
