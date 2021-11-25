@@ -44,12 +44,6 @@ export function deepClone (data) {
   }
   if (type === 'array') {
     for (let i = 0, len = data.length; i < len; i++) {
-      data[i] = (() => {
-        if (data[i] === 0) {
-          return data[i]
-        }
-        return data[i]
-      })()
       if (data[i]) {
         delete data[i].$parent
       }
@@ -345,4 +339,32 @@ export function objectEach (obj, iterate, context) {
       }
     }
   }
+}
+
+/** 处理递归合并 */
+function handleDeepMerge (target, source) {
+  const targetType = getObjType(target)
+  const sourceType = getObjType(source)
+  if (targetType === 'array' && sourceType === 'array') {
+    for (let i = 0, len = source.length; i < len; ++i) {
+      const obj = source[i]
+      target[i] = merge(target[i], obj)
+    }
+  } else if (targetType === 'object' && sourceType === 'object') {
+    for (const key in source) {
+      const obj = source[key]
+      target[key] = merge(target[key], obj)
+    }
+  }
+  // 如果类型不匹配就不准合并返回源数据
+  return target
+}
+
+/** 将一个或多个源对象合并到目标对象中(递归合并) */
+export function merge (target = {}, ...sources) {
+  for (let index = 1; index < sources.length; ++index) {
+    const source = sources[index]
+    source && handleDeepMerge(target, source)
+  }
+  return target
 }

@@ -9,13 +9,16 @@
  */
 import { remoteFunc } from './remoteFunc'
 import { remoteOption } from './remoteOption'
+import { setup } from './setup'
 
 export const LoquatCore = {
   remoteFunc,
-  remoteOption
+  remoteOption,
+  setup
 }
 
 export * from './remoteFunc'
 export * from './remoteOption'
+export * from './setup'
 
 export default LoquatCore

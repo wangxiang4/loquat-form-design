@@ -20,9 +20,11 @@ import permission from './directive'
 import { kebabCase } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 import '@/assets/iconfont/iconfont.css'
+import { setup } from './core'
 
 export default {
-  install (Vue, opts = {}) {
+  install (Vue, options = {}) {
+    setup(options)
     Vue.use(Configs)
     Vue.use(Plugins)
     Vue.use(permission)
