@@ -346,21 +346,23 @@ export function objectEach (obj, iterate, context) {
 function handleDeepMerge (target, source) {
   const targetType = getObjType(target)
   const sourceType = getObjType(source)
+  const toString = Object.prototype.toString
   if (targetType === 'array' && sourceType === 'array') {
     for (let i = 0, len = source.length; i < len; ++i) {
-      const obj = source[i]
-      target[i] = handleDeepMerge(target[i], obj)
+      // 确保源数据类型完全一致性时才能合并
+      if (target[i] != null && toString.call(source[i]) !== toString.call(target[i])) continue
+      target[i] = handleDeepMerge(target[i], source[i])
     }
+    return target
   } else if (targetType === 'object' && sourceType === 'object') {
     for (const key in source) {
-      const obj = source[key]
-      target[key] = handleDeepMerge(target[key], obj)
+      // 确保源数据类型完全一致性时才能合并
+      if (target[key] != null && toString.call(source[key]) !== toString.call(target[key])) continue
+      target[key] = handleDeepMerge(target[key], source[key])
     }
-  } else if (targetType === 'function' && sourceType === 'function') {
-    return source
+    return target
   }
-  // 如果类型不匹配就不准合并返回源数据
-  return target
+  return source
 }
 
 /** 将一个或多个源对象合并到目标对象中(递归合并) */
@@ -368,6 +370,24 @@ export function merge (target = {}, ...sources) {
   for (let index = 0; index < sources.length; ++index) {
     const source = sources[index]
     source && handleDeepMerge(target, source)
+  }
+  return target
+}
+
+/** 将一个或多个源对象复制到目标对象中 */
+export function assign (target = {}, ...sources) {
+  const toString = Object.prototype.toString
+  for (let index = 0; index < sources.length; ++index) {
+    const source = sources[index]
+    if (source) {
+      const keys = Object.keys(source)
+      for (let index = 0, len = keys.length; index < len; ++index) {
+        const key = keys[index]
+        // 确保源数据类型完全一致性时才能合并
+        if (target[key] != null && toString.call(source[key]) !== toString.call(target[key])) continue
+        target[key] = deepClone(source[key])
+      }
+    }
   }
   return target
 }

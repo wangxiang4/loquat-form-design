@@ -14,7 +14,9 @@ import { objectEach } from '@/utils/index'
  * 创建数据仓库
  */
 export class Store {
-  #store = {}
+  constructor () {
+    this.store = {}
+  }
 
   mixin (options) {
     Object.assign(this.store, options)

@@ -158,8 +158,8 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
   const options = {
     eventScript: ops.eventScript || [],
     autoDataSource: ops.autoDataSource || [],
-    remoteOption: { ...GlobalConfig.defaultRemoteOption, ...remoteOption },
-    remoteFunc: { ...GlobalConfig.defaultRemoteFunc, ...remoteFunc },
+    remoteOption: { ...GlobalConfig.defaultRemoteOption, ...remoteOption.store },
+    remoteFunc: { ...GlobalConfig.defaultRemoteFunc, ...remoteFunc.store },
     axiosInstance: GlobalConfig.axiosInstance
   }
   for (let i = 0; i < column.length; ++i) {

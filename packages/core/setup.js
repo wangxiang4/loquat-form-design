@@ -9,11 +9,11 @@
  */
 
 import GlobalConfig from '@/global/config'
-import { merge } from '@utils'
+import { assign } from '@utils'
 
 /**
  * 全局参数设置
  */
 export const setup = (options) => {
-  return merge(GlobalConfig, options)
+  return assign(GlobalConfig, options)
 }
