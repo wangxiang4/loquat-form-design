@@ -40,8 +40,8 @@
     "vue-template-compiler": "^2.6.12"
   },
   "repository": {
-    "type": "gitee",
-    "url": "https://gitee.com/CodeZealot1024/loquat-from-design"
+    "type": "github",
+    "url": "https://github.com/wangxiang4/loquat-form-design"
   },
   "keywords": [
     "from",
