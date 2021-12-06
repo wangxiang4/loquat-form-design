@@ -38,6 +38,24 @@ module.exports =  {
       .plugin("limitChunkCountPlugin")
       .use(require("webpack").optimize.LimitChunkCountPlugin, [{ maxChunks: 1 }])
 
+    // set svg-sprite-loader
+    config.module
+      .rule('svg')
+      // 其他 svg loader 排除 icons 目录
+      .exclude.add(resolve('packages/assets/icons'))
+      .end()
+    config.module
+      .rule('icons')
+      .test(/\.svg$/)
+      .include.add(resolve('packages/assets/icons'))
+      .end()
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader')
+      .options({
+        symbolId: 'icon-[name]'
+      })
+      .end()
+
   },
 
   devServer: {

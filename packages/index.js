@@ -19,6 +19,7 @@ import FormDesign from './index.vue'
 import permission from './directive'
 import { kebabCase } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
+import '@/assets/icons'
 import '@/assets/iconfont/iconfont.css'
 import { setup } from './core'
 

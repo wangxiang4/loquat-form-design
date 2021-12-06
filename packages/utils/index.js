@@ -391,3 +391,8 @@ export function assign (target = {}, ...sources) {
   }
   return target
 }
+
+/** 判断是否外部svg地址 **/
+export function isExternal (path) {
+  return /^(https?:|mailto:|tel:)/.test(path)
+}

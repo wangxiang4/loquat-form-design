@@ -48,7 +48,7 @@
       <el-container class="widget-container" direction="vertical">
         <el-header class="widget-container-header">
           <div style="display: flex; align-items: center">
-            <img :src="require('./assets/images/homeIcon.svg')" height="30" width="30">
+            <svg-icon icon-class="homeIcon" style="height: 30px;width: 30px;"/>
             <el-divider direction="vertical"/>
             <div class="btn-bar-plat">
               <a :class="{ active: adapter==='pc' }"
@@ -635,9 +635,10 @@ import { insertCss, parseCss, classCss } from '@utils/dom'
 import GlobalConfig from './global/config'
 import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig, validateNull, deepClone } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
+import SvgIcon from '@components/SvgIcon'
 export default {
   name: 'FormDesign',
-  components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor, pluginForm },
+  components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor, pluginForm, SvgIcon },
   mixins: [history],
   props: {
     options: {
