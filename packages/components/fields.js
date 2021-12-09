@@ -518,6 +518,18 @@ export default [
           width: '100%'
         }
       }
+    }, {
+      type: 'table',
+      label: '子表格',
+      icon: 'icon-table',
+      plugin: {
+      },
+      events: {
+        change: '',
+        rowAdd: '',
+        rowRemove: '',
+        rowChange: ''
+      }
     }]
   },
   {

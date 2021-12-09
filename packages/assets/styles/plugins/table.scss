@@ -1,0 +1,15 @@
+.loquat-table {
+  &__empty{
+    padding:  60px 0;
+  }
+
+  &__pagination {
+    position: relative;
+    padding: 25px 0 20px 20px;
+    text-align: right;
+
+    .el-pagination {
+      display: inline-block;
+    }
+  }
+}
