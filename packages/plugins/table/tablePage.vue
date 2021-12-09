@@ -29,8 +29,7 @@ export default {
       default: () => {
         return {}
       }
-    },
-    pagination: Function
+    }
   },
   data () {
     return {

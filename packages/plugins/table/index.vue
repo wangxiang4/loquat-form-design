@@ -49,7 +49,7 @@
     <!-- 根据我的开发经验来说,如果提供给外部使用的话,无非就是分页实时查询数据库的数据,但是这样也会引发一个问题,不能拿取全部的数据了 -->
     <!-- 导致后端保存数据不好保存,因为这是子表单后端保存数据就只能先删后保存,但是也可以解决这个问题,实现一个实时数据操作池就可以解决这个问题 -->
     <!-- 比如添加一条数据就把他放到新增池中,删除也是一样的放到删除池,目前由于是写第一版,不打算实现,后面再说 -->
-    <table-page :page="page" :pagination="pagingAction">
+    <table-page :page="page">
       <template slot="headPage">
         <slot name="headPage"/>
       </template>
@@ -94,8 +94,7 @@ export default {
       default () {
         return {}
       }
-    },
-    pagingAction: Function
+    }
   },
   data () {
     return {
