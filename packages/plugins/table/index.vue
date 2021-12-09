@@ -15,34 +15,13 @@
           />
         </div>
       </template>
-      <column :columnOption="columnOption">
-        <column-default ref="columnDefault"
-                        slot="header">
-          <template slot-scope="{row,index}"
-                    slot="expand">
-            <slot :row="row"
-                  :index="index"
-                  name="expand"></slot>
-          </template>
-        </column-default>
+      <column :columnOption="tableColumns">
         <template v-for="item in mainSlot"
                   slot-scope="scope"
                   :slot="item">
           <slot v-bind="scope"
                 :name="item"></slot>
         </template>
-        <column-menu slot="footer">
-          <template slot="menu"
-                    slot-scope="scope">
-            <slot name="menu"
-                  v-bind="scope"></slot>
-          </template>
-          <template slot="menuBtn"
-                    slot-scope="scope">
-            <slot name="menuBtn"
-                  v-bind="scope"></slot>
-          </template>
-        </column-menu>
       </column>
     </el-table>
     <!-- 分页-目前只支持内部操作,外部不能操作只能配置页面默认参数 -->
@@ -94,7 +73,8 @@ export default {
       default () {
         return {}
       }
-    }
+    },
+    tableColumns: { type: Array }
   },
   data () {
     return {
