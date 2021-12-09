@@ -1,6 +1,6 @@
 <template>
   <div v-if="pageFlag && table.paging" class="loquat-table__pagination" >
-    <slot name="page"/>
+    <slot name="headPage"/>
     <el-pagination :small="defaultPage.smallPaging"
                    :disabled="defaultPage.disabled"
                    :layout="defaultPage.layout"
