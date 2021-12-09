@@ -29,7 +29,8 @@ export default {
       default: () => {
         return {}
       }
-    }
+    },
+    pagination: Function
   },
   data () {
     return {
@@ -61,7 +62,9 @@ export default {
       // 当最后一页数据全删除完了,自动调用上一页数据
       if (this.defaultPage.total === (this.defaultPage.currentPage - 1) * this.defaultPage.pageSize && this.defaultPage.total != 0) {
         this.defaultPage.currentPage = this.defaultPage.currentPage - 1
-        this.$emit('pagination', this.defaultPage)
+        /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
+        this.table.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
+        this.localPaging()
         this.updateValue()
       }
     }
@@ -84,7 +87,7 @@ export default {
     },
     // 更新外部分页配置参数
     updateValue () {
-      this.$emit('update:page', this.defaultPage)
+      this.table.$emit('update:page', this.defaultPage)
     },
     // 下一页事件
     nextClick (val) {
@@ -96,16 +99,30 @@ export default {
     },
     // 页大小回调
     sizeChange (val) {
-      //  当调整每页显示条数,重置当前页码
+      // 当调整每页显示条数,重置当前页码
       this.defaultPage.currentPage = 1
       this.defaultPage.pageSize = val
       this.updateValue()
-      this.$emit('pagination', this.defaultPage)
+      /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
+      this.table.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
+      this.localPaging()
+    },
+    // 本地分页
+    localPaging () {
+      const array = this.table.text
+      const offset = (this.defaultPage.currentPage - 1) * this.defaultPage.pageSize
+      // 兼容外部使用pagination重新赋值分页数据,只要超过总数量则显示全部数量
+      // 列如当前{pageSize:5,currentPage:2,array:[1,2,3,4,5]},如果没处理这样分页到第二页是没有数据的,处理后可直接获取全部数据
+      const pagingList = (offset + this.defaultPage.pageSize > array.length) ? array.slice(0, array.length) : array.slice(offset, offset + this.defaultPage.pageSize)
+      this.table.pagingList = pagingList
+      this.defaultPage.total = array.length
     },
     // 页码回调
     currentChange (val) {
       this.updateValue()
-      this.$emit('pagination', this.defaultPage)
+      /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
+      this.table.$emit('pagination', { currentPage: val, pageSize: this.defaultPage.pageSize })
+      this.localPaging()
     }
   }
 }
