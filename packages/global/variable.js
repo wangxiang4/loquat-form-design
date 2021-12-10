@@ -21,6 +21,7 @@ export const TYPE_LIST = {
   img: /\.(gif|jpg|jpeg|png|GIF|JPG|PNG)/,
   video: /\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|ogg|mp4)/
 }
+/** 默认的表单配置选项 */
 export const DEFAULT_CONFIG_INSIDE_FORM = {
   size: 'small',
   labelPosition: 'left',
@@ -28,6 +29,13 @@ export const DEFAULT_CONFIG_INSIDE_FORM = {
   labelSuffix: ':',
   readonly: false,
   disabled: false
+}
+/** 默认的子表单配置选项 */
+export const DEFAULT_CONFIG_INSIDE_LIST = {
+  size: 'small',
+  border: true,
+  colDefIndexLabel: '#',
+  colDefIndexWidth: 50
 }
 export const UPLOAD_CONFIG_PROPS = {
   home: '',
@@ -37,6 +45,7 @@ export const UPLOAD_CONFIG_PROPS = {
   resUrl: 'data',
   fileName: 'file'
 }
+/** 通用参数键配置 */
 export const DIC_PROPS = {
   label: 'label',
   value: 'value',

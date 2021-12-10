@@ -1,38 +1,40 @@
 <template>
   <div>
-    <template v-for="column in list">
-      <column-slot :column="column" :column-option="columnOption">
+    <!--前置预设列-->
+    <slot name="header"/>
+    <!--动态列-->
+    <template v-for="(column, index) in list">
+      <column-slot :key="index" :column="column" :column-option="columnOption">
         <template slot-scope="scope" :slot="column.prop">
           <slot v-bind="scope" :name="column.prop"/>
         </template>
       </column-slot>
     </template>
+    <!--前置菜单操作列-->
+    <slot name="footer"/>
   </div>
-
 </template>
 
 <script>
 import columnSlot from './columnSlot'
 export default {
   name: 'Column',
-  inject: ['table'],
+  inject: ['childForm'],
   components: { columnSlot },
-  data () {
-    return {}
-  },
   provide () {
     return {
-      table: this.table
+      childForm: this.childForm
     }
   },
   props: {
-    columnOption: Array
+    columns: {
+      type: Array
+    }
   },
   computed: {
     list () {
-      let result = [...this.columnOption];
-      result = arraySort(result, 'index', (a, b) => this.crud.objectOption[a.prop]?.index - this.crud.objectOption[b.prop]?.index)
-      return result;
+      const result = [...this.columns]
+      return result
     }
   }
 }
