@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'TablePage',
+  name: 'Page',
   inject: ['table'],
   props: {
     page: {

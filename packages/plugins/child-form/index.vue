@@ -1,0 +1,123 @@
+<template>
+  <div class="loquat-table">
+    <el-form :model="cellForm"
+             :show-message="false"
+             @validate="handleValidate"
+             ref="cellForm"
+    >
+      <el-table :data="paging?pagingList:text"
+                :size="size"
+                :border="true"
+      >
+        <!-- 暂无数据提醒 -->
+        <template slot="empty">
+          <div class="loquat-table__empty">
+            <slot v-if="$slots.empty" name="empty"/>
+            <empty v-else
+                   size="50"
+                   image="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAxKSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgIDxlbGxpcHNlIGZpbGw9IiNGNUY1RjUiIGN4PSIzMiIgY3k9IjMzIiByeD0iMzIiIHJ5PSI3Ii8+CiAgICA8ZyBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0iI0Q5RDlEOSI+CiAgICAgIDxwYXRoIGQ9Ik01NSAxMi43Nkw0NC44NTQgMS4yNThDNDQuMzY3LjQ3NCA0My42NTYgMCA0Mi45MDcgMEgyMS4wOTNjLS43NDkgMC0xLjQ2LjQ3NC0xLjk0NyAxLjI1N0w5IDEyLjc2MVYyMmg0NnYtOS4yNHoiLz4KICAgICAgPHBhdGggZD0iTTQxLjYxMyAxNS45MzFjMC0xLjYwNS45OTQtMi45MyAyLjIyNy0yLjkzMUg1NXYxOC4xMzdDNTUgMzMuMjYgNTMuNjggMzUgNTIuMDUgMzVoLTQwLjFDMTAuMzIgMzUgOSAzMy4yNTkgOSAzMS4xMzdWMTNoMTEuMTZjMS4yMzMgMCAyLjIyNyAxLjMyMyAyLjIyNyAyLjkyOHYuMDIyYzAgMS42MDUgMS4wMDUgMi45MDEgMi4yMzcgMi45MDFoMTQuNzUyYzEuMjMyIDAgMi4yMzctMS4zMDggMi4yMzctMi45MTN2LS4wMDd6IiBmaWxsPSIjRkFGQUZBIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
+                   :desc="emptyText"
+            />
+          </div>
+        </template>
+        <column :columnOption="tableColumns">
+          <template v-for="item in mainSlot"
+                    slot-scope="scope"
+                    :slot="item">
+            <slot v-bind="scope"
+                  :name="item"></slot>
+          </template>
+        </column>
+      </el-table>
+    </el-form>
+    <!-- 分页-目前只支持内部操作,外部不能操作只能配置页面默认参数 -->
+    <!-- 根据我的开发经验来说,如果提供给外部使用的话,无非就是分页实时查询数据库的数据,但是这样也会引发一个问题,不能拿取全部的数据了 -->
+    <!-- 导致后端保存数据不好保存,因为这是子表单后端保存数据就只能先删后保存,但是也可以解决这个问题,实现一个实时数据操作池就可以解决这个问题 -->
+    <!-- 比如添加一条数据就把他放到新增池中,删除也是一样的放到删除池,目前由于是写第一版,不打算实现,后面再说 -->
+    <table-page :page="page">
+      <template slot="headPage">
+        <slot name="headPage"/>
+      </template>
+    </table-page>
+  </div>
+</template>
+
+<script>
+import empty from '../empty'
+import tablePage from './page'
+import column from './column'
+import { validateNull } from '@utils'
+export default {
+  name: 'ChildForm',
+  provide () {
+    return {
+      childForm: this
+    }
+  },
+  components: { empty, tablePage, column },
+  props: {
+    // 表格配置(跟表单配置类似)
+    option: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {}
+      }
+    },
+    // 表格list
+    value: {
+      type: Array,
+      required: true,
+      default: () => []
+    },
+    // 表格分页配置
+    page: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
+  data () {
+    return {
+      list: [],
+      pagingList: [],
+      first: false
+    }
+  },
+  computed: {
+  },
+  watch: {
+    list: {
+      handler (n) {
+        if (this.first || !validateNull(n)) {
+          this.first = true
+          this.handleChange(n)
+        } else {
+          this.first = true
+        }
+      },
+      deep: true
+    },
+    value: {
+      handler (val) {
+        this.initVal()
+      },
+      deep: true
+    }
+  },
+  created () {
+    this.initVal()
+  },
+  methods: {
+    initVal () {
+      this.list = this.value
+    },
+    handleChange (value) {
+      this.$emit('input', value)
+      this.$emit('change', value)
+    }
+  }
+}
+</script>
+

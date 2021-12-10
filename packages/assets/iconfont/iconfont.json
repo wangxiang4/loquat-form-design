@@ -6,6 +6,13 @@
   "description": "枇杷图标",
   "glyphs": [
     {
+      "icon_id": "26405062",
+      "name": "child-form",
+      "font_class": "child-form",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
       "icon_id": "24598642",
       "name": "add",
       "font_class": "add",

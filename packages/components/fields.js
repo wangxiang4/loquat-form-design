@@ -519,9 +519,9 @@ export default [
         }
       }
     }, {
-      type: 'table',
-      label: '子表格',
-      icon: 'icon-table',
+      type: 'childForm',
+      label: '子表单',
+      icon: 'icon-child-form',
       plugin: {
       },
       events: {
