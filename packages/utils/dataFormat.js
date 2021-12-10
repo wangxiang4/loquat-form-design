@@ -133,23 +133,25 @@ export function getComponentConfig (type, component) {
 
 /** 设计器配置转换设计器预览配置 **/
 export function designTransformPreview (_this) {
-  const data = deepClone(_this.option)
-  const eventScript = data.eventScript || []
-  const autoDataSource = data.dataSource && data.dataSource.filter(item => item.auto)
-  handleDeepDesignTransformPreview(_this, data.column, {
-    eventScript,
-    autoDataSource
-  })
-  // 获取表单执行回调钩子函数
-  const executeCallbackHooks = {}
-  for (const item of GlobalConfig.formExecuteCallbackHooks) {
-    const event = eventScript.find(e => e.key === item)
-    executeCallbackHooks[item] = event && new Function(event.func)
+  if (!validateNull(_this.configOption)) {
+    const data = deepClone(_this.configOption)
+    const eventScript = data.eventScript || []
+    const autoDataSource = data.dataSource && data.dataSource.filter(item => item.auto)
+    handleDeepDesignTransformPreview(_this, data.column, {
+      eventScript,
+      autoDataSource
+    })
+    // 获取表单执行回调钩子函数
+    const executeCallbackHooks = {}
+    for (const item of GlobalConfig.formExecuteCallbackHooks) {
+      const event = eventScript.find(e => e.key === item)
+      executeCallbackHooks[item] = event && new Function(event.func)
+    }
+    data.callbackHooks = executeCallbackHooks
+    delete data.dataSource
+    delete data.eventScript
+    return data
   }
-  data.callbackHooks = executeCallbackHooks
-  delete data.dataSource
-  delete data.eventScript
-  return data
 }
 
 /** 处理设计器配置转换设计器预览配置深度递归 **/

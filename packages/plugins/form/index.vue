@@ -56,6 +56,7 @@ export default {
       form: {},
       home: this,
       first: false,
+      configOption: {},
       formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
       formId: '',
       DIC: {}
@@ -89,6 +90,12 @@ export default {
         this.form = val
       },
       deep: true
+    },
+    option: {
+      handler () {
+        this.initVal()
+      },
+      deep: true
     }
   },
   created () {
@@ -104,6 +111,8 @@ export default {
   methods: {
     setPx,
     initVal () {
+      this.configOption = this.option
+      insertCss([], this.formId)
       this.formId = KEY_COMPONENT_NAME.concat(randomId8())
       insertCss(parseCss(this.widgetForm.styleSheets), this.formId)
       this.form = deepClone({ ...formInitVal(this.columns), ...this.form })
