@@ -20,7 +20,7 @@
                 :column="column"
                 :value="home.form[column.prop]"
                 :readonly="home.widgetForm.readonly || column.readonly || home.formDefaultConfig.readonly"
-                :disabled="home.disabled || home.widgetForm.disabled || column.disabled"
+                :disabled="home.widgetForm.disabled || column.disabled || home.disabled"
                 :size="home.widgetForm.size || column.size || home.formDefaultConfig.size"
                 :dic="home.DIC[column.prop]"
           />
@@ -31,7 +31,7 @@
                   column: column,
                   value:home.form[column.prop],
                   readonly: home.widgetForm.readonly || column.readonly || home.formDefaultConfig.readonly,
-                  disabled: home.disabled || home.widgetForm.disabled || column.disabled,
+                  disabled: home.widgetForm.disabled || column.disabled || home.disabled,
                   size: home.widgetForm.size || column.size || home.formDefaultConfig.size,
                   dic: home.DIC[column.prop]
                 })"
@@ -42,7 +42,7 @@
               :column="column"
               :value="home.form[column.prop]"
               :readonly="home.widgetForm.readonly || column.readonly || home.formDefaultConfig.readonly"
-              :disabled="home.disabled || home.widgetForm.disabled || column.disabled"
+              :disabled="home.widgetForm.disabled || column.disabled || home.disabled"
               :size="home.widgetForm.size || column.size || home.formDefaultConfig.size"
               :dic="home.DIC[column.prop]"
         />
@@ -53,7 +53,7 @@
                 :column="column"
                 :props="home.widgetForm.props"
                 :readonly="home.widgetForm.readonly || home.formDefaultConfig.readonly"
-                :disabled="home.disabled || home.widgetForm.disabled"
+                :disabled="home.widgetForm.disabled || home.disabled"
                 :size="home.widgetForm.size || home.formDefaultConfig.size"
                 :enter="home.widgetForm.enter"
                 @enter="home.submit"
