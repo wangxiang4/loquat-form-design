@@ -26,16 +26,12 @@ export const DEFAULT_CONFIG_INSIDE_FORM = {
   size: 'small',
   labelPosition: 'left',
   labelWidth: 90,
-  labelSuffix: ':',
-  readonly: false,
-  disabled: false
+  labelSuffix: ':'
 }
 /** 默认的子表单配置选项 */
-export const DEFAULT_CONFIG_INSIDE_LIST = {
+export const DEFAULT_CONFIG_INSIDE_CHILD_FORM = {
   size: 'small',
-  border: true,
-  paging: true,
-  colDefIndexWidth: 50
+  indexExecuteWidth: 50
 }
 export const UPLOAD_CONFIG_PROPS = {
   home: '',

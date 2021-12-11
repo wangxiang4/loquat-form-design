@@ -1,13 +1,24 @@
 <template>
-  <div :class="['loquat-child-form', listId]">
-    <el-form :model="cellForm"
+  <div :class="['loquat-child-form', formId]" :style="{ width: setPx(widgetChildForm.formWidth, '100%') }">
+    <el-form ref="childForm"
+             :model="childForm"
+             :status-icon="widgetChildForm.statusIcon"
+             :size="widgetChildForm.size || childFormDefaultConfig.size"
+             :class="widgetChildForm.customClass"
              :show-message="false"
              @validate="handleValidate"
-             ref="cellForm"
     >
-      <el-table :data="cellForm.list"
-                :size="widgetList.size || listDefaultConfig.size"
-                :border="widgetList.border || listDefaultConfig.border"
+      <el-table ref="table"
+                :data="childForm.list"
+                :border="true"
+                :fit="widgetChildForm.fit"
+                :stripe="widgetChildForm.stripe"
+                :max-height="widgetChildForm.maxHeight"
+                :default-sort="widgetChildForm.defaultSort"
+                :show-header="widgetChildForm.showHeader"
+                :size="widgetChildForm.size || childFormDefaultConfig.size"
+                :highlight-current-row="widgetChildForm.highlightCurrentRow"
+                v-loading="loading"
                 @cell-mouse-enter="cellMouseEnter"
                 @cell-mouse-leave="cellMouseLeave"
       >
@@ -18,7 +29,7 @@
             <empty v-else
                    size="50"
                    image="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAxKSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgIDxlbGxpcHNlIGZpbGw9IiNGNUY1RjUiIGN4PSIzMiIgY3k9IjMzIiByeD0iMzIiIHJ5PSI3Ii8+CiAgICA8ZyBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0iI0Q5RDlEOSI+CiAgICAgIDxwYXRoIGQ9Ik01NSAxMi43Nkw0NC44NTQgMS4yNThDNDQuMzY3LjQ3NCA0My42NTYgMCA0Mi45MDcgMEgyMS4wOTNjLS43NDkgMC0xLjQ2LjQ3NC0xLjk0NyAxLjI1N0w5IDEyLjc2MVYyMmg0NnYtOS4yNHoiLz4KICAgICAgPHBhdGggZD0iTTQxLjYxMyAxNS45MzFjMC0xLjYwNS45OTQtMi45MyAyLjIyNy0yLjkzMUg1NXYxOC4xMzdDNTUgMzMuMjYgNTMuNjggMzUgNTIuMDUgMzVoLTQwLjFDMTAuMzIgMzUgOSAzMy4yNTkgOSAzMS4xMzdWMTNoMTEuMTZjMS4yMzMgMCAyLjIyNyAxLjMyMyAyLjIyNyAyLjkyOHYuMDIyYzAgMS42MDUgMS4wMDUgMi45MDEgMi4yMzcgMi45MDFoMTQuNzUyYzEuMjMyIDAgMi4yMzctMS4zMDggMi4yMzctMi45MTN2LS4wMDd6IiBmaWxsPSIjRkFGQUZBIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
-                   :desc="widgetList.emptyText || '暂无数据'"
+                   :desc="widgetChildForm.emptyText || '暂无数据'"
             />
           </div>
         </template>
@@ -26,10 +37,7 @@
           <!--渲染头部操作列-->
           <column-default slot="header"/>
           <!--渲染插槽列表-->
-          <template v-for="item in tableColSlot"
-                    slot-scope="scope"
-                    :slot="item"
-          >
+          <template v-for="item in columnSlot" slot-scope="scope" :slot="item">
             <slot v-bind="scope" :name="item"/>
           </template>
         </column>
@@ -53,9 +61,9 @@ import empty from '../empty'
 import tablePage from './page'
 import column from './column'
 import columnDefault from './columnDefault'
-import { deepClone, randomId8, validateNull } from '@utils'
+import { deepClone, randomId8, validateNull, setPx } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
-import { DEFAULT_CONFIG_INSIDE_LIST, KEY_COMPONENT_NAME } from '@/global/variable'
+import { DEFAULT_CONFIG_INSIDE_CHILD_FORM, KEY_COMPONENT_NAME } from '@/global/variable'
 import { designTransformPreview, formInitVal } from '@utils/dataFormat'
 export default {
   name: 'ChildForm',
@@ -80,7 +88,6 @@ export default {
       required: true,
       default: () => []
     },
-    /** 把一些需要常用的配置提取出来,如果使用option更新常用参数需要重新转换数据,消耗性能 */
     // 表格分页配置
     page: {
       type: Object,
@@ -98,70 +105,58 @@ export default {
       type: Boolean,
       default: false
     },
-    // 是否显示删除按钮
-    delBtn: {
-      type: Boolean,
-      default: true
-    },
-    // 是否显示新增按钮
-    addBtn: {
-      type: Boolean,
-      default: true
-    },
     // 详细模式
     detailModel: {
       type: Boolean,
       default: false
-    }
+    },
+    // table加载
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    // 是否启动分页
+    paging: {
+      type: Boolean,
+      default: true
+    },
+    // 回调函数
+    rowCellAddFun: Function,
+    rowCellDelFun: Function
   },
   data () {
     return {
-      listId: '',
       list: [],
       pagingList: [],
+      listError: {},
+      hoverMark: {},
       first: false,
       configOption: {},
-      listDefaultConfig: DEFAULT_CONFIG_INSIDE_LIST,
-      DIC: {},
-      listError: {},
-      hoverMark: {}
+      childFormDefaultConfig: DEFAULT_CONFIG_INSIDE_CHILD_FORM,
+      formId: '',
+      DIC: {}
     }
   },
   computed: {
-    widgetList () {
+    // 子表单主体配置
+    widgetChildForm () {
       return designTransformPreview(this)
     },
+    // 子表单列配置
     columns () {
-      return this.widgetList.column || []
+      return this.widgetChildForm.column || []
     },
-    // 列表单
-    cellForm () {
-      const list = this.pagingEnable ? this.pagingList : this.list
+    // 子表单model
+    childForm () {
+      const list = this.paging ? this.pagingList : this.list
       return { list }
     },
     // 列插槽定义
-    tableColSlot () {
+    columnSlot () {
       const result = []
-      this.columns.forEach(item => {
-        if (this.$scopedSlots[item.prop]) result.push(item.prop)
-      })
+      // 此子表单为表格预览方式,固然没有布局组件也就没有递归,可以直接循环获取插槽
+      this.columns.forEach(item => { this.$scopedSlots[item.prop] && result.push(item.prop) })
       return result
-    },
-    // 分页是否启动
-    pagingEnable () {
-      return this.widgetList.paging || this.listDefaultConfig.paging
-    },
-    // 设置子表单是否只读
-    formReadonly () {
-      return this.widgetList.readonly || this.readonly
-    },
-    // 设置子表单是否禁用
-    formDisabled () {
-      return this.widgetList.disabled || this.disabled
-    },
-    // 设置子表单详细模式
-    formDetailModel () {
-      return this.widgetList.detailModel || this.detailModel
     }
   },
   watch: {
@@ -190,29 +185,31 @@ export default {
     }
   },
   created () {
-    this.initOption()
-  },
-  mounted () {
     this.initVal()
-    this.pagingEnable && this.$refs.page.homePage()
+    this.initOption()
+    this.$nextTick(() => {
+      this.paging && this.$refs.page.homePage()
+      this.clearValidate()
+    })
   },
   beforeDestroy () {
-    insertCss([], this.listId)
+    insertCss([], this.formId)
   },
   methods: {
+    setPx,
     initVal () {
       this.list = this.value
       this.list.forEach((item, index) => Object.assign(item, { $index: index }))
     },
     initOption () {
       this.configOption = this.option
-      insertCss([], this.listId)
-      this.listId = KEY_COMPONENT_NAME.concat(randomId8())
-      insertCss(parseCss(this.widgetList.styleSheets), this.listId)
+      insertCss([], this.formId)
+      this.formId = KEY_COMPONENT_NAME.concat(randomId8())
+      insertCss(parseCss(this.widgetChildForm.styleSheets), this.formId)
     },
     // 处理部件修改动作
     handleWidgetChange (column) {
-      if (this.$refs.cellForm) this.$refs.cellForm.validateField(column.prop)
+      if (this.$refs.childForm) this.$refs.childForm.validateField(column.prop)
     },
     // 处理校验信息
     handleValidate (prop, valid, msg) {
@@ -227,26 +224,24 @@ export default {
         const len = this.list.length
         const formDefault = formInitVal(this.columns)
         row = deepClone(Object.assign({ $index: len }, formDefault, row))
-        this.controlOperateOrigin = 'insideCellAdd'
         this.list.push(row)
       }
-      if (typeof this.widgetList.rowAddFun === 'function') {
-        this.widgetList.rowAddFun(callback)
+      if (typeof this.rowCellAddFun === 'function') {
+        this.rowCellAddFun(callback)
       } else callback()
-      this.pagingEnable && this.$refs.page.lastPage()
+      this.paging && this.$refs.page.lastPage()
     },
     // 单元格删除
-    rowCellRow (index) {
+    rowCellDel (index) {
       const callback = () => {
         const list = deepClone(this.list)
         list.splice(index, 1)
-        this.controlOperateOrigin = 'insideCellRow'
         this.list = list
       }
-      if (typeof this.widgetList.rowDelFun === 'function') {
-        this.widgetList.rowDelFun(this.list[index], callback)
+      if (typeof this.rowCellDelFun === 'function') {
+        this.rowCellDelFun(this.list[index], callback)
       } else callback()
-      if (this.pagingEnable) {
+      if (this.paging) {
         this.$refs.page.rePaging()
         this.$refs.page.autoPrevPage()
       }
@@ -254,17 +249,29 @@ export default {
     // 当单元格 hover 进入时会触发该事件
     cellMouseEnter (row, column, cell, event) {
       const index = row.$index
-      if (!this.formReadonly || !this.formDisabled || this.delBtn) {
+      if (!this.readonly || !this.disabled) {
         this.hoverMark = { [index]: true }
       }
       this.$emit('cell-mouse-enter', row, column, cell, event)
     },
     // 当单元格 hover 退出时会触发该事件
     cellMouseLeave (row, column, cell, event) {
-      if (!this.formReadonly || !this.formDisabled || this.delBtn) {
+      if (!this.readonly || !this.disabled) {
         this.hoverMark = {}
       }
       this.$emit('cell-mouse-leave', row, column, cell, event)
+    },
+    clearValidate (list) {
+      this.$refs.childForm.clearValidate(list)
+    },
+    validate (callback) {
+      this.$refs.childForm.validate((valid, msg) => {
+        if (valid) {
+          callback(true)
+        } else {
+          callback(false, msg)
+        }
+      })
     },
     submit () {
       this.validate((valid, msg) => {

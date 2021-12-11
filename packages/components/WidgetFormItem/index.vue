@@ -31,8 +31,8 @@
                     :column="column"
                     :dic="column.dicData"
                     :props="data.props"
-                    :readonly="data.readonly || formDefaultConfig.readonly"
-                    :disabled="data.disabled || formDefaultConfig.disabled"
+                    :readonly="data.readonly"
+                    :disabled="data.disabled"
                     :size="data.size || formDefaultConfig.size"
                     :preview="false"
             />

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="pageFlag && childForm.pagingEnable" class="loquat-child-form__pagination" >
+  <div v-if="pageFlag" class="loquat-child-form__pagination" >
     <slot name="headPage"/>
     <el-pagination :small="defaultPage.smallPaging"
                    :disabled="defaultPage.disabled"
@@ -18,15 +18,6 @@
 </template>
 
 <script>
-/**
- * @program: loquat-form-design
- *
- * @description: 子表单定制分页
- *
- * @author: entfrm开发团队-王翔
- *
- * @create: 2021-12-11
- */
 export default {
   name: 'Page',
   inject: ['childForm'],
@@ -66,7 +57,7 @@ export default {
   },
   computed: {
     pageFlag () {
-      return this.defaultPage.total > 0
+      return this.defaultPage.total > 0 && this.childForm.paging
     }
   },
   methods: {
