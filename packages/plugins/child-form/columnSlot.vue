@@ -7,7 +7,7 @@
                    :render-header="column.tableColRenderHeader"
                    :align="column.tableColAlign || childForm.widgetList.align"
                    :header-align="column.tableColHeaderAlign || childForm.widgetList.headerAlign"
-                   :width="column.tableColumnWidth == 0 ? undefined : column.tableColumnWidth"
+                   :width="column.tableColWidth == 0 ? undefined : column.tableColWidth"
                    :fixed="column.tableColFixed"
   >
     <template slot-scope="{row,$index}">
@@ -20,6 +20,7 @@
             :size="childForm.widgetList.size || childForm.listDefaultConfig.size"
             :name="column.prop"
       />
+      <span v-else-if="childForm.formDetailModel || column.tableColDetailModel" v-html="row[column.prop]"/>
       <el-form-item v-else :prop="`list.${$index}.${column.prop}`" :rules="column.rules">
         <!--校验错误提示-->
         <el-tooltip :content="(childForm.listError[`list.${$index}.${column.prop}`] || {}).msg"

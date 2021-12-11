@@ -124,6 +124,11 @@ export default {
       this.defaultPage.total = array.length
       this.updateValue()
     },
+    // 链接到最一页
+    homePage () {
+      this.defaultPage.currentPage = 1
+      this.rePaging()
+    },
     // 页码回调
     currentChange () {
       this.rePaging()

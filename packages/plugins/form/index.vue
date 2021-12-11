@@ -86,20 +86,21 @@ export default {
       deep: true
     },
     value: {
-      handler (val) {
-        this.form = val
+      handler () {
+        this.initVal()
       },
       deep: true
     },
     option: {
       handler () {
-        this.initVal()
+        this.initOption()
       },
       deep: true
     }
   },
   created () {
     this.initVal()
+    this.initOption()
     this.$nextTick(() => this.clearValidate())
   },
   mounted () {
@@ -111,6 +112,9 @@ export default {
   methods: {
     setPx,
     initVal () {
+      this.form = this.value
+    },
+    initOption () {
       this.configOption = this.option
       insertCss([], this.formId)
       this.formId = KEY_COMPONENT_NAME.concat(randomId8())

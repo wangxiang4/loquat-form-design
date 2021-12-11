@@ -2,7 +2,17 @@
   <div>
     <child-form v-model="data"
                 :option="option"
-    />
+    >
+      <template slot="empty">
+        没有数据
+      </template>
+      <template slot="headPage">
+        分页头部插槽
+      </template>
+      <!--<template slot="input_j5vFQOMI" slot-scope="scope">
+        列插槽{{ scope }}
+      </template>-->
+    </child-form>
   </div>
 </template>
 
@@ -14,6 +24,7 @@ export default {
   data () {
     return {
       option: {
+        tableColDetailModel: true,
         'column': [{
           'type': 'input',
           'label': '单行文本',
@@ -84,7 +95,7 @@ export default {
           'errorFunc': ''
         }]
       },
-      data: []
+      data: [{ $index: 0, input_j5vFQOMI: '详情信息' }]
     }
   },
   methods: {

@@ -107,6 +107,11 @@ export default {
     addBtn: {
       type: Boolean,
       default: true
+    },
+    // 详细模式
+    detailModel: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -135,7 +140,7 @@ export default {
       const list = this.pagingEnable ? this.pagingList : this.list
       return { list }
     },
-    // table列插槽定义
+    // 列插槽定义
     tableColSlot () {
       const result = []
       this.columns.forEach(item => {
@@ -149,11 +154,15 @@ export default {
     },
     // 设置子表单是否只读
     formReadonly () {
-      return this.readonly || this.widgetList.readonly
+      return this.widgetList.readonly || this.readonly
     },
     // 设置子表单是否禁用
     formDisabled () {
-      return this.disabled || this.widgetList.disabled
+      return this.widgetList.disabled || this.disabled
+    },
+    // 设置子表单详细模式
+    formDetailModel () {
+      return this.widgetList.detailModel || this.detailModel
     }
   },
   watch: {
@@ -169,13 +178,22 @@ export default {
       deep: true
     },
     value: {
-      handler (val) {
+      handler () {
         this.initVal()
+      },
+      deep: true
+    },
+    option: {
+      handler () {
+        this.initOption()
       },
       deep: true
     }
   },
   created () {
+    this.initOption()
+  },
+  mounted () {
     this.initVal()
   },
   beforeDestroy () {
@@ -183,12 +201,14 @@ export default {
   },
   methods: {
     initVal () {
+      this.list = this.value
+      this.pagingEnable && this.$refs.page.homePage()
+    },
+    initOption () {
       this.configOption = this.option
       insertCss([], this.listId)
       this.listId = KEY_COMPONENT_NAME.concat(randomId8())
       insertCss(parseCss(this.widgetList.styleSheets), this.listId)
-      this.form = deepClone({ ...formInitVal(this.columns), ...this.form })
-      this.list = this.value
     },
     // 处理部件修改动作
     handleWidgetChange (column) {
