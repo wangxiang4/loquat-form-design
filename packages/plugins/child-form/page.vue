@@ -101,12 +101,7 @@ export default {
       this.defaultPage.pageSize = val
       /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
       this.childForm.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
-      // 启动本地分页,可兼容组件方式使用
-      const array = this.childForm.list
-      const pagingList = this.localPaging(array, this.defaultPage.currentPage, this.defaultPage.pageSize)
-      this.childForm.pagingList = pagingList
-      this.defaultPage.total = array.length
-      this.updateValue()
+      this.rePaging()
     },
     // 本地分页
     localPaging (array = [], currentPage, pageSize) {
@@ -123,34 +118,30 @@ export default {
       this.defaultPage.currentPage = array.length % this.defaultPage.pageSize == 0
         ? array.length / this.defaultPage.pageSize
         : Math.ceil(array.length / this.defaultPage.pageSize)
-      // 启动本地分页,可兼容组件方式使用
-      const pagingList = this.localPaging(array, this.defaultPage.currentPage, this.defaultPage.pageSize)
-      this.childForm.pagingList = pagingList
-      this.defaultPage.total = array.length
-      this.updateValue()
+      this.rePaging()
     },
     // 删除数据后,当最后一页数据全删除完了,自动调用上一页数据
     autoPrevPage () {
       const array = this.childForm.list
       if (array.length === (this.defaultPage.currentPage - 1) * this.defaultPage.pageSize && array.length != 0) {
         this.defaultPage.currentPage = this.defaultPage.currentPage - 1
-        // 启动本地分页,可兼容组件方式使用
-        const pagingList = this.localPaging(array, this.defaultPage.currentPage, this.defaultPage.pageSize)
-        this.childForm.pagingList = pagingList
-        this.defaultPage.total = array.length
-        this.updateValue()
+        this.rePaging()
       }
     },
-    // 页码回调
-    currentChange (val) {
-      /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
-      this.childForm.$emit('pagination', { currentPage: val, pageSize: this.defaultPage.pageSize })
+    // 重新执行分页
+    rePaging () {
       // 启动本地分页,可兼容组件方式使用
       const array = this.childForm.list
       const pagingList = this.localPaging(array, this.defaultPage.currentPage, this.defaultPage.pageSize)
       this.childForm.pagingList = pagingList
       this.defaultPage.total = array.length
       this.updateValue()
+    },
+    // 页码回调
+    currentChange (val) {
+      /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
+      this.childForm.$emit('pagination', { currentPage: val, pageSize: this.defaultPage.pageSize })
+      this.rePaging()
     }
   }
 }

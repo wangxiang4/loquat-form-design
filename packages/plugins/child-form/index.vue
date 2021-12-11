@@ -215,7 +215,7 @@ export default {
     // 单元格删除
     rowCellRow (index) {
       const callback = () => {
-        const list = this.deepClone(this.list)
+        const list = deepClone(this.list)
         list.splice(index, 1)
         this.list = list
       }
@@ -224,7 +224,11 @@ export default {
       } else callback()
       // 重新排序表格列序号
       this.list.forEach((ele, index) => { ele = Object.assign(ele, { $index: index }) })
-      if (this.pagingEnable) this.$refs.page.autoPrevPage()
+      if (this.pagingEnable) {
+        // 重新执行本地分页,刷新数据
+        this.$refs.page.rePaging()
+        this.$refs.page.autoPrevPage()
+      }
     },
     // 当单元格 hover 进入时会触发该事件
     cellMouseEnter (row, column, cell, event) {
