@@ -19,8 +19,8 @@
           <slot :name="column.prop + 'Label'"
                 :column="column"
                 :value="home.form[column.prop]"
-                :readonly="home.widgetForm.readonly || column.readonly || home.formDefaultConfig.readonly"
-                :disabled="home.widgetForm.disabled || column.disabled || home.disabled"
+                :readonly="home.readonly || column.readonly"
+                :disabled="home.disabled || column.disabled"
                 :size="home.widgetForm.size || column.size || home.formDefaultConfig.size"
                 :dic="home.DIC[column.prop]"
           />
@@ -30,8 +30,8 @@
                 v-bind="Object.assign(scope, {
                   column: column,
                   value:home.form[column.prop],
-                  readonly: home.widgetForm.readonly || column.readonly || home.formDefaultConfig.readonly,
-                  disabled: home.widgetForm.disabled || column.disabled || home.disabled,
+                  readonly: home.readonly || column.readonly,
+                  disabled: home.disabled || column.disabled,
                   size: home.widgetForm.size || column.size || home.formDefaultConfig.size,
                   dic: home.DIC[column.prop]
                 })"
@@ -41,8 +41,8 @@
               :name="column.prop"
               :column="column"
               :value="home.form[column.prop]"
-              :readonly="home.widgetForm.readonly || column.readonly || home.formDefaultConfig.readonly"
-              :disabled="home.widgetForm.disabled || column.disabled || home.disabled"
+              :readonly="home.readonly || column.readonly"
+              :disabled="home.disabled || column.disabled"
               :size="home.widgetForm.size || column.size || home.formDefaultConfig.size"
               :dic="home.DIC[column.prop]"
         />
@@ -52,8 +52,8 @@
                 :dic="home.DIC[column.prop]"
                 :column="column"
                 :props="home.widgetForm.props"
-                :readonly="home.widgetForm.readonly || home.formDefaultConfig.readonly"
-                :disabled="home.widgetForm.disabled || home.disabled"
+                ::readonly="home.readonly || column.readonly"
+                :disabled="home.disabled || column.disabled"
                 :size="home.widgetForm.size || home.formDefaultConfig.size"
                 :enter="home.widgetForm.enter"
                 @enter="home.submit"
