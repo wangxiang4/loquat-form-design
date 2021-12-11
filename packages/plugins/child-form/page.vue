@@ -46,7 +46,7 @@ export default {
         total: 0,        // 总页数
         pagerCount: 7,   // 超过多少条隐藏
         currentPage: 1,  // 当前页数
-        pageSize: 10,    // 每页显示多少条
+        pageSize: 5,    // 每页显示多少条
         smallPaging: true, // 是否使用小分页
         simplePage: false, // 当只有一页时隐藏分页
         pageSizes: [10, 20, 30, 40, 50, 100],
@@ -96,6 +96,7 @@ export default {
     },
     // 页大小回调
     sizeChange (val) {
+      debugger
       // 当调整每页显示条数,重置当前页码
       this.defaultPage.currentPage = 1
       this.defaultPage.pageSize = val
@@ -110,10 +111,11 @@ export default {
     },
     // 本地分页
     localPaging (array = [], currentPage, pageSize) {
+      debugger
       const offset = (currentPage - 1) * pageSize
       // 兼容外部使用pagination重新赋值分页数据,只要超过总数量则显示全部数量
       // 列如当前{pageSize:5,currentPage:2,array:[1,2,3,4,5]},如果没处理这样分页到第二页是没有数据的,处理后可直接获取全部数据
-      const pagingList = (offset + pageSize > array.length) ? array.slice(0, array.length) : array.slice(offset, offset + pageSize)
+      const pagingList = (offset > array.length) ? array.slice(0, array.length) : array.slice(offset, offset + pageSize)
       return pagingList
     },
     // 链接到最后一页
