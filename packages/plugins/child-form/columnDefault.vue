@@ -4,7 +4,6 @@
     <!-- 子表单操作列 -->
     <el-table-column v-if="!childForm.widgetList.colDefIndexHide"
                      :fixed="childForm.widgetList.colDefIndexFixed"
-                     :label="childForm.widgetList.colDefIndexLabel || childForm.listDefaultConfig.colDefIndexLabel"
                      :width="childForm.widgetList.colDefIndexWidth || childForm.listDefaultConfig.colDefIndexWidth"
                      align="center"
                      header-align="center"

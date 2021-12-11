@@ -12,4 +12,9 @@
       display: inline-block;
     }
   }
+
+  .el-table thead tr, .el-table thead tr th{
+    background-color: #f6f7fa;
+    font-weight: 400;
+  }
 }
