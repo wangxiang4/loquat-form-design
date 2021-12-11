@@ -78,7 +78,7 @@ export default {
         currentPage: Number(this.page.currentPage || this.defaultPage.currentPage),
         pageSize: Number(this.page.pageSize || this.defaultPage.pageSize)
       })
-      this.updateValue()
+      this.rePaging()
     },
     // 更新外部分页配置参数
     updateValue () {
@@ -124,7 +124,7 @@ export default {
       this.defaultPage.total = array.length
       this.updateValue()
     },
-    // 链接到最一页
+    // 链接到第一页
     homePage () {
       this.defaultPage.currentPage = 1
       this.rePaging()

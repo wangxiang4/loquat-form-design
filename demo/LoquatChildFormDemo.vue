@@ -2,6 +2,7 @@
   <div>
     <child-form v-model="data"
                 :option="option"
+                :page.sync="page"
     >
       <template slot="empty">
         没有数据
@@ -13,6 +14,7 @@
         列插槽{{ scope }}
       </template>-->
     </child-form>
+    <el-button @click="testPage">测试分页</el-button>
   </div>
 </template>
 
@@ -24,7 +26,7 @@ export default {
   data () {
     return {
       option: {
-        tableColDetailModel: true,
+        tableColDetailModel: false,
         'column': [{
           'type': 'input',
           'label': '单行文本',
@@ -95,10 +97,27 @@ export default {
           'errorFunc': ''
         }]
       },
-      data: [{ $index: 0, input_j5vFQOMI: '详情信息' }]
+      data: [{ input_j5vFQOMI: '详情信息' }],
+      page: {
+        total: 0,        // 总页数
+        pagerCount: 7,   // 超过多少条隐藏
+        currentPage: 1,  // 当前页数
+        pageSize: 3,     // 每页显示多少条
+        smallPaging: true, // 是否使用小分页
+        simplePage: false, // 当只有一页时隐藏分页
+        pageSizes: [10, 20, 30, 40, 50, 100],
+        layout: 'total, prev, pager, next',
+        background: false // 背景颜色
+      }
     }
   },
   methods: {
+    testPage () {
+      this.page = {
+        currentPage: 1,
+        pageSize: 3
+      }
+    }
   }
 }
 </script>

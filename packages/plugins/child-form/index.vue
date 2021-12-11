@@ -111,7 +111,7 @@ export default {
     // 详细模式
     detailModel: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data () {
@@ -124,7 +124,6 @@ export default {
       listDefaultConfig: DEFAULT_CONFIG_INSIDE_LIST,
       DIC: {},
       listError: {},
-      // 删除按钮悬浮标记
       hoverMark: {}
     }
   },
@@ -195,6 +194,7 @@ export default {
   },
   mounted () {
     this.initVal()
+    this.pagingEnable && this.$refs.page.homePage()
   },
   beforeDestroy () {
     insertCss([], this.listId)
@@ -202,7 +202,7 @@ export default {
   methods: {
     initVal () {
       this.list = this.value
-      this.pagingEnable && this.$refs.page.homePage()
+      this.list.forEach((item, index) => Object.assign(item, { $index: index }))
     },
     initOption () {
       this.configOption = this.option
@@ -227,27 +227,26 @@ export default {
         const len = this.list.length
         const formDefault = formInitVal(this.columns)
         row = deepClone(Object.assign({ $index: len }, formDefault, row))
+        this.controlOperateOrigin = 'insideCellAdd'
         this.list.push(row)
       }
       if (typeof this.widgetList.rowAddFun === 'function') {
         this.widgetList.rowAddFun(callback)
       } else callback()
-      if (this.pagingEnable) this.$refs.page.lastPage()
+      this.pagingEnable && this.$refs.page.lastPage()
     },
     // 单元格删除
     rowCellRow (index) {
       const callback = () => {
         const list = deepClone(this.list)
         list.splice(index, 1)
+        this.controlOperateOrigin = 'insideCellRow'
         this.list = list
       }
       if (typeof this.widgetList.rowDelFun === 'function') {
         this.widgetList.rowDelFun(this.list[index], callback)
       } else callback()
-      // 重新排序表格列序号
-      this.list.forEach((ele, index) => { ele = Object.assign(ele, { $index: index }) })
       if (this.pagingEnable) {
-        // 重新执行本地分页,刷新数据
         this.$refs.page.rePaging()
         this.$refs.page.autoPrevPage()
       }
