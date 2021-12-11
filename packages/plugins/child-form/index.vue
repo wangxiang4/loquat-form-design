@@ -35,10 +35,11 @@
         </column>
       </el-table>
     </el-form>
-    <!-- 分页-目前只支持内部操作,外部不能操作只能配置页面默认参数 -->
-    <!-- 根据我的开发经验来说,如果提供给外部使用的话,无非就是分页实时查询数据库的数据,但是这样也会引发一个问题,不能拿取全部的数据了 -->
-    <!-- 导致后端保存数据不好保存,因为这是子表单后端保存数据就只能先删后保存,但是也可以解决这个问题,实现一个实时数据操作池就可以解决这个问题 -->
-    <!-- 比如添加一条数据就把他放到新增池中,删除也是一样的放到删除池,目前由于是写第一版,不打算实现,后面再说 -->
+    <!-- 分页-目前只支持本地分页 -->
+    <!-- 根据我的开发经验来说,如果提供远程请求分页数据,无非就是点击页码实时查询数据库的分页数据,但是这样也会引发一个问题,不能拿取全部的数据了 -->
+    <!-- 导致数据的一些增删改操作无效,假设(pageSize:5)比如远程请求分页第一页拿到5条数据,此时我删除了第一页的3条数据,然后在远程请求第二页 -->
+    <!-- 此时第一页我删除的3条数据信息丢失了,会导致删除无效,但是也可以解决这个问题,实现一个实时数据操作池,然后那操作池的数据去比对远程请求分页数据 -->
+    <!-- 就可以解决这个问题,目前由于是写第一版,不打算实现,后面再说 -->
     <table-page ref="page" :page="page">
       <template slot="headPage">
         <slot name="headPage"/>
@@ -110,12 +111,12 @@ export default {
   },
   data () {
     return {
+      listId: '',
       list: [],
       pagingList: [],
       first: false,
       configOption: {},
       listDefaultConfig: DEFAULT_CONFIG_INSIDE_LIST,
-      listId: '',
       DIC: {},
       listError: {},
       // 删除按钮悬浮标记
@@ -189,6 +190,7 @@ export default {
       this.form = deepClone({ ...formInitVal(this.columns), ...this.form })
       this.list = this.value
     },
+    // 处理部件修改动作
     handleWidgetChange (column) {
       if (this.$refs.cellForm) this.$refs.cellForm.validateField(column.prop)
     },
