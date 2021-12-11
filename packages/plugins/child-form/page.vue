@@ -111,7 +111,6 @@ export default {
     },
     // 本地分页
     localPaging (array = [], currentPage, pageSize) {
-      debugger
       const offset = (currentPage - 1) * pageSize
       // 兼容外部使用pagination重新赋值分页数据,只要超过总数量则显示全部数量
       // 列如当前{pageSize:5,currentPage:2,array:[1,2,3,4,5]},如果没处理这样分页到第二页是没有数据的,处理后可直接获取全部数据
