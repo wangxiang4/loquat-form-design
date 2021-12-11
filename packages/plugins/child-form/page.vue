@@ -101,7 +101,6 @@ export default {
       // 当调整每页显示条数,重置当前页码
       this.defaultPage.currentPage = 1
       this.defaultPage.pageSize = val
-      this.updateValue()
       /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
       this.childForm.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
       this.localPaging()
@@ -115,10 +114,18 @@ export default {
       const pagingList = (offset + this.defaultPage.pageSize > array.length) ? array.slice(0, array.length) : array.slice(offset, offset + this.defaultPage.pageSize)
       this.childForm.pagingList = pagingList
       this.defaultPage.total = array.length
+      this.updateValue()
+    },
+    // 链接到最后一页
+    lastPage () {
+      const computeLastPage = this.defaultPage.total % this.defaultPage.pageSize == 0
+        ? this.defaultPage.total / this.defaultPage.pageSize
+        : Math.ceil(this.defaultPage.total / this.defaultPage.pageSize)
+      this.defaultPage.currentPage = computeLastPage
+      this.localPaging()
     },
     // 页码回调
     currentChange (val) {
-      this.updateValue()
       /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
       this.childForm.$emit('pagination', { currentPage: val, pageSize: this.defaultPage.pageSize })
       this.localPaging()

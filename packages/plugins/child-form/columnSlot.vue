@@ -33,8 +33,6 @@
                   :readonly="childForm.widgetList.readonly || childForm.readonly"
                   :disabled="childForm.widgetList.disabled || childForm.disabled"
                   :size="childForm.widgetList.size || childForm.listDefaultConfig.size"
-                  :enter="childForm.widgetForm.enter"
-                  @enter="childForm.submit"
                   @change="childForm.handleWidgetChange(column)"
           />
         </el-tooltip>
