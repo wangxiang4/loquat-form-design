@@ -96,7 +96,6 @@ export default {
     },
     // 页大小回调
     sizeChange (val) {
-      debugger
       // 当调整每页显示条数,重置当前页码
       this.defaultPage.currentPage = 1
       this.defaultPage.pageSize = val

@@ -8,6 +8,8 @@
       <el-table :data="cellForm.list"
                 :size="widgetList.size || listDefaultConfig.size"
                 :border="widgetList.border || listDefaultConfig.border"
+                @cell-mouse-enter="cellMouseEnter"
+                @cell-mouse-leave="cellMouseLeave"
       >
         <!-- 暂无数据提醒 -->
         <template slot="empty">
@@ -116,7 +118,8 @@ export default {
       listId: '',
       DIC: {},
       listError: {},
-      hoverList: []
+      // 删除按钮悬浮标记
+      hoverMark: {}
     }
   },
   computed: {
@@ -139,8 +142,17 @@ export default {
       })
       return result
     },
+    // 分页是否启动
     pagingEnable () {
       return this.widgetList.paging || this.listDefaultConfig.paging
+    },
+    // 设置子表单是否只读
+    formReadonly () {
+      return this.readonly || this.widgetList.readonly
+    },
+    // 设置子表单是否禁用
+    formDisabled () {
+      return this.disabled || this.widgetList.disabled
     }
   },
   watch: {
@@ -213,6 +225,21 @@ export default {
       // 重新排序表格列序号
       this.list.forEach((ele, index) => { ele = Object.assign(ele, { $index: index }) })
       if (this.pagingEnable) this.$refs.page.autoPrevPage()
+    },
+    // 当单元格 hover 进入时会触发该事件
+    cellMouseEnter (row, column, cell, event) {
+      const index = row.$index
+      if (!this.formReadonly || !this.formDisabled || this.delBtn) {
+        this.hoverMark = { [index]: true }
+      }
+      this.$emit('cell-mouse-enter', row, column, cell, event)
+    },
+    // 当单元格 hover 退出时会触发该事件
+    cellMouseLeave (row, column, cell, event) {
+      if (!this.formReadonly || !this.formDisabled || this.delBtn) {
+        this.hoverMark = {}
+      }
+      this.$emit('cell-mouse-leave', row, column, cell, event)
     },
     handleChange (value) {
       this.$emit('input', value)

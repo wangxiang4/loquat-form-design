@@ -9,17 +9,17 @@
                      header-align="center"
     >
       <template slot="header">
-        <el-button v-if="!readonly || !childForm.widgetList.addBtn"
+        <el-button v-if="!childForm.formReadonly || !childForm.widgetList.addBtn"
                    @click="childForm.rowCellAdd()"
                    type="primary"
                    size="mini"
-                   :disabled="disabled"
+                   :disabled="childForm.formDisabled"
                    icon="el-icon-plus"
                    circle
         />
       </template>
       <template slot-scope="scope">
-        <el-button v-if="(!readonly || !disabled || !childForm.widgetList.delBtn) && childForm.hoverList[scope.row.$index]"
+        <el-button v-if="(!childForm.formReadonly || !childForm.formDisabled || !childForm.widgetList.delBtn) && childForm.hoverMark[scope.row.$index]"
                    @click="childForm.rowCellRow(scope.row.$index)"
                    type="danger"
                    size="mini"
@@ -35,14 +35,6 @@
 <script>
 export default {
   name: 'ColumnDefault',
-  inject: ['childForm'],
-  computed: {
-    readonly () {
-      return this.childForm.widgetList.readonly || this.childForm.readonly
-    },
-    disabled () {
-      return this.childForm.widgetList.disabled || this.childForm.disabled
-    }
-  }
+  inject: ['childForm']
 }
 </script>

@@ -15,8 +15,8 @@
             :row="row"
             :index="$index"
             :dic="childForm.DIC[column.prop]"
-            :readonly="childForm.widgetList.readonly || childForm.readonly"
-            :disabled="childForm.widgetList.disabled || childForm.disabled"
+            :readonly="childForm.formReadonly"
+            :disabled="childForm.formDisabled"
             :size="childForm.widgetList.size || childForm.listDefaultConfig.size"
             :name="column.prop"
       />
