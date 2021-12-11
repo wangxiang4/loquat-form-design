@@ -26,7 +26,6 @@ export default {
   data () {
     return {
       option: {
-        tableColDetailModel: false,
         'column': [{
           'type': 'input',
           'label': '单行文本',
