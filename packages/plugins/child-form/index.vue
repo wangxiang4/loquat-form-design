@@ -266,6 +266,15 @@ export default {
       }
       this.$emit('cell-mouse-leave', row, column, cell, event)
     },
+    submit () {
+      this.validate((valid, msg) => {
+        if (valid) {
+          this.$emit('submit', this.list)
+        } else {
+          this.$emit('error', msg)
+        }
+      })
+    },
     handleChange (value) {
       this.$emit('input', value)
       this.$emit('change', value)

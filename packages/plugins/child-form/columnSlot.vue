@@ -14,6 +14,7 @@
       <slot v-if="childForm.$scopedSlots[column.prop]"
             :row="row"
             :index="$index"
+            :column="column"
             :dic="childForm.DIC[column.prop]"
             :readonly="childForm.formReadonly"
             :disabled="childForm.formDisabled"
@@ -34,6 +35,8 @@
                   :readonly="childForm.widgetList.readonly || childForm.readonly"
                   :disabled="childForm.widgetList.disabled || childForm.disabled"
                   :size="childForm.widgetList.size || childForm.listDefaultConfig.size"
+                  :enter="childForm.widgetList.enter"
+                  @enter="childForm.submit"
                   @change="childForm.handleWidgetChange(column)"
           />
         </el-tooltip>

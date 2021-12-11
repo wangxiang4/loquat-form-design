@@ -35,7 +35,7 @@ export default {
           'hideLabel': false,
           'customClass': [],
           'validateConfig': {
-            'required': false,
+            'required': true,
             'type': false,
             'pattern': false
           },
