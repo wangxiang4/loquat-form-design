@@ -20,6 +20,15 @@
 </template>
 
 <script>
+/**
+ * @program: loquat-form-design
+ *
+ * @description: 子表单定制分页
+ *
+ * @author: entfrm开发团队-王翔
+ *
+ * @create: 2021-07-19
+ **/
 export default {
   name: 'Page',
   inject: ['childForm'],
@@ -42,7 +51,7 @@ export default {
         simplePage: false, // 当只有一页时隐藏分页
         pageSizes: [10, 20, 30, 40, 50, 100],
         layout: 'total, prev, pager, next',
-        background: true // 背景颜色
+        background: false // 背景颜色
       }
     }
   },
@@ -55,17 +64,6 @@ export default {
         this.pageInit()
       },
       deep: true
-    },
-    // 当外部修改total触发
-    'defaultPage.total' (val) {
-      // 当最后一页数据全删除完了,自动调用上一页数据
-      if (this.defaultPage.total === (this.defaultPage.currentPage - 1) * this.defaultPage.pageSize && this.defaultPage.total != 0) {
-        this.defaultPage.currentPage = this.defaultPage.currentPage - 1
-        /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
-        this.childForm.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
-        this.localPaging()
-        this.updateValue()
-      }
     }
   },
   computed: {
@@ -103,32 +101,56 @@ export default {
       this.defaultPage.pageSize = val
       /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
       this.childForm.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
-      this.localPaging()
-    },
-    // 本地分页
-    localPaging () {
+      // 启动本地分页,可兼容组件方式使用
       const array = this.childForm.list
-      const offset = (this.defaultPage.currentPage - 1) * this.defaultPage.pageSize
-      // 兼容外部使用pagination重新赋值分页数据,只要超过总数量则显示全部数量
-      // 列如当前{pageSize:5,currentPage:2,array:[1,2,3,4,5]},如果没处理这样分页到第二页是没有数据的,处理后可直接获取全部数据
-      const pagingList = (offset + this.defaultPage.pageSize > array.length) ? array.slice(0, array.length) : array.slice(offset, offset + this.defaultPage.pageSize)
+      const pagingList = this.localPaging(array, this.defaultPage.currentPage, this.defaultPage.pageSize)
       this.childForm.pagingList = pagingList
       this.defaultPage.total = array.length
       this.updateValue()
     },
+    // 本地分页
+    localPaging (array = [], currentPage, pageSize) {
+      const offset = (currentPage - 1) * pageSize
+      // 兼容外部使用pagination重新赋值分页数据,只要超过总数量则显示全部数量
+      // 列如当前{pageSize:5,currentPage:2,array:[1,2,3,4,5]},如果没处理这样分页到第二页是没有数据的,处理后可直接获取全部数据
+      const pagingList = (offset + pageSize > array.length) ? array.slice(0, array.length) : array.slice(offset, offset + pageSize)
+      return pagingList
+    },
     // 链接到最后一页
     lastPage () {
-      const computeLastPage = this.defaultPage.total % this.defaultPage.pageSize == 0
-        ? this.defaultPage.total / this.defaultPage.pageSize
-        : Math.ceil(this.defaultPage.total / this.defaultPage.pageSize)
-      this.defaultPage.currentPage = computeLastPage
-      this.localPaging()
+      const array = this.childForm.list
+      // 计算最后一的页码
+      this.defaultPage.currentPage = array.length % this.defaultPage.pageSize == 0
+        ? array.length / this.defaultPage.pageSize
+        : Math.ceil(array.length / this.defaultPage.pageSize)
+      // 启动本地分页,可兼容组件方式使用
+      const pagingList = this.localPaging(array, this.defaultPage.currentPage, this.defaultPage.pageSize)
+      this.childForm.pagingList = pagingList
+      this.defaultPage.total = array.length
+      this.updateValue()
+    },
+    // 删除数据后,当最后一页数据全删除完了,自动调用上一页数据
+    autoPrevPage () {
+      const array = this.childForm.list
+      if (array.length === (this.defaultPage.currentPage - 1) * this.defaultPage.pageSize && array.length != 0) {
+        this.defaultPage.currentPage = this.defaultPage.currentPage - 1
+        // 启动本地分页,可兼容组件方式使用
+        const pagingList = this.localPaging(array, this.defaultPage.currentPage, this.defaultPage.pageSize)
+        this.childForm.pagingList = pagingList
+        this.defaultPage.total = array.length
+        this.updateValue()
+      }
     },
     // 页码回调
     currentChange (val) {
       /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
       this.childForm.$emit('pagination', { currentPage: val, pageSize: this.defaultPage.pageSize })
-      this.localPaging()
+      // 启动本地分页,可兼容组件方式使用
+      const array = this.childForm.list
+      const pagingList = this.localPaging(array, this.defaultPage.currentPage, this.defaultPage.pageSize)
+      this.childForm.pagingList = pagingList
+      this.defaultPage.total = array.length
+      this.updateValue()
     }
   }
 }

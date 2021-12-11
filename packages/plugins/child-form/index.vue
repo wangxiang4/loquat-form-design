@@ -197,9 +197,7 @@ export default {
       }
       if (typeof this.widgetList.rowAddFun === 'function') {
         this.widgetList.rowAddFun(callback)
-      } else {
-        callback()
-      }
+      } else callback()
       if (this.pagingEnable) this.$refs.page.lastPage()
     },
     // 单元格删除
@@ -211,11 +209,10 @@ export default {
       }
       if (typeof this.widgetList.rowDelFun === 'function') {
         this.widgetList.rowDelFun(this.list[index], callback)
-      } else {
-        callback()
-      }
+      } else callback()
       // 重新排序表格列序号
-      this.text.forEach((ele, index) => { ele = Object.assign(ele, { $index: index }) })
+      this.list.forEach((ele, index) => { ele = Object.assign(ele, { $index: index }) })
+      if (this.pagingEnable) this.$refs.page.autoPrevPage()
     },
     handleChange (value) {
       this.$emit('input', value)
