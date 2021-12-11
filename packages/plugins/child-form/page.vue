@@ -1,5 +1,5 @@
 <template>
-  <div v-if="pageFlag && table.paging" class="loquat-table__pagination" >
+  <div v-if="pageFlag && childForm.pagingEnable" class="loquat-child-form__pagination" >
     <slot name="headPage"/>
     <el-pagination :small="defaultPage.smallPaging"
                    :disabled="defaultPage.disabled"
@@ -22,7 +22,7 @@
 <script>
 export default {
   name: 'Page',
-  inject: ['table'],
+  inject: ['childForm'],
   props: {
     page: {
       type: Object,
@@ -62,7 +62,7 @@ export default {
       if (this.defaultPage.total === (this.defaultPage.currentPage - 1) * this.defaultPage.pageSize && this.defaultPage.total != 0) {
         this.defaultPage.currentPage = this.defaultPage.currentPage - 1
         /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
-        this.table.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
+        this.childForm.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
         this.localPaging()
         this.updateValue()
       }
@@ -86,15 +86,15 @@ export default {
     },
     // 更新外部分页配置参数
     updateValue () {
-      this.table.$emit('update:page', this.defaultPage)
+      this.childForm.$emit('update:page', this.defaultPage)
     },
     // 下一页事件
     nextClick (val) {
-      this.table.$emit('next-click', val)
+      this.childForm.$emit('next-click', val)
     },
     // 上一页事件
     prevClick (val) {
-      this.table.$emit('prev-click', val)
+      this.childForm.$emit('prev-click', val)
     },
     // 页大小回调
     sizeChange (val) {
@@ -103,24 +103,24 @@ export default {
       this.defaultPage.pageSize = val
       this.updateValue()
       /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
-      this.table.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
+      this.childForm.$emit('pagination', { currentPage: this.defaultPage.currentPage, pageSize: this.defaultPage.pageSize })
       this.localPaging()
     },
     // 本地分页
     localPaging () {
-      const array = this.table.text
+      const array = this.childForm.list
       const offset = (this.defaultPage.currentPage - 1) * this.defaultPage.pageSize
       // 兼容外部使用pagination重新赋值分页数据,只要超过总数量则显示全部数量
       // 列如当前{pageSize:5,currentPage:2,array:[1,2,3,4,5]},如果没处理这样分页到第二页是没有数据的,处理后可直接获取全部数据
       const pagingList = (offset + this.defaultPage.pageSize > array.length) ? array.slice(0, array.length) : array.slice(offset, offset + this.defaultPage.pageSize)
-      this.table.pagingList = pagingList
+      this.childForm.pagingList = pagingList
       this.defaultPage.total = array.length
     },
     // 页码回调
     currentChange (val) {
       this.updateValue()
       /** 分页这里需要考虑两种情况,表单内部使用,提供此组件给外部使用 **/
-      this.table.$emit('pagination', { currentPage: val, pageSize: this.defaultPage.pageSize })
+      this.childForm.$emit('pagination', { currentPage: val, pageSize: this.defaultPage.pageSize })
       this.localPaging()
     }
   }

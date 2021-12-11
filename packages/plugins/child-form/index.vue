@@ -128,7 +128,7 @@ export default {
     },
     // 列表单
     cellForm () {
-      const list = this.pagingList
+      const list = this.pagingEnable ? this.pagingList : this.list
       return { list }
     },
     // table列插槽定义
@@ -138,6 +138,9 @@ export default {
         if (this.$scopedSlots[item.prop]) result.push(item.prop)
       })
       return result
+    },
+    pagingEnable () {
+      return this.widgetList.paging || this.listDefaultConfig.paging
     }
   },
   watch: {
@@ -181,18 +184,34 @@ export default {
       this.listError[prop].valid = !valid
       this.listError[prop].msg = msg
     },
-    // 删除行
-    delRow (index) {
-      const callback = () => {
-        let list = this.deepClone(this.text)
-        list.splice(index, 1);
-        this.text = list;
+    // 单元格新增
+    rowCellAdd (row = {}) {
+      const callback = (obj = {}) => {
+        const len = this.list.length
+        const formDefault = formInitVal(this.columns)
+        row = deepClone(Object.assign({ $index: len }, formDefault, row))
+        this.list.push(row)
       }
-      if (typeof this.rowDel === 'function') {
-        this.rowDel(this.text[index], callback);
+      if (typeof this.widgetList.rowAddFun === 'function') {
+        this.widgetList.rowAddFun(callback)
       } else {
-        callback();
+        callback()
       }
+    },
+    // 单元格删除
+    rowCellRow (index) {
+      const callback = () => {
+        const list = this.deepClone(this.list)
+        list.splice(index, 1)
+        this.list = list
+      }
+      if (typeof this.widgetList.rowDelFun === 'function') {
+        this.widgetList.rowDelFun(this.list[index], callback)
+      } else {
+        callback()
+      }
+      // 重新排序表格列序号
+      this.text.forEach((ele, index) => { ele = Object.assign(ele, { $index: index }) })
     },
     handleChange (value) {
       this.$emit('input', value)

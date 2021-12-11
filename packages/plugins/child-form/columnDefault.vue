@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-table-column width="1px"/>
     <!-- 子表单操作列 -->
     <el-table-column v-if="!childForm.widgetList.colDefIndexHide"
                      :fixed="childForm.widgetList.colDefIndexFixed"
@@ -8,19 +9,19 @@
                      align="center"
                      header-align="center"
     >
-      <template slot="header" slot-scope="scope">
-        <el-button v-if="addBtnDisplay(scope)"
-                   @click="addRow(scope.row.$index)"
+      <template slot="header">
+        <el-button v-if="!readonly || !childForm.widgetList.addBtn"
+                   @click="childForm.rowCellAdd()"
                    type="primary"
                    size="mini"
-                   :disabled="childForm.widgetList.disabled || childForm.disabled"
+                   :disabled="disabled"
                    icon="el-icon-plus"
                    circle
         />
       </template>
       <template slot-scope="scope">
-        <el-button v-if="deleteBtnDisplay"
-                   @click="delRow(scope.row.$index)"
+        <el-button v-if="(!readonly || !disabled || !childForm.widgetList.delBtn) && childForm.hoverList[scope.row.$index]"
+                   @click="childForm.rowCellRow(scope.row.$index)"
                    type="danger"
                    size="mini"
                    icon="el-icon-delete"
@@ -33,18 +34,15 @@
 </template>
 
 <script>
-
 export default {
   name: 'ColumnDefault',
   inject: ['childForm'],
   computed: {
-    deleteBtnDisplay (scope) {
-      return (!(this.childForm.widgetList.readonly || this.childForm.readonly) ||
-          !(this.childForm.widgetList.disabled || this.childForm.disabled) || !this.childForm.widgetList.delBtn) &&
-          this.childForm.hoverList[scope.row.$index]
+    readonly () {
+      return this.childForm.widgetList.readonly || this.childForm.readonly
     },
-    addBtnDisplay () {
-      return !(this.childForm.widgetList.readonly || this.childForm.readonly) || !this.childForm.widgetList.addBtn
+    disabled () {
+      return this.childForm.widgetList.disabled || this.childForm.disabled
     }
   }
 }

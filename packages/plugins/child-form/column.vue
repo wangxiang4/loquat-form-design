@@ -4,7 +4,7 @@
     <slot name="header"/>
     <!--动态列-->
     <template v-for="(column, index) in list">
-      <column-slot :key="index" :column="column" :column-option="columnOption">
+      <column-slot :key="index" :column="column">
         <template slot-scope="scope" :slot="column.prop">
           <slot v-bind="scope" :name="column.prop"/>
         </template>

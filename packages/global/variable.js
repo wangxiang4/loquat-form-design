@@ -34,7 +34,7 @@ export const DEFAULT_CONFIG_INSIDE_FORM = {
 export const DEFAULT_CONFIG_INSIDE_LIST = {
   size: 'small',
   border: true,
-  colDefIndexLabel: '#',
+  paging: true,
   colDefIndexWidth: 50
 }
 export const UPLOAD_CONFIG_PROPS = {
