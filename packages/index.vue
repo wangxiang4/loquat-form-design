@@ -635,7 +635,7 @@ import { insertCss, parseCss, classCss } from '@utils/dom'
 import GlobalConfig from './global/config'
 import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig, validateNull, deepClone } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
-import SvgIcon from '@components/SvgIcon'
+import SvgIcon from '@components/Helper/SvgIcon'
 export default {
   name: 'FormDesign',
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor, pluginForm, SvgIcon },
