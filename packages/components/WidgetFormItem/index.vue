@@ -13,6 +13,7 @@
       <div @click.stop="emitInvoke('select')">
         <div :class="[
           'widget-view', {
+            'widget-child-form': column.type == 'childForm',
             active: selectWidget.prop == column.prop,
             readonly: plugin.readonly,
             hide: column.hide
@@ -27,7 +28,9 @@
                         :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, formDefaultConfig.labelWidth)"
                         :label-position="column.labelPosition || data.labelPosition || formDefaultConfig.labelPosition"
           >
-            <widget v-model="plugin.value"
+            <widget-child-form v-if="column.type == 'childForm'" :column="column"/>
+            <widget v-else
+                    v-model="plugin.value"
                     :column="column"
                     :dic="column.dicData"
                     :props="data.props"
@@ -57,9 +60,10 @@
 import { getLabelWidth } from '@utils/dataFormat'
 import { DEFAULT_CONFIG_INSIDE_FORM } from '@/global/variable'
 import widget from '@/plugins/form/widget'
+import widgetChildForm from '../WidgetChildForm'
 export default {
   name: 'WidgetFormItem',
-  components: { widget, widgetCoralLayout: () => import('@components/WidgetCoralLayout') },
+  components: { widget, widgetChildForm, widgetCoralLayout: () => import('@components/WidgetCoralLayout') },
   props: {
     data: {
       type: Object

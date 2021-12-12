@@ -1,5 +1,5 @@
 <template>
-  <div class="widget-view coral-layout"
+  <div class="widget-view widget-coral-layout"
        :class="{active: selectWidget.prop == column.prop, hide: column.hide}"
        @click.stop="handleSelectWidget(index)"
   >
@@ -11,7 +11,7 @@
     >
       <el-col v-for="(col, colIndex) in column.cols"
               :key="colIndex"
-              class="coral-layout-col"
+              class="widget-coral-layout-col"
               :class="[{
                 active: selectWidget.prop == col.prop
               }].concat(col.customClass||[])"

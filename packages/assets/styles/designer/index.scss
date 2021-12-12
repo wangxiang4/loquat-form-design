@@ -6,8 +6,8 @@ $primary-background-color: #ecf8ff;
 $primary-hide-color: #fef0f0;
 $primary-readonly-color: #F2F2F2;
 $primary-ghost-color: #67C23A;
-$coral-layout-color: #e6a23c;
-$coral-layout-background-color: #fdf6ec;
+$widget-coral-layout-color: #e6a23c;
+$widget-coral-layout-background-color: #fdf6ec;
 
 *,
 ::after,
@@ -304,23 +304,23 @@ $coral-layout-background-color: #fdf6ec;
         }
       }
 
-      .coral-layout {
+      .widget-coral-layout {
         padding: 5px;
         position: relative;
         background-color: rgba(253, 246, 236, 0.3);
         &.active{
-          outline: 2px solid $coral-layout-color;
-          border: 1px solid $coral-layout-color;
+          outline: 2px solid $widget-coral-layout-color;
+          border: 1px solid $widget-coral-layout-color;
         }
 
         &:hover{
-          outline: 1px solid $coral-layout-color;
-          background: $coral-layout-background-color;
+          outline: 1px solid $widget-coral-layout-color;
+          background: $widget-coral-layout-background-color;
           outline-offset: 0;
 
           &.active{
-            outline: 2px solid $coral-layout-color;
-            border: 1px solid $coral-layout-color;
+            outline: 2px solid $widget-coral-layout-color;
+            border: 1px solid $widget-coral-layout-color;
             outline-offset: 0;
           }
         }
@@ -330,11 +330,11 @@ $coral-layout-background-color: #fdf6ec;
         }
 
         .widget-view-action.widget-col-action{
-          background: $coral-layout-color;
+          background: $widget-coral-layout-color;
         }
 
         .widget-view-drag.widget-col-drag{
-          background: $coral-layout-color;
+          background: $widget-coral-layout-color;
         }
 
         .el-col {
@@ -349,19 +349,19 @@ $coral-layout-background-color: #fdf6ec;
           border: 1px dashed #999;
 
           &.active{
-            outline: 2px solid $coral-layout-color;
-            border: 1px solid $coral-layout-color;
+            outline: 2px solid $widget-coral-layout-color;
+            border: 1px solid $widget-coral-layout-color;
             outline-offset: -1px;
           }
 
           &:hover{
-            outline: 2px solid $coral-layout-color;
-            background: $coral-layout-background-color;
+            outline: 2px solid $widget-coral-layout-color;
+            background: $widget-coral-layout-background-color;
             outline-offset: -1px;
 
             &.active{
-              outline: 2px solid $coral-layout-color;
-              border: 1px solid $coral-layout-color;
+              outline: 2px solid $widget-coral-layout-color;
+              border: 1px solid $widget-coral-layout-color;
               outline-offset: -1px;
             }
           }
@@ -376,6 +376,64 @@ $coral-layout-background-color: #fdf6ec;
             border: 2px inset rgba(0,0,0,.1);
             background: #fff;
           }
+        }
+      }
+
+      .widget-child-form{
+        &-wrapper {
+          min-height: 50px;
+          backgr: #fff;
+          background: #fff;
+          y: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: start;
+          -ms-flex-pack: start;
+          justify-content: flex-start;
+
+          &-left{
+            width: 51px;
+            border-left: 1px solid #ebeef5;
+            border-right: 1px solid #ebeef5;
+            border-top: 1px solid #ebeef5;
+            -webkit-box-flex: 0;
+            -ms-flex: none;
+            flex: none;
+            overflow: hidden;
+
+            .el-table__body-wrapper {
+              overflow: hidden;
+            }
+          }
+
+          &-content {
+            width: 100%;
+            border: 2px inset rgba(0,0,0,.1);
+            background: #fff;
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            margin: 0;
+            overflow: auto;
+            position: relative;
+          }
+
+          &-col {
+            height: 100%;
+          }
+
+          &-view {
+            border: 1px solid #ebeef5;
+            width: 200px;
+            float: left;
+            height: 100%;
+            position: relative;
+            display: block;
+          }
+        }
+
+        &::after {
+          display: none;
         }
       }
     }
