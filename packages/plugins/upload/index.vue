@@ -70,13 +70,13 @@ import axios from 'loquat-axios'
 import GlobalConfig from '@/global/config'
 import { detailImg } from '@utils/watermark'
 import ImagePreview from '@components/Helper/ImagePreview'
-import { getFileUrl, byteCapacityCompute, urlJoin, get, validateNull, deepClone } from '@utils'
+import { getFileUrl, byteCapacityCompute, urlJoin, get, validateNull, deepClone, getObjType } from '@utils'
 import { UPLOAD_CONFIG_PROPS, TYPE_LIST } from '@/global/variable'
 export default {
   name: 'Upload',
   inheritAttrs: false,
   props: {
-    value: { type: Array },
+    value: {},
     listType: {
       type: String
     },
@@ -227,9 +227,12 @@ export default {
       }
       return this.accept
     },
+    getTextList () {
+      return getObjType(this.text) === 'array' ? this.text : []
+    },
     fileList () {
-      const list = [];
-      (this.text || []).forEach((ele, index) => {
+      const list = []
+      this.getTextList.forEach((ele, index) => {
         if (ele) {
           let name
           // 处理单个url链接取最后为label
@@ -248,7 +251,7 @@ export default {
       return this.listType === 'picture-img'
     },
     avatarImgUrl () {
-      return !validateNull(this.text) && getFileUrl(this.homeUrl, this.text[0])
+      return getFileUrl(this.homeUrl, this.getTextList[0])
     },
     getStringMode () {
       return this.isAvatarImg ? true : this.stringMode
@@ -418,11 +421,11 @@ export default {
       this.loading = false
       const url = this.handleExternalLinkUrl(res)
       if (this.isAvatarImg) {
-        this.text.splice(0, 1, url)
+        this.getTextList.splice(0, 1, url)
       } else if (this.getStringMode) {
-        this.text.push(url)
+        this.getTextList.push(url)
       } else {
-        this.text.push({ [this.nameKey]: uploadFile.name, [this.urlKey]: url })
+        this.getTextList.push({ [this.nameKey]: uploadFile.name, [this.urlKey]: url })
       }
       this.uploadSuccess && this.uploadSuccess(res, uploadFile, this.fileList, this.column)
     },
