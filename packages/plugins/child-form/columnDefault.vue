@@ -3,21 +3,12 @@
     <el-table-column width="1px"/>
     <!-- 子表单操作列 -->
     <el-table-column v-if="!childForm.widgetChildForm.indexExecute"
+                     :label="childForm.widgetChildForm.indexExecuteLabel || childForm.childFormDefaultConfig.indexExecuteLabel"
                      :fixed="childForm.widgetChildForm.indexExecuteFixed"
                      :width="childForm.widgetChildForm.indexExecuteWidth || childForm.childFormDefaultConfig.indexExecuteWidth"
                      align="center"
                      header-align="center"
     >
-      <template slot="header">
-        <el-button v-if="!childForm.readonly"
-                   @click="childForm.rowCellAdd()"
-                   type="primary"
-                   size="mini"
-                   :disabled="childForm.disabled"
-                   icon="el-icon-plus"
-                   circle
-        />
-      </template>
       <template slot-scope="scope">
         <el-button v-if="(!childForm.readonly || !childForm.disabled) && childForm.hoverMark[scope.row.$index]"
                    @click="childForm.rowCellDel(scope.row.$index)"

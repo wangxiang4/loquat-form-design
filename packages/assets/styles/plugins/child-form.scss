@@ -5,7 +5,7 @@
 
   &__pagination {
     position: relative;
-    padding: 25px 0 20px 20px;
+    padding: 0px 0px 0px 0px;
     text-align: right;
 
     .el-pagination {
@@ -13,12 +13,23 @@
     }
   }
 
-  .el-form .el-form-item {
-    margin-bottom: 0;
+  .el-form-item {
+    margin-top: 2px;
+  }
+
+  .el-table td {
+    padding-bottom: 0;
+  }
+
+  .el-table th.required>div:before {
+    content: "*";
+    color: #f56c6c;
+    margin-right: 4px;
+    background: transparent;
+    vertical-align: top;
   }
 
   .el-table thead tr, .el-table thead tr th{
-    background-color: #f6f7fa;
-    font-weight: 400;
+    background-color: #f5f7fa;
   }
 }

@@ -26,6 +26,7 @@ export default {
   data () {
     return {
       option: {
+        'indexExecuteLabel': '序列操作',
         'column': [{
           'type': 'input',
           'label': '单行文本',

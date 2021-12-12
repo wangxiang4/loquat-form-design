@@ -3,6 +3,7 @@
   <el-table-column v-if="!column.hide"
                    :prop="column.prop"
                    :label="column.label"
+                   :class-name="validate && 'required'"
                    :show-overflow-tooltip="column.overHidden"
                    :render-header="column.renderHeader"
                    :align="column.align || childForm.widgetChildForm.align"
@@ -12,6 +13,7 @@
                    :fixed="column.fixed"
   >
     <template slot-scope="{row,$index}">
+      <!--设置自定义列内容渲染插槽,满足自定义需求-->
       <slot v-if="childForm.$scopedSlots[column.prop]"
             :row="row"
             :index="$index"
@@ -28,29 +30,24 @@
                     :rules="column.rules"
                     :class="column.customClass"
       >
-        <!--校验错误提示-->
-        <el-tooltip :content="(childForm.listError[`list.${$index}.${column.prop}`] || {}).msg"
-                    :disabled="!(childForm.listError[`list.${$index}.${column.prop}`] || {}).valid"
-                    placement="top"
-        >
-          <widget v-model="row[column.prop]"
-                  :dic="childForm.DIC[column.prop]"
-                  :column="column"
-                  :props="childForm.widgetChildForm.props"
-                  :readonly="childForm.readonly"
-                  :disabled="childForm.disabled"
-                  :size="childForm.widgetChildForm.size || childForm.childFormDefaultConfig.size"
-                  :enter="childForm.widgetChildForm.enter"
-                  @enter="childForm.submit"
-                  @change="childForm.handleWidgetChange(column)"
-          />
-        </el-tooltip>
+        <widget v-model="row[column.prop]"
+                :dic="childForm.DIC[column.prop]"
+                :column="column"
+                :props="childForm.widgetChildForm.props"
+                :readonly="childForm.readonly"
+                :disabled="childForm.disabled"
+                :size="childForm.widgetChildForm.size || childForm.childFormDefaultConfig.size"
+                :enter="childForm.widgetChildForm.enter"
+                @enter="childForm.submit"
+                @change="childForm.handleWidgetChange(column)"
+        />
       </el-form-item>
     </template>
   </el-table-column>
 </template>
 
 <script>
+import { validateNull } from '@utils'
 import widget from '../form/widget'
 export default {
   name: 'ColumnSlot',
@@ -58,6 +55,14 @@ export default {
   components: { widget },
   props: {
     column: Object
+  },
+  computed: {
+    plugin () {
+      return this.column.plugin || {}
+    },
+    validate () {
+      return !validateNull(this.column.rules)
+    }
   }
 }
 </script>

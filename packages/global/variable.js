@@ -31,7 +31,8 @@ export const DEFAULT_CONFIG_INSIDE_FORM = {
 /** 默认的子表单配置选项 */
 export const DEFAULT_CONFIG_INSIDE_CHILD_FORM = {
   size: 'small',
-  indexExecuteWidth: 50
+  indexExecuteWidth: 50,
+  indexExecuteLabel: '#'
 }
 export const UPLOAD_CONFIG_PROPS = {
   home: '',
