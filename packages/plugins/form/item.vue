@@ -29,7 +29,7 @@
           <slot :name="column.prop + 'Error'"
                 v-bind="Object.assign(scope, {
                   column: column,
-                  value:home.form[column.prop],
+                  value: home.form[column.prop],
                   readonly: home.readonly || column.readonly,
                   disabled: home.disabled || column.disabled,
                   size: home.widgetForm.size || column.size || home.formDefaultConfig.size,

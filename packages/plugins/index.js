@@ -14,6 +14,7 @@ import slider from './slider'
 import font from './font'
 import upload from './upload'
 import cascader from './cascader'
+import childForm from './child-form'
 import { kebabCase } from '@utils'
 import { KEY_COMPONENT_NAME } from '@/global/variable'
 const components = [
@@ -32,7 +33,8 @@ const components = [
   slider,
   font,
   upload,
-  cascader
+  cascader,
+  childForm
 ]
 
 const Plugins = {

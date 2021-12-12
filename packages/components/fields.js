@@ -522,13 +522,59 @@ export default [
       type: 'childForm',
       label: '子表单',
       icon: 'icon-child-form',
-      plugin: {
+      labelWidth: '',
+      hide: false,
+      hideLabel: false,
+      customClass: [],
+      validateConfig: {
+        required: false
       },
       events: {
         change: '',
-        rowAdd: '',
-        rowRemove: '',
-        rowChange: ''
+        'row-add': '',
+        'row-del': ''
+      },
+      plugin: {
+        value: [],
+        option: {
+          formWidth: '',
+          statusIcon: false,
+          customClass: [],
+          styleSheets: '',
+          fit: true,
+          stripe: false,
+          maxHeight: '',
+          defaultSort: {},
+          showHeader: true,
+          highlightCurrentRow: false,
+          emptyText: '',
+          // 默认列配置
+          indexExecute: false,
+          indexExecuteLabel: '序号',
+          indexExecuteFixed: '',
+          indexExecuteWidth: 50,
+          // 动态列配置
+          align: '',
+          headerAlign: '',
+          enter: false,
+          column: []
+        },
+        disabled: false,
+        page: {
+          total: 0,        // 总页数
+          pagerCount: 7,   // 超过多少条隐藏
+          currentPage: 1,  // 当前页数
+          pageSize: 5,     // 每页显示多少条
+          smallPaging: true, // 是否使用小分页
+          simplePage: false, // 当只有一页时隐藏分页
+          pageSizes: [10, 20, 30, 40, 50, 100],
+          layout: 'total, prev, pager, next',
+          background: false  // 背景颜色
+        },
+        readonly: false,
+        detailModel: false,
+        loading: false,
+        paging: false
       }
     }]
   },

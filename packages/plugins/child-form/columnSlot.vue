@@ -10,7 +10,7 @@
                    :header-align="column.headerAlign || childForm.widgetChildForm.headerAlign"
                    :width="column.width == 0 ? undefined : column.width"
                    :min-width="column.minWidth"
-                   :fixed="column.fixed"
+                   :fixed="column.fixed || undefined"
   >
     <template slot-scope="{row,$index}">
       <!--设置自定义列内容渲染插槽,满足自定义需求-->

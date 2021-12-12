@@ -232,6 +232,7 @@ export default {
         this.rowCellAddFun(callback)
       } else callback()
       this.paging && this.$refs.page.lastPage()
+      this.$emit('row-add', row)
     },
     // 单元格删除
     rowCellDel (index) {
@@ -247,6 +248,7 @@ export default {
         this.$refs.page.rePaging()
         this.$refs.page.autoPrevPage()
       }
+      this.$emit('row-del')
     },
     // 当单元格 hover 进入时会触发该事件
     cellMouseEnter (row, column, cell, event) {

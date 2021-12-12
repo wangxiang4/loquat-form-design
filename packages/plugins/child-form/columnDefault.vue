@@ -4,7 +4,7 @@
     <!-- 子表单操作列 -->
     <el-table-column v-if="!childForm.widgetChildForm.indexExecute"
                      :label="childForm.widgetChildForm.indexExecuteLabel || childForm.childFormDefaultConfig.indexExecuteLabel"
-                     :fixed="childForm.widgetChildForm.indexExecuteFixed"
+                     :fixed="childForm.widgetChildForm.indexExecuteFixed || undefined"
                      :width="childForm.widgetChildForm.indexExecuteWidth || childForm.childFormDefaultConfig.indexExecuteWidth"
                      align="center"
                      header-align="center"

@@ -24,7 +24,9 @@ export const GlobalConfig = {
     blur: '失去焦点',
     uploadSuccess: '上传成功',
     uploadError: '上传失败',
-    uploadRemove: '移除'
+    uploadRemove: '移除',
+    'row-add': '子表单添加行',
+    'row-del': '子表单添加行'
   },
   formExecuteCallbackHooks: ['mounted'],
   jsonOptionDefaultConfig: {

@@ -134,10 +134,11 @@ export function getComponentConfig (type, component) {
 /** 设计器配置转换设计器预览配置 **/
 export function designTransformPreview (_this) {
   if (!validateNull(_this.configOption)) {
-    const data = deepClone(_this.configOption)
-    const eventScript = data.eventScript || []
-    const autoDataSource = data.dataSource && data.dataSource.filter(item => item.auto)
-    handleDeepDesignTransformPreview(_this, data.column, {
+    const config = deepClone(_this.configOption)
+    const eventScript = config.eventScript || []
+    const autoDataSource = config.dataSource && config.dataSource.filter(item => item.auto)
+    handleDeepDesignTransformPreview(_this, config.column, {
+      config,
       eventScript,
       autoDataSource
     })
@@ -147,10 +148,10 @@ export function designTransformPreview (_this) {
       const event = eventScript.find(e => e.key === item)
       executeCallbackHooks[item] = event && new Function(event.func)
     }
-    data.callbackHooks = executeCallbackHooks
-    delete data.dataSource
-    delete data.eventScript
-    return data
+    config.callbackHooks = executeCallbackHooks
+    delete config.dataSource
+    delete config.eventScript
+    return config
   }
 }
 
@@ -158,6 +159,7 @@ export function designTransformPreview (_this) {
 function handleDeepDesignTransformPreview (_this, column, ops = {}) {
   // 设置参数配置,为了后面好扩展单独提出来
   const options = {
+    config: ops.config || {},
     eventScript: ops.eventScript || [],
     autoDataSource: ops.autoDataSource || [],
     remoteOption: { ...GlobalConfig.defaultRemoteOption, ...remoteOption.store },
@@ -174,6 +176,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
         for (let colIndex = 0; colIndex < col.cols.length; ++colIndex) {
           const coralCol = col.cols[colIndex]
           handleDeepDesignTransformPreview(_this, coralCol.list, {
+            config: ops.config,
             eventScript: ops.eventScript,
             autoDataSource: ops.autoDataSource
           })
@@ -274,6 +277,15 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
           validateConfig.type && rules.push({ type: validateConfig.typeFormat, message: validateConfig.typeMessage || `${col.label}格式不正确` })
           validateConfig.pattern && rules.push({ pattern: validateConfig.patternFormat, message: validateConfig.patternMessage || `${col.label}格式不匹配` })
           col.rules = rules
+        }
+        // 处理子表单数据-针对主表单内嵌子表单
+        if (col.type === 'childForm') {
+          Object.assign(plugin.option, {
+            // 使用主表单的一些配置
+            size: options.config.size,
+            eventScript: options.eventScript,
+            dataSource: options.autoDataSource
+          })
         }
         clearTransformColumnDirtyData(col)
     }
