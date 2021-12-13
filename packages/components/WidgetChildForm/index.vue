@@ -17,7 +17,10 @@
                     :label-position="formItem.column.labelPosition || formItem.data.labelPosition || formItem.formDefaultConfig.labelPosition"
       >
         <div class="widget-child-form-wrapper">
-          <el-table :data="[{}]" class="widget-child-form-left">
+          <el-table :data="[{}]"
+                    class="widget-child-form-left"
+                    row-class-name="widget-child-form-row"
+          >
             <el-table-column v-if="!configOption.indexExecute"
                              :label="configOption.indexExecuteLabel"
                              :width="50"
