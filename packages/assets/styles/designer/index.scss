@@ -6,8 +6,9 @@ $primary-background-color: #ecf8ff;
 $primary-hide-color: #fef0f0;
 $primary-readonly-color: #F2F2F2;
 $primary-ghost-color: #67C23A;
-$widget-coral-layout-color: #e6a23c;
-$widget-coral-layout-background-color: #fdf6ec;
+$layout-background-color: rgba(253, 246, 236, 0.3);
+$widget-layout-color: #e6a23c;
+$widget-layout-background-color: #fdf6ec;
 
 *,
 ::after,
@@ -290,6 +291,7 @@ $widget-coral-layout-background-color: #fdf6ec;
         &.active {
           outline: 2px solid $primary-color;
           border: 1px solid $primary-color;
+          outline-offset: 0;
         }
 
         &::after {
@@ -307,20 +309,22 @@ $widget-coral-layout-background-color: #fdf6ec;
       .widget-coral-layout {
         padding: 5px;
         position: relative;
-        background-color: rgba(253, 246, 236, 0.3);
+        background-color: $layout-background-color;
+
         &.active{
-          outline: 2px solid $widget-coral-layout-color;
-          border: 1px solid $widget-coral-layout-color;
+          outline: 2px solid $widget-layout-color;
+          border: 1px solid $widget-layout-color;
+          outline-offset: 0;
         }
 
         &:hover{
-          outline: 1px solid $widget-coral-layout-color;
-          background: $widget-coral-layout-background-color;
+          outline: 1px solid $widget-layout-color;
+          background: $widget-layout-background-color;
           outline-offset: 0;
 
           &.active{
-            outline: 2px solid $widget-coral-layout-color;
-            border: 1px solid $widget-coral-layout-color;
+            outline: 2px solid $widget-layout-color;
+            border: 1px solid $widget-layout-color;
             outline-offset: 0;
           }
         }
@@ -329,12 +333,12 @@ $widget-coral-layout-background-color: #fdf6ec;
           display: none;
         }
 
-        .widget-view-action.widget-col-action{
-          background: $widget-coral-layout-color;
+        .widget-view-action.widget-layout-action{
+          background: $widget-layout-color;
         }
 
-        .widget-view-drag.widget-col-drag{
-          background: $widget-coral-layout-color;
+        .widget-view-drag.widget-layout-drag{
+          background: $widget-layout-color;
         }
 
         .el-col {
@@ -349,19 +353,19 @@ $widget-coral-layout-background-color: #fdf6ec;
           border: 1px dashed #999;
 
           &.active{
-            outline: 2px solid $widget-coral-layout-color;
-            border: 1px solid $widget-coral-layout-color;
+            outline: 2px solid $widget-layout-color;
+            border: 1px solid $widget-layout-color;
             outline-offset: -1px;
           }
 
           &:hover{
-            outline: 2px solid $widget-coral-layout-color;
-            background: $widget-coral-layout-background-color;
+            outline: 2px solid $widget-layout-color;
+            background: $widget-layout-background-color;
             outline-offset: -1px;
 
             &.active{
-              outline: 2px solid $widget-coral-layout-color;
-              border: 1px solid $widget-coral-layout-color;
+              outline: 2px solid $widget-layout-color;
+              border: 1px solid $widget-layout-color;
               outline-offset: -1px;
             }
           }
@@ -380,72 +384,165 @@ $widget-coral-layout-background-color: #fdf6ec;
       }
 
       .widget-child-form {
-        &-wrapper {
+        padding-bottom: 0;
+        padding: 5px;
+        background-color: $layout-background-color;
+
+        .widget-child-form-wrapper {
           min-height: 50px;
-          backgr: #fff;
           background: #fff;
-          y: -webkit-box;
-          display: -ms-flexbox;
           display: flex;
-          -webkit-box-pack: start;
-          -ms-flex-pack: start;
           justify-content: flex-start;
-        }
 
-        &-left{
-          width: 51px;
-          border-left: 1px solid #ebeef5;
-          border-right: 1px solid #ebeef5;
-          border-top: 1px solid #ebeef5;
-          -webkit-box-flex: 0;
-          -ms-flex: none;
-          flex: none;
-          overflow: hidden;
+          .widget-child-form-left{
+            width: 51px;
+            border-left: 1px solid #EBEEF5;
+            border-right: 1px solid #EBEEF5;
+            border-top: 1px solid #EBEEF5;
+            flex: none;
 
-          .el-table__body-wrapper {
-            overflow: hidden;
+            .el-table__body-wrapper {
+              overflow: hidden;
+            }
+          }
+
+          .widget-child-form-content {
+            width: 100%;
+            border: 2px inset rgba(0,0,0,.1);
+            background: #fff;
+            flex: 1;
+            margin: 0;
+            overflow: auto;
+            position: relative;
+
+            &>div{
+              height: 100%;
+            }
+
+            .widget-child-form-col {
+              height: 100%;
+            }
+
+            .child-form-empty {
+              position: absolute;
+              text-align: center;
+              width: 300px;
+              height: 20px;
+              font-size: 16px;
+              top: 30px;
+              left: 50%;
+              margin-left: -150px;
+              color: rgba(0,0,0,.15);
+            }
+          }
+
+          .widget-child-form-view {
+            border: 1px solid #EBEEF5;
+            width: 200px;
+            float: left;
+            height: 100%;
+            position: relative;
+            display: block;
+
+            .el-table{
+              height: 100%;
+            }
+
+            .el-table th.required>div:before {
+              content: "*";
+              color: #f56c6c;
+              margin-right: 4px;
+              background: transparent;
+              vertical-align: top;
+            }
+
+            &.active{
+              outline: 1px solid $primary-color;
+              border: 1px solid $primary-color;
+              outline-offset: -1px;
+            }
+
+            &:hover{
+              outline: 1px solid $primary-color;
+              background: $primary-background-color;
+              outline-offset: -1px;
+
+              &.active{
+                outline: 1px solid $primary-color;
+                border: 1px solid $primary-color;
+                outline-offset: -1px;
+              }
+            }
+
+            .readonly {
+              background: $primary-readonly-color;
+            }
+
+            .hide {
+              background: $primary-hide-color;
+            }
+
+            &::after {
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 0;
+              bottom: 0;
+              display: block;
+              content: "";
+              z-index: 1000;
+            }
           }
         }
 
-        &-content {
-          width: 100%;
-          border: 2px inset rgba(0,0,0,.1);
-          background: #fff;
-          -webkit-box-flex: 1;
-          -ms-flex: 1;
-          flex: 1;
-          margin: 0;
-          overflow: auto;
-          position: relative;
+        &.active{
+          outline: 2px solid $widget-layout-color;
+          border: 1px solid $widget-layout-color;
+        }
 
-          .child-form-empty {
-            position: absolute;
-            text-align: center;
-            width: 300px;
-            height: 20px;
-            font-size: 16px;
-            top: 30px;
-            left: 50%;
-            margin-left: -150px;
-            color: rgba(0,0,0,.15);
+        &:hover{
+          outline: 1px solid $widget-layout-color;
+          background: $widget-layout-background-color;
+          outline-offset: 0;
+
+          &.active{
+            outline: 2px solid $widget-layout-color;
+            border: 1px solid $widget-layout-color;
+            outline-offset: 0;
           }
         }
 
-        &-col {
-          height: 100%;
+        .widget-view-action.widget-layout-action{
+          background: $widget-layout-color;
         }
 
-        &-view {
-          border: 1px solid #ebeef5;
-          width: 200px;
-          float: left;
-          height: 100%;
-          position: relative;
-          display: block;
+        .widget-view-drag.widget-layout-drag{
+          background: $widget-layout-color;
+        }
+
+        .widget-view-model {
+          top: 2px;
+          right: 3px;
         }
 
         &::after {
           display: none;
+        }
+
+        .ghost{
+          background: white;
+          border: 2px solid $primary-ghost-color;
+          box-sizing: border-box;
+          font-size: 0;
+          content: "";
+          overflow: hidden;
+          padding: 0 !important;
+          position: relative;
+          outline: none 0;
+          height: 100% !important;
+          width: 0 !important;
+          float: left;
+          margin: 0 2px 0 2px;
         }
       }
     }

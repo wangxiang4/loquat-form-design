@@ -3,7 +3,7 @@
   <el-table-column v-if="!column.hide"
                    :prop="column.prop"
                    :label="column.label"
-                   :class-name="validate && 'required'"
+                   :class-name="validate?'required':''"
                    :show-overflow-tooltip="column.overHidden"
                    :render-header="column.renderHeader"
                    :align="column.align || childForm.widgetChildForm.align"

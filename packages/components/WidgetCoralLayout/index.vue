@@ -47,7 +47,7 @@
             </template>
           </transition-group>
         </draggable>
-        <div v-if="selectWidget.prop == col.prop" class="widget-view-action widget-col-action">
+        <div v-if="selectWidget.prop == col.prop" class="widget-view-action widget-layout-action">
           <i title="复制"
              class="iconfont icon-clone"
              @click.stop="handleColumnClone(colIndex)"
@@ -60,12 +60,12 @@
         </div>
       </el-col>
     </el-row>
-    <div v-if="selectWidget.prop == column.prop" class="widget-view-action widget-col-action">
+    <div v-if="selectWidget.prop == column.prop" class="widget-view-action widget-layout-action">
       <i title="添加列" class="iconfont icon-add" @click.stop="handleColumnAdd"/>
       <i title="复制" class="iconfont icon-clone" @click.stop="handleRowClone"/>
       <i title="删除" class="iconfont icon-trash" @click.stop="handleRowDelete"/>
     </div>
-    <div v-if="selectWidget.prop == column.prop" class="widget-view-drag widget-col-drag">
+    <div v-if="selectWidget.prop == column.prop" class="widget-view-drag widget-layout-drag">
       <i class="iconfont icon-drag"/>
     </div>
   </div>

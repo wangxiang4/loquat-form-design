@@ -19,13 +19,7 @@
 import columnSlot from './columnSlot'
 export default {
   name: 'Column',
-  inject: ['childForm'],
   components: { columnSlot },
-  provide () {
-    return {
-      childForm: this.childForm
-    }
-  },
   props: {
     columns: {
       type: Array

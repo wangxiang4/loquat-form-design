@@ -9,11 +9,13 @@
                            @change="$emit('change')"
       />
     </template>
+    <template v-else-if="column.type == 'childForm'">
+      <widget-child-form/>
+    </template>
     <template v-else>
       <div @click.stop="emitInvoke('select')">
         <div :class="[
           'widget-view', {
-            'widget-child-form': column.type == 'childForm',
             active: selectWidget.prop == column.prop,
             readonly: plugin.readonly,
             hide: column.hide
@@ -28,27 +30,27 @@
                         :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, formDefaultConfig.labelWidth)"
                         :label-position="column.labelPosition || data.labelPosition || formDefaultConfig.labelPosition"
           >
-            <widget-child-form v-if="column.type == 'childForm'"
-                               :column="column"
-                               :select.sync="selectWidget"
-                               @change="$emit('change')"
-            />
-            <widget v-else
-                    v-model="plugin.value"
+            <widget v-model="plugin.value"
                     :column="column"
                     :dic="column.dicData"
                     :props="data.props"
-                    :readonly="data.readonly"
-                    :disabled="data.disabled"
                     :size="data.size || formDefaultConfig.size"
                     :preview="false"
             />
           </el-form-item>
-          <div v-if="selectWidget.prop == column.prop" class="widget-view-action">
+          <div v-if="selectWidget.prop == column.prop"
+               :class="['widget-view-action',{
+                 'widget-layout-action': column.type == 'childForm'
+               }]"
+          >
             <i title="复制" class="iconfont icon-clone" @click.stop="emitInvoke('clone')"/>
             <i title="删除" class="iconfont icon-trash" @click.stop="emitInvoke('delete')"/>
           </div>
-          <div v-if="selectWidget.prop == column.prop" class="widget-view-drag">
+          <div v-if="selectWidget.prop == column.prop"
+               :class="['widget-view-drag',{
+                 'widget-layout-drag': column.type == 'childForm'
+               }]"
+          >
             <i class="iconfont icon-drag"/>
           </div>
           <div class="widget-view-model">

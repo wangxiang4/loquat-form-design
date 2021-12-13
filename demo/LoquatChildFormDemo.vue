@@ -1,6 +1,6 @@
 <template>
   <div>
-    <child-form :page.sync="page">
+    <child-form v-model="data" :option="option" :page.sync="page">
       <template slot="empty">
         没有数据
       </template>

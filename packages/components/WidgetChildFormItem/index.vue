@@ -1,0 +1,106 @@
+<template>
+  <div :class="['widget-child-form-view' ,{
+         active: formItem.selectWidget.prop == column.prop
+       }]"
+       style="width: 200px;"
+       @click.stop="childForm.handleWidgetDataSelect(column)"
+  >
+    <el-table :data="[{}]"
+              :cell-class-name="tableBackgroundClass"
+              :header-cell-class-name="tableBackgroundClass"
+    >
+      <el-table-column :label="column.label"
+                       :class-name="validateConfig.required?'required':''"
+                       :width="198"
+      >
+        <widget v-model="column.value"
+                :column="column"
+                :dic="column.dicData"
+                :props="formItem.data.props"
+                :size="formItem.data.size || formItem.formDefaultConfig.size"
+                :preview="false"
+        />
+      </el-table-column>
+    </el-table>
+    <div v-if="formItem.selectWidget.prop == column.prop" class="widget-view-action">
+      <i title="复制" class="iconfont icon-clone" @click.stop="handleWidgetClone(index)"/>
+      <i title="删除" class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"/>
+    </div>
+    <div v-if="formItem.selectWidget.prop == column.prop" class="widget-view-drag">
+      <i class="iconfont icon-drag"/>
+    </div>
+    <div class="widget-view-model">
+      <span v-text="column.prop"/>
+    </div>
+  </div>
+</template>
+
+<script>
+import { getWidgetCloneData } from '@utils/dataFormat'
+import widget from '@/plugins/form/widget'
+export default {
+  name: 'WidgetChildFormItem',
+  inject: ['widgetChildForm', 'widgetFormItem'],
+  props: {
+    column: {
+      type: Object,
+      defalut: () => {
+        return {}
+      }
+    },
+    index: {
+      type: Number
+    }
+  },
+  components: { widget },
+  computed: {
+    childForm () {
+      return this.widgetChildForm || {}
+    },
+    formItem () {
+      return this.widgetFormItem || {}
+    },
+    plugin () {
+      return this.column.plugin || {}
+    },
+    validateConfig () {
+      return this.column.validateConfig || {}
+    },
+    tableBackgroundClass () {
+      const classDef = {
+        hide: this.column.hide,
+        readonly: this.plugin.readonly
+      }
+      let className = ''
+      for (const key in classDef) {
+        if (classDef[key]) {
+          className = key
+          break
+        }
+      }
+      return className
+    }
+  },
+  methods: {
+    // 处理插件克隆
+    handleWidgetClone (index) {
+      this.childForm.childFormColumn.splice(index, 0, getWidgetCloneData(this.childForm.childFormColumn[index]))
+      this.$nextTick(() => {
+        this.childForm.handleWidgetDataSelect(this.childFormColumn[index + 1])
+        this.formItem.$emit('change')
+      })
+    },
+    // 处理插件删除
+    handleWidgetDelete (index) {
+      if (this.childForm.childFormColumn.length - 1 === index) {
+        if (index === 0) this.formItem.selectWidget = {}
+        else this.childForm.handleWidgetDataSelect(this.childForm.childFormColumn[index - 1])
+      } else this.childForm.handleWidgetDataSelect(this.childForm.childFormColumn[index + 1])
+      this.$nextTick(() => {
+        this.childForm.childFormColumn.splice(index, 1)
+        this.formItem.$emit('change')
+      })
+    }
+  }
+}
+</script>
