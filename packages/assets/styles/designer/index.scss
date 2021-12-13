@@ -379,7 +379,7 @@ $widget-coral-layout-background-color: #fdf6ec;
         }
       }
 
-      .widget-child-form{
+      .widget-child-form {
         &-wrapper {
           min-height: 50px;
           backgr: #fff;
@@ -390,46 +390,58 @@ $widget-coral-layout-background-color: #fdf6ec;
           -webkit-box-pack: start;
           -ms-flex-pack: start;
           justify-content: flex-start;
+        }
 
-          &-left{
-            width: 51px;
-            border-left: 1px solid #ebeef5;
-            border-right: 1px solid #ebeef5;
-            border-top: 1px solid #ebeef5;
-            -webkit-box-flex: 0;
-            -ms-flex: none;
-            flex: none;
+        &-left{
+          width: 51px;
+          border-left: 1px solid #ebeef5;
+          border-right: 1px solid #ebeef5;
+          border-top: 1px solid #ebeef5;
+          -webkit-box-flex: 0;
+          -ms-flex: none;
+          flex: none;
+          overflow: hidden;
+
+          .el-table__body-wrapper {
             overflow: hidden;
-
-            .el-table__body-wrapper {
-              overflow: hidden;
-            }
           }
+        }
 
-          &-content {
-            width: 100%;
-            border: 2px inset rgba(0,0,0,.1);
-            background: #fff;
-            -webkit-box-flex: 1;
-            -ms-flex: 1;
-            flex: 1;
-            margin: 0;
-            overflow: auto;
-            position: relative;
-          }
+        &-content {
+          width: 100%;
+          border: 2px inset rgba(0,0,0,.1);
+          background: #fff;
+          -webkit-box-flex: 1;
+          -ms-flex: 1;
+          flex: 1;
+          margin: 0;
+          overflow: auto;
+          position: relative;
 
-          &-col {
-            height: 100%;
+          .child-form-empty {
+            position: absolute;
+            text-align: center;
+            width: 300px;
+            height: 20px;
+            font-size: 16px;
+            top: 30px;
+            left: 50%;
+            margin-left: -150px;
+            color: rgba(0,0,0,.15);
           }
+        }
 
-          &-view {
-            border: 1px solid #ebeef5;
-            width: 200px;
-            float: left;
-            height: 100%;
-            position: relative;
-            display: block;
-          }
+        &-col {
+          height: 100%;
+        }
+
+        &-view {
+          border: 1px solid #ebeef5;
+          width: 200px;
+          float: left;
+          height: 100%;
+          position: relative;
+          display: block;
         }
 
         &::after {

@@ -28,7 +28,11 @@
                         :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, formDefaultConfig.labelWidth)"
                         :label-position="column.labelPosition || data.labelPosition || formDefaultConfig.labelPosition"
           >
-            <widget-child-form v-if="column.type == 'childForm'" :column="column"/>
+            <widget-child-form v-if="column.type == 'childForm'"
+                               :column="column"
+                               :select.sync="selectWidget"
+                               @change="$emit('change')"
+            />
             <widget v-else
                     v-model="plugin.value"
                     :column="column"
@@ -64,6 +68,11 @@ import widgetChildForm from '../WidgetChildForm'
 export default {
   name: 'WidgetFormItem',
   components: { widget, widgetChildForm, widgetCoralLayout: () => import('@components/WidgetCoralLayout') },
+  provide () {
+    return {
+      widgetFormItem: this
+    }
+  },
   props: {
     data: {
       type: Object
