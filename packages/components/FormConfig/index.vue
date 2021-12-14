@@ -1,5 +1,5 @@
 <template>
-  <div class="form-config-container">
+  <div class="widget-config">
     <el-form label-position="top" size="small">
       <el-form-item v-loquat-has-perm="[widgetForm, 'labelPosition']" label="标签对齐方式">
         <el-radio-group v-model="widgetForm.labelPosition">
