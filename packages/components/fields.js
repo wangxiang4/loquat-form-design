@@ -543,7 +543,6 @@ export default [
           styleSheets: '',
           fit: true,
           stripe: false,
-          maxHeight: '',
           defaultSort: {},
           showHeader: true,
           highlightCurrentRow: false,

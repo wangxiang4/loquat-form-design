@@ -11,25 +11,20 @@
                 :border="true"
                 :fit="widgetChildForm.fit"
                 :stripe="widgetChildForm.stripe"
-                :max-height="widgetChildForm.maxHeight"
                 :default-sort="widgetChildForm.defaultSort"
                 :show-header="widgetChildForm.showHeader"
                 :size="widgetChildForm.size || childFormDefaultConfig.size"
                 :highlight-current-row="widgetChildForm.highlightCurrentRow"
+                :max-height="widgetChildForm.maxHeight"
                 v-loading="loading"
                 @cell-mouse-enter="cellMouseEnter"
                 @cell-mouse-leave="cellMouseLeave"
       >
         <!-- 暂无数据提醒 -->
         <template slot="empty">
-          <div class="loquat-child-form__empty">
-            <slot v-if="$slots.empty" name="empty"/>
-            <empty v-else
-                   size="50"
-                   image="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAxKSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgIDxlbGxpcHNlIGZpbGw9IiNGNUY1RjUiIGN4PSIzMiIgY3k9IjMzIiByeD0iMzIiIHJ5PSI3Ii8+CiAgICA8ZyBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0iI0Q5RDlEOSI+CiAgICAgIDxwYXRoIGQ9Ik01NSAxMi43Nkw0NC44NTQgMS4yNThDNDQuMzY3LjQ3NCA0My42NTYgMCA0Mi45MDcgMEgyMS4wOTNjLS43NDkgMC0xLjQ2LjQ3NC0xLjk0NyAxLjI1N0w5IDEyLjc2MVYyMmg0NnYtOS4yNHoiLz4KICAgICAgPHBhdGggZD0iTTQxLjYxMyAxNS45MzFjMC0xLjYwNS45OTQtMi45MyAyLjIyNy0yLjkzMUg1NXYxOC4xMzdDNTUgMzMuMjYgNTMuNjggMzUgNTIuMDUgMzVoLTQwLjFDMTAuMzIgMzUgOSAzMy4yNTkgOSAzMS4xMzdWMTNoMTEuMTZjMS4yMzMgMCAyLjIyNyAxLjMyMyAyLjIyNyAyLjkyOHYuMDIyYzAgMS42MDUgMS4wMDUgMi45MDEgMi4yMzcgMi45MDFoMTQuNzUyYzEuMjMyIDAgMi4yMzctMS4zMDggMi4yMzctMi45MTN2LS4wMDd6IiBmaWxsPSIjRkFGQUZBIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
-                   :desc="widgetChildForm.emptyText || '暂无数据'"
-            />
-          </div>
+          <el-table-column v-if="columns.length == 0"/>
+          <slot v-if="$slots.empty" name="empty"/>
+          <template v-else>{{ widgetChildForm.emptyText || '暂无数据' }}</template>
         </template>
         <column :columns="columns">
           <!--渲染头部操作列-->
@@ -67,7 +62,6 @@
 </template>
 
 <script>
-import empty from '../empty'
 import tablePage from './page'
 import column from './column'
 import columnDefault from './columnDefault'
@@ -82,7 +76,7 @@ export default {
       childForm: this
     }
   },
-  components: { empty, tablePage, column, columnDefault },
+  components: { tablePage, column, columnDefault },
   props: {
     // 表格配置(跟表单配置类似)
     option: {
