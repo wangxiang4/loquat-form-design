@@ -39,11 +39,12 @@ export const GlobalConfig = {
     minify: false
   },
   widgetFormDefaultConfig: {
-    column: [],
-    labelPosition: 'right',
-    labelWidth: 90,
+    enter: true,
     size: 'small',
+    labelWidth: 90,
+    labelPosition: 'right',
     styleSheets: '',
+    column: [],
     customClass: [],
     eventScript: [
       {

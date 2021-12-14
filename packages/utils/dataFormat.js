@@ -303,6 +303,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
         if (col.type === 'childForm') {
           Object.assign(plugin.option, {
             // 使用主表单的一些配置
+            enter: options.config.enter,
             size: options.config.size,
             eventScript: options.eventScript,
             dataSource: options.autoDataSource

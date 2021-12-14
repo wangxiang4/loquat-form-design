@@ -22,7 +22,6 @@
       >
         <!-- 暂无数据提醒 -->
         <template slot="empty">
-          <el-table-column v-if="columns.length == 0"/>
           <slot v-if="$slots.empty" name="empty"/>
           <template v-else>{{ widgetChildForm.emptyText || '暂无数据' }}</template>
         </template>

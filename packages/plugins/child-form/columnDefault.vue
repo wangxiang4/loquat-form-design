@@ -9,7 +9,7 @@
                      align="center"
                      header-align="center"
     >
-      <template slot-scope="scope">
+      <div slot-scope="scope" style="min-height: 52px">
         <el-button v-if="(!childForm.readonly || !childForm.disabled) && childForm.hoverMark[scope.row.$index]"
                    @click="childForm.rowCellDel(scope.row.$index)"
                    type="danger"
@@ -18,8 +18,9 @@
                    circle
         />
         <div v-else>{{scope.row.$index+1}}</div>
-      </template>
+      </div>
     </el-table-column>
+    <el-table-column v-if="childForm.columns.length == 0"/>
   </div>
 </template>
 
