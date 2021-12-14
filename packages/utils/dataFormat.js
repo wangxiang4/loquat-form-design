@@ -131,24 +131,34 @@ export function getComponentConfig (type, component) {
   return KEY_COMPONENT_CONFIG_NAME.concat(kebabCase(result))
 }
 
-/** 设计器配置转换设计器预览配置 **/
+/**
+ * 设计器配置转换设计器预览配置
+ * 此配置处理目前已经跟子表单配置处理共用,当子表单需要定制处理,建议重新提取一个,不要公用
+ */
 export function designTransformPreview (_this) {
   if (!validateNull(_this.configOption)) {
     const config = deepClone(_this.configOption)
     const eventScript = config.eventScript || []
     const autoDataSource = config.dataSource && config.dataSource.filter(item => item.auto)
+    const executeCallbackHooks = {}
+    const pluginImplantPaths = {}
+    const widgets = []
     handleDeepDesignTransformPreview(_this, config.column, {
       config,
+      widgets,
       eventScript,
-      autoDataSource
+      autoDataSource,
+      pluginImplantPaths
     })
     // 获取表单执行回调钩子函数
-    const executeCallbackHooks = {}
     for (const item of GlobalConfig.formExecuteCallbackHooks) {
       const event = eventScript.find(e => e.key === item)
       executeCallbackHooks[item] = event && new Function(event.func)
     }
-    config.callbackHooks = executeCallbackHooks
+    // 内部附加属性
+    config._callbackHooks = executeCallbackHooks
+    config._pluginImplantPaths = pluginImplantPaths
+    config._widgets = widgets
     delete config.dataSource
     delete config.eventScript
     return config
@@ -160,14 +170,18 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
   // 设置参数配置,为了后面好扩展单独提出来
   const options = {
     config: ops.config || {},
+    widgets: ops.widgets || [],
     eventScript: ops.eventScript || [],
     autoDataSource: ops.autoDataSource || [],
     remoteOption: { ...GlobalConfig.defaultRemoteOption, ...remoteOption.store },
     remoteFunc: { ...GlobalConfig.defaultRemoteFunc, ...remoteFunc.store },
-    axiosInstance: GlobalConfig.axiosInstance
+    axiosInstance: GlobalConfig.axiosInstance,
+    pluginImplantPaths: ops.pluginImplantPaths || {},
+    parentPluginImplantPath: ops.parentPluginImplantPath || '_this'
   }
   for (let i = 0; i < column.length; ++i) {
     const col = column[i]
+    options.widgets.push(col)
     const plugin = col.plugin || {}
     const validateConfig = col.validateConfig || {}
     switch (col.type) {
@@ -176,9 +190,16 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
         for (let colIndex = 0; colIndex < col.cols.length; ++colIndex) {
           const coralCol = col.cols[colIndex]
           handleDeepDesignTransformPreview(_this, coralCol.list, {
-            config: ops.config,
-            eventScript: ops.eventScript,
-            autoDataSource: ops.autoDataSource
+            config: options.config,
+            widgets: options.widgets,
+            eventScript: options.eventScript,
+            autoDataSource: options.autoDataSource,
+            pluginImplantPaths: options.pluginImplantPaths,
+            parentPluginImplantPath: [
+              options.parentPluginImplantPath,
+              col.prop.concat('[0]'),
+              'coralLayout'
+            ].join('.$refs.')
           })
         }
         break
@@ -270,7 +291,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
             }
           }
         }
-        // 校验规则处理
+        // 处理校验规则
         if (getObjType(validateConfig) === 'object') {
           const rules = []
           validateConfig.required && rules.push({ required: true, message: validateConfig.requiredMessage || `${col.label}必须填写` })
@@ -287,6 +308,13 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
             dataSource: options.autoDataSource
           })
         }
+        // 处理插件植入路径存储
+        options.pluginImplantPaths[col.prop] = [
+          options.parentPluginImplantPath,
+          col.prop.concat('[0]'),
+          'widget',
+          'plugin'
+        ].join('.$refs.')
         clearTransformColumnDirtyData(col)
     }
   }

@@ -12,6 +12,7 @@
     >
       <template v-for="(column, index) in columns">
         <item :key="index"
+              :ref="column.prop"
               :column="column"
               :widgets="columns"
               :home="home"
@@ -30,6 +31,11 @@ import item from './item'
 import { setPx } from '@utils'
 export default {
   name: 'Form',
+  provide () {
+    return {
+      form: this
+    }
+  },
   components: { item },
   props: {
     option: {
@@ -74,7 +80,17 @@ export default {
       return this.widgetForm.column || []
     },
     callbackHooks () {
-      return this.widgetForm.callbackHooks || {}
+      return this.widgetForm._callbackHooks || {}
+    },
+    pluginImplantPaths () {
+      return this.widgetForm._pluginImplantPaths || {}
+    },
+    // 如果需要修改属性不影响别的部件,建议克隆
+    widgets () {
+      return this.widgetForm._widgets || []
+    },
+    childForms () {
+      return this.widgets.filter(col => col.type == 'childForm' && !col.hide)
     }
   },
   watch: {
@@ -130,11 +146,29 @@ export default {
     },
     validate (callback) {
       this.$refs.form.validate((valid, msg) => {
-        if (valid) {
-          callback(true)
-        } else {
-          callback(false, msg)
-        }
+        const childFormValidates = []
+        const childFormProps = []
+        const childFormError = {}
+        this.childForms.forEach(item => {
+          childFormProps.push(item.prop)
+          // eval内部不支持箭头函数this作用域绑定,只支持当前函数作用域绑定
+          // eslint-disable-next-line no-unused-vars
+          const _this = this
+          childFormValidates.push(eval(`${this.pluginImplantPaths[item.prop]}.validate()`))
+        })
+        Promise.all(childFormValidates).then(res => {
+          res.forEach((error, index) => {
+            if (!validateNull(error)) {
+              childFormError[childFormProps[index]] = error
+            }
+          })
+          const errorMessages = Object.assign(childFormError, msg)
+          if (validateNull(errorMessages)) {
+            callback(true)
+          } else {
+            callback(false, errorMessages)
+          }
+        })
       })
     },
     submit () {

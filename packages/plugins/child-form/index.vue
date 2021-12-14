@@ -71,6 +71,7 @@ import { DEFAULT_CONFIG_INSIDE_CHILD_FORM, KEY_COMPONENT_NAME } from '@/global/v
 import { designTransformPreview, formInitVal } from '@utils/dataFormat'
 export default {
   name: 'ChildForm',
+  inject: ['form'],
   provide () {
     return {
       childForm: this
@@ -262,21 +263,35 @@ export default {
     clearValidate (list) {
       this.$refs.childForm.clearValidate(list)
     },
-    validate (callback) {
-      this.$refs.childForm.validate((valid, msg) => {
-        if (valid) {
-          callback(true)
-        } else {
-          callback(false, msg)
-        }
+    validate () {
+      return new Promise(resolve => {
+        this.$refs.childForm.validate((valid, msg) => {
+          resolve(msg)
+        })
       })
     },
+    // 校验一行表单字段
+    validateRowCellField (index) {
+      let result = true
+      for (const item of this.$refs.childForm.fields) {
+        if (item.prop.split('.')[1] == index) {
+          this.$refs.childForm.validateField(item.prop, (error) => {
+            if (error) result = false
+          })
+        }
+        if (!result) break
+      }
+      return result
+    },
     submit () {
-      this.validate((valid, msg) => {
-        if (valid) {
-          this.$emit('submit', this.list)
-        } else {
-          this.$emit('error', msg)
+      this.validate().catch(msg => {
+        if (this.form) this.form.submit()
+        else {
+          if (validateNull(msg)) {
+            this.$emit('submit', this.list)
+          } else {
+            this.$emit('error', msg)
+          }
         }
       })
     },

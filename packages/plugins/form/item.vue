@@ -1,7 +1,8 @@
 <template>
   <div>
     <template v-if="column.type == 'coralLayout'">
-      <coral-layout :column="column"
+      <coral-layout ref="coralLayout"
+                    :column="column"
                     :widgets="widgets"
                     :home="home"
       />
@@ -47,7 +48,7 @@
               :dic="home.DIC[column.prop]"
         />
         <widget v-else
-                :ref="column.prop"
+                ref="widget"
                 v-model="home.form[column.prop]"
                 :dic="home.DIC[column.prop]"
                 :column="column"

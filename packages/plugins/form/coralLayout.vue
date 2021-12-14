@@ -16,6 +16,7 @@
     >
       <template v-for="(column, index) in col.list">
         <item :key="index"
+              :ref="column.prop"
               :column="column"
               :widgets="col.list"
               :home="home"

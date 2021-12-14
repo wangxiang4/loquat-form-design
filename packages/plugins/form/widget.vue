@@ -1,5 +1,6 @@
 <template>
   <component :is="getComponent(getColumn.type, getColumn.component)"
+             ref="plugin"
              v-model="text"
              v-bind="plugin"
              :dic="dic"
