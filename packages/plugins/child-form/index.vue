@@ -5,6 +5,7 @@
              :status-icon="widgetChildForm.statusIcon"
              :size="widgetChildForm.size || childFormDefaultConfig.size"
              :class="widgetChildForm.customClass"
+             @submit.native.prevent
     >
       <el-table ref="table"
                 :data="childForm.list"
@@ -70,7 +71,6 @@ import { DEFAULT_CONFIG_INSIDE_CHILD_FORM, KEY_COMPONENT_NAME } from '@/global/v
 import { designTransformPreview, formInitVal } from '@utils/dataFormat'
 export default {
   name: 'ChildForm',
-  inject: ['form'],
   provide () {
     return {
       childForm: this
@@ -283,14 +283,11 @@ export default {
       return result
     },
     submit () {
-      this.validate().catch(msg => {
-        if (this.form) this.form.submit()
-        else {
-          if (validateNull(msg)) {
-            this.$emit('submit', this.list)
-          } else {
-            this.$emit('error', msg)
-          }
+      this.validate().then(msg => {
+        if (validateNull(msg)) {
+          this.$emit('submit', this.list)
+        } else {
+          this.$emit('error', msg)
         }
       })
     },

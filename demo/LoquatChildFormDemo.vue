@@ -23,6 +23,7 @@ export default {
   data () {
     return {
       option: {
+        'enter': true,
         'indexExecuteLabel': '序列操作',
         'column': [{
           'type': 'input',
