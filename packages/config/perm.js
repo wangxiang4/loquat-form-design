@@ -299,6 +299,31 @@ const permission = {
       'plugin.multiple',
       'plugin.showFileList'
     ]
+  },
+  childForm: {
+    pageConfig: [
+      'page.pagerCount',
+      'page.pageSize',
+      'page.layout'
+    ],
+    pageConfigOperate: [
+      'page.smallPaging',
+      'page.simplePage',
+      'page.background'
+    ],
+    operate: [
+      'hide',
+      'hideLabel',
+      'plugin.disabled',
+      'plugin.readonly',
+      'plugin.loading',
+      'plugin.paging',
+      'plugin.option.fit',
+      'plugin.option.stripe',
+      'plugin.option.showHeader',
+      'plugin.option.highlightCurrentRow',
+      'plugin.option.indexExecute'
+    ]
   }
 }
 
@@ -460,6 +485,15 @@ export default [
       oss: permission.upload.oss,
       getToken: permission.upload.getToken,
       fileSize: permission.upload.fileSize
+    }
+  },
+  {
+    component: 'ChildForm',
+    somePermission: {
+      configCenterPerm: [...permission.childForm.pageConfig, ...permission.childForm.pageConfigOperate],
+      pageConfig: [...permission.childForm.pageConfig, ...permission.childForm.pageConfigOperate],
+      pageConfigOperate: permission.childForm.pageConfigOperate,
+      operate: permission.childForm.operate
     }
   }
 ]

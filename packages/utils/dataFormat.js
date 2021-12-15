@@ -305,6 +305,7 @@ function handleDeepDesignTransformPreview (_this, column, ops = {}) {
             // 使用主表单的一些配置
             enter: options.config.enter,
             size: options.config.size,
+            statusIcon: options.config.statusIcon,
             eventScript: options.eventScript,
             dataSource: options.autoDataSource
           })

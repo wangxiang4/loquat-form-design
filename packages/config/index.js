@@ -15,6 +15,7 @@ import upload from './upload'
 import cascader from './cascader'
 import coralLayout from './coral-layout'
 import column from './coral-layout/column'
+import childForm from './child-form'
 import { KEY_COMPONENT_CONFIG_NAME } from '@/global/variable'
 import { kebabCase } from '@utils'
 const components = [
@@ -34,7 +35,8 @@ const components = [
   upload,
   cascader,
   coralLayout,
-  column
+  column,
+  childForm
 ]
 
 const Configs = {

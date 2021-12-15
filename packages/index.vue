@@ -614,6 +614,18 @@
           >取消</el-button>
         </span>
       </el-dialog>
+      <el-dialog title="子表单默认值"
+                 class="loquat-dialog"
+                 v-if="childFormModelVisible"
+                 :visible.sync="childFormModelVisible"
+                 :close-on-click-modal="false"
+                 width="800px"
+                 append-to-body
+                 top="3vh"
+                 center
+      >
+        <plugin-child-form v-model="widgetFormSelectPlugin.value" v-bind="widgetFormSelectPlugin"/>
+      </el-dialog>
     </el-container>
   </div>
 </template>
@@ -631,6 +643,7 @@ import codeBeautifier from 'js-beautify'
 import request from '@utils/request'
 import packages from '@utils/packages'
 import pluginForm from '@/plugins/form'
+import pluginChildForm from '@/plugins/child-form'
 import { insertCss, parseCss, classCss } from '@utils/dom'
 import GlobalConfig from './global/config'
 import { randomId8, getObjType, getWidgetFormDefaultConfig, getJsonOptionDefaultConfig, validateNull, deepClone } from '@utils'
@@ -638,7 +651,7 @@ import { KEY_COMPONENT_NAME } from '@/global/variable'
 import SvgIcon from '@components/Helper/SvgIcon'
 export default {
   name: 'FormDesign',
-  components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor, pluginForm, SvgIcon },
+  components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor, pluginForm, SvgIcon, pluginChildForm },
   mixins: [history],
   props: {
     options: {
@@ -727,7 +740,8 @@ export default {
       styleSheets: '',
       previewDisableSwitch: false,
       cascadeOptionVisible: false,
-      cascadeOption: ''
+      cascadeOption: '',
+      childFormModelVisible: false
     }
   },
   computed: {
@@ -753,6 +767,9 @@ export default {
         })
       })
       return customFields
+    },
+    widgetFormSelectPlugin () {
+      return this.widgetFormSelect.plugin || {}
     }
   },
   watch: {
