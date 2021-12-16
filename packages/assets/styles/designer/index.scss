@@ -96,16 +96,37 @@ $widget-layout-background-color: #fdf6ec;
     border-left: 1px solid #e0e0e0;
     border-right: 1px solid #e0e0e0;
 
-    .widget-container-header {
-      height: 45px !important;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: solid 2px #e4e7ed;
+    .btn-bar {
+      height: 45px!important;
+      line-height: 45px;
+      font-size: 18px;
+      border-bottom: 2px solid #e4e7ed;
+      text-align: right;
+      display: block;
+
+      &.el-header {
+        padding: 0 10px;
+      }
+
+      .bar-icon {
+        width: 30px;
+        height: 45px;
+        float: left;
+      }
+
+      .btn-diviler {
+        height: 25px;
+        float: left;
+        width: 1px;
+        background: #eee;
+        margin: 10px;
+      }
 
       .btn-bar-action {
+        height: 45px;
         line-height: 45px;
         font-size: 24px;
+        float: left;
 
         .iconfont {
           font-size: 18px;
@@ -113,8 +134,10 @@ $widget-layout-background-color: #fdf6ec;
       }
 
       .btn-bar-plat {
+        height: 45px;
         line-height: 45px;
         font-size: 24px;
+        float: left;
 
         a {
           width: 30px;
@@ -125,6 +148,8 @@ $widget-layout-background-color: #fdf6ec;
           line-height: 30px;
           border-radius: 3px;
           margin-right: 5px;
+          cursor: pointer;
+          transition: color .3s;
 
           &.active {
             background: #e4e7ed;

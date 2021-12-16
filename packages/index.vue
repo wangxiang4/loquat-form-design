@@ -46,70 +46,66 @@
         </div>
       </el-aside>
       <el-container class="widget-container" direction="vertical">
-        <el-header class="widget-container-header">
-          <div style="display: flex; align-items: center">
-            <svg-icon icon-class="homeIcon" style="height: 30px;width: 30px;"/>
-            <el-divider direction="vertical"/>
-            <div class="btn-bar-plat">
-              <a :class="{ active: adapter==='pc' }"
-                 @click="adapter = 'pc'"
-              ><i class="iconfont icon-pc"/></a>
-              <a :class="{ active: adapter==='pad' }"
-                 @click="adapter = 'pad'"
-              ><i class="iconfont icon-pad"/></a>
-              <a :class="{ active: adapter==='mobile' }"
-                 @click="adapter = 'mobile'"
-              ><i class="iconfont icon-mobile"/></a>
-            </div>
-            <el-divider direction="vertical"/>
-            <div v-if="undoRedo" class="btn-bar-action">
-              <el-tooltip effect="dark" content="撤销" placement="bottom">
-                <el-button type="text"
-                           size="medium"
-                           icon="iconfont icon-undo"
-                           :disabled="historySteps.index == 0"
-                           @click="handleWidgetFormUndo"
-                />
-              </el-tooltip>
-              <el-tooltip effect="dark" content="重做" placement="bottom">
-                <el-button type="text"
-                           size="medium"
-                           icon="iconfont icon-redo"
-                           :disabled="historySteps.index == (historySteps.steps.length - 1)"
-                           @click="handleWidgetFormRedo"
-                />
-              </el-tooltip>
-            </div>
+        <el-header class="btn-bar">
+          <svg-icon class="bar-icon" icon-class="homeIcon"/>
+          <div class="btn-diviler"/>
+          <div class="btn-bar-plat">
+            <a :class="{ active: adapter==='pc' }"
+               @click="adapter = 'pc'"
+            ><i class="iconfont icon-pc"/></a>
+            <a :class="{ active: adapter==='pad' }"
+               @click="adapter = 'pad'"
+            ><i class="iconfont icon-pad"/></a>
+            <a :class="{ active: adapter==='mobile' }"
+               @click="adapter = 'mobile'"
+            ><i class="iconfont icon-mobile"/></a>
           </div>
-          <div style="display: flex; align-items: center;">
-            <slot name="toolbar-left"/>
-            <el-button v-if="toolbar.includes('import')"
-                       type="text"
-                       size="medium"
-                       icon="el-icon-upload2"
-                       @click="handleImportJson"
-            >导入JSON</el-button>
-            <el-button v-if="toolbar.includes('clear')"
-                       class="danger"
-                       type="text"
-                       size="medium"
-                       icon="el-icon-delete"
-                       @click="handleClear"
-            >清空</el-button>
-            <el-button v-if="toolbar.includes('preview')"
-                       type="text"
-                       size="medium"
-                       icon="el-icon-view"
-                       @click="handlePreview"
-            >预览</el-button>
-            <el-button v-if="toolbar.includes('generate')"
-                       type="text"
-                       size="medium"
-                       icon="el-icon-download"
-                       @click="handleGenerateJson"
-            >生成JSON</el-button>
-            <slot name="toolbar"/>
+          <div class="btn-diviler"/>
+          <div v-if="undoRedo" class="btn-bar-action">
+            <el-tooltip effect="dark" content="撤销" placement="bottom">
+              <el-button type="text"
+                         size="medium"
+                         icon="iconfont icon-undo"
+                         :disabled="historySteps.index == 0"
+                         @click="handleWidgetFormUndo"
+              />
+            </el-tooltip>
+            <el-tooltip effect="dark" content="重做" placement="bottom">
+              <el-button type="text"
+                         size="medium"
+                         icon="iconfont icon-redo"
+                         :disabled="historySteps.index == (historySteps.steps.length - 1)"
+                         @click="handleWidgetFormRedo"
+              />
+            </el-tooltip>
           </div>
+          <slot name="toolbar-left"/>
+          <el-button v-if="toolbar.includes('import')"
+                     type="text"
+                     size="medium"
+                     icon="el-icon-upload2"
+                     @click="handleImportJson"
+          >导入JSON</el-button>
+          <el-button v-if="toolbar.includes('clear')"
+                     class="danger"
+                     type="text"
+                     size="medium"
+                     icon="el-icon-delete"
+                     @click="handleClear"
+          >清空</el-button>
+          <el-button v-if="toolbar.includes('preview')"
+                     type="text"
+                     size="medium"
+                     icon="el-icon-view"
+                     @click="handlePreview"
+          >预览</el-button>
+          <el-button v-if="toolbar.includes('generate')"
+                     type="text"
+                     size="medium"
+                     icon="el-icon-download"
+                     @click="handleGenerateJson"
+          >生成JSON</el-button>
+          <slot name="toolbar-right"/>
         </el-header>
         <el-main>
           <widget-form ref="widgetForm"
@@ -624,7 +620,7 @@
                  top="3vh"
                  center
       >
-        <plugin-child-form v-model="widgetFormSelectPlugin.value" v-bind="widgetFormSelectPlugin"/>
+        <plugin-child-form v-model="widgetFormSelect.plugin.value" v-bind="widgetFormSelect.plugin"/>
       </el-dialog>
     </el-container>
   </div>
@@ -767,9 +763,6 @@ export default {
         })
       })
       return customFields
-    },
-    widgetFormSelectPlugin () {
-      return this.widgetFormSelect.plugin || {}
     }
   },
   watch: {
