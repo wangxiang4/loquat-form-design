@@ -55,14 +55,14 @@
           <div v-loquat-has-perm="[plugin, somePermission.pageConfigOperate, 1]">
             <span class="horizontal-tip-text">操作属性:</span>
             <el-row>
-              <el-col v-loquat-has-perm="[pageConfig, 'smallPaging']" :span="operationComputedSpan">
+              <el-col v-loquat-has-perm="[pageConfig, 'smallPaging']" :span="24">
                 <el-checkbox v-model="pageConfig.smallPaging" size="mini">是否使用小分页</el-checkbox>
               </el-col>
-              <el-col v-loquat-has-perm="[pageConfig, 'simplePage']" :span="operationComputedSpan">
-                <el-checkbox v-model="pageConfig.simplePage" size="mini">当只有一页时隐藏分页</el-checkbox>
-              </el-col>
-              <el-col v-loquat-has-perm="[pageConfig, 'background']" :span="operationComputedSpan">
+              <el-col v-loquat-has-perm="[pageConfig, 'background']" :span="24">
                 <el-checkbox v-model="pageConfig.background" size="mini">是否显示背景颜色</el-checkbox>
+              </el-col>
+              <el-col v-loquat-has-perm="[pageConfig, 'simplePage']" :span="24">
+                <el-checkbox v-model="pageConfig.simplePage" size="mini">当只有一页时隐藏分页</el-checkbox>
               </el-col>
             </el-row>
           </div>
@@ -87,29 +87,8 @@
     </el-form-item>
     <el-form-item v-loquat-has-perm="[column, somePermission.operate, 1]" label="操作属性">
       <el-row>
-        <el-col v-loquat-has-perm="[option, 'fit']" :span="operationComputedSpan">
-          <el-checkbox v-model="option.fit">列的宽度是否自撑开</el-checkbox>
-        </el-col>
-        <el-col v-loquat-has-perm="[option, 'stripe']" :span="operationComputedSpan">
-          <el-checkbox v-model="option.stripe">是否为斑马纹</el-checkbox>
-        </el-col>
-        <el-col v-loquat-has-perm="[option, 'showHeader']" :span="operationComputedSpan">
-          <el-checkbox v-model="option.showHeader">是否显示表头</el-checkbox>
-        </el-col>
-        <el-col v-loquat-has-perm="[option, 'highlightCurrentRow']" :span="operationComputedSpan">
-          <el-checkbox v-model="option.highlightCurrentRow">是否要高亮当前行</el-checkbox>
-        </el-col>
-        <el-col v-loquat-has-perm="[option, 'indexExecute']" :span="operationComputedSpan">
-          <el-checkbox v-model="option.highlightCurrentRow">是否显示索引列</el-checkbox>
-        </el-col>
         <el-col v-loquat-has-perm="[plugin, 'disabled']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.disabled">禁用</el-checkbox>
-        </el-col>
-        <el-col v-loquat-has-perm="[plugin, 'loading']" :span="operationComputedSpan">
-          <el-checkbox v-model="plugin.loading">是否显示加载</el-checkbox>
-        </el-col>
-        <el-col v-loquat-has-perm="[plugin, 'paging']" :span="operationComputedSpan">
-          <el-checkbox v-model="plugin.paging">是否启动分页</el-checkbox>
         </el-col>
         <el-col v-loquat-has-perm="[plugin, 'readonly']" :span="operationComputedSpan">
           <el-checkbox v-model="plugin.readonly">只读</el-checkbox>
@@ -119,6 +98,27 @@
         </el-col>
         <el-col v-loquat-has-perm="[column, 'hideLabel']" :span="operationComputedSpan">
           <el-checkbox v-model="column.hideLabel">隐藏标签</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[option, 'stripe']" :span="operationComputedSpan">
+          <el-checkbox v-model="option.stripe">是否为斑马纹</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[option, 'showHeader']" :span="operationComputedSpan">
+          <el-checkbox v-model="option.showHeader">是否显示表头</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[plugin, 'loading']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.loading">是否显示加载</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[plugin, 'paging']" :span="operationComputedSpan">
+          <el-checkbox v-model="plugin.paging">是否启动分页</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[option, 'indexExecute']" :span="operationComputedSpan">
+          <el-checkbox v-model="option.highlightCurrentRow">是否显示索引列</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[option, 'highlightCurrentRow']" :span="24">
+          <el-checkbox v-model="option.highlightCurrentRow">是否要高亮当前行</el-checkbox>
+        </el-col>
+        <el-col v-loquat-has-perm="[option, 'fit']" :span="24">
+          <el-checkbox v-model="option.fit">列的宽度是否自撑开</el-checkbox>
         </el-col>
       </el-row>
     </el-form-item>
