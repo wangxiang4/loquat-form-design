@@ -41,6 +41,7 @@ import widget from '@/plugins/form/widget'
 export default {
   name: 'WidgetChildFormItem',
   inject: ['childFormProvide'],
+  components: { widget },
   props: {
     column: {
       type: Object,
@@ -52,7 +53,6 @@ export default {
       type: Number
     }
   },
-  components: { widget },
   computed: {
     childForm () {
       return this.childFormProvide || {}

@@ -8,6 +8,7 @@
              @submit.native.prevent
     >
       <el-table ref="table"
+                v-loading="loading"
                 :data="childForm.list"
                 :border="true"
                 :fit="widgetChildForm.fit"
@@ -17,7 +18,6 @@
                 :size="widgetChildForm.size || childFormDefaultConfig.size"
                 :highlight-current-row="widgetChildForm.highlightCurrentRow"
                 :max-height="widgetChildForm.maxHeight"
-                v-loading="loading"
                 @cell-mouse-enter="cellMouseEnter"
                 @cell-mouse-leave="cellMouseLeave"
       >
@@ -30,7 +30,7 @@
           <!--渲染头部操作列-->
           <column-default slot="header"/>
           <!--渲染插槽列表-->
-          <template v-for="item in columnSlot" slot-scope="scope" :slot="item">
+          <template v-for="item in columnSlot" :slot="item" slot-scope="scope">
             <slot v-bind="scope" :name="item"/>
           </template>
         </column>
@@ -38,7 +38,7 @@
     </el-form>
     <el-row>
       <el-col :span="12">
-        <el-button v-if="!this.readonly || !this.disabled"
+        <el-button v-if="!readonly || !disabled"
                    :size="widgetChildForm.size || childFormDefaultConfig.size"
                    type="text"
                    icon="el-icon-plus"

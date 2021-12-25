@@ -9,9 +9,9 @@
               <draggable tag="ul"
                          :list="field.list"
                          :group="{ name: 'form', pull: 'clone', put: false }"
-                         @start="handleDraggableWidget(field.list, $event)"
                          ghost-class="ghost"
                          :sort="false"
+                         @start="handleDraggableWidget(field.list, $event)"
               >
                 <template v-for="(item, index) in field.list">
                   <li v-if="includeFields.includes(item.type)" :key="index" class="field-label">
@@ -30,9 +30,9 @@
               <draggable tag="ul"
                          :list="field.list"
                          :group="{ name: 'form', pull: 'clone', put: false }"
-                         @start="handleDraggableWidget(field.list, $event)"
                          ghost-class="ghost"
                          :sort="false"
+                         @start="handleDraggableWidget(field.list, $event)"
               >
                 <template v-for="(item, index) in field.list">
                   <li :key="index" class="field-label">

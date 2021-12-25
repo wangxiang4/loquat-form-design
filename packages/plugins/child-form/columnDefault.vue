@@ -11,13 +11,13 @@
     >
       <div slot-scope="scope" style="min-height: 52px">
         <el-button v-if="(!childForm.readonly || !childForm.disabled) && childForm.hoverMark[scope.row.$index]"
-                   @click="childForm.rowCellDel(scope.row.$index)"
                    type="danger"
                    size="mini"
                    icon="el-icon-delete"
                    circle
+                   @click="childForm.rowCellDel(scope.row.$index)"
         />
-        <div v-else>{{scope.row.$index+1}}</div>
+        <div v-else>{{ scope.row.$index+1 }}</div>
       </div>
     </el-table-column>
     <el-table-column v-if="columns.length == 0"/>

@@ -44,8 +44,13 @@ export default {
       }
     }
   },
-  created () {
-    this.pageInit()
+  computed: {
+    childForm () {
+      return this.childFormProvide || {}
+    },
+    pageFlag () {
+      return this.defaultPage.total > 0 && this.childForm.paging
+    }
   },
   watch: {
     page: {
@@ -55,13 +60,8 @@ export default {
       deep: true
     }
   },
-  computed: {
-    childForm () {
-      return this.childFormProvide || {}
-    },
-    pageFlag () {
-      return this.defaultPage.total > 0 && this.childForm.paging
-    }
+  created () {
+    this.pageInit()
   },
   methods: {
     // 初始化分页配置参数
