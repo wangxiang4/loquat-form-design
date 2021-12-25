@@ -5,7 +5,7 @@
     <!--动态列-->
     <template v-for="(column, index) in list">
       <column-slot :key="index" :column="column">
-        <template slot-scope="scope" :slot="column.prop">
+        <template :slot="column.prop" slot-scope="scope">
           <slot v-bind="scope" :name="column.prop"/>
         </template>
       </column-slot>
