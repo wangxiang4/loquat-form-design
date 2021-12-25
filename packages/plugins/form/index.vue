@@ -23,7 +23,7 @@
 <script>
 import { formClearVal, formInitVal, designTransformPreview } from '@utils/dataFormat'
 import { DEFAULT_CONFIG_INSIDE_FORM, KEY_COMPONENT_NAME } from '@/global/variable'
-import { randomId8, deepClone, validateNull } from '@utils'
+import { randomId8, deepClone, validateNull, getObjType } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
 import item from './item'
 import { setPx } from '@utils'
@@ -36,16 +36,9 @@ export default {
   },
   components: { item },
   props: {
+    value: {},
     option: {
       type: Object,
-      required: true,
-      default: () => {
-        return {}
-      }
-    },
-    value: {
-      type: Object,
-      required: true,
       default: () => {
         return {}
       }
@@ -61,7 +54,7 @@ export default {
   },
   data () {
     return {
-      form: {},
+      text: {},
       first: false,
       configOption: {},
       formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
@@ -71,7 +64,7 @@ export default {
   },
   computed: {
     widgetForm () {
-      return designTransformPreview(this)
+      return designTransformPreview(this) || {}
     },
     columns () {
       return this.widgetForm.column || []
@@ -88,10 +81,13 @@ export default {
     },
     childForms () {
       return this.widgets.filter(col => col.type == 'childForm' && !col.hide)
+    },
+    form () {
+      return getObjType(this.text) === 'object' ? this.text : {}
     }
   },
   watch: {
-    form: {
+    text: {
       handler (val) {
         if (this.first || !validateNull(val)) {
           this.first = true
@@ -129,14 +125,14 @@ export default {
   methods: {
     setPx,
     initVal () {
-      this.form = this.value
+      this.text = this.value
     },
     initOption () {
       this.configOption = this.option
       insertCss([], this.formId)
       this.formId = KEY_COMPONENT_NAME.concat(randomId8())
       insertCss(parseCss(this.widgetForm.styleSheets), this.formId)
-      this.form = deepClone({ ...formInitVal(this.columns), ...this.form })
+      this.text = deepClone({ ...formInitVal(this.columns), ...this.form })
     },
     handleWidgetChange (column) {
       if (this.$refs.form) this.$refs.form.validateField(column.prop)
@@ -182,7 +178,7 @@ export default {
     },
     resetForm () {
       const row = this.widgetForm.rowKey || 'id'
-      this.form = formClearVal(this.form, (this.widgetForm.clearExclude || []).concat([row]))
+      this.text = formClearVal(this.form, (this.widgetForm.clearExclude || []).concat([row]))
       this.$nextTick(() => {
         this.clearValidate()
         this.$emit('reset-change')

@@ -166,7 +166,7 @@ export function designTransformPreview (_this) {
 }
 
 /** 处理设计器配置转换设计器预览配置深度递归 **/
-function handleDeepDesignTransformPreview (_this, column, ops = {}) {
+function handleDeepDesignTransformPreview (_this, column = [], ops = {}) {
   // 设置参数配置,为了后面好扩展单独提出来
   const options = {
     config: ops.config || {},

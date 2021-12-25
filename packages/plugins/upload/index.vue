@@ -227,12 +227,12 @@ export default {
       }
       return this.accept
     },
-    getTextList () {
+    files () {
       return getObjType(this.text) === 'array' ? this.text : []
     },
     fileList () {
       const list = []
-      this.getTextList.forEach((ele, index) => {
+      this.files.forEach((ele, index) => {
         if (ele) {
           let name
           // 处理单个url链接取最后为label
@@ -251,7 +251,7 @@ export default {
       return this.listType === 'picture-img'
     },
     avatarImgUrl () {
-      return getFileUrl(this.homeUrl, this.getTextList[0])
+      return getFileUrl(this.homeUrl, this.files[0])
     },
     getStringMode () {
       return this.isAvatarImg ? true : this.stringMode
@@ -421,11 +421,11 @@ export default {
       this.loading = false
       const url = this.handleExternalLinkUrl(res)
       if (this.isAvatarImg) {
-        this.getTextList.splice(0, 1, url)
+        this.files.splice(0, 1, url)
       } else if (this.getStringMode) {
-        this.getTextList.push(url)
+        this.files.push(url)
       } else {
-        this.getTextList.push({ [this.nameKey]: uploadFile.name, [this.urlKey]: url })
+        this.files.push({ [this.nameKey]: uploadFile.name, [this.urlKey]: url })
       }
       this.uploadSuccess && this.uploadSuccess(res, uploadFile, this.fileList, this.column)
     },
