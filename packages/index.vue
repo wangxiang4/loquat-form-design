@@ -621,7 +621,7 @@
                  top="3vh"
                  center
       >
-        <plugin-child-form v-model="widgetFormSelect.plugin.value" v-bind="widgetFormSelect.plugin"/>
+        <plugin-child-form v-model="plugin.value" v-bind="plugin"/>
       </el-dialog>
     </el-container>
   </div>
@@ -747,6 +747,9 @@ export default {
     }
   },
   computed: {
+    plugin () {
+      return this.widgetFormSelect.plugin || {}
+    },
     leftWidth () {
       if (typeof this.asideLeftWidth === 'string') {
         return this.asideLeftWidth
