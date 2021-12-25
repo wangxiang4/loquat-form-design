@@ -65,7 +65,7 @@
 import tablePage from './page'
 import column from './column'
 import columnDefault from './columnDefault'
-import { deepClone, randomId8, validateNull, setPx } from '@utils'
+import { deepClone, randomId8, validateNull, setPx, getObjType } from '@utils'
 import { insertCss, parseCss } from '@utils/dom'
 import { DEFAULT_CONFIG_INSIDE_CHILD_FORM, KEY_COMPONENT_NAME } from '@/global/variable'
 import { designTransformPreview, formInitVal } from '@utils/dataFormat'
@@ -78,19 +78,13 @@ export default {
   },
   components: { tablePage, column, columnDefault },
   props: {
+    value: {},
     // 表格配置(跟表单配置类似)
     option: {
       type: Object,
-      required: true,
       default: () => {
         return {}
       }
-    },
-    // 表格list
-    value: {
-      type: Array,
-      required: true,
-      default: () => []
     },
     // 表格分页配置
     page: {
@@ -130,7 +124,7 @@ export default {
   },
   data () {
     return {
-      list: [],
+      text: [],
       pagingList: [],
       hoverMark: {},
       first: false,
@@ -143,7 +137,7 @@ export default {
   computed: {
     // 子表单主体配置
     widgetChildForm () {
-      return designTransformPreview(this)
+      return designTransformPreview(this) || {}
     },
     // 子表单列配置
     columns () {
@@ -160,10 +154,16 @@ export default {
       // 此子表单为表格预览方式,固然没有布局组件也就没有递归,可以直接循环获取插槽
       this.columns.forEach(item => { this.$scopedSlots[item.prop] && result.push(item.prop) })
       return result
+    },
+    list () {
+      if (getObjType(this.text) === 'array') {
+        this.text.forEach((item, index) => Object.assign(item, { $index: index }))
+        return this.text
+      } else return []
     }
   },
   watch: {
-    list: {
+    text: {
       handler (n) {
         if (this.first || !validateNull(n)) {
           this.first = true
@@ -201,8 +201,7 @@ export default {
   methods: {
     setPx,
     initVal () {
-      this.list = this.value
-      this.list.forEach((item, index) => Object.assign(item, { $index: index }))
+      this.text = this.value
     },
     initOption () {
       this.configOption = this.option
@@ -231,9 +230,7 @@ export default {
     // 单元格删除
     rowCellDel (index) {
       const callback = () => {
-        const list = deepClone(this.list)
-        list.splice(index, 1)
-        this.list = list
+        this.list.splice(index, 1)
       }
       if (typeof this.rowCellDelFun === 'function') {
         this.rowCellDelFun(this.list[index], callback)

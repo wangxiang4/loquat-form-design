@@ -614,7 +614,6 @@
       </el-dialog>
       <el-dialog title="子表单默认值"
                  class="loquat-dialog"
-                 v-if="childFormModelVisible"
                  :visible.sync="childFormModelVisible"
                  :close-on-click-modal="false"
                  width="800px"
