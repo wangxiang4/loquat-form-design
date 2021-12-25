@@ -1,9 +1,9 @@
 <template>
   <div :class="['widget-child-form-view' ,{
-         active: formItem.selectWidget.prop == column.prop
+         active: selectWidget.prop == column.prop
        }]"
        style="width: 200px;"
-       @click.stop="childForm.handleWidgetDataSelect(column)"
+       @click.stop="form.handleDataSelectWidget(column)"
   >
     <el-table :data="[{}]"
               :cell-class-name="tableBackgroundClass"
@@ -16,17 +16,17 @@
         <widget v-model="column.value"
                 :column="column"
                 :dic="column.dicData"
-                :props="formItem.data.props"
-                :size="formItem.data.size || formItem.formDefaultConfig.size"
+                :props="data.props"
+                :size="data.size || formDefaultConfig.size"
                 :preview="false"
         />
       </el-table-column>
     </el-table>
-    <div v-if="formItem.selectWidget.prop == column.prop" class="widget-view-action">
+    <div v-if="selectWidget.prop == column.prop" class="widget-view-action">
       <i title="复制" class="iconfont icon-clone" @click.stop="handleWidgetClone(index)"/>
       <i title="删除" class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"/>
     </div>
-    <div v-if="formItem.selectWidget.prop == column.prop" class="widget-view-drag">
+    <div v-if="selectWidget.prop == column.prop" class="widget-view-drag">
       <i class="iconfont icon-drag"/>
     </div>
     <div class="widget-view-model">
@@ -40,11 +40,11 @@ import { getWidgetCloneData } from '@utils/dataFormat'
 import widget from '@/plugins/form/widget'
 export default {
   name: 'WidgetChildFormItem',
-  inject: ['widgetChildForm', 'widgetFormItem'],
+  inject: ['childFormProvide'],
   props: {
     column: {
       type: Object,
-      defalut: () => {
+      default: () => {
         return {}
       }
     },
@@ -55,10 +55,7 @@ export default {
   components: { widget },
   computed: {
     childForm () {
-      return this.widgetChildForm || {}
-    },
-    formItem () {
-      return this.widgetFormItem || {}
+      return this.childFormProvide || {}
     },
     plugin () {
       return this.column.plugin || {}
@@ -79,26 +76,41 @@ export default {
         }
       }
       return className
+    },
+    form () {
+      return this.childForm.form || {}
+    },
+    data () {
+      return this.childForm.data || {}
+    },
+    formDefaultConfig () {
+      return this.childForm.formDefaultConfig || {}
+    },
+    selectWidget () {
+      return this.childForm.selectWidget || {}
+    },
+    childFormColumns () {
+      return this.childForm.childFormColumns || []
     }
   },
   methods: {
     // 处理插件克隆
     handleWidgetClone (index) {
-      this.childForm.childFormColumn.splice(index, 0, getWidgetCloneData(this.childForm.childFormColumn[index]))
+      this.childFormColumns.splice(index, 0, getWidgetCloneData(this.childFormColumns[index]))
       this.$nextTick(() => {
-        this.childForm.handleWidgetDataSelect(this.childFormColumn[index + 1])
-        this.formItem.$emit('change')
+        this.form.handleDataSelectWidget(this.childFormColumns[index + 1])
+        this.from.$emit('change')
       })
     },
     // 处理插件删除
     handleWidgetDelete (index) {
-      if (this.childForm.childFormColumn.length - 1 === index) {
-        if (index === 0) this.formItem.selectWidget = {}
-        else this.childForm.handleWidgetDataSelect(this.childForm.childFormColumn[index - 1])
-      } else this.childForm.handleWidgetDataSelect(this.childForm.childFormColumn[index + 1])
+      if (this.childFormColumns.length - 1 === index) {
+        if (index === 0) this.form.handleDataSelectWidget({})
+        else this.form.handleDataSelectWidget(this.childFormColumns[index - 1])
+      } else this.form.handleDataSelectWidget(this.childFormColumns[index + 1])
       this.$nextTick(() => {
-        this.childForm.childFormColumn.splice(index, 1)
-        this.formItem.$emit('change')
+        this.childFormColumns.splice(index, 1)
+        this.from.$emit('change')
       })
     }
   }

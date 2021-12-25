@@ -18,8 +18,6 @@
         <item :key="index"
               :ref="column.prop"
               :column="column"
-              :widgets="col.list"
-              :home="home"
         />
       </template>
     </el-col>
@@ -32,14 +30,6 @@ export default {
   components: { item },
   props: {
     column: {
-      type: Object
-    },
-    widgets: {
-      required: true,
-      type: Array
-    },
-    home: {
-      required: true,
       type: Object
     }
   }

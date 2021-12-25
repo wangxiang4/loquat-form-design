@@ -6,8 +6,8 @@
                    :class-name="validate?'required':''"
                    :show-overflow-tooltip="column.overHidden"
                    :render-header="column.renderHeader"
-                   :align="column.align || childForm.widgetChildForm.align"
-                   :header-align="column.headerAlign || childForm.widgetChildForm.headerAlign"
+                   :align="column.align || widgetChildForm.align"
+                   :header-align="column.headerAlign || widgetChildForm.headerAlign"
                    :width="column.width == 0 ? undefined : column.width"
                    :min-width="column.minWidth"
                    :fixed="column.fixed || undefined"
@@ -21,7 +21,7 @@
             :dic="childForm.DIC[column.prop]"
             :readonly="childForm.readonly || column.readonly"
             :disabled="childForm.disabled || column.disabled"
-            :size="childForm.widgetChildForm.size || childForm.childFormDefaultConfig.size"
+            :size="widgetChildForm.size || childFormDefaultConfig.size"
             :name="column.prop"
       />
       <span v-else-if="column.detailModel || childForm.detailModel" v-html="row[column.prop]"/>
@@ -33,11 +33,11 @@
         <widget v-model="row[column.prop]"
                 :dic="childForm.DIC[column.prop]"
                 :column="column"
-                :props="childForm.widgetChildForm.props"
+                :props="widgetChildForm.props"
                 :readonly="childForm.readonly"
                 :disabled="childForm.disabled"
-                :size="childForm.widgetChildForm.size || childForm.childFormDefaultConfig.size"
-                :enter="childForm.widgetChildForm.enter"
+                :size="widgetChildForm.size || childFormDefaultConfig.size"
+                :enter="widgetChildForm.enter"
                 @enter="childForm.submit"
                 @change="childForm.handleWidgetChange(column)"
         />
@@ -51,7 +51,7 @@ import { validateNull } from '@utils'
 import widget from '../form/widget'
 export default {
   name: 'ColumnSlot',
-  inject: ['childForm'],
+  inject: ['childFormProvide'],
   components: { widget },
   props: {
     column: Object
@@ -62,6 +62,15 @@ export default {
     },
     validate () {
       return !validateNull(this.column.rules)
+    },
+    childForm () {
+      return this.childFormProvide || {}
+    },
+    widgetChildForm () {
+      return this.childForm.widgetChildForm || {}
+    },
+    childFormDefaultConfig () {
+      return this.childForm.childFormDefaultConfig || {}
     }
   }
 }

@@ -9,6 +9,7 @@
               <draggable tag="ul"
                          :list="field.list"
                          :group="{ name: 'form', pull: 'clone', put: false }"
+                         @start="handleDraggableWidget(field.list, $event)"
                          ghost-class="ghost"
                          :sort="false"
               >
@@ -29,6 +30,7 @@
               <draggable tag="ul"
                          :list="field.list"
                          :group="{ name: 'form', pull: 'clone', put: false }"
+                         @start="handleDraggableWidget(field.list, $event)"
                          ghost-class="ghost"
                          :sort="false"
               >
@@ -122,10 +124,10 @@
       <el-aside class="widget-config-container" :width="rightWidth">
         <el-tabs v-model="configTab" stretch>
           <el-tab-pane label="字段属性" name="widget" style="padding: 0 10px;">
-            <widget-config :data="widgetFormSelect" :home="home"/>
+            <widget-config :data="widgetFormSelect"/>
           </el-tab-pane>
           <el-tab-pane label="表单属性" name="form" lazy style="padding: 0 10px;">
-            <form-config :data="widgetForm" :home="home"/>
+            <form-config :data="widgetForm"/>
           </el-tab-pane>
         </el-tabs>
       </el-aside>
@@ -647,6 +649,11 @@ import { KEY_COMPONENT_NAME } from '@/global/variable'
 import SvgIcon from '@components/Helper/SvgIcon'
 export default {
   name: 'FormDesign',
+  provide () {
+    return {
+      designProvide: this
+    }
+  },
   components: { Draggable, WidgetForm, FormConfig, WidgetConfig, AceEditor, pluginForm, SvgIcon, pluginChildForm },
   mixins: [history],
   props: {
@@ -699,7 +706,6 @@ export default {
   },
   data () {
     return {
-      home: this,
       formId: '',
       adapter: 'pc',
       fields: GlobalConfig.fields,
@@ -707,6 +713,7 @@ export default {
       widgetForm: getWidgetFormDefaultConfig(),
       configTab: 'widget',
       widgetFormSelect: {},
+      widgetFormDraggable: {},
       widgetFormPreview: {},
       previewVisible: false,
       importJsonVisible: false,
@@ -1228,6 +1235,10 @@ export default {
       const redo = this.handleRedo()
       this.widgetForm = redo.widgetForm
       this.widgetFormSelect = redo.widgetFormSelect
+    },
+    // 处理当前拖拽部件数据
+    handleDraggableWidget (columns, evt) {
+      this.$refs.widgetForm.handleDraggableWidget(columns, evt)
     }
   }
 }

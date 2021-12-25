@@ -98,7 +98,7 @@
                  multiple
                  laceholder="请选择"
       >
-        <el-option v-for="item in home.styleSheetsArray"
+        <el-option v-for="item in design.styleSheetsArray"
                    :key="item"
                    :label="item"
                    :value="item"
@@ -159,13 +159,13 @@
                          size="mini"
                          style="width: 100%; margin-bottom: 5px;"
               >
-                <el-option v-for="item in home.widgetForm.eventScript"
+                <el-option v-for="item in design.widgetForm.eventScript"
                            :key="item.key"
                            :label="item.name"
                            :value="item.name"
                 />
               </el-select>
-              <i title="编辑代码" class="iconfont icon-code-generation" @click.stop="home.handleActionSettingsSetData({ eventName: key, funcName: val })"/>
+              <i title="编辑代码" class="iconfont icon-code-generation" @click.stop="design.handleActionSettingsSetData({ eventName: key, funcName: val })"/>
               <i title="删除" class="iconfont icon-trash" @click.stop="column.events[key] = ''"/>
             </div>
           </el-collapse-item>
@@ -185,8 +185,8 @@
                               :key="index"
                               :disabled="!!val"
                               @click.native="() => {
-                                home.handleActionSettingsSetData({ eventName: key })
-                                home.handleActionAdd()
+                                design.handleActionSettingsSetData({ eventName: key })
+                                design.handleActionAdd()
                               }"
             >{{ `${key} ${get(eventsDic, key, '')}` }}</el-dropdown-item>
           </el-dropdown-menu>
@@ -202,11 +202,9 @@ import { originComponentName, validateNull, get, deepClone } from '@utils'
 import permission from '@/config/perm'
 export default {
   name: 'Date',
+  inject: ['designProvide'],
   props: {
     data: {
-      type: Object
-    },
-    home: {
       type: Object
     }
   },
@@ -219,6 +217,9 @@ export default {
     }
   },
   computed: {
+    design () {
+      return this.designProvide || {}
+    },
     permConfig () {
       const name = originComponentName(this.$options.name)
       return this.permission.find(item => name === item.component) || {}

@@ -1,7 +1,7 @@
 <template>
   <div class="widget-config">
     <el-form v-if="!validateNull(data)" label-position="top" size="small">
-      <component :is="getComponentConfig(data.type, data.component)" :data="data" :home="home"/>
+      <component :is="getComponentConfig(data.type, data.component)" :data="data"/>
     </el-form>
     <plugin-empty v-else desc="拖拽字段进行配置" style="margin-top: 100%;"/>
   </div>
@@ -16,9 +16,6 @@ export default {
   components: { pluginEmpty },
   props: {
     data: {
-      type: Object
-    },
-    home: {
       type: Object
     }
   },

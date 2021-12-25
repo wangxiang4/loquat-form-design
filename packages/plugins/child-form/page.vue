@@ -20,7 +20,7 @@
 <script>
 export default {
   name: 'Page',
-  inject: ['childForm'],
+  inject: ['childFormProvide'],
   props: {
     page: {
       type: Object,
@@ -56,6 +56,9 @@ export default {
     }
   },
   computed: {
+    childForm () {
+      return this.childFormProvide || {}
+    },
     pageFlag () {
       return this.defaultPage.total > 0 && this.childForm.paging
     }

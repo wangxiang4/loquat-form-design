@@ -14,8 +14,6 @@
         <item :key="index"
               :ref="column.prop"
               :column="column"
-              :widgets="columns"
-              :home="home"
         />
       </template>
     </el-form>
@@ -33,7 +31,7 @@ export default {
   name: 'Form',
   provide () {
     return {
-      form: this
+      formProvide: this
     }
   },
   components: { item },
@@ -64,7 +62,6 @@ export default {
   data () {
     return {
       form: {},
-      home: this,
       first: false,
       configOption: {},
       formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,

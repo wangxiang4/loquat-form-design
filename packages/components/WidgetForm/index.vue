@@ -8,27 +8,26 @@
              :style="defaultBackground"
              :class="data.customClass"
     >
-      <draggable :list="data.column"
+      <draggable :list="columns"
                  :group="{ name: 'form' }"
                  ghost-class="ghost"
                  :animation="300"
                  handle=".widget-view-drag"
                  :no-transition-on-drag="true"
+                 @start="handleDraggableWidget(columns, $event)"
                  @add="handleWidgetAdd"
                  @end="$emit('change')"
       >
         <transition-group name="fade" tag="div" class="widget-form-list">
-          <template v-for="(column, index) in data.column">
+          <template v-for="(column, index) in columns">
             <widget-form-item :key="index"
                               :data="data"
-                              :widgets="data.column"
+                              :widgets="columns"
                               :index="index"
                               :column="column"
-                              :select.sync="selectWidget"
-                              @select="handleSelectWidget"
+                              @select="handleIndexSelectWidget"
                               @clone="handleWidgetClone"
                               @delete="handleWidgetDelete"
-                              @change="$emit('change')"
             />
           </template>
         </transition-group>
@@ -46,14 +45,14 @@ import { DEFAULT_CONFIG_INSIDE_FORM } from '@/global/variable'
 import widgetFormItem from '@components/WidgetFormItem'
 export default {
   name: 'WidgetForm',
+  inject: ['designProvide'],
+  provide () {
+    return {
+      formProvide: this
+    }
+  },
   components: { Draggable, widgetFormItem },
   props: {
-    data: {
-      type: Object
-    },
-    select: {
-      type: Object
-    },
     adapter: {
       type: String,
       default: 'pc'
@@ -62,53 +61,63 @@ export default {
   data () {
     return {
       widgetEmpty,
-      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
-      selectWidget: this.select
+      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM
     }
   },
   computed: {
     defaultBackground () {
-      return { background: (this.data.column?.length || 0) === 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
-    }
-  },
-  watch: {
-    select (val) {
-      this.selectWidget = val
+      return { background: this.columns.length === 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
     },
-    selectWidget: {
-      handler (val) {
-        this.$emit('update:select', val)
-      },
-      deep: true
+    design () {
+      return this.designProvide || {}
+    },
+    data () {
+      return this.design.widgetForm || {}
+    },
+    columns () {
+      return this.data.column || []
+    },
+    widgetFormSelect () {
+      return this.design.widgetFormSelect || {}
+    },
+    widgetFormDraggable () {
+      return this.design.widgetFormDraggable || {}
     }
   },
   methods: {
     setPx,
-    handleSelectWidget (index) {
-      this.selectWidget = this.data.column[index]
+    handleDraggableWidget (columns = [], evt) {
+      const oldIndex = evt.oldIndex
+      this.$set(this.design, 'widgetFormDraggable', columns[oldIndex])
+    },
+    handleDataSelectWidget (data) {
+      this.$set(this.design, 'widgetFormSelect', data)
+    },
+    handleIndexSelectWidget (index) {
+      this.$set(this.design, 'widgetFormSelect', this.columns[index])
     },
     handleWidgetAdd (evt) {
       const newIndex = evt.newIndex
-      this.$set(this.data.column, newIndex, getWidgetAddData(this.data.column[newIndex]))
-      this.handleSelectWidget(newIndex)
+      this.$set(this.columns, newIndex, getWidgetAddData(this.columns[newIndex]))
+      this.handleIndexSelectWidget(newIndex)
       this.$nextTick(() => {
         this.$emit('change')
       })
     },
     handleWidgetDelete (index) {
-      if (this.data.column.length - 1 === index) {
-        if (index === 0) this.selectWidget = {}
-        else this.handleSelectWidget(index - 1)
-      } else this.handleSelectWidget(index + 1)
+      if (this.columns.length - 1 === index) {
+        if (index === 0) this.handleDataSelectWidget({})
+        else this.handleIndexSelectWidget(index - 1)
+      } else this.handleIndexSelectWidget(index + 1)
       this.$nextTick(() => {
-        this.data.column.splice(index, 1)
+        this.columns.splice(index, 1)
         this.$emit('change')
       })
     },
     handleWidgetClone (index) {
-      this.data.column.splice(index, 0, getWidgetCloneData(this.data.column[index]))
+      this.columns.splice(index, 0, getWidgetCloneData(this.columns[index]))
       this.$nextTick(() => {
-        this.handleSelectWidget(index + 1)
+        this.handleIndexSelectWidget(index + 1)
         this.$emit('change')
       })
     }

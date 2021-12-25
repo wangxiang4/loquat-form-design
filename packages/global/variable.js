@@ -16,6 +16,7 @@ export const NUMBER_VALUE_TYPES = ['inputNumber', 'rate', 'slider']
 export const BOOLEAN_VALUE_TYPES = ['switch']
 export const SELECT_TYPES = ['date', 'select', 'checkbox', 'radio', 'cascader', 'inputColor', 'time']
 export const REMOTE_REQUEST_TYPES = ['upload', 'select', 'radio', 'checkbox', 'cascader']
+export const CHILD_FORM_DRAGGABLE_EXCLUDE_TYPES = ['coralLayout', 'childForm']
 /** 文件类型定义 todo:目前这种方式存在一定的限制,后期会拔除 */
 export const TYPE_LIST = {
   img: /\.(gif|jpg|jpeg|png|GIF|JPG|PNG)/,

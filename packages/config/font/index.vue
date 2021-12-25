@@ -46,7 +46,7 @@
                  multiple
                  laceholder="请选择"
       >
-        <el-option v-for="item in home.styleSheetsArray"
+        <el-option v-for="item in design.styleSheetsArray"
                    :key="item"
                    :label="item"
                    :value="item"
@@ -74,11 +74,9 @@ import { originComponentName } from '@utils'
 import permission from '@/config/perm'
 export default {
   name: 'Font',
+  inject: ['designProvide'],
   props: {
     data: {
-      type: Object
-    },
-    home: {
       type: Object
     }
   },
@@ -90,6 +88,9 @@ export default {
     }
   },
   computed: {
+    design () {
+      return this.designProvide || {}
+    },
     permConfig () {
       const name = originComponentName(this.$options.name)
       return this.permission.find(item => name === item.component) || {}

@@ -73,7 +73,7 @@ export default {
   name: 'ChildForm',
   provide () {
     return {
-      childForm: this
+      childFormProvide: this
     }
   },
   components: { tablePage, column, columnDefault },

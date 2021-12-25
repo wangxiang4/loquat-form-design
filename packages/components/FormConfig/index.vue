@@ -25,7 +25,7 @@
       </el-form-item>
       <el-form-item v-loquat-has-perm="[widgetForm, 'styleSheets']" label="表单样式表">
         <el-button style="width: 100%;"
-                   @click="home.styleSheetsVisible = true"
+                   @click="design.styleSheetsVisible = true"
         >设置</el-button>
       </el-form-item>
       <el-form-item v-loquat-has-perm="[widgetForm, 'customClass']" label="自定义Class">
@@ -37,7 +37,7 @@
                    multiple
                    laceholder="请选择"
         >
-          <el-option v-for="item in home.styleSheetsArray"
+          <el-option v-for="item in design.styleSheetsArray"
                      :key="item"
                      :label="item"
                      :value="item"
@@ -46,12 +46,12 @@
       </el-form-item>
       <el-form-item v-loquat-has-perm="[widgetForm, 'dataSource']" label="数据源">
         <el-button style="width: 100%;"
-                   @click="home.dataSourceSettingsVisible = true"
+                   @click="design.dataSourceSettingsVisible = true"
         >设置</el-button>
       </el-form-item>
       <el-form-item v-loquat-has-perm="[widgetForm, 'eventScript']" label="动作面板">
         <el-button style="width: 100%;"
-                   @click="home.handleActionSettingsSetData({eventName: ''})"
+                   @click="design.handleActionSettingsSetData({eventName: ''})"
         >设置</el-button>
       </el-form-item>
     </el-form>
@@ -61,11 +61,9 @@
 <script>
 export default {
   name: 'FormConfig',
+  inject: ['designProvide'],
   props: {
     data: {
-      type: Object
-    },
-    home: {
       type: Object
     }
   },
@@ -77,6 +75,9 @@ export default {
   computed: {
     widgetForm () {
       return this.first ? this.data : {}
+    },
+    design () {
+      return this.designProvide || {}
     }
   },
   mounted () {

@@ -33,7 +33,7 @@
                  multiple
                  laceholder="请选择"
       >
-        <el-option v-for="item in home.styleSheetsArray"
+        <el-option v-for="item in design.styleSheetsArray"
                    :key="item"
                    :label="item"
                    :value="item"
@@ -46,11 +46,9 @@
 <script>
 export default {
   name: 'CoralLayoutCol',
+  inject: ['designProvide'],
   props: {
     data: {
-      type: Object
-    },
-    home: {
       type: Object
     }
   },
@@ -60,6 +58,9 @@ export default {
     }
   },
   computed: {
+    design () {
+      return this.designProvide || {}
+    },
     column () {
       return this.first ? this.data : {}
     }
