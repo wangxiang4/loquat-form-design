@@ -13,27 +13,25 @@
                  ghost-class="ghost"
                  :animation="300"
                  handle=".widget-view-drag"
-                 :no-transition-on-drag="true"
+                 class="widget-form-list"
                  @start="handleDraggableWidget(columns, $event)"
                  @add="handleWidgetAdd"
                  @end="$emit('change')"
       >
-        <transition-group name="fade" tag="div" class="widget-form-list">
-          <template v-for="(column, index) in columns">
-            <widget-form-item :key="index"
-                              :data="data"
-                              :widgets="columns"
-                              :index="index"
-                              :column="column"
-                              :select.sync="selectWidget"
-                              :draggable.sync="draggableWidget"
-                              @select="handleIndexSelectWidget"
-                              @clone="handleWidgetClone"
-                              @delete="handleWidgetDelete"
-                              @change="$emit('change')"
-            />
-          </template>
-        </transition-group>
+        <template v-for="(column, index) in columns">
+          <widget-form-item :key="index"
+                            :data="data"
+                            :widgets="columns"
+                            :index="index"
+                            :column="column"
+                            :select.sync="selectWidget"
+                            :draggable.sync="draggableWidget"
+                            @select="handleIndexSelectWidget"
+                            @clone="handleWidgetClone"
+                            @delete="handleWidgetDelete"
+                            @change="$emit('change')"
+          />
+        </template>
       </draggable>
     </el-form>
   </div>

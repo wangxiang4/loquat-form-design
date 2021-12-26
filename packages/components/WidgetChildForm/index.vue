@@ -35,22 +35,21 @@
                        ghost-class="ghost"
                        :animation="300"
                        handle=".widget-view-drag"
-                       :no-transition-on-drag="true"
+                       class="widget-child-form-col"
+                       :style="{width: `calc(${columnCalcWidth}px)`}"
                        @start="handleDraggableWidget(childFormColumns, $event)"
                        @add="handleWidgetColAdd"
                        @end="$emit('change')"
             >
-              <transition-group name="fade" tag="div" class="widget-child-form-col" :style="{width: `calc(${columnCalcWidth}px)`}">
-                <template v-for="(column, index) in childFormColumns">
-                  <widget-child-form-item :key="index"
-                                          :data="data"
-                                          :column="column"
-                                          :index="index"
-                                          :select.sync="selectWidget"
-                                          :widgets="childFormColumns"
-                  />
-                </template>
-              </transition-group>
+              <template v-for="(column, index) in childFormColumns">
+                <widget-child-form-item :key="index"
+                                        :data="data"
+                                        :column="column"
+                                        :index="index"
+                                        :select.sync="selectWidget"
+                                        :widgets="childFormColumns"
+                />
+              </template>
             </draggable>
           </div>
         </div>

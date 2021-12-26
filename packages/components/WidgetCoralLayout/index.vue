@@ -26,28 +26,26 @@
                    ghost-class="ghost"
                    :animation="300"
                    handle=".widget-view-drag"
-                   :no-transition-on-drag="true"
+                   class="widget-col-list"
                    @start="handleDraggableWidget(col.list, $event)"
                    @add="handleWidgetColAdd(col.list, $event)"
                    @end="$emit('change')"
         >
-          <transition-group name="fade" tag="div" class="widget-col-list">
-            <template v-for="(column, index) in col.list">
-              <widget-form-item :key="index"
-                                :data="data"
-                                :widgets="col.list"
-                                :index="index"
-                                :column="column"
-                                layout-type="coralLayout"
-                                :select.sync="selectWidget"
-                                :draggable.sync="draggableWidget"
-                                @select="handleDataSelectWidget"
-                                @clone="handleWidgetClone"
-                                @delete="handleWidgetDelete"
-                                @change="$emit('change')"
-              />
-            </template>
-          </transition-group>
+          <template v-for="(column, index) in col.list">
+            <widget-form-item :key="index"
+                              :data="data"
+                              :widgets="col.list"
+                              :index="index"
+                              :column="column"
+                              layout-type="coralLayout"
+                              :select.sync="selectWidget"
+                              :draggable.sync="draggableWidget"
+                              @select="handleDataSelectWidget"
+                              @clone="handleWidgetClone"
+                              @delete="handleWidgetDelete"
+                              @change="$emit('change')"
+            />
+          </template>
         </draggable>
         <div v-if="selectWidget.prop == col.prop" class="widget-view-action widget-layout-action">
           <i title="复制"
