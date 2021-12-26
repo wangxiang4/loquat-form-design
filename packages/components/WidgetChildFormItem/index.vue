@@ -44,10 +44,7 @@ export default {
   components: { widget },
   props: {
     column: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+      type: Object
     },
     index: {
       type: Number
