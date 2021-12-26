@@ -24,12 +24,9 @@
                             :widgets="columns"
                             :index="index"
                             :column="column"
-                            :select.sync="selectWidget"
-                            :draggable.sync="draggableWidget"
                             @select="handleIndexSelectWidget"
                             @clone="handleWidgetClone"
                             @delete="handleWidgetDelete"
-                            @change="$emit('change')"
           />
         </template>
       </draggable>
@@ -46,26 +43,14 @@ import { DEFAULT_CONFIG_INSIDE_FORM } from '@/global/variable'
 import widgetFormItem from '@components/WidgetFormItem'
 export default {
   name: 'WidgetForm',
+  inject: ['designProvide'],
+  provide () {
+    return {
+      formProvide: this
+    }
+  },
   components: { Draggable, widgetFormItem },
   props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    select: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    draggable: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
     adapter: {
       type: String,
       default: 'pc'
@@ -74,50 +59,40 @@ export default {
   data () {
     return {
       widgetEmpty,
-      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
-      selectWidget: this.select,
-      draggableWidget: this.draggable
+      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM
     }
   },
   computed: {
     defaultBackground () {
       return { background: this.columns.length === 0 ? `url(${widgetEmpty}) no-repeat 50%` : '' }
     },
+    design () {
+      return this.designProvide || {}
+    },
+    data () {
+      return this.design.widgetForm || {}
+    },
     columns () {
       return this.data.column || []
-    }
-  },
-  watch: {
-    select (val) {
-      this.selectWidget = val
     },
-    selectWidget: {
-      handler (val) {
-        this.$emit('update:select', val)
-      },
-      deep: true
+    widgetFormSelect () {
+      return this.design.widgetFormSelect || {}
     },
-    draggable (val) {
-      this.draggableWidget = val
-    },
-    draggableWidget: {
-      handler (val) {
-        this.$emit('update:draggable', val)
-      },
-      deep: true
+    widgetFormDraggable () {
+      return this.design.widgetFormDraggable || {}
     }
   },
   methods: {
     setPx,
-    handleDataSelectWidget (data) {
-      this.selectWidget = data
-    },
     handleDraggableWidget (columns = [], evt) {
       const oldIndex = evt.oldIndex
-      this.draggableWidget = columns[oldIndex]
+      this.$set(this.design, 'widgetFormDraggable', columns[oldIndex])
+    },
+    handleDataSelectWidget (data) {
+      this.$set(this.design, 'widgetFormSelect', data)
     },
     handleIndexSelectWidget (index) {
-      this.selectWidget = this.columns[index]
+      this.$set(this.design, 'widgetFormSelect', this.columns[index])
     },
     handleWidgetAdd (evt) {
       const newIndex = evt.newIndex
@@ -129,7 +104,7 @@ export default {
     },
     handleWidgetDelete (index) {
       if (this.columns.length - 1 === index) {
-        if (index === 0) this.selectWidget = {}
+        if (index === 0) this.handleDataSelectWidget({})
         else this.handleIndexSelectWidget(index - 1)
       } else this.handleIndexSelectWidget(index + 1)
       this.$nextTick(() => {

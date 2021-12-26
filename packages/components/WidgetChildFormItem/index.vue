@@ -3,7 +3,7 @@
          active: selectWidget.prop == column.prop
        }]"
        style="width: 200px;"
-       @click.stop="handleDataSelectWidget(column)"
+       @click.stop="form.handleDataSelectWidget(column)"
   >
     <el-table :data="[{}]"
               :cell-class-name="tableBackgroundClass"
@@ -38,36 +38,25 @@
 <script>
 import { getWidgetCloneData } from '@utils/dataFormat'
 import widget from '@/plugins/form/widget'
-import { DEFAULT_CONFIG_INSIDE_FORM } from '@/global/variable'
 export default {
   name: 'WidgetChildFormItem',
+  inject: ['childFormProvide'],
   components: { widget },
   props: {
-    data: {
-      type: Object
-    },
     column: {
-      type: Object
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
     index: {
       type: Number
-    },
-    select: {
-      type: Object
-    },
-    widgets: {
-      required: true,
-      type: Array
-    }
-  },
-  data () {
-    return {
-      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
-      selectWidget: this.select,
-      draggableWidget: this.draggable
     }
   },
   computed: {
+    childForm () {
+      return this.childFormProvide || {}
+    },
     plugin () {
       return this.column.plugin || {}
     },
@@ -87,40 +76,41 @@ export default {
         }
       }
       return className
-    }
-  },
-  watch: {
-    select (val) {
-      this.selectWidget = val
     },
-    selectWidget: {
-      handler (val) {
-        this.$emit('update:select', val)
-      },
-      deep: true
+    form () {
+      return this.childForm.form || {}
+    },
+    data () {
+      return this.childForm.data || {}
+    },
+    formDefaultConfig () {
+      return this.childForm.formDefaultConfig || {}
+    },
+    selectWidget () {
+      return this.childForm.selectWidget || {}
+    },
+    childFormColumns () {
+      return this.childForm.childFormColumns || []
     }
   },
   methods: {
-    handleDataSelectWidget (data) {
-      this.selectWidget = data
-    },
     // 处理插件克隆
     handleWidgetClone (index) {
-      this.widgets.splice(index, 0, getWidgetCloneData(this.widgets[index]))
+      this.childFormColumns.splice(index, 0, getWidgetCloneData(this.childFormColumns[index]))
       this.$nextTick(() => {
-        this.handleDataSelectWidget(this.widgets[index + 1])
-        this.$emit('change')
+        this.form.handleDataSelectWidget(this.childFormColumns[index + 1])
+        this.from.$emit('change')
       })
     },
     // 处理插件删除
     handleWidgetDelete (index) {
-      if (this.widgets.length - 1 === index) {
-        if (index === 0) this.selectWidget = {}
-        else this.handleDataSelectWidget(this.widgets[index - 1])
-      } else this.handleDataSelectWidget(this.widgets[index + 1])
+      if (this.childFormColumns.length - 1 === index) {
+        if (index === 0) this.form.handleDataSelectWidget({})
+        else this.form.handleDataSelectWidget(this.childFormColumns[index - 1])
+      } else this.form.handleDataSelectWidget(this.childFormColumns[index + 1])
       this.$nextTick(() => {
-        this.widgets.splice(index, 1)
-        this.$emit('change')
+        this.childFormColumns.splice(index, 1)
+        this.from.$emit('change')
       })
     }
   }

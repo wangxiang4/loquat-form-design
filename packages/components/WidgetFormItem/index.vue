@@ -2,21 +2,12 @@
   <div>
     <template v-if="column.type == 'coralLayout'">
       <widget-coral-layout :column="column"
-                           :data="data"
                            :index="index"
                            :widgets="widgets"
-                           :select.sync="selectWidget"
-                           :draggable.sync="draggableWidget"
-                           @change="$emit('change')"
       />
     </template>
     <template v-else-if="column.type == 'childForm'">
-      <widget-child-form :column="column"
-                         :data="data"
-                         :select.sync="selectWidget"
-                         :draggable.sync="draggableWidget"
-                         @change="$emit('change')"
-      />
+      <widget-child-form/>
     </template>
     <template v-else>
       <div @click.stop="emitInvoke('select')">
@@ -70,23 +61,18 @@
 
 <script>
 import { getLabelWidth } from '@utils/dataFormat'
-import { DEFAULT_CONFIG_INSIDE_FORM } from '@/global/variable'
 import widget from '@/plugins/form/widget'
 import widgetChildForm from '../WidgetChildForm'
 export default {
-  name: 'WidgetFormItem',
   components: { widget, widgetChildForm, widgetCoralLayout: () => import('@components/WidgetCoralLayout') },
+  inject: ['formProvide'],
+  provide () {
+    return {
+      formItemProvide: this
+    }
+  },
   props: {
-    data: {
-      type: Object
-    },
     column: {
-      type: Object
-    },
-    draggable: {
-      type: Object
-    },
-    select: {
       type: Object
     },
     index: {
@@ -101,39 +87,24 @@ export default {
       default: 'widgets'
     }
   },
-  data () {
-    return {
-      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
-      selectWidget: this.select,
-      draggableWidget: this.draggable
-    }
-  },
   computed: {
+    form () {
+      return this.formProvide || {}
+    },
+    data () {
+      return this.form.data || {}
+    },
     plugin () {
       return this.column.plugin || {}
     },
     validateConfig () {
       return this.column.validateConfig || {}
-    }
-  },
-  watch: {
-    select (val) {
-      this.selectWidget = val
     },
-    selectWidget: {
-      handler (val) {
-        this.$emit('update:select', val)
-      },
-      deep: true
+    formDefaultConfig () {
+      return this.form.formDefaultConfig || {}
     },
-    draggable (val) {
-      this.draggableWidget = val
-    },
-    draggableWidget: {
-      handler (val) {
-        this.$emit('update:draggable', val)
-      },
-      deep: true
+    selectWidget () {
+      return this.form.widgetFormSelect || {}
     }
   },
   methods: {
