@@ -1,7 +1,7 @@
 <template>
   <div class="widget-view widget-coral-layout"
        :class="{active: selectWidget.prop == column.prop, hide: column.hide}"
-       @click.stop="form.handleDataSelectWidget(widgets[index])"
+       @click.stop="handleIndexSelectWidget(index)"
   >
     <el-row :type="column.flex ? 'flex' : undefined"
             :gutter="column.gutter"
@@ -19,7 +19,7 @@
               :offset="col.offset"
               :push="col.push"
               :pull="col.pull"
-              @click.native.stop="form.handleDataSelectWidget(col)"
+              @click.native.stop="handleDataSelectWidget(col)"
       >
         <draggable :list="col.list"
                    :group="{ name: 'form' }"
@@ -27,21 +27,24 @@
                    :animation="300"
                    handle=".widget-view-drag"
                    :no-transition-on-drag="true"
-                   @start="form.handleDraggableWidget(col.list, $event)"
+                   @start="handleDraggableWidget(col.list, $event)"
                    @add="handleWidgetColAdd(col.list, $event)"
-                   @end="form.$emit('change')"
+                   @end="$emit('change')"
         >
           <transition-group name="fade" tag="div" class="widget-col-list">
             <template v-for="(column, index) in col.list">
               <widget-form-item :key="index"
+                                :data="data"
                                 :widgets="col.list"
                                 :index="index"
                                 :column="column"
+                                :select.sync="selectWidget"
+                                :draggable.sync="draggableWidget"
                                 layout-type="coralLayout"
-                                @select="form.handleDataSelectWidget"
+                                @select="handleDataSelectWidget"
                                 @clone="handleWidgetClone"
                                 @delete="handleWidgetDelete"
-                                @change="form.$emit('change')"
+                                @change="$emit('change')"
               />
             </template>
           </transition-group>
@@ -77,9 +80,17 @@ import widgetFormItem from '@components/WidgetFormItem'
 export default {
   name: 'WidgetCoralLayout',
   components: { draggable, widgetFormItem },
-  inject: ['formItemProvide'],
   props: {
+    data: {
+      type: Object
+    },
     column: {
+      type: Object
+    },
+    select: {
+      type: Object
+    },
+    draggable: {
       type: Object
     },
     index: {
@@ -92,6 +103,8 @@ export default {
   },
   data () {
     return {
+      selectWidget: this.select,
+      draggableWidget: this.draggable,
       colPreset: {
         type: 'coralLayoutCol',
         offset: 0,
@@ -104,91 +117,114 @@ export default {
     }
   },
   computed: {
-    formItem () {
-      return this.formItemProvide || {}
-    },
     coralLayoutColumns () {
-      return this.column.cols || {}
+      return this.column.cols || []
+    }
+  },
+  watch: {
+    select (val) {
+      this.selectWidget = val
     },
-    form () {
-      return this.formItem.form || {}
+    selectWidget: {
+      handler (val) {
+        this.$emit('update:select', val)
+      },
+      deep: true
     },
-    selectWidget () {
-      return this.form.widgetFormSelect || {}
+    draggable (val) {
+      this.draggableWidget = val
+    },
+    draggableWidget: {
+      handler (val) {
+        this.$emit('update:draggable', val)
+      },
+      deep: true
     }
   },
   methods: {
+    handleDraggableWidget (columns = [], evt) {
+      const oldIndex = evt.oldIndex
+      this.draggableWidget = columns[oldIndex]
+    },
+    // 处理选择部件,根据索引
+    handleIndexSelectWidget (index) {
+      this.selectWidget = this.widgets[index]
+    },
+    // 处理选择部件,根据数据
+    handleDataSelectWidget (data) {
+      this.selectWidget = data
+    },
     // 处理行克隆操作
     handleRowClone () {
       this.widgets.splice(this.index, 0, coralLayoutRowDeepClone(this.column))
       this.$nextTick(() => {
-        this.form.handleIndexSelectWidget(this.index + 1)
-        this.form.$emit('change')
+        this.handleIndexSelectWidget(this.index + 1)
+        this.$emit('change')
       })
     },
     // 处理行删除操作
     handleRowDelete () {
       if (this.widgets.length - 1 === this.index) {
-        if (this.index === 0) this.form.handleDataSelectWidget({})
-        else this.form.handleIndexSelectWidget(this.index - 1)
-      } else this.form.handleIndexSelectWidget(this.index + 1)
+        if (this.index === 0) this.selectWidget = {}
+        else this.handleIndexSelectWidget(this.index - 1)
+      } else this.handleIndexSelectWidget(this.index + 1)
       this.$nextTick(() => {
         this.widgets.splice(this.index, 1)
-        this.form.$emit('change')
+        this.$emit('change')
       })
     },
     // 处理列添加操作
     handleColumnAdd () {
       this.coralLayoutColumns.push(getWidgetAddData(this.colPreset))
       this.$nextTick(() => {
-        this.form.$emit('change')
+        this.$emit('change')
       })
     },
     // 处理列克隆操作
     handleColumnClone (index) {
       this.coralLayoutColumns.splice(index, 0, coralLayoutColumnDeepClone(this.coralLayoutColumns[index]))
       this.$nextTick(() => {
-        this.form.handleDataSelectWidget(this.coralLayoutColumns[index + 1])
-        this.form.$emit('change')
+        this.handleDataSelectWidget(this.coralLayoutColumns[index + 1])
+        this.$emit('change')
       })
     },
     // 处理列删除操作
     handleColumnDelete (index) {
       if (this.coralLayoutColumns.length - 1 === index) {
-        if (index === 0) this.form.handleDataSelectWidget({})
-        else this.form.handleDataSelectWidget(this.coralLayoutColumns[index - 1])
-      } else this.form.handleDataSelectWidget(this.coralLayoutColumns[index + 1])
+        if (index === 0) this.selectWidget = {}
+        else this.handleDataSelectWidget(this.coralLayoutColumns[index - 1])
+      } else this.handleDataSelectWidget(this.coralLayoutColumns[index + 1])
       this.$nextTick(() => {
         this.coralLayoutColumns.splice(index, 1)
-        this.form.$emit('change')
+        this.$emit('change')
       })
     },
     // 处理部件列拖拽新增
     handleWidgetColAdd (list, evt) {
       const newIndex = evt.newIndex
       this.$set(list, newIndex, getWidgetAddData(list[newIndex]))
-      this.form.handleDataSelectWidget(list[newIndex])
+      this.handleDataSelectWidget(list[newIndex])
       this.$nextTick(() => {
-        this.form.$emit('change')
+        this.$emit('change')
       })
     },
     // 处理插件克隆
     handleWidgetClone (list, index) {
       list.splice(index, 0, getWidgetCloneData(list[index]))
       this.$nextTick(() => {
-        this.form.handleDataSelectWidget(list[index + 1])
-        this.form.$emit('change')
+        this.handleDataSelectWidget(list[index + 1])
+        this.$emit('change')
       })
     },
     // 处理插件删除
     handleWidgetDelete (list, index) {
       if (list.length - 1 === index) {
-        if (index === 0) this.form.handleDataSelectWidget({})
-        else this.form.handleDataSelectWidget(list[index - 1])
-      } else this.form.handleDataSelectWidget(list[index + 1])
+        if (index === 0) this.selectWidget = {}
+        else this.handleDataSelectWidget(list[index - 1])
+      } else this.handleDataSelectWidget(list[index + 1])
       this.$nextTick(() => {
         list.splice(index, 1)
-        this.form.$emit('change')
+        this.$emit('change')
       })
     }
   }

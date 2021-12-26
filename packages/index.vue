@@ -113,6 +113,7 @@
           <widget-form ref="widgetForm"
                        :data="widgetForm"
                        :select.sync="widgetFormSelect"
+                       :draggable.sync="widgetFormDraggable"
                        :adapter="adapter"
                        @change="handleHistoryChange({
                          widgetForm: widgetForm,

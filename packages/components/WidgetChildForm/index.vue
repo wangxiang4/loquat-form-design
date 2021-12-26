@@ -1,5 +1,5 @@
 <template>
-  <div @click.stop="formItem.emitInvoke('select')">
+  <div @click.stop="emitInvoke('select')">
     <div :class="['widget-view',
                   'widget-child-form', {
                     active: selectWidget.prop == column.prop,
@@ -13,7 +13,7 @@
                     }].concat(column.customClass||[])"
                     :prop="column.prop"
                     :label="column.hideLabel ? '' : column.label"
-                    :label-width="column.hideLabel ? '0' : formItem.getLabelWidth(column, data, formDefaultConfig.labelWidth)"
+                    :label-width="column.hideLabel ? '0' : getLabelWidth(column, data, formDefaultConfig.labelWidth)"
                     :label-position="column.labelPosition || data.labelPosition || formDefaultConfig.labelPosition"
       >
         <div class="widget-child-form-wrapper">
@@ -36,13 +36,19 @@
                        :animation="300"
                        handle=".widget-view-drag"
                        :no-transition-on-drag="true"
-                       @start="form.handleDraggableWidget(childFormColumns, $event)"
+                       @start="handleDraggableWidget(childFormColumns, $event)"
                        @add="handleWidgetColAdd"
-                       @end="form.$emit('change')"
+                       @end="$emit('change')"
             >
               <transition-group name="fade" tag="div" class="widget-child-form-col" :style="{width: `calc(${columnCalcWidth}px)`}">
                 <template v-for="(column, index) in childFormColumns">
-                  <widget-child-form-item :key="index" :column="column" :index="index"/>
+                  <widget-child-form-item :key="index"
+                                          :data="data"
+                                          :column="column"
+                                          :index="index"
+                                          :select.sync="selectWidget"
+                                          :widgets="childFormColumns"
+                  />
                 </template>
               </transition-group>
             </draggable>
@@ -50,8 +56,8 @@
         </div>
       </el-form-item>
       <div v-if="selectWidget.prop == column.prop" class="widget-view-action widget-layout-action">
-        <i title="复制" class="iconfont icon-clone" @click.stop="formItem.emitInvoke('clone')"/>
-        <i title="删除" class="iconfont icon-trash" @click.stop="formItem.emitInvoke('delete')"/>
+        <i title="复制" class="iconfont icon-clone" @click.stop="emitInvoke('clone')"/>
+        <i title="删除" class="iconfont icon-trash" @click.stop="emitInvoke('delete')"/>
       </div>
       <div v-if="selectWidget.prop == column.prop" class="widget-view-drag widget-layout-drag">
         <i class="iconfont icon-drag"/>
@@ -63,30 +69,39 @@
   </div>
 </template>
 <script>
-import { getWidgetAddData } from '@utils/dataFormat'
+import { getLabelWidth, getWidgetAddData } from '@utils/dataFormat'
 import widgetChildFormItem from '../WidgetChildFormItem'
-import { CHILD_FORM_DRAGGABLE_EXCLUDE_TYPES } from '@/global/variable'
+import { CHILD_FORM_DRAGGABLE_EXCLUDE_TYPES, DEFAULT_CONFIG_INSIDE_FORM } from '@/global/variable'
 export default {
   name: 'WidgetChildForm',
   components: { widgetChildFormItem },
-  inject: ['formItemProvide'],
-  provide () {
+  props: {
+    data: {
+      type: Object
+    },
+    column: {
+      type: Object
+    },
+    select: {
+      type: Object
+    },
+    draggable: {
+      type: Object
+    }
+  },
+  data () {
     return {
-      childFormProvide: this
+      formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
+      selectWidget: this.select,
+      draggableWidget: this.draggable
     }
   },
   computed: {
-    formItem () {
-      return this.formItemProvide || {}
-    },
-    column () {
-      return this.formItem.column || {}
-    },
     plugin () {
-      return this.formItem.plugin || {}
+      return this.column.plugin || {}
     },
     validateConfig () {
-      return this.formItem.validateConfig || {}
+      return this.column.validateConfig || {}
     },
     configOption () {
       return this.plugin.option || {}
@@ -96,24 +111,40 @@ export default {
     },
     columnCalcWidth () {
       return (this.childFormColumns.length * 200) + 200
+    }
+  },
+  watch: {
+    select (val) {
+      this.selectWidget = val
     },
-    form () {
-      return this.formItem.form || {}
+    selectWidget: {
+      handler (val) {
+        this.$emit('update:select', val)
+      },
+      deep: true
     },
-    data () {
-      return this.form.data || {}
+    draggable (val) {
+      this.draggableWidget = val
     },
-    formDefaultConfig () {
-      return this.form.formDefaultConfig || {}
-    },
-    selectWidget () {
-      return this.form.widgetFormSelect || {}
-    },
-    draggableWidget () {
-      return this.form.widgetFormDraggable || {}
+    draggableWidget: {
+      handler (val) {
+        this.$emit('update:draggable', val)
+      },
+      deep: true
     }
   },
   methods: {
+    getLabelWidth,
+    emitInvoke (methodName) {
+      this.$parent.emitInvoke(methodName)
+    },
+    handleDataSelectWidget (data) {
+      this.selectWidget = data
+    },
+    handleDraggableWidget (columns = [], evt) {
+      const oldIndex = evt.oldIndex
+      this.draggableWidget = columns[oldIndex]
+    },
     // 排除一些不支持新增的插件,防止一些递归错误,子表单组件没做递归处理
     handleExcludeDraggable () {
       return !CHILD_FORM_DRAGGABLE_EXCLUDE_TYPES.includes(this.draggableWidget.type)
@@ -122,9 +153,9 @@ export default {
     handleWidgetColAdd (evt) {
       const newIndex = evt.newIndex
       this.$set(this.childFormColumns, newIndex, getWidgetAddData(this.childFormColumns[newIndex]))
-      this.form.handleDataSelectWidget(this.childFormColumns[newIndex])
+      this.handleDataSelectWidget(this.childFormColumns[newIndex])
       this.$nextTick(() => {
-        this.form.$emit('change')
+        this.$emit('change')
       })
     }
   }
