@@ -112,9 +112,9 @@
         <el-main>
           <widget-form ref="widgetForm"
                        :data="widgetForm"
+                       :adapter="adapter"
                        :select.sync="widgetFormSelect"
                        :draggable.sync="widgetFormDraggable"
-                       :adapter="adapter"
                        @change="handleHistoryChange({
                          widgetForm: widgetForm,
                          widgetFormSelect: widgetFormSelect

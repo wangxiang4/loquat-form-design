@@ -6,7 +6,7 @@
                            :index="index"
                            :widgets="widgets"
                            :select.sync="selectWidget"
-                           :draggable.sync="selectWidget"
+                           :draggable.sync="draggableWidget"
                            @change="$emit('change')"
       />
     </template>
