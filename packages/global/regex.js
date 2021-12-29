@@ -7,7 +7,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-10-22
- **/
+ */
 
 /**
  * 用于组合unicode字符类,前缀请使用rs全名RecordSplit(记录分割符)
@@ -15,7 +15,7 @@
  * https://unicode-table.com/cn/blocks/
  * https://unicode-table.com/cn/blocks/combining-diacritical-marks/
  * https://zh.wikipedia.org/wiki/Unicode%E5%AD%97%E7%AC%A6%E5%B9%B3%E9%9D%A2%E6%98%A0%E5%B0%84
- **/
+ */
 // 结合附加符号
 const RS_COMBO_MARKS_RANGE = '\\u0300-\\u036f'
 // 组合用半符号
@@ -45,7 +45,7 @@ const RS_VAR_RANGE = '\\ufe0e\\ufe0f'
 // 匹配组合符号
 const RS_COMBO_RANGE = RS_COMBO_MARKS_RANGE + RS_COMBO_HALF_MARKS_RANGE + RS_COMBO_SYMBOLS_RANGE
 
-/** 用于组成unicode捕获组 **/
+/** 用于组成unicode捕获组 */
 const RS_DIGITS = '\\d+'
 // 匹配单引号跟右单引号('’)
 const RS_APOS = "['\u2019]"
@@ -68,7 +68,7 @@ const RS_MODIFIER = '(?:' + RS_COMBO + '|' + RS_FITZ + ')'
 // 匹配零宽度连接符: https://www.emojiall.com/zh-hans/help-emoji-zwj-sequences
 const RS_ZWJ = '\\u200d'
 
-/** 用于编写 unicode 正则表达式 **/
+/** 用于编写 unicode 正则表达式 */
 const RS_MISC_UPPER = '(?:' + RS_UPPER + '|' + RS_MISC + ')'
 const RS_MISC_LOWER = '(?:' + RS_LOWER + '|' + RS_MISC + ')'
 // 反对以'(d|ll|m|re|s|t|ve)的字母出现0次或1次不被拆分(d'd=>["d'd"])
@@ -85,19 +85,19 @@ const RS_OPT_JOIN = '(?:' + RS_ZWJ + '(?:' + [RS_NON_ASTRAL, RS_REGIONAL, RS_SUR
 const RS_SEQ = RS_OPT_VAR + RS_OPT_MOD + RS_OPT_JOIN
 const RS_EMOJI = '(?:' + [RS_DINGBAT, RS_REGIONAL, RS_SURR_PAIR].join('|') + ')' + RS_SEQ
 
-/** 全局匹配prop参数路径,比如a[0].b.c对应匹配(a,0,b,c) **/
+/** 全局匹配prop参数路径,比如a[0].b.c对应匹配(a,0,b,c) */
 export const RE_PROP_NAME = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g
 
-/** 全局匹配Unicode拉丁字母(不包括数学运算符) **/
+/** 全局匹配Unicode拉丁字母(不包括数学运算符) */
 export const RE_LATIN = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g
 
-/** 全局匹配组合符号 **/
+/** 全局匹配组合符号 */
 export const RE_COMBO_RANGE = RegExp(`[${RS_COMBO_MARKS_RANGE}${RS_COMBO_HALF_MARKS_RANGE}${RS_COMBO_SYMBOLS_RANGE}]`, 'g')
 
-/** 全局匹配引号 **/
+/** 全局匹配引号 */
 export const RE_APOS = RegExp(RS_APOS, 'g')
 
-/** 用于匹配复杂的单词或复合词 **/
+/** 用于匹配复杂的单词或复合词 */
 export const RE_UNICODE_WORD = RegExp([
   RS_UPPER + '?' + RS_LOWER + '+' + RS_OPT_CONTR_LOWER + '(?=' + [RS_BREAK, RS_UPPER, '$'].join('|') + ')',
   RS_MISC_UPPER + '+' + RS_OPT_CONTR_UPPER + '(?=' + [RS_BREAK, RS_UPPER + RS_MISC_LOWER, '$'].join('|') + ')',

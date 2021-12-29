@@ -209,11 +209,11 @@ export default {
       this.formId = KEY_COMPONENT_NAME.concat(randomId8())
       insertCss(parseCss(this.widgetChildForm.styleSheets), this.formId)
     },
-    // 处理部件修改动作
+    /** 处理部件修改动作 */
     handleWidgetChange (column) {
       if (this.$refs.childForm) this.$refs.childForm.validateField(column.prop)
     },
-    // 单元格新增
+    /** 单元格新增 */
     rowCellAdd (row = {}) {
       const callback = () => {
         const len = this.list.length
@@ -227,7 +227,7 @@ export default {
       this.paging && this.$refs.page.lastPage()
       this.$emit('row-add', row)
     },
-    // 单元格删除
+    /** 单元格删除 */
     rowCellDel (index) {
       const callback = () => {
         this.list.splice(index, 1)
@@ -241,7 +241,7 @@ export default {
       }
       this.$emit('row-del')
     },
-    // 当单元格 hover 进入时会触发该事件
+    /** 当单元格 hover 进入时会触发该事件 */
     cellMouseEnter (row, column, cell, event) {
       const index = row.$index
       if (!this.readonly || !this.disabled) {
@@ -249,7 +249,7 @@ export default {
       }
       this.$emit('cell-mouse-enter', row, column, cell, event)
     },
-    // 当单元格 hover 退出时会触发该事件
+    /** 当单元格 hover 退出时会触发该事件 */
     cellMouseLeave (row, column, cell, event) {
       if (!this.readonly || !this.disabled) {
         this.hoverMark = {}
@@ -266,7 +266,7 @@ export default {
         })
       })
     },
-    // 校验一行表单字段
+    /** 校验一行表单字段 */
     validateRowCellField (index) {
       let result = true
       for (const item of this.$refs.childForm.fields) {

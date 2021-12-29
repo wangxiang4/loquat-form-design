@@ -254,7 +254,7 @@ export default {
   methods: {
     get,
     validateNull,
-    // 获取格式类型,可以通过设置选择显示格式(1)或值格式(0)
+    /** 获取格式类型,可以通过设置选择显示格式(1)或值格式(0) */
     handleFormatType (type, option) {
       switch (type) {
         case 'year':

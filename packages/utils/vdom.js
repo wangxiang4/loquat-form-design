@@ -6,15 +6,15 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-08-04
- **/
+ */
 
-/** 是否是虚拟dom节点 **/
+/** 是否是虚拟dom节点 */
 export function isVNode (node) {
   const hasOwnProperty = Object.prototype.hasOwnProperty
   return node !== null && typeof node === 'object' && hasOwnProperty.call(node, 'componentOptions')
 }
 
-/** 是否是真实dom节点 **/
+/** 是否是真实dom节点 */
 export function isDom (obj) {
   // 首先要对HTMLElement进行类型检查，因为即使在支持HTMLElement
   // 的浏览器中，类型却是有差别的，在Chrome,Opera中HTMLElement的

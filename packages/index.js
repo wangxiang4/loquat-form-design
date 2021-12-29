@@ -11,7 +11,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-19
- **/
+ */
 
 import Configs from './config'
 import Plugins from './plugins'

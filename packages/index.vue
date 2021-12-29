@@ -798,7 +798,7 @@ export default {
   },
   methods: {
     validateNull,
-    // 处理加载历史数据
+    /** 处理加载历史数据 */
     handleLoadStorage () {
       let options = this.options
       if (typeof options === 'string') {
@@ -832,7 +832,7 @@ export default {
         }, false)
       }
     },
-    // 左侧字段点击
+    /** 左侧字段点击 */
     handleFieldClick (item) {
       const activeIndex = this.widgetForm.column.findIndex(c => c.prop == this.widgetFormSelect.prop) + 1
       let newIndex = 0
@@ -845,7 +845,7 @@ export default {
       }
       this.$refs.widgetForm.handleWidgetAdd({ newIndex })
     },
-    // 初始化预览
+    /** 初始化预览 */
     handlePreview () {
       if (!this.widgetForm.column || this.widgetForm.column.length == 0) this.$message.error('没有需要展示的内容')
       else {
@@ -853,7 +853,7 @@ export default {
         this.previewVisible = true
       }
     },
-    // 处理预览获取模型数据动作
+    /** 处理预览获取模型数据动作 */
     handlePreviewGetData () {
       this.jsonOption = getJsonOptionDefaultConfig()
       this.$refs.previewForm.validate(valid => {
@@ -867,7 +867,7 @@ export default {
         }
       })
     },
-    // 处理清空动作
+    /** 处理清空动作 */
     handleClear () {
       if (this.widgetForm && this.widgetForm.column && this.widgetForm.column.length > 0) {
         this.$set(this.widgetForm, 'column', [])
@@ -879,7 +879,7 @@ export default {
         })
       } else this.$message.error('没有需要清空的内容')
     },
-    // 初始化导入JSON
+    /** 初始化导入JSON */
     handleImportJson () {
       const data = getWidgetFormDefaultConfig()
       this.importJson = codeBeautifier.js(beautifier(data, {
@@ -888,7 +888,7 @@ export default {
       }), GlobalConfig.beautifierDefaultsConf)
       this.importJsonVisible = true
     },
-    // 导入JSON确定
+    /** 导入JSON确定 */
     handleImportJsonSubmit () {
       try {
         const data = getWidgetFormDefaultConfig()
@@ -903,7 +903,7 @@ export default {
         this.$message.error(e.message)
       }
     },
-    // 初始化生成JSON
+    /** 初始化生成JSON */
     handleGenerateJson () {
       this.jsonOption = getJsonOptionDefaultConfig()
       const clone = deepClone(this.widgetForm)
@@ -913,7 +913,7 @@ export default {
       }), GlobalConfig.beautifierDefaultsConf)
       this.generateJsonVisible = true
     },
-    // 生成JSON复制
+    /** 生成JSON复制 */
     handleCopy () {
       const data = eval('(' + this.generateJson + ')')
       clipboard({
@@ -924,7 +924,7 @@ export default {
         this.$message.error('复制失败')
       })
     },
-    // 生成JSON导出
+    /** 生成JSON导出 */
     handleExport () {
       const encodedData = encodeURIComponent(this.generateJson)
       const filename = Date.now() + '.json'
@@ -935,20 +935,20 @@ export default {
       a.click() // 模拟点击
       URL.revokeObjectURL(a.href) // 释放URL 对象
     },
-    // 处理样式表提交
+    /** 处理样式表提交 */
     handleStyleSheetsSubmit () {
       this.widgetForm.styleSheets = this.styleSheets
       this.styleSheetsVisible = false
       this.handleStyleSheetsCore()
     },
-    // 处理样式表核心逻辑
+    /** 处理样式表核心逻辑 */
     handleStyleSheetsCore () {
       this.formId = KEY_COMPONENT_NAME.concat(randomId8())
       const css = parseCss(this.widgetForm.styleSheets)
       insertCss(css, this.formId)
       this.styleSheetsArray = classCss(css)
     },
-    // 处理动作设置添加
+    /** 处理动作设置添加 */
     handleActionAdd () {
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       const id = randomId8()
@@ -961,14 +961,14 @@ export default {
       this.actionMainContainerVisible = true
       this.actionMenuActive = id
     },
-    // 处理动作设置菜单选择
+    /** 处理动作设置菜单选择 */
     handleActionSelect (key) {
       if (this.actionForm.key === key) return
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       this.actionForm = deepClone(this.widgetForm.eventScript.find(item => item.key === key))
       this.actionMainContainerVisible = true
     },
-    // 处理动作设置保存
+    /** 处理动作设置保存 */
     handleActionSave () {
       this.$refs.actionForm.validate((valid, msg) => {
         if (valid) {
@@ -982,7 +982,7 @@ export default {
         }
       })
     },
-    // 处理动作设置克隆
+    /** 处理动作设置克隆 */
     handleActionClone (data) {
       if (this.actionMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       this.actionForm = { ...data }
@@ -992,7 +992,7 @@ export default {
       this.actionMainContainerVisible = true
       this.actionMenuActive = this.actionForm.key
     },
-    // 处理动作设置删除
+    /** 处理动作设置删除 */
     handleActionDelete (data) {
       this.$confirm(`确定要删除该方法 [${data.name}] ?`, '警告', {
         type: 'warning'
@@ -1009,14 +1009,14 @@ export default {
       }).catch(() => {
       })
     },
-    // 处理动作设置取消
+    /** 处理动作设置取消 */
     handleActionCancel () {
       this.actionForm = {}
       this.actionMenuActive = randomId8()
       this.actionMenuItemDisabled = false
       this.actionMainContainerVisible = false
     },
-    // 处理动作设置确认
+    /** 处理动作设置确认 */
     handleActionConfirm () {
       this.$refs.actionForm.validate((valid, msg) => {
         if (valid) {
@@ -1032,7 +1032,7 @@ export default {
         }
       })
     },
-    // 处理动作设置初始值
+    /** 处理动作设置初始值 */
     handleActionSettingsSetData (obj) {
       const { eventName, funcName } = obj
       this.eventSelect = eventName
@@ -1045,7 +1045,7 @@ export default {
         this.actionMainContainerVisible = true
       }
     },
-    // 处理函数名称不能重复校验
+    /** 处理函数名称不能重复校验 */
     handleActionFormNameValidate (rule, value, callback) {
       !this.widgetForm.eventScript ? this.widgetForm.eventScript = [] : ''
       const eventScript = deepClone(this.widgetForm.eventScript)
@@ -1055,7 +1055,7 @@ export default {
         else return false
       }) ? callback(new Error('方法名称不能重复')) : callback()
     },
-    // 处理数据源设置添加
+    /** 处理数据源设置添加 */
     handleDataSourceAdd () {
       if (this.dataSourceMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       const id = randomId8()
@@ -1076,7 +1076,7 @@ export default {
       this.dataSourceMainContainerVisible = true
       this.dataSourceMenuActive = id
     },
-    // 处理数据源设置菜单选择
+    /** 处理数据源设置菜单选择 */
     handleDataSourceSelect (key) {
       if (this.dataSourceForm.key === key) return
       if (this.dataSourceMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
@@ -1088,7 +1088,7 @@ export default {
       this.dataSourceForm = dataSource
       this.dataSourceMainContainerVisible = true
     },
-    // 处理数据源设置保存
+    /** 处理数据源设置保存 */
     handleDataSourceSave () {
       this.$refs.dataSourceForm.validate((valid, msg) => {
         if (valid) {
@@ -1102,7 +1102,7 @@ export default {
         }
       })
     },
-    // 处理数据源设置克隆
+    /** 处理数据源设置克隆 */
     handleDataSourceClone (data) {
       if (this.dataSourceMenuItemDisabled) return this.$message.warning('存在未保存的数据，请先保存')
       this.dataSourceForm = deepClone(data)
@@ -1116,7 +1116,7 @@ export default {
       this.dataSourceMainContainerVisible = true
       this.dataSourceMenuActive = this.dataSourceForm.key
     },
-    // 处理数据源设置删除
+    /** 处理数据源设置删除 */
     handleDataSourceDelete (data) {
       this.$confirm(`确定要删除该方法 [${data.name}] ?`, '警告', {
         type: 'warning'
@@ -1132,14 +1132,14 @@ export default {
       }).catch(() => {
       })
     },
-    // 处理数据源设置取消
+    /** 处理数据源设置取消 */
     handleDataSourceCancel () {
       this.dataSourceForm = {}
       this.dataSourceMenuActive = randomId8()
       this.dataSourceMenuItemDisabled = false
       this.dataSourceMainContainerVisible = false
     },
-    // 处理数据源名称不能重复校验
+    /** 处理数据源名称不能重复校验 */
     handleDataSourceFormNameValidate (rule, value, callback) {
       const dataSource = deepClone(this.widgetForm.dataSource)
       dataSource.find(item => {
@@ -1148,7 +1148,7 @@ export default {
         else return false
       }) ? callback(new Error('数据源名称不能重复')) : callback()
     },
-    // 处理数据源设置请求测试
+    /** 处理数据源设置请求测试 */
     handleDataSourceRequestTest () {
       this.$refs.dataSourceForm.validate((valid, msg) => {
         if (valid) {
@@ -1199,11 +1199,11 @@ export default {
         }
       })
     },
-    // 处理预览表单重置
+    /** 处理预览表单重置 */
     handlePreviewFormReset () {
       this.$refs.previewForm.resetForm()
     },
-    // 处理级联静态数据设置对话框提交
+    /** 处理级联静态数据设置对话框提交 */
     handleCascadeOptionSubmit () {
       try {
         const plugin = this.widgetFormSelect.plugin || {}
@@ -1215,7 +1215,7 @@ export default {
         this.$message.error(e.message)
       }
     },
-    // 处理级联静态数据设置对话框初始值
+    /** 处理级联静态数据设置对话框初始值 */
     handleCascadeOptionSetData (obj) {
       const clone = deepClone(obj)
       this.cascadeOption = codeBeautifier.js(beautifier(clone, {
@@ -1224,19 +1224,19 @@ export default {
       }), GlobalConfig.beautifierDefaultsConf)
       this.cascadeOptionVisible = true
     },
-    // 处理部件表单撤回
+    /** 处理部件表单撤回 */
     handleWidgetFormUndo () {
       const undo = this.handleUndo()
       this.widgetForm = undo.widgetForm
       this.widgetFormSelect = undo.widgetFormSelect
     },
-    // 处理部件表单重做
+    /** 处理部件表单重做 */
     handleWidgetFormRedo () {
       const redo = this.handleRedo()
       this.widgetForm = redo.widgetForm
       this.widgetFormSelect = redo.widgetFormSelect
     },
-    // 处理当前拖拽部件数据
+    /** 处理当前拖拽部件数据 */
     handleDraggableWidget (columns, evt) {
       this.$refs.widgetForm.handleDraggableWidget(columns, evt)
     }

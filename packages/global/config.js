@@ -82,7 +82,7 @@ export const GlobalConfig = {
       }
     ]
   },
-  /** 更多配置详情参考地址:https://github.com/beautify-web/js-beautify **/
+  /** 更多配置详情参考地址:https://github.com/beautify-web/js-beautify */
   beautifierDefaultsConf: {
     // 此配置可以通用(html,js,css),需要额外参数可以合并默认配置或者遗迹默认配置
     'indent_size': 2, // 缩进大小

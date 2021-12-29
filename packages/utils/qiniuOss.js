@@ -6,7 +6,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-08-04
- **/
+ */
 
 export function getToken (accessKey, secretKey, putPolicy) {
   // SETP 1 : json格式化上传策略,https://developer.qiniu.com/kodo/1206/put-policy
@@ -31,7 +31,7 @@ export function getToken (accessKey, secretKey, putPolicy) {
 
 export default getToken
 
-/** UTF16转换UTF8 **/
+/** UTF16转换UTF8 */
 function utf16to8 (str) {
   let out, i, c
   out = ''
@@ -52,7 +52,7 @@ function utf16to8 (str) {
   return out
 }
 
-/** UTF8转换UTF16 **/
+/** UTF8转换UTF16 */
 // eslint-disable-next-line no-unused-vars
 function utf8to16 (str) {
   let out, i, c
@@ -102,7 +102,7 @@ const base64DecodeChars = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -
   15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1, -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
   41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1]
 
-/** base64编码 **/
+/** base64编码 */
 function base64encode (str) {
   let out, i
   let c1, c2, c3
@@ -134,7 +134,7 @@ function base64encode (str) {
   return out
 }
 
-/** base64解码 **/
+/** base64解码 */
 // eslint-disable-next-line no-unused-vars
 function base64decode (str) {
   let c1, c2, c3, c4
@@ -174,7 +174,7 @@ function base64decode (str) {
   return out
 }
 
-/** 去除base64不安全的字符 **/
+/** 去除base64不安全的字符 */
 const safe64 = function (base64) {
   base64 = base64.replace(/\+/g, '-')
   base64 = base64.replace(/\//g, '_')

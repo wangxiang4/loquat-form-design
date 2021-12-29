@@ -113,11 +113,11 @@ export default {
     }
   },
   methods: {
-    // 排除一些不支持新增的插件,防止一些递归错误,子表单组件没做递归处理
+    /** 排除一些不支持新增的插件,防止一些递归错误,子表单组件没做递归处理 */
     handleExcludeDraggable () {
       return !CHILD_FORM_DRAGGABLE_EXCLUDE_TYPES.includes(this.draggableWidget.type)
     },
-    // 处理部件列拖拽新增
+    /** 处理部件列拖拽新增 */
     handleWidgetColAdd (evt) {
       const newIndex = evt.newIndex
       this.$set(this.childFormColumns, newIndex, getWidgetAddData(this.childFormColumns[newIndex]))

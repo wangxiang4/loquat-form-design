@@ -64,7 +64,7 @@ export default {
     this.pageInit()
   },
   methods: {
-    // 初始化分页配置参数
+    /** 初始化分页配置参数 */
     pageInit () {
       this.defaultPage = Object.assign(this.defaultPage, this.page, {
         total: Number(this.page.total || this.defaultPage.total),
@@ -74,18 +74,18 @@ export default {
       })
       this.rePaging()
     },
-    // 更新外部分页配置参数
+    /** 更新外部分页配置参数 */
     updateValue () {
       this.childForm.$emit('update:page', this.defaultPage)
     },
-    // 页大小回调
+    /** 页大小回调 */
     sizeChange (val) {
       // 当调整每页显示条数,重置当前页码
       this.defaultPage.currentPage = 1
       this.defaultPage.pageSize = val
       this.rePaging()
     },
-    // 本地分页
+    /** 本地分页 */
     localPaging (array = [], currentPage, pageSize) {
       const offset = (currentPage - 1) * pageSize
       // 兼容外部使用pagination重新赋值分页数据,只要超过总数量则显示全部数量,为后期提供远程请求分页做铺垫
@@ -93,7 +93,7 @@ export default {
       const pagingList = (offset > array.length) ? array.slice(0, array.length) : array.slice(offset, offset + pageSize)
       return pagingList
     },
-    // 链接到最后一页
+    /** 链接到最后一页 */
     lastPage () {
       const array = this.childForm.list
       // 计算最后一的页码
@@ -102,7 +102,7 @@ export default {
         : Math.ceil(array.length / this.defaultPage.pageSize)
       this.rePaging()
     },
-    // 删除数据后,当最后一页数据全删除完了,自动调用上一页数据
+    /** 删除数据后,当最后一页数据全删除完了,自动调用上一页数据 */
     autoPrevPage () {
       const array = this.childForm.list
       if (array.length === (this.defaultPage.currentPage - 1) * this.defaultPage.pageSize && array.length != 0) {
@@ -110,7 +110,7 @@ export default {
         this.rePaging()
       }
     },
-    // 重新执行分页
+    /** 重新执行分页 */
     rePaging () {
       const array = this.childForm.list
       const pagingList = this.localPaging(array, this.defaultPage.currentPage, this.defaultPage.pageSize)
@@ -118,12 +118,12 @@ export default {
       this.defaultPage.total = array.length
       this.updateValue()
     },
-    // 链接到第一页
+    /** 链接到第一页 */
     homePage () {
       this.defaultPage.currentPage = 1
       this.rePaging()
     },
-    // 页码回调
+    /** 页码回调 */
     currentChange () {
       this.rePaging()
     }

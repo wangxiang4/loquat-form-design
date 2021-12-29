@@ -295,7 +295,7 @@ export default {
     initVal () {
       this.text = this.value
     },
-    // 处理上传外部链接地址
+    /** 处理上传外部链接地址 */
     handleExternalLinkUrl (response) {
       if (this.isQiniuOss) {
         return urlJoin(this.domain, response.key)
@@ -303,14 +303,14 @@ export default {
         return get(response, this.resUrlKey, '')
       }
     },
-    // 处理上传移除
+    /** 处理上传移除 */
     handleRemove (file, fileList) {
       this.fileList.forEach((ele, index) => {
         if (ele.uid === file.uid) this.text.splice(index, 1)
       })
       this.uploadRemove && this.uploadRemove(file, fileList)
     },
-    // 处理上传移除前
+    /** 处理上传移除前 */
     handleBeforeRemove (file, fileList) {
       if (typeof this.uploadRemoveBefore === 'function') {
         return this.uploadRemoveBefore(file, fileList, this.column)
@@ -318,7 +318,7 @@ export default {
         return Promise.resolve()
       }
     },
-    // 处理预览
+    /** 处理预览 */
     handlePreview (file) {
       const callback = () => {
         const url = file.url
@@ -339,7 +339,7 @@ export default {
         callback()
       }
     },
-    // 扩展内部文件上传
+    /** 扩展内部文件上传 */
     httpUpload (config) {
       if (typeof this.httpRequest === 'function') {
         this.httpRequest(config)
@@ -416,7 +416,7 @@ export default {
         })
       } else done()
     },
-    // 处理上传成功
+    /** 处理上传成功 */
     handleSuccess (res, uploadFile) {
       this.loading = false
       const url = this.handleExternalLinkUrl(res)
@@ -429,16 +429,16 @@ export default {
       }
       this.uploadSuccess && this.uploadSuccess(res, uploadFile, this.fileList, this.column)
     },
-    // 处理上传超出扩展
+    /** 处理上传超出扩展 */
     handleExceed (files, fileList) {
       this.uploadExceed && this.uploadExceed(this.limit, files, fileList, this.column)
     },
-    // 处理上传异常扩展
+    /** 处理上传异常扩展 */
     handleError (err) {
       this.loading = false
       this.uploadError && this.uploadError(err, this.fileList, this.column)
     },
-    // 处理头像移除操作
+    /** 处理头像移除操作 */
     handleAvatarRemove (file) {
       this.handleBeforeRemove(file, this.fileList).then(() => {
         this.text = []

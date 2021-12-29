@@ -6,7 +6,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-09-27
- **/
+ */
 import { getWidgetCloneData } from '@utils/dataFormat'
 
 // 处理珊瑚布局行克隆递归

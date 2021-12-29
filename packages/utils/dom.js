@@ -6,9 +6,9 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-19
- **/
+ */
 
-/** 转换css字符串解析成对应的class样式规则  **/
+/** 转换css字符串解析成对应的class样式规则  */
 export function parseCss (val) {
   if (!val) return []
   return val.split(/}\s+./).filter(v => v).map(item => {
@@ -18,7 +18,7 @@ export function parseCss (val) {
   })
 }
 
-/** 新增样式:借助ace编辑器的autocompletion.css **/
+/** 新增样式:借助ace编辑器的autocompletion.css */
 export function insertCss (css, formId) {
   // 获取一个嵌入样式,注意需要设置head[0]为嵌入样式
   const styleSheets = document.styleSheets[0]
@@ -32,7 +32,7 @@ export function insertCss (css, formId) {
   for (let i = 0; i < css.length; i++) styleSheets.insertRule(`.${formId} ${css[i]}`, 0)
 }
 
-/** 获取自定义css样式所有类名 **/
+/** 获取自定义css样式所有类名 */
 export function classCss (css) {
   return css.map(item => {
     const space = item.indexOf(' ')

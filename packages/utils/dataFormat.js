@@ -6,7 +6,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-15
- **/
+ */
 import {
   ARRAY_VALUE_TYPES,
   KEY_COMPONENT_NAME,
@@ -26,7 +26,7 @@ import packages from './packages'
 import { hasOwnProperty } from '@/directive/hasPerm'
 import { coralLayoutRowDeepClone } from '@utils/layout'
 
-/** 获取控件默认提示 **/
+/** 获取控件默认提示 */
 export function getPlaceholder (item) {
   const label = item.label
   if (SELECT_TYPES.includes(item.type)) {
@@ -36,7 +36,7 @@ export function getPlaceholder (item) {
   }
 }
 
-/** 获取标签长度 **/
+/** 获取标签长度 */
 export function getLabelWidth (column, item, defval) {
   let result
   if (!validateNull(column.labelWidth)) {
@@ -47,7 +47,7 @@ export function getLabelWidth (column, item, defval) {
   return setPx(result, defval)
 }
 
-/** 表单初始化默认模型设置prop **/
+/** 表单初始化默认模型设置prop */
 export function formInitVal (list = []) {
   const formModel = {}
   list.forEach(ele => {
@@ -83,7 +83,7 @@ export function formInitVal (list = []) {
   return formModel
 }
 
-/** 清空表单值 **/
+/** 清空表单值 */
 export function formClearVal (obj, list = []) {
   if (!obj) return {}
   Object.keys(obj).forEach(key => {
@@ -108,7 +108,7 @@ export function formClearVal (obj, list = []) {
   return obj
 }
 
-/** 获取组件名称 **/
+/** 获取组件名称 */
 export function getComponent (type, component) {
   let result = type || 'input'
   if (!validateNull(component)) {
@@ -119,7 +119,7 @@ export function getComponent (type, component) {
   return KEY_COMPONENT_NAME.concat(kebabCase(result))
 }
 
-/** 获取配置组件名称 **/
+/** 获取配置组件名称 */
 export function getComponentConfig (type, component) {
   let result = type || 'input'
   // 引入第三方组件打开自定义配置面板
@@ -165,7 +165,7 @@ export function designTransformPreview (_this) {
   }
 }
 
-/** 处理设计器配置转换设计器预览配置深度递归 **/
+/** 处理设计器配置转换设计器预览配置深度递归 */
 function handleDeepDesignTransformPreview (_this, column = [], ops = {}) {
   // 设置参数配置,为了后面好扩展单独提出来
   const options = {
@@ -322,7 +322,7 @@ function handleDeepDesignTransformPreview (_this, column = [], ops = {}) {
   }
 }
 
-/** 清除设计转换预列览脏数据  **/
+/** 清除设计转换预列览脏数据  */
 export function clearTransformColumnDirtyData (column) {
   const plugin = column.plugin || {}
   // 清除动作转换数据
@@ -348,7 +348,7 @@ export function clearTransformColumnDirtyData (column) {
   delete column.validateConfig
 }
 
-/** 表单部件添加数据处理 **/
+/** 表单部件添加数据处理 */
 export function getWidgetAddData (data) {
   data = deepClone(data)
   delete data.icon
@@ -365,7 +365,7 @@ export function getWidgetAddData (data) {
   return data
 }
 
-/** 表单部件克隆数据处理 **/
+/** 表单部件克隆数据处理 */
 export function getWidgetCloneData (data) {
   data = deepClone(data)
   // todo: 处理不同插件属性又互不影响,可采用switch
@@ -373,12 +373,12 @@ export function getWidgetCloneData (data) {
   return data
 }
 
-/** 表单部件prop身份生成 **/
+/** 表单部件prop身份生成 */
 export function randomIdentity (type) {
   return (validateNull(type) ? '' : `${type}_`) + randomId8()
 }
 
-/** 处理响应数据数据是否受理,解决dic应对各种类型问题 **/
+/** 处理响应数据数据是否受理,解决dic应对各种类型问题 */
 export function remoteAccept (data, type) {
   // 远程类型细粒化处理,类型具体参考REMOTE_REQUEST_TYPES
   switch (type) {

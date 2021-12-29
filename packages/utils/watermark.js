@@ -6,7 +6,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-08-04
- **/
+ */
 
 import { randomId8, dataURLtoFile } from '@utils'
 
@@ -19,7 +19,7 @@ import { randomId8, dataURLtoFile } from '@utils'
  * @param {String} textAlign    水印文本对齐方式，默认'center'
  * @param {String} textStyle    水印文本样式，默认'rgba(100,100,100,0.15)'
  * @param {Int} degree    水印文本旋转角度，默认 -20
- **/
+ */
 export class waterMark {
   constructor (opt = {}) {
     this.CONTAINERID = randomId8()
@@ -116,7 +116,7 @@ export class waterMark {
   }
 }
 
-/** 图片加水印 **/
+/** 图片加水印 */
 export function detailImg (file, option = {}) {
   const configDefault = {
     width: 200,

@@ -6,9 +6,9 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-10-29
- **/
+ */
 
-/** 许可配置映射标识 **/
+/** 许可配置映射标识 */
 const permission = {
   cascader: {
     operate: [

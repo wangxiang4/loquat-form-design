@@ -6,7 +6,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-15
- **/
+ */
 export const KEY_COMPONENT_NAME = 'loquat-'
 export const KEY_COMPONENT_CONFIG_NAME = KEY_COMPONENT_NAME.concat('config-')
 export const MULTIPLE_FEATURE_TYPES = ['cascader', 'select']

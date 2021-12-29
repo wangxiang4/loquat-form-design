@@ -34,7 +34,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-12
- **/
+ */
 import { pathFormat } from '@utils'
 export default {
   update (el, binding) {
@@ -71,7 +71,7 @@ export default {
   }
 }
 
-/** 采用正则对路径进行解析查找对象key **/
+/** 采用正则对路径进行解析查找对象key */
 export function hasOwnProperty (object, path) {
   path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
   let index = 0

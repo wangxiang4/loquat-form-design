@@ -7,7 +7,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-10-4
- **/
+ */
 
 export default [
   {

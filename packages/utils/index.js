@@ -6,7 +6,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-15
- **/
+ */
 import {
   BASIC_LATIN_MAPPING, KEY_COMPONENT_CONFIG_NAME,
   KEY_COMPONENT_NAME
@@ -19,7 +19,7 @@ import random from '@utils/random'
 
 import GlobalConfig from '@/global/config'
 
-/** 设置px像素 **/
+/** 设置px像素 */
 export function setPx (val, defval = '') {
   if (validateNull(val)) val = defval
   if (validateNull(val)) return ''
@@ -30,7 +30,7 @@ export function setPx (val, defval = '') {
   return val
 }
 
-/** 对象深拷贝 **/
+/** 对象深拷贝 */
 export function deepClone (data) {
   const type = getObjType(data)
   let obj
@@ -60,7 +60,7 @@ export function deepClone (data) {
   return obj
 }
 
-/** 获取对象类型 **/
+/** 获取对象类型 */
 export function getObjType (obj) {
   const toString = Object.prototype.toString
   const map = {
@@ -82,7 +82,7 @@ export function getObjType (obj) {
   return map[toString.call(obj)]
 }
 
-/** 判断是否为空 **/
+/** 判断是否为空 */
 export function validateNull (val) {
   // 特殊判断
   if (val && parseInt(val) === 0) return false
@@ -114,7 +114,7 @@ export function validateNull (val) {
   return false
 }
 
-/** 路径string格式转换为数组格式 **/
+/** 路径string格式转换为数组格式 */
 export function pathFormat (val) {
   const result = []
   if (val.charCodeAt(0) === 46) {
@@ -126,7 +126,7 @@ export function pathFormat (val) {
   return result
 }
 
-/** 获取对象值 **/
+/** 获取对象值 */
 export function get (object, path, defaultValue) {
   if (validateNull(path)) return object
   path = RegExp('^\w*$').test(path) ? [path] : pathFormat(path)
@@ -138,12 +138,12 @@ export function get (object, path, defaultValue) {
   return object == null ? defaultValue : object
 }
 
-/** 生成随机8位ID **/
+/** 生成随机8位ID */
 export function randomId8 () {
   return random(8)
 }
 
-/** 字符串数据类型转化 **/
+/** 字符串数据类型转化 */
 export function detailDataType (value, type) {
   if (type === 'number') {
     return Number(value)
@@ -154,7 +154,7 @@ export function detailDataType (value, type) {
   }
 }
 
-/** 将base64地址转换为文件 **/
+/** 将base64地址转换为文件 */
 export function dataURLtoFile (dataUrl, filename) {
   const arr = dataUrl.split(',')
   // 获取Base64类型
@@ -172,14 +172,14 @@ export function dataURLtoFile (dataUrl, filename) {
   })
 }
 
-/** 文件上传判断是否拼接根地址加子地址 **/
+/** 文件上传判断是否拼接根地址加子地址 */
 export function getFileUrl (home, uri) {
   return getObjType(uri) === 'string'
     ? uri.match(/(^http:\/\/|^https:\/\/|^\/\/|data:image\/)/) ? uri : urlJoin(home, uri)
     : ''
 }
 
-/** 处理字节容量计算 **/
+/** 处理字节容量计算 */
 export function byteCapacityCompute (fileSize, unit) {
   switch (unit) {
     case 'KB':
@@ -191,30 +191,30 @@ export function byteCapacityCompute (fileSize, unit) {
   }
 }
 
-/** 处理url路径拼接是否自动加斜杠 **/
+/** 处理url路径拼接是否自动加斜杠 */
 export function urlJoin (base, url) {
   return (getObjType(base) === 'string' && getObjType(url) === 'string')
     ? `${base.replace(/([\w\W]+)\/$/, '$1')}/${url.replace(/^\/([\w\W]+)$/, '$1')}`
     : url
 }
 
-/** 获取部件表单默认配置 **/
+/** 获取部件表单默认配置 */
 export function getWidgetFormDefaultConfig () {
   return deepClone(GlobalConfig.widgetFormDefaultConfig)
 }
 
-/** 获取json选项默认配置 **/
+/** 获取json选项默认配置 */
 export function getJsonOptionDefaultConfig () {
   return deepClone(GlobalConfig.jsonOptionDefaultConfig)
 }
 
-/** 驼峰转下划线 **/
+/** 驼峰转下划线 */
 export function kebabCase (str) {
   return createCompounder(str, (result, word, index) =>
     result + (index ? '-' : '') + word.toLowerCase())
 }
 
-/** 下划线转驼峰 **/
+/** 下划线转驼峰 */
 export function camelCase (str) {
   return createCompounder(str, (result, word, index) => {
     word = word.toLowerCase()
@@ -325,7 +325,7 @@ export function words (string, pattern) {
   return string.match(pattern) || []
 }
 
-/** 源组件名称 **/
+/** 源组件名称 */
 export function originComponentName (name, type = 'config') {
   const str = camelCase(name.replace(type === 'plugin' ? KEY_COMPONENT_NAME : KEY_COMPONENT_CONFIG_NAME, ''))
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -392,7 +392,7 @@ export function assign (target = {}, ...sources) {
   return target
 }
 
-/** 判断是否外部svg地址 **/
+/** 判断是否外部svg地址 */
 export function isExternal (path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }

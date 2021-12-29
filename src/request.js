@@ -6,7 +6,7 @@
  * @author: entfrm开发团队-王翔
  *
  * @create: 2021-07-19
- **/
+ */
 import axios from 'axios'
 import log from '@utils/log'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'

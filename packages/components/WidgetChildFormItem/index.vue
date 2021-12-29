@@ -91,7 +91,7 @@ export default {
     }
   },
   methods: {
-    // 处理插件克隆
+    /** 处理插件克隆 */
     handleWidgetClone (index) {
       this.childFormColumns.splice(index, 0, getWidgetCloneData(this.childFormColumns[index]))
       this.$nextTick(() => {
@@ -99,7 +99,7 @@ export default {
         this.from.$emit('change')
       })
     },
-    // 处理插件删除
+    /** 处理插件删除 */
     handleWidgetDelete (index) {
       if (this.childFormColumns.length - 1 === index) {
         if (index === 0) this.form.handleDataSelectWidget({})

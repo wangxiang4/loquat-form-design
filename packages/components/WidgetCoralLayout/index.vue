@@ -116,7 +116,7 @@ export default {
     }
   },
   methods: {
-    // 处理行克隆操作
+    /** 处理行克隆操作 */
     handleRowClone () {
       this.widgets.splice(this.index, 0, coralLayoutRowDeepClone(this.column))
       this.$nextTick(() => {
@@ -124,7 +124,7 @@ export default {
         this.form.$emit('change')
       })
     },
-    // 处理行删除操作
+    /** 处理行删除操作 */
     handleRowDelete () {
       if (this.widgets.length - 1 === this.index) {
         if (this.index === 0) this.form.handleDataSelectWidget({})
@@ -135,14 +135,14 @@ export default {
         this.form.$emit('change')
       })
     },
-    // 处理列添加操作
+    /** 处理列添加操作 */
     handleColumnAdd () {
       this.coralLayoutColumns.push(getWidgetAddData(this.colPreset))
       this.$nextTick(() => {
         this.form.$emit('change')
       })
     },
-    // 处理列克隆操作
+    /** 处理列克隆操作 */
     handleColumnClone (index) {
       this.coralLayoutColumns.splice(index, 0, coralLayoutColumnDeepClone(this.coralLayoutColumns[index]))
       this.$nextTick(() => {
@@ -150,7 +150,7 @@ export default {
         this.form.$emit('change')
       })
     },
-    // 处理列删除操作
+    /** 处理列删除操作 */
     handleColumnDelete (index) {
       if (this.coralLayoutColumns.length - 1 === index) {
         if (index === 0) this.form.handleDataSelectWidget({})
@@ -161,7 +161,7 @@ export default {
         this.form.$emit('change')
       })
     },
-    // 处理部件列拖拽新增
+    /** 处理部件列拖拽新增 */
     handleWidgetColAdd (list, evt) {
       const newIndex = evt.newIndex
       this.$set(list, newIndex, getWidgetAddData(list[newIndex]))
@@ -170,7 +170,7 @@ export default {
         this.form.$emit('change')
       })
     },
-    // 处理插件克隆
+    /** 处理插件克隆 */
     handleWidgetClone (list, index) {
       list.splice(index, 0, getWidgetCloneData(list[index]))
       this.$nextTick(() => {
@@ -178,7 +178,7 @@ export default {
         this.form.$emit('change')
       })
     },
-    // 处理插件删除
+    /** 处理插件删除 */
     handleWidgetDelete (list, index) {
       if (list.length - 1 === index) {
         if (index === 0) this.form.handleDataSelectWidget({})
