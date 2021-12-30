@@ -34,3 +34,4 @@ export default {
 }
 
 export * from './core/index'
+export * from './utils/provide'
