@@ -11,7 +11,7 @@
  *
  * dropQuotesOnKeys:
  *   * description: 是否删除对象key上的引号
- *   * default: true
+ *   * default: false
  *   * type: Boolean
  *
  * dropQuotesOnNumbers:
@@ -31,7 +31,7 @@
  *
  * quoteType:
  *   * description: 引号类型(single,double)
- *   * default: single
+ *   * default: double
  *   * type: String
  *
  * minify:
@@ -63,11 +63,11 @@ let rep
 
 export default function convert (object, options = {}) {
   const space = options.space || 2
-  const dropQuotesOnKeys = options.dropQuotesOnKeys != false
+  const dropQuotesOnKeys = options.dropQuotesOnKeys || false
   const dropQuotesOnNumbers = options.dropQuotesOnNumbers || false
   const inlineShortArrays = options.inlineShortArrays || false
   const inlineShortArraysDepth = options.inlineShortArraysDepth || 1
-  const quoteType = options.quoteType || 'single'
+  const quoteType = options.quoteType || 'double'
   const minify = options.minify || false
 
   if (dropQuotesOnNumbers) walkObjectAndDropQuotesOnNumbers(object)

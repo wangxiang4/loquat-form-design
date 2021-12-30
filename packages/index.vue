@@ -859,10 +859,7 @@ export default {
       this.$refs.previewForm.validate(valid => {
         if (valid) {
           const clone = deepClone(this.widgetModels)
-          this.generateJson = codeBeautifier.js(beautifier(clone, {
-            quoteType: 'double',
-            dropQuotesOnKeys: false
-          }), GlobalConfig.beautifierDefaultsConf)
+          this.generateJson = codeBeautifier.js(beautifier(clone), GlobalConfig.beautifierDefaultsConf)
           this.generateJsonVisible = true
         }
       })
@@ -882,10 +879,7 @@ export default {
     /** 初始化导入JSON */
     handleImportJson () {
       const data = getWidgetFormDefaultConfig()
-      this.importJson = codeBeautifier.js(beautifier(data, {
-        quoteType: 'double',
-        dropQuotesOnKeys: false
-      }), GlobalConfig.beautifierDefaultsConf)
+      this.importJson = codeBeautifier.js(beautifier(data), GlobalConfig.beautifierDefaultsConf)
       this.importJsonVisible = true
     },
     /** 导入JSON确定 */
@@ -907,10 +901,7 @@ export default {
     handleGenerateJson () {
       this.jsonOption = getJsonOptionDefaultConfig()
       const clone = deepClone(this.widgetForm)
-      this.generateJson = codeBeautifier.js(beautifier(clone, {
-        quoteType: 'double',
-        dropQuotesOnKeys: false
-      }), GlobalConfig.beautifierDefaultsConf)
+      this.generateJson = codeBeautifier.js(beautifier(clone), GlobalConfig.beautifierDefaultsConf)
       this.generateJsonVisible = true
     },
     /** 生成JSON复制 */
@@ -1218,10 +1209,7 @@ export default {
     /** 处理级联静态数据设置对话框初始值 */
     handleCascadeOptionSetData (obj) {
       const clone = deepClone(obj)
-      this.cascadeOption = codeBeautifier.js(beautifier(clone, {
-        quoteType: 'double',
-        dropQuotesOnKeys: false
-      }), GlobalConfig.beautifierDefaultsConf)
+      this.cascadeOption = codeBeautifier.js(beautifier(clone), GlobalConfig.beautifierDefaultsConf)
       this.cascadeOptionVisible = true
     },
     /** 处理部件表单撤回 */

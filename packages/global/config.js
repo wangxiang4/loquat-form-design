@@ -31,11 +31,11 @@ export const GlobalConfig = {
   formExecuteCallbackHooks: ['mounted'],
   jsonOptionDefaultConfig: {
     space: 2,
-    dropQuotesOnKeys: true,
+    dropQuotesOnKeys: false,
     dropQuotesOnNumbers: false,
     inlineShortArrays: false,
     inlineShortArraysDepth: 1,
-    quoteType: 'single',
+    quoteType: 'double',
     minify: false
   },
   widgetFormDefaultConfig: {
