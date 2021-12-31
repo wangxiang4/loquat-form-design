@@ -775,16 +775,7 @@ export default {
   watch: {
     options: {
       handler (val) {
-        let options = val
-        if (typeof options === 'string') {
-          try {
-            options = eval('(' + options + ')')
-          } catch (e) {
-            console.error('非法配置')
-            options = { column: [] }
-          }
-        }
-        this.widgetForm = deepClone({ ...this.widgetForm, ...options })
+        this.setWidgetFormJson(val)
       },
       deep: true
     }
@@ -900,8 +891,7 @@ export default {
     /** 初始化生成JSON */
     handleGenerateJson () {
       this.jsonOption = getJsonOptionDefaultConfig()
-      const clone = deepClone(this.widgetForm)
-      this.generateJson = codeBeautifier.js(beautifier(clone), GlobalConfig.beautifierDefaultsConf)
+      this.generateJson = this.getWidgetFormJson()
       this.generateJsonVisible = true
     },
     /** 生成JSON复制 */
@@ -1227,6 +1217,25 @@ export default {
     /** 处理当前拖拽部件数据 */
     handleDraggableWidget (columns, evt) {
       this.$refs.widgetForm.handleDraggableWidget(columns, evt)
+    },
+    /** 获取部件表单数据 */
+    getWidgetFormJson () {
+      const clone = deepClone(this.widgetForm)
+      return codeBeautifier.js(beautifier(clone), GlobalConfig.beautifierDefaultsConf)
+    },
+    /** 设置部件表单数据 */
+    setWidgetFormJson (data) {
+      let options = data
+      if (typeof options === 'string') {
+        try {
+          options = eval('(' + options + ')')
+        } catch (e) {
+          console.error('非法配置')
+          options = { column: [] }
+        }
+      }
+      const defaultWidgetForm = getWidgetFormDefaultConfig()
+      this.widgetForm = deepClone({ ...defaultWidgetForm, ...options })
     }
   }
 }
