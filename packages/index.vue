@@ -1,628 +1,630 @@
 <template>
-  <div :class="['form-designer', formId]">
-    <el-container>
-      <el-aside :width="leftWidth">
-        <div class="fields-list">
-          <div v-for="(field, index) in fields" :key="index">
-            <template v-if="field.list.find(f => includeFields.includes(f.type))">
-              <div class="field-title">{{ field.title }}</div>
-              <draggable tag="ul"
-                         :list="field.list"
-                         :group="{ name: 'form', pull: 'clone', put: false }"
-                         ghost-class="ghost"
-                         :sort="false"
-                         @start="handleDraggableWidget(field.list, $event)"
-              >
-                <template v-for="(item, index) in field.list">
-                  <li v-if="includeFields.includes(item.type)" :key="index" class="field-label">
-                    <a @click="handleFieldClick(item)">
-                      <i class="icon iconfont" :class="item.icon"/>
-                      <span>{{ item.title || item.label }}</span>
-                    </a>
-                  </li>
-                </template>
-              </draggable>
+  <el-container :class="['form-designer', formId]">
+    <el-main class="widget-form-main">
+      <el-container>
+        <el-aside :width="leftWidth">
+          <div class="fields-list">
+            <div v-for="(field, index) in fields" :key="index">
+              <template v-if="field.list.find(f => includeFields.includes(f.type))">
+                <div class="field-title">{{ field.title }}</div>
+                <draggable tag="ul"
+                           :list="field.list"
+                           :group="{ name: 'form', pull: 'clone', put: false }"
+                           ghost-class="ghost"
+                           :sort="false"
+                           @start="handleDraggableWidget(field.list, $event)"
+                >
+                  <template v-for="(item, index) in field.list">
+                    <li v-if="includeFields.includes(item.type)" :key="index" class="field-label">
+                      <a @click="handleFieldClick(item)">
+                        <i class="icon iconfont" :class="item.icon"/>
+                        <span>{{ item.title || item.label }}</span>
+                      </a>
+                    </li>
+                  </template>
+                </draggable>
+              </template>
+            </div>
+            <template v-if="!validateNull(getCustomFields)">
+              <div v-for="(field, index) in getCustomFields" :key="index + fields.length">
+                <div class="field-title">{{ field.title }}</div>
+                <draggable tag="ul"
+                           :list="field.list"
+                           :group="{ name: 'form', pull: 'clone', put: false }"
+                           ghost-class="ghost"
+                           :sort="false"
+                           @start="handleDraggableWidget(field.list, $event)"
+                >
+                  <template v-for="(item, index) in field.list">
+                    <li :key="index" class="field-label">
+                      <a @click="handleFieldClick(item)">
+                        <i class="icon" :class="item.icon"/>
+                        <span>{{ item.title || item.label }}</span>
+                      </a>
+                    </li>
+                  </template>
+                </draggable>
+              </div>
             </template>
           </div>
-          <template v-if="!validateNull(getCustomFields)">
-            <div v-for="(field, index) in getCustomFields" :key="index + fields.length">
-              <div class="field-title">{{ field.title }}</div>
-              <draggable tag="ul"
-                         :list="field.list"
-                         :group="{ name: 'form', pull: 'clone', put: false }"
-                         ghost-class="ghost"
-                         :sort="false"
-                         @start="handleDraggableWidget(field.list, $event)"
-              >
-                <template v-for="(item, index) in field.list">
-                  <li :key="index" class="field-label">
-                    <a @click="handleFieldClick(item)">
-                      <i class="icon" :class="item.icon"/>
-                      <span>{{ item.title || item.label }}</span>
-                    </a>
-                  </li>
-                </template>
-              </draggable>
+        </el-aside>
+        <el-container class="widget-container" direction="vertical">
+          <el-header class="btn-bar">
+            <svg-icon class="bar-icon" icon-class="homeIcon"/>
+            <div class="btn-diviler"/>
+            <div class="btn-bar-plat">
+              <a :class="{ active: adapter==='pc' }"
+                 @click="adapter = 'pc'"
+              ><i class="iconfont icon-pc"/></a>
+              <a :class="{ active: adapter==='pad' }"
+                 @click="adapter = 'pad'"
+              ><i class="iconfont icon-pad"/></a>
+              <a :class="{ active: adapter==='mobile' }"
+                 @click="adapter = 'mobile'"
+              ><i class="iconfont icon-mobile"/></a>
             </div>
-          </template>
-        </div>
-      </el-aside>
-      <el-container class="widget-container" direction="vertical">
-        <el-header class="btn-bar">
-          <svg-icon class="bar-icon" icon-class="homeIcon"/>
-          <div class="btn-diviler"/>
-          <div class="btn-bar-plat">
-            <a :class="{ active: adapter==='pc' }"
-               @click="adapter = 'pc'"
-            ><i class="iconfont icon-pc"/></a>
-            <a :class="{ active: adapter==='pad' }"
-               @click="adapter = 'pad'"
-            ><i class="iconfont icon-pad"/></a>
-            <a :class="{ active: adapter==='mobile' }"
-               @click="adapter = 'mobile'"
-            ><i class="iconfont icon-mobile"/></a>
-          </div>
-          <div class="btn-diviler"/>
-          <div v-if="undoRedo" class="btn-bar-action">
-            <el-tooltip effect="dark" content="撤销" placement="bottom">
-              <el-button type="text"
-                         size="medium"
-                         icon="iconfont icon-undo"
-                         :disabled="historySteps.index == 0"
-                         @click="handleWidgetFormUndo"
-              />
-            </el-tooltip>
-            <el-tooltip effect="dark" content="重做" placement="bottom">
-              <el-button type="text"
-                         size="medium"
-                         icon="iconfont icon-redo"
-                         :disabled="historySteps.index == (historySteps.steps.length - 1)"
-                         @click="handleWidgetFormRedo"
-              />
-            </el-tooltip>
-          </div>
-          <slot name="toolbar-left"/>
-          <el-button v-if="toolbar.includes('import')"
-                     type="text"
-                     size="medium"
-                     icon="el-icon-upload2"
-                     @click="handleImportJson"
-          >导入JSON</el-button>
-          <el-button v-if="toolbar.includes('clear')"
-                     class="danger"
-                     type="text"
-                     size="medium"
-                     icon="el-icon-delete"
-                     @click="handleClear"
-          >清空</el-button>
-          <el-button v-if="toolbar.includes('preview')"
-                     type="text"
-                     size="medium"
-                     icon="el-icon-view"
-                     @click="handlePreview"
-          >预览</el-button>
-          <el-button v-if="toolbar.includes('generate')"
-                     type="text"
-                     size="medium"
-                     icon="el-icon-download"
-                     @click="handleGenerateJson"
-          >生成JSON</el-button>
-          <slot name="toolbar-right"/>
-        </el-header>
-        <el-main>
-          <widget-form ref="widgetForm"
-                       :adapter="adapter"
-                       @change="handleHistoryChange({
-                         widgetForm: widgetForm,
-                         widgetFormSelect: widgetFormSelect
-                       })"
-          />
-        </el-main>
-      </el-container>
-      <el-aside class="widget-config-container" :width="rightWidth">
-        <el-tabs v-model="configTab" stretch>
-          <el-tab-pane label="字段属性" name="widget" style="padding: 0 10px;">
-            <widget-config :data="widgetFormSelect"/>
-          </el-tab-pane>
-          <el-tab-pane label="表单属性" name="form" lazy style="padding: 0 10px;">
-            <form-config :data="widgetForm"/>
-          </el-tab-pane>
-        </el-tabs>
-      </el-aside>
-      <!--弹出窗口-->
-      <el-dialog title="预览"
-                 class="loquat-dialog"
-                 :visible.sync="previewVisible"
-                 :close-on-click-modal="false"
-                 append-to-body
-                 center
-                 fullscreen
-                 @close="widgetModels = {}"
-      >
-        <div :class="['form-preview', adapter]">
-          <plugin-form v-if="previewVisible"
-                       ref="previewForm"
-                       v-model="widgetModels"
-                       :option="widgetFormPreview"
-                       :disabled="previewDisableSwitch"
-                       @submit="handlePreviewGetData"
-          />
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary"
-                     size="medium"
-                     @click="handlePreviewGetData"
-          >获取数据</el-button>
-          <el-button size="medium"
-                     @click="handlePreviewFormReset"
-          >重置</el-button>
-          <el-button size="medium"
-                     @click="previewDisableSwitch = !previewDisableSwitch"
-          > {{ previewDisableSwitch ? '启动编辑' : '禁用编辑' }} </el-button>
-          <el-button size="medium"
-                     @click="previewVisible = false"
-          >关闭</el-button>
-        </span>
-      </el-dialog>
-      <el-dialog title="导入JSON"
-                 class="loquat-dialog"
-                 :visible.sync="importJsonVisible"
-                 :close-on-click-modal="false"
-                 width="800px"
-                 append-to-body
-                 top="3vh"
-                 center
-      >
-        <el-alert type="info" title="JSON格式如下，直接复制生成的json覆盖此处代码点击确定即可"/>
-        <ace-editor v-model="importJson"
-                    lang="json"
-                    theme="textmate"
-                    style="height: 400px;"
-        />
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary"
-                     size="medium"
-                     @click="handleImportJsonSubmit"
-          >确定</el-button>
-          <el-button size="medium"
-                     @click="importJsonVisible = false"
-          >取消</el-button>
-        </span>
-      </el-dialog>
-      <el-dialog title="生成JSON"
-                 class="loquat-dialog"
-                 :visible.sync="generateJsonVisible"
-                 :close-on-click-modal="false"
-                 width="800px"
-                 append-to-body
-                 top="3vh"
-                 center
-      >
-        <ace-editor v-model="generateJson"
-                    lang="json"
-                    theme="textmate"
-                    :readonly="true"
-                    style="height: 400px;"
-        />
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary"
-                     size="medium"
-                     @click="handleExport"
-          >导出</el-button>
-          <el-popover placement="top-start" trigger="hover">
-            <el-form v-model="jsonOption"
-                     style="padding: 0 20px;"
-                     label-suffix="："
-                     label-width="166px"
-                     label-position="left"
-            >
-              <el-form-item label="缩进长度-空格数量">
-                <el-slider v-model="jsonOption.space"
-                           :disabled="jsonOption.minify"
-                           show-stops
-                           :marks="{ 1: '1', 2: '2', 3: '3', 4: '4' }"
-                           :min="1"
-                           :max="4"
-                           :step="1"
+            <div class="btn-diviler"/>
+            <div v-if="undoRedo" class="btn-bar-action">
+              <el-tooltip effect="dark" content="撤销" placement="bottom">
+                <el-button type="text"
+                           size="medium"
+                           icon="iconfont icon-undo"
+                           :disabled="historySteps.index == 0"
+                           @click="handleWidgetFormUndo"
                 />
-              </el-form-item>
-              <el-form-item label="引号类型">
-                <el-switch v-model="jsonOption.quoteType"
-                           active-value="single"
-                           inactive-value="double"
-                           active-text="单引号"
-                           inactive-text="双引号"
+              </el-tooltip>
+              <el-tooltip effect="dark" content="重做" placement="bottom">
+                <el-button type="text"
+                           size="medium"
+                           icon="iconfont icon-redo"
+                           :disabled="historySteps.index == (historySteps.steps.length - 1)"
+                           @click="handleWidgetFormRedo"
                 />
-              </el-form-item>
-              <el-form-item label="移除key的引号">
-                <el-switch v-model="jsonOption.dropQuotesOnKeys"/>
-              </el-form-item>
-              <el-form-item label="移除数字字符串的引号">
-                <el-switch v-model="jsonOption.dropQuotesOnNumbers"/>
-              </el-form-item>
-              <el-form-item label="数组折叠">
-                <el-switch v-model="jsonOption.inlineShortArrays" :disabled="jsonOption.minify"/>
-              </el-form-item>
-              <el-form-item label="数组折叠-深度">
-                <el-slider v-model="jsonOption.inlineShortArraysDepth"
-                           :disabled="jsonOption.minify"
-                           show-stops
-                           :marks="{ 1: '1', 2: '2', 3: '3', 4: '4' }"
-                           :min="1"
-                           :max="4"
-                           :step="1"
-                />
-              </el-form-item>
-              <el-form-item label="压缩json">
-                <el-switch v-model="jsonOption.minify"/>
-              </el-form-item>
-            </el-form>
-            <el-button slot="reference"
+              </el-tooltip>
+            </div>
+            <slot name="toolbar-left"/>
+            <el-button v-if="toolbar.includes('import')"
+                       type="text"
                        size="medium"
-                       type="primary"
-                       style="margin-left: 10px;"
-                       @click="handleCopy"
-            >复制</el-button>
-          </el-popover>
-        </span>
-      </el-dialog>
-      <el-dialog title="表单样式表"
-                 class="loquat-dialog"
-                 :visible.sync="styleSheetsVisible"
-                 :close-on-click-modal="false"
-                 width="900px"
-                 append-to-body
-                 top="3vh"
-                 center
-                 @open="styleSheets = widgetForm.styleSheets"
-      >
-        <ace-editor v-model="styleSheets"
-                    lang="css"
-                    theme="textmate"
-                    style="height: 450px;"
-        />
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary"
-                     size="medium"
-                     @click="handleStyleSheetsSubmit"
-          >确定</el-button>
-          <el-button size="medium"
-                     @click="styleSheetsVisible = false"
-          >取消</el-button>
-        </span>
-      </el-dialog>
-      <el-dialog title="动作设置"
-                 class="loquat-dialog"
-                 :visible.sync="actionSettingsVisible"
-                 :close-on-click-modal="false"
-                 width="1000px"
-                 append-to-body
-                 top="3vh"
-                 center
-                 @close="handleActionCancel"
-      >
-        <el-container style="height: 600px; border: 1px solid rgb(238, 238, 238);">
-          <el-container class="event-script-container">
-            <el-aside class="event-script-aside" style="width: 320px;">
-              <el-container>
-                <el-header style="height: 40px;">
-                  <el-button type="text"
-                             size="small"
-                             icon="el-icon-plus"
-                             @click="handleActionAdd"
-                  >添加动作</el-button>
-                </el-header>
-                <el-main>
-                  <el-menu :default-active="actionMenuActive" class="event-script-aside-menu">
-                    <el-menu-item v-for="item in widgetForm.eventScript"
-                                  :key="item.key"
-                                  :index="item.key"
-                                  :disabled="actionMenuItemDisabled"
-                                  @click.native="handleActionSelect(item.key)"
-                    >
-                      <div>
-                        <span class="event-script-menu-i">Function</span>
-                        <div class="event-script-menu-label">{{ item.name }}</div>
-                        <div v-if="!formCallbackHooks.includes(item.key)" class="event-script-menu-action">
-                          <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(item)"/>
-                          <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(item)"/>
-                        </div>
-                      </div>
-                    </el-menu-item>
-                    <!--虚拟表单项-->
-                    <el-menu-item v-if="actionMenuItemDisabled" :index="actionForm.key">
-                      <div>
-                        <span class="event-script-menu-i">Function</span>
-                        <div class="event-script-menu-label">{{ actionForm.name }}</div>
-                        <div class="event-script-menu-action">
-                          <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(actionForm)"/>
-                          <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(actionForm)"/>
-                        </div>
-                      </div>
-                    </el-menu-item>
-                  </el-menu>
-                </el-main>
-              </el-container>
-            </el-aside>
-            <el-main class="event-script-main">
-              <el-container v-if="actionMainContainerVisible">
-                <el-header style="height: 40px;">
-                  <div class="event-script-action">
-                    <el-button v-if="eventSelect" size="mini" type="primary" @click="handleActionConfirm">确定</el-button>
-                    <el-button size="mini" type="primary" @click="handleActionSave">保存</el-button>
-                    <el-button size="mini" @click="handleActionCancel">取消</el-button>
-                  </div>
-                </el-header>
-                <el-main>
-                  <el-form ref="actionForm"
-                           :model="actionForm"
-                           size="small"
-                  >
-                    <el-form-item label="Function Name"
-                                  prop="name"
-                                  :rules="[
-                                    { required: true, message: '函数名称不能为空' },
-                                    { validator: handleActionFormNameValidate, trigger: 'blur' }
-                                  ]"
-                                  label-width="130px"
-                    >
-                      <el-input v-model="actionForm.name"
-                                :disabled="formCallbackHooks.includes(actionForm.key)"
-                      />
-                    </el-form-item>
-                    <el-form-item prop="func" label-width="0">
-                      <div class="code-line">Function () {</div>
-                      <ace-editor v-model="actionForm.func"
-                                  lang="javascript"
-                                  theme="textmate"
-                                  style="height: 380px;border:1px solid #dcdfe6;"
-                      />
-                      <div class="code-line">}</div>
-                    </el-form-item>
-                  </el-form>
-                </el-main>
-              </el-container>
-            </el-main>
-          </el-container>
+                       icon="el-icon-upload2"
+                       @click="handleImportJson"
+            >导入JSON</el-button>
+            <el-button v-if="toolbar.includes('clear')"
+                       class="danger"
+                       type="text"
+                       size="medium"
+                       icon="el-icon-delete"
+                       @click="handleClear"
+            >清空</el-button>
+            <el-button v-if="toolbar.includes('preview')"
+                       type="text"
+                       size="medium"
+                       icon="el-icon-view"
+                       @click="handlePreview"
+            >预览</el-button>
+            <el-button v-if="toolbar.includes('generate')"
+                       type="text"
+                       size="medium"
+                       icon="el-icon-download"
+                       @click="handleGenerateJson"
+            >生成JSON</el-button>
+            <slot name="toolbar-right"/>
+          </el-header>
+          <el-main>
+            <widget-form ref="widgetForm"
+                         :adapter="adapter"
+                         @change="handleHistoryChange({
+                           widgetForm: widgetForm,
+                           widgetFormSelect: widgetFormSelect
+                         })"
+            />
+          </el-main>
         </el-container>
-      </el-dialog>
-      <el-dialog title="数据源设置"
-                 class="loquat-dialog"
-                 :visible.sync="dataSourceSettingsVisible"
-                 :close-on-click-modal="false"
-                 width="1000px"
-                 append-to-body
-                 top="3vh"
-                 center
-                 @close="handleDataSourceCancel"
-      >
-        <el-container style="height: 600px; border: 1px solid rgb(238, 238, 238);">
-          <el-container class="data-source-container">
-            <el-aside class="data-source-aside" style="width: 320px;">
-              <el-container>
-                <el-header style="height: 40px;">
-                  <el-button type="text"
-                             size="small"
-                             icon="el-icon-plus"
-                             @click="handleDataSourceAdd"
-                  >添加数据源</el-button>
-                </el-header>
-                <el-main>
-                  <el-menu :default-active="dataSourceMenuActive" class="data-source-aside-menu">
-                    <el-menu-item v-for="item in widgetForm.dataSource"
-                                  :key="item.key"
-                                  :index="item.key"
-                                  :disabled="dataSourceMenuItemDisabled"
-                                  @click.native="handleDataSourceSelect(item.key)"
-                    >
-                      <div>
-                        <span :class="['data-source-menu-i', item.method]">{{ item.method }}</span>
-                        <div class="data-source-menu-label">{{ item.name }}</div>
-                        <div class="data-source-menu-action">
-                          <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(item)"/>
-                          <i title="删除" class="iconfont icon-trash" @click.stop="handleDataSourceDelete(item)"/>
-                        </div>
-                      </div>
-                    </el-menu-item>
-                    <!--虚拟表单项-->
-                    <el-menu-item v-if="dataSourceMenuItemDisabled" :index="dataSourceForm.key">
-                      <div>
-                        <span :class="['data-source-menu-i', dataSourceForm.method]">{{ dataSourceForm.method }}</span>
-                        <div class="data-source-menu-label">{{ dataSourceForm.name }}</div>
-                        <div class="data-source-menu-action">
-                          <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(dataSourceForm)"/>
-                          <i title="删除" class="iconfont icon-trash" @click.stop="handleDataSourceDelete(dataSourceForm)"/>
-                        </div>
-                      </div>
-                    </el-menu-item>
-                  </el-menu>
-                </el-main>
-              </el-container>
-            </el-aside>
-            <el-main class="data-source-main">
-              <el-container v-if="dataSourceMainContainerVisible">
-                <el-header style="height: 40px;">
-                  <div class="data-source-action">
-                    <el-button size="mini" type="primary" @click="handleDataSourceSave">保存</el-button>
-                    <el-button size="mini" @click="handleDataSourceRequestTest">请求测试</el-button>
-                    <el-button size="mini" @click="handleDataSourceCancel">取消</el-button>
-                  </div>
-                </el-header>
-                <el-main>
-                  <el-form ref="dataSourceForm"
-                           :model="dataSourceForm"
-                           size="small"
-                           label-width="79px"
-                  >
-                    <el-form-item label="名称"
-                                  prop="name"
-                                  :rules="[
-                                    { required: true, message: '数据源名称不能为空' },
-                                    { validator: handleDataSourceFormNameValidate, trigger: 'blur' }
-                                  ]"
-                    ><el-input v-model="dataSourceForm.name"/>
-                    </el-form-item>
-                    <el-form-item label="请求地址"
-                                  prop="url"
-                                  :rules="[
-                                    { required: true, message: '请求地址不能为空' },
-                                    { type: 'url', message: 'url格式不正确'}
-                                  ]"
-                    ><el-input v-model="dataSourceForm.url"
+        <el-aside class="widget-config-container" :width="rightWidth">
+          <el-tabs v-model="configTab" stretch>
+            <el-tab-pane label="字段属性" name="widget" style="padding: 0 10px;">
+              <widget-config :data="widgetFormSelect"/>
+            </el-tab-pane>
+            <el-tab-pane label="表单属性" name="form" lazy style="padding: 0 10px;">
+              <form-config :data="widgetForm"/>
+            </el-tab-pane>
+          </el-tabs>
+        </el-aside>
+        <!--弹出窗口-->
+        <el-dialog title="预览"
+                   class="loquat-dialog"
+                   :visible.sync="previewVisible"
+                   :close-on-click-modal="false"
+                   append-to-body
+                   center
+                   fullscreen
+                   @close="widgetModels = {}"
+        >
+          <div :class="['form-preview', adapter]">
+            <plugin-form v-if="previewVisible"
+                         ref="previewForm"
+                         v-model="widgetModels"
+                         :option="widgetFormPreview"
+                         :disabled="previewDisableSwitch"
+                         @submit="handlePreviewGetData"
+            />
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary"
+                       size="medium"
+                       @click="handlePreviewGetData"
+            >获取数据</el-button>
+            <el-button size="medium"
+                       @click="handlePreviewFormReset"
+            >重置</el-button>
+            <el-button size="medium"
+                       @click="previewDisableSwitch = !previewDisableSwitch"
+            > {{ previewDisableSwitch ? '启动编辑' : '禁用编辑' }} </el-button>
+            <el-button size="medium"
+                       @click="previewVisible = false"
+            >关闭</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog title="导入JSON"
+                   class="loquat-dialog"
+                   :visible.sync="importJsonVisible"
+                   :close-on-click-modal="false"
+                   width="800px"
+                   append-to-body
+                   top="3vh"
+                   center
+        >
+          <el-alert type="info" title="JSON格式如下，直接复制生成的json覆盖此处代码点击确定即可"/>
+          <ace-editor v-model="importJson"
+                      lang="json"
+                      theme="textmate"
+                      style="height: 400px;"
+          />
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary"
+                       size="medium"
+                       @click="handleImportJsonSubmit"
+            >确定</el-button>
+            <el-button size="medium"
+                       @click="importJsonVisible = false"
+            >取消</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog title="生成JSON"
+                   class="loquat-dialog"
+                   :visible.sync="generateJsonVisible"
+                   :close-on-click-modal="false"
+                   width="800px"
+                   append-to-body
+                   top="3vh"
+                   center
+        >
+          <ace-editor v-model="generateJson"
+                      lang="json"
+                      theme="textmate"
+                      :readonly="true"
+                      style="height: 400px;"
+          />
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary"
+                       size="medium"
+                       @click="handleExport"
+            >导出</el-button>
+            <el-popover placement="top-start" trigger="hover">
+              <el-form v-model="jsonOption"
+                       style="padding: 0 20px;"
+                       label-suffix="："
+                       label-width="166px"
+                       label-position="left"
+              >
+                <el-form-item label="缩进长度-空格数量">
+                  <el-slider v-model="jsonOption.space"
+                             :disabled="jsonOption.minify"
+                             show-stops
+                             :marks="{ 1: '1', 2: '2', 3: '3', 4: '4' }"
+                             :min="1"
+                             :max="4"
+                             :step="1"
+                  />
+                </el-form-item>
+                <el-form-item label="引号类型">
+                  <el-switch v-model="jsonOption.quoteType"
+                             active-value="single"
+                             inactive-value="double"
+                             active-text="单引号"
+                             inactive-text="双引号"
+                  />
+                </el-form-item>
+                <el-form-item label="移除key的引号">
+                  <el-switch v-model="jsonOption.dropQuotesOnKeys"/>
+                </el-form-item>
+                <el-form-item label="移除数字字符串的引号">
+                  <el-switch v-model="jsonOption.dropQuotesOnNumbers"/>
+                </el-form-item>
+                <el-form-item label="数组折叠">
+                  <el-switch v-model="jsonOption.inlineShortArrays" :disabled="jsonOption.minify"/>
+                </el-form-item>
+                <el-form-item label="数组折叠-深度">
+                  <el-slider v-model="jsonOption.inlineShortArraysDepth"
+                             :disabled="jsonOption.minify"
+                             show-stops
+                             :marks="{ 1: '1', 2: '2', 3: '3', 4: '4' }"
+                             :min="1"
+                             :max="4"
+                             :step="1"
+                  />
+                </el-form-item>
+                <el-form-item label="压缩json">
+                  <el-switch v-model="jsonOption.minify"/>
+                </el-form-item>
+              </el-form>
+              <el-button slot="reference"
+                         size="medium"
+                         type="primary"
+                         style="margin-left: 10px;"
+                         @click="handleCopy"
+              >复制</el-button>
+            </el-popover>
+          </span>
+        </el-dialog>
+        <el-dialog title="表单样式表"
+                   class="loquat-dialog"
+                   :visible.sync="styleSheetsVisible"
+                   :close-on-click-modal="false"
+                   width="900px"
+                   append-to-body
+                   top="3vh"
+                   center
+                   @open="styleSheets = widgetForm.styleSheets"
+        >
+          <ace-editor v-model="styleSheets"
+                      lang="css"
+                      theme="textmate"
+                      style="height: 450px;"
+          />
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary"
+                       size="medium"
+                       @click="handleStyleSheetsSubmit"
+            >确定</el-button>
+            <el-button size="medium"
+                       @click="styleSheetsVisible = false"
+            >取消</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog title="动作设置"
+                   class="loquat-dialog"
+                   :visible.sync="actionSettingsVisible"
+                   :close-on-click-modal="false"
+                   width="1000px"
+                   append-to-body
+                   top="3vh"
+                   center
+                   @close="handleActionCancel"
+        >
+          <el-container style="height: 600px; border: 1px solid rgb(238, 238, 238);">
+            <el-container class="event-script-container">
+              <el-aside class="event-script-aside" style="width: 320px;">
+                <el-container>
+                  <el-header style="height: 40px;">
+                    <el-button type="text"
                                size="small"
-                               type="textarea"
-                               :rows="1"
-                    />
-                    </el-form-item>
-                    <el-form-item label="请求方法" prop="method">
-                      <el-radio-group v-model="dataSourceForm.method">
-                        <el-radio-button label="GET">GET</el-radio-button>
-                        <el-radio-button label="POST">POST</el-radio-button>
-                        <el-radio-button label="PUT">PUT</el-radio-button>
-                        <el-radio-button label="DELETE">DELETE</el-radio-button>
-                      </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="请求头部" prop="headers">
-                      <div class="array-dynamic-container">
-                        <div v-for="(item, index) in dataSourceForm.headers" :key="index" class="array-dynamic-item" >
-                          <el-input v-model="item.key"
-                                    size="small"
-                                    clearable
-                                    type="textarea"
-                                    :rows="1"
-                                    placeholder="KEY"
-                          />
-                          <el-input v-model="item.value"
-                                    size="small"
-                                    clearable
-                                    type="textarea"
-                                    :rows="1"
-                                    placeholder="VALUE"
-                          />
-                          <el-button circle
-                                     plain
-                                     type="danger"
-                                     size="small"
-                                     icon="el-icon-minus"
-                                     @click="dataSourceForm.headers.splice(index, 1)"
-                          />
+                               icon="el-icon-plus"
+                               @click="handleActionAdd"
+                    >添加动作</el-button>
+                  </el-header>
+                  <el-main>
+                    <el-menu :default-active="actionMenuActive" class="event-script-aside-menu">
+                      <el-menu-item v-for="item in widgetForm.eventScript"
+                                    :key="item.key"
+                                    :index="item.key"
+                                    :disabled="actionMenuItemDisabled"
+                                    @click.native="handleActionSelect(item.key)"
+                      >
+                        <div>
+                          <span class="event-script-menu-i">Function</span>
+                          <div class="event-script-menu-label">{{ item.name }}</div>
+                          <div v-if="!formCallbackHooks.includes(item.key)" class="event-script-menu-action">
+                            <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(item)"/>
+                            <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(item)"/>
+                          </div>
                         </div>
-                        <el-button type="text" @click="dataSourceForm.headers.push({})">添加</el-button>
-                      </div>
-                    </el-form-item>
-                    <el-form-item label="请求参数" prop="params">
-                      <div class="array-dynamic-container">
-                        <div v-for="(item, index) in dataSourceForm.params" :key="index" class="array-dynamic-item" >
-                          <el-input v-model="item.key"
-                                    size="small"
-                                    type="textarea"
-                                    :rows="1"
-                                    placeholder="KEY"
-                          />
-                          <el-input v-model="item.value"
-                                    size="small"
-                                    type="textarea"
-                                    :rows="1"
-                                    placeholder="VALUE"
-                          />
-                          <el-button circle
-                                     plain
-                                     type="danger"
-                                     size="small"
-                                     icon="el-icon-minus"
-                                     @click="dataSourceForm.params.splice(index, 1)"
-                          />
+                      </el-menu-item>
+                      <!--虚拟表单项-->
+                      <el-menu-item v-if="actionMenuItemDisabled" :index="actionForm.key">
+                        <div>
+                          <span class="event-script-menu-i">Function</span>
+                          <div class="event-script-menu-label">{{ actionForm.name }}</div>
+                          <div class="event-script-menu-action">
+                            <i title="复制" class="iconfont icon-clone" @click.stop="handleActionClone(actionForm)"/>
+                            <i title="删除" class="iconfont icon-trash" @click.stop="handleActionDelete(actionForm)"/>
+                          </div>
                         </div>
-                        <el-button type="text" @click="dataSourceForm.params.push({})">添加</el-button>
-                      </div>
-                    </el-form-item>
-                    <el-form-item label="是否使用第三方axios" prop="thirdPartyAxios" label-width="155px">
-                      <el-switch v-model="dataSourceForm.thirdPartyAxios"/>
-                    </el-form-item>
-                    <el-form-item label="是否表单初始化发送请求" prop="auto" label-width="175px">
-                      <el-switch v-model="dataSourceForm.auto"/>
-                    </el-form-item>
-                    <el-form-item label="数据处理">
-                      <el-collapse :value="['requestFunc', 'responseFunc', 'errorFunc']">
-                        <el-collapse-item name="requestFunc" title="请求发送前：">
-                          <div class="code-desc">// config: 发出请求的可用配置选项;</div>
-                          <div class="code-desc">// 通过 config.url 可以更改请求地址，通过 config.headers 可以更改请求头部</div>
-                          <div class="code-desc">// 通过 config.data 可以更改发送的数据，（GET 请求不适用，需要更改 config.params）</div>
-                          <div class="code-line">(config) => {</div>
-                          <ace-editor ref="requestFuncAce"
-                                      v-model="dataSourceForm.requestFunc"
-                                      lang="javascript"
-                                      :readonly="dataSourceForm.thirdPartyAxios"
-                                      theme="textmate"
-                                      style="height: 148px; border:1px solid #dcdfe6;"
-                          />
-                          <div class="code-line">}</div>
-                        </el-collapse-item>
-                        <el-collapse-item name="responseFunc" title="请求返回响应数据时：">
-                          <div class="code-desc">// 默认直接返回响应数据 res，可以在下方对数据进行处理</div>
-                          <div class="code-line">(res) => {</div>
-                          <ace-editor v-model="dataSourceForm.responseFunc"
-                                      lang="javascript"
-                                      theme="textmate"
-                                      style="height: 148px; border:1px solid #dcdfe6;"
-                          />
-                          <div class="code-line">}</div>
-                        </el-collapse-item>
-                        <el-collapse-item name="errorFunc" title="请求发生错误时：">
-                          <div class="code-line">(error) => {</div>
-                          <ace-editor v-model="dataSourceForm.errorFunc"
-                                      lang="javascript"
-                                      theme="textmate"
-                                      style="height: 148px; border:1px solid #dcdfe6;"
-                          />
-                          <div class="code-line">}</div>
-                        </el-collapse-item>
-                      </el-collapse>
-                    </el-form-item>
-                  </el-form>
-                </el-main>
-              </el-container>
-            </el-main>
+                      </el-menu-item>
+                    </el-menu>
+                  </el-main>
+                </el-container>
+              </el-aside>
+              <el-main class="event-script-main">
+                <el-container v-if="actionMainContainerVisible">
+                  <el-header style="height: 40px;">
+                    <div class="event-script-action">
+                      <el-button v-if="eventSelect" size="mini" type="primary" @click="handleActionConfirm">确定</el-button>
+                      <el-button size="mini" type="primary" @click="handleActionSave">保存</el-button>
+                      <el-button size="mini" @click="handleActionCancel">取消</el-button>
+                    </div>
+                  </el-header>
+                  <el-main>
+                    <el-form ref="actionForm"
+                             :model="actionForm"
+                             size="small"
+                    >
+                      <el-form-item label="Function Name"
+                                    prop="name"
+                                    :rules="[
+                                      { required: true, message: '函数名称不能为空' },
+                                      { validator: handleActionFormNameValidate, trigger: 'blur' }
+                                    ]"
+                                    label-width="130px"
+                      >
+                        <el-input v-model="actionForm.name"
+                                  :disabled="formCallbackHooks.includes(actionForm.key)"
+                        />
+                      </el-form-item>
+                      <el-form-item prop="func" label-width="0">
+                        <div class="code-line">Function () {</div>
+                        <ace-editor v-model="actionForm.func"
+                                    lang="javascript"
+                                    theme="textmate"
+                                    style="height: 380px;border:1px solid #dcdfe6;"
+                        />
+                        <div class="code-line">}</div>
+                      </el-form-item>
+                    </el-form>
+                  </el-main>
+                </el-container>
+              </el-main>
+            </el-container>
           </el-container>
-        </el-container>
-      </el-dialog>
-      <el-dialog title="选项"
-                 class="loquat-dialog"
-                 :visible.sync="cascadeOptionVisible"
-                 :close-on-click-modal="false"
-                 width="800px"
-                 append-to-body
-                 top="3vh"
-                 center
-      >
-        <ace-editor v-model="cascadeOption"
-                    lang="json"
-                    theme="textmate"
-                    style="height: 400px;"
-        />
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary"
-                     size="medium"
-                     @click="handleCascadeOptionSubmit"
-          >确定</el-button>
-          <el-button size="medium"
-                     @click="cascadeOptionVisible = false"
-          >取消</el-button>
-        </span>
-      </el-dialog>
-      <el-dialog title="子表单默认值"
-                 class="loquat-dialog"
-                 :visible.sync="childFormModelVisible"
-                 :close-on-click-modal="false"
-                 width="800px"
-                 append-to-body
-                 top="3vh"
-                 center
-      >
-        <plugin-child-form v-model="plugin.value" v-bind="plugin"/>
-      </el-dialog>
-    </el-container>
-  </div>
+        </el-dialog>
+        <el-dialog title="数据源设置"
+                   class="loquat-dialog"
+                   :visible.sync="dataSourceSettingsVisible"
+                   :close-on-click-modal="false"
+                   width="1000px"
+                   append-to-body
+                   top="3vh"
+                   center
+                   @close="handleDataSourceCancel"
+        >
+          <el-container style="height: 600px; border: 1px solid rgb(238, 238, 238);">
+            <el-container class="data-source-container">
+              <el-aside class="data-source-aside" style="width: 320px;">
+                <el-container>
+                  <el-header style="height: 40px;">
+                    <el-button type="text"
+                               size="small"
+                               icon="el-icon-plus"
+                               @click="handleDataSourceAdd"
+                    >添加数据源</el-button>
+                  </el-header>
+                  <el-main>
+                    <el-menu :default-active="dataSourceMenuActive" class="data-source-aside-menu">
+                      <el-menu-item v-for="item in widgetForm.dataSource"
+                                    :key="item.key"
+                                    :index="item.key"
+                                    :disabled="dataSourceMenuItemDisabled"
+                                    @click.native="handleDataSourceSelect(item.key)"
+                      >
+                        <div>
+                          <span :class="['data-source-menu-i', item.method]">{{ item.method }}</span>
+                          <div class="data-source-menu-label">{{ item.name }}</div>
+                          <div class="data-source-menu-action">
+                            <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(item)"/>
+                            <i title="删除" class="iconfont icon-trash" @click.stop="handleDataSourceDelete(item)"/>
+                          </div>
+                        </div>
+                      </el-menu-item>
+                      <!--虚拟表单项-->
+                      <el-menu-item v-if="dataSourceMenuItemDisabled" :index="dataSourceForm.key">
+                        <div>
+                          <span :class="['data-source-menu-i', dataSourceForm.method]">{{ dataSourceForm.method }}</span>
+                          <div class="data-source-menu-label">{{ dataSourceForm.name }}</div>
+                          <div class="data-source-menu-action">
+                            <i title="复制" class="iconfont icon-clone" @click.stop="handleDataSourceClone(dataSourceForm)"/>
+                            <i title="删除" class="iconfont icon-trash" @click.stop="handleDataSourceDelete(dataSourceForm)"/>
+                          </div>
+                        </div>
+                      </el-menu-item>
+                    </el-menu>
+                  </el-main>
+                </el-container>
+              </el-aside>
+              <el-main class="data-source-main">
+                <el-container v-if="dataSourceMainContainerVisible">
+                  <el-header style="height: 40px;">
+                    <div class="data-source-action">
+                      <el-button size="mini" type="primary" @click="handleDataSourceSave">保存</el-button>
+                      <el-button size="mini" @click="handleDataSourceRequestTest">请求测试</el-button>
+                      <el-button size="mini" @click="handleDataSourceCancel">取消</el-button>
+                    </div>
+                  </el-header>
+                  <el-main>
+                    <el-form ref="dataSourceForm"
+                             :model="dataSourceForm"
+                             size="small"
+                             label-width="79px"
+                    >
+                      <el-form-item label="名称"
+                                    prop="name"
+                                    :rules="[
+                                      { required: true, message: '数据源名称不能为空' },
+                                      { validator: handleDataSourceFormNameValidate, trigger: 'blur' }
+                                    ]"
+                      ><el-input v-model="dataSourceForm.name"/>
+                      </el-form-item>
+                      <el-form-item label="请求地址"
+                                    prop="url"
+                                    :rules="[
+                                      { required: true, message: '请求地址不能为空' },
+                                      { type: 'url', message: 'url格式不正确'}
+                                    ]"
+                      ><el-input v-model="dataSourceForm.url"
+                                 size="small"
+                                 type="textarea"
+                                 :rows="1"
+                      />
+                      </el-form-item>
+                      <el-form-item label="请求方法" prop="method">
+                        <el-radio-group v-model="dataSourceForm.method">
+                          <el-radio-button label="GET">GET</el-radio-button>
+                          <el-radio-button label="POST">POST</el-radio-button>
+                          <el-radio-button label="PUT">PUT</el-radio-button>
+                          <el-radio-button label="DELETE">DELETE</el-radio-button>
+                        </el-radio-group>
+                      </el-form-item>
+                      <el-form-item label="请求头部" prop="headers">
+                        <div class="array-dynamic-container">
+                          <div v-for="(item, index) in dataSourceForm.headers" :key="index" class="array-dynamic-item" >
+                            <el-input v-model="item.key"
+                                      size="small"
+                                      clearable
+                                      type="textarea"
+                                      :rows="1"
+                                      placeholder="KEY"
+                            />
+                            <el-input v-model="item.value"
+                                      size="small"
+                                      clearable
+                                      type="textarea"
+                                      :rows="1"
+                                      placeholder="VALUE"
+                            />
+                            <el-button circle
+                                       plain
+                                       type="danger"
+                                       size="small"
+                                       icon="el-icon-minus"
+                                       @click="dataSourceForm.headers.splice(index, 1)"
+                            />
+                          </div>
+                          <el-button type="text" @click="dataSourceForm.headers.push({})">添加</el-button>
+                        </div>
+                      </el-form-item>
+                      <el-form-item label="请求参数" prop="params">
+                        <div class="array-dynamic-container">
+                          <div v-for="(item, index) in dataSourceForm.params" :key="index" class="array-dynamic-item" >
+                            <el-input v-model="item.key"
+                                      size="small"
+                                      type="textarea"
+                                      :rows="1"
+                                      placeholder="KEY"
+                            />
+                            <el-input v-model="item.value"
+                                      size="small"
+                                      type="textarea"
+                                      :rows="1"
+                                      placeholder="VALUE"
+                            />
+                            <el-button circle
+                                       plain
+                                       type="danger"
+                                       size="small"
+                                       icon="el-icon-minus"
+                                       @click="dataSourceForm.params.splice(index, 1)"
+                            />
+                          </div>
+                          <el-button type="text" @click="dataSourceForm.params.push({})">添加</el-button>
+                        </div>
+                      </el-form-item>
+                      <el-form-item label="是否使用第三方axios" prop="thirdPartyAxios" label-width="155px">
+                        <el-switch v-model="dataSourceForm.thirdPartyAxios"/>
+                      </el-form-item>
+                      <el-form-item label="是否表单初始化发送请求" prop="auto" label-width="175px">
+                        <el-switch v-model="dataSourceForm.auto"/>
+                      </el-form-item>
+                      <el-form-item label="数据处理">
+                        <el-collapse :value="['requestFunc', 'responseFunc', 'errorFunc']">
+                          <el-collapse-item name="requestFunc" title="请求发送前：">
+                            <div class="code-desc">// config: 发出请求的可用配置选项;</div>
+                            <div class="code-desc">// 通过 config.url 可以更改请求地址，通过 config.headers 可以更改请求头部</div>
+                            <div class="code-desc">// 通过 config.data 可以更改发送的数据，（GET 请求不适用，需要更改 config.params）</div>
+                            <div class="code-line">(config) => {</div>
+                            <ace-editor ref="requestFuncAce"
+                                        v-model="dataSourceForm.requestFunc"
+                                        lang="javascript"
+                                        :readonly="dataSourceForm.thirdPartyAxios"
+                                        theme="textmate"
+                                        style="height: 148px; border:1px solid #dcdfe6;"
+                            />
+                            <div class="code-line">}</div>
+                          </el-collapse-item>
+                          <el-collapse-item name="responseFunc" title="请求返回响应数据时：">
+                            <div class="code-desc">// 默认直接返回响应数据 res，可以在下方对数据进行处理</div>
+                            <div class="code-line">(res) => {</div>
+                            <ace-editor v-model="dataSourceForm.responseFunc"
+                                        lang="javascript"
+                                        theme="textmate"
+                                        style="height: 148px; border:1px solid #dcdfe6;"
+                            />
+                            <div class="code-line">}</div>
+                          </el-collapse-item>
+                          <el-collapse-item name="errorFunc" title="请求发生错误时：">
+                            <div class="code-line">(error) => {</div>
+                            <ace-editor v-model="dataSourceForm.errorFunc"
+                                        lang="javascript"
+                                        theme="textmate"
+                                        style="height: 148px; border:1px solid #dcdfe6;"
+                            />
+                            <div class="code-line">}</div>
+                          </el-collapse-item>
+                        </el-collapse>
+                      </el-form-item>
+                    </el-form>
+                  </el-main>
+                </el-container>
+              </el-main>
+            </el-container>
+          </el-container>
+        </el-dialog>
+        <el-dialog title="选项"
+                   class="loquat-dialog"
+                   :visible.sync="cascadeOptionVisible"
+                   :close-on-click-modal="false"
+                   width="800px"
+                   append-to-body
+                   top="3vh"
+                   center
+        >
+          <ace-editor v-model="cascadeOption"
+                      lang="json"
+                      theme="textmate"
+                      style="height: 400px;"
+          />
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary"
+                       size="medium"
+                       @click="handleCascadeOptionSubmit"
+            >确定</el-button>
+            <el-button size="medium"
+                       @click="cascadeOptionVisible = false"
+            >取消</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog title="子表单默认值"
+                   class="loquat-dialog"
+                   :visible.sync="childFormModelVisible"
+                   :close-on-click-modal="false"
+                   width="800px"
+                   append-to-body
+                   top="3vh"
+                   center
+        >
+          <plugin-child-form v-model="plugin.value" v-bind="plugin"/>
+        </el-dialog>
+      </el-container>
+    </el-main>
+  </el-container>
 </template>
 
 <script>

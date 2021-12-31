@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <loquat-form-design style="height: 100vh;"
+    <loquat-form-design ref="loquat-form-design"
+                        style="height:100vh"
                         :options="options"
                         :custom-fields="customFields"
     />
