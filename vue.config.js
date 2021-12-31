@@ -22,8 +22,11 @@ module.exports =  {
   assetsDir: 'static',
 
   configureWebpack: {
+    performance: {
+      hints: false
+    },
     output: {
-      libraryExport: 'default'
+      library: 'LoquatFormDesign'
     }
   },
 
