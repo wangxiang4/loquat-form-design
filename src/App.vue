@@ -11,9 +11,6 @@
 <script>
 export default {
   name: 'App',
-  created () {
-    window.vuexx = this
-  },
   data () {
     return {
       customFields: [{
