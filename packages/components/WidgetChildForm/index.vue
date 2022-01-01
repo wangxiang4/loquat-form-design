@@ -65,9 +65,10 @@
 import { getWidgetAddData } from '@utils/dataFormat'
 import widgetChildFormItem from '../WidgetChildFormItem'
 import { CHILD_FORM_DRAGGABLE_EXCLUDE_TYPES } from '@/global/variable'
+import Draggable from 'vuedraggable'
 export default {
   name: 'WidgetChildForm',
-  components: { widgetChildFormItem },
+  components: { Draggable, widgetChildFormItem },
   inject: ['formItemProvide'],
   provide () {
     return {

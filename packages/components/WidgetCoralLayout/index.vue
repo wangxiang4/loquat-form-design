@@ -68,13 +68,13 @@
   </div>
 </template>
 <script>
-import draggable from 'vuedraggable'
+import Draggable from 'vuedraggable'
 import { getWidgetAddData, getWidgetCloneData } from '@utils/dataFormat'
 import { coralLayoutRowDeepClone, coralLayoutColumnDeepClone } from '@utils/layout'
 import widgetFormItem from '@components/WidgetFormItem'
 export default {
   name: 'WidgetCoralLayout',
-  components: { draggable, widgetFormItem },
+  components: { Draggable, widgetFormItem },
   inject: ['formItemProvide'],
   props: {
     column: {
