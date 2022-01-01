@@ -1,6 +1,7 @@
 node_modules*
 /scripts
 *.sh
+/dist
 
 # local env files
 .env.local
