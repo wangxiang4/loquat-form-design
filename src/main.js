@@ -7,18 +7,16 @@ import request from './request'
 import 'element-ui/packages/theme-chalk/src/index.scss'
 Vue.use(ElementUI)*/
 
-// 开发版
-import LoquatFormDesign from '../packages'
-Vue.use(LoquatFormDesign, { axiosInstance: request })
+// 开发版,目前不支持按需加载,后期会填补此功能
+import { install, remoteFunc, remoteOption } from '../packages/all'
+Vue.use(install, { axiosInstance: request })
+Vue.prototype.remoteFunc = remoteFunc
+Vue.prototype.remoteOption = remoteOption
 
 // 发布版
 /* import LoquatFormDesign from '../lib/loquat-form-design.umd.min.js'
 import '../lib/loquat-form-design.css'
-Vue.use(LoquatFormDesign, { axiosInstance: request })
-
-import { LoquatCore } from '../lib/loquat-form-design.umd.min.js'
-Vue.prototype.formDesignRemoteFunc = LoquatCore.remoteFunc
-Vue.prototype.formDesignRemoteOption = LoquatCore.remoteOption*/
+Vue.use(LoquatFormDesign, { axiosInstance: request })*/
 
 Vue.config.productionTip = false
 new Vue({
