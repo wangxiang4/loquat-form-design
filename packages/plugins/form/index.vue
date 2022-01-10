@@ -59,7 +59,9 @@ export default {
       configOption: {},
       formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
       formId: '',
-      DIC: {}
+      DIC: {},
+      requiredHideIds: [],
+      requiredDisableIds: []
     }
   },
   computed: {
@@ -187,6 +189,12 @@ export default {
     handleChange (value) {
       this.$emit('input', value)
       this.$emit('change', value)
+    },
+    setHideIds (ids = []) {
+      this.requiredHideIds = ids
+    },
+    setDisableIds (ids = []) {
+      this.requiredDisableIds = ids
     }
   }
 }

@@ -4,7 +4,7 @@
       <coral-layout ref="coralLayout" :column="column"/>
     </template>
     <template v-else>
-      <el-form-item v-if="!column.hide"
+      <el-form-item v-if="!(form.requiredHideIds.includes(column.prop) || column.hide)"
                     :prop="column.prop"
                     :rules="column.rules"
                     :label="column.hideLabel ? '' : column.label"
@@ -49,8 +49,8 @@
                 :dic="form.DIC[column.prop]"
                 :column="column"
                 :props="widgetForm.props"
-                ::readonly="form.readonly"
-                :disabled="form.disabled"
+                :readonly="form.readonly"
+                :disabled="(form.requiredDisableIds.includes(column.prop) || form.disabled)"
                 :size="widgetForm.size || formDefaultConfig.size"
                 :enter="widgetForm.enter"
                 @enter="form.submit"
