@@ -60,8 +60,8 @@ export default {
       formDefaultConfig: DEFAULT_CONFIG_INSIDE_FORM,
       formId: '',
       DIC: {},
-      requiredHideIds: [],
-      requiredDisableIds: []
+      showIds: [],
+      disableIds: []
     }
   },
   computed: {
@@ -190,11 +190,11 @@ export default {
       this.$emit('input', value)
       this.$emit('change', value)
     },
-    setHideIds (ids = []) {
-      this.requiredHideIds = ids
+    setShowIds (ids) {
+      getObjType(ids) === 'array' && (this.showIds = ids)
     },
-    setDisableIds (ids = []) {
-      this.requiredDisableIds = ids
+    setDisableIds (ids) {
+      getObjType(ids) === 'array' && (this.disableIds = ids)
     }
   }
 }

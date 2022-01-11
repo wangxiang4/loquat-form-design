@@ -4,7 +4,7 @@
       <coral-layout ref="coralLayout" :column="column"/>
     </template>
     <template v-else>
-      <el-form-item v-if="!(form.requiredHideIds.includes(column.prop) || column.hide)"
+      <el-form-item v-if="isShow"
                     :prop="column.prop"
                     :rules="column.rules"
                     :label="column.hideLabel ? '' : column.label"
@@ -17,7 +17,7 @@
                 :column="column"
                 :value="form.form[column.prop]"
                 :readonly="form.readonly || column.readonly"
-                :disabled="form.disabled || column.disabled"
+                :disabled="form.disableIds.includes(column.prop) || form.disabled || column.disabled"
                 :size="widgetForm.size || column.size || formDefaultConfig.size"
                 :dic="form.DIC[column.prop]"
           />
@@ -39,7 +39,7 @@
               :column="column"
               :value="form.form[column.prop]"
               :readonly="form.readonly || column.readonly"
-              :disabled="form.disabled || column.disabled"
+              :disabled="form.disableIds.includes(column.prop) || form.disabled || form.disabled || column.disabled"
               :size="widgetForm.size || column.size || formDefaultConfig.size"
               :dic="form.DIC[column.prop]"
         />
@@ -50,7 +50,7 @@
                 :column="column"
                 :props="widgetForm.props"
                 :readonly="form.readonly"
-                :disabled="(form.requiredDisableIds.includes(column.prop) || form.disabled)"
+                :disabled="(form.disableIds.includes(column.prop) || form.disabled)"
                 :size="widgetForm.size || formDefaultConfig.size"
                 :enter="widgetForm.enter"
                 @enter="form.submit"
@@ -89,6 +89,14 @@ export default {
     },
     formDefaultConfig () {
       return this.form.formDefaultConfig || {}
+    },
+    isShow () {
+      const { prop, hide } = this.column
+      if (this.form.showIds.length !== 0) {
+        return this.form.showIds.includes(prop)
+      } else {
+        return !hide
+      }
     }
   },
   methods: {
